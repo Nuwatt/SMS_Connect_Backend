@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from WebPortal import views
 # from WebPortal.views import MyObtainTokenPairView, RegisterView
-from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+# from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 from django.conf.urls.static import static
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -66,8 +66,8 @@ urlpatterns=[
     # url(r'^login/$',views.loginApi),
 
     
-    url(r'^login/', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
-    url(r'^login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # url(r'^login/', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
+    # url(r'^login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # # url(r'^login/([0-9]+)$',views.loginApi),
     # url(r'^register/', csrf_exempt(RegisterView.as_view()), name='auth_register'),
 
