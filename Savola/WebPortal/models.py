@@ -1,12 +1,14 @@
 from django.db import models
 from datetime import datetime 
 from django.contrib.auth.models import User
-# Create your models here.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
-
-from .managers import CustomUserManager
+from django.conf import settings
+from django.contrib.auth.models import (
+    AbstractBaseUser, BaseUserManager, PermissionsMixin
+)
+from rest_framework_simplejwt.tokens import RefreshToken
 
 #Table18 User role Table
 class Roles(models.Model):
@@ -16,38 +18,6 @@ class Roles(models.Model):
     updated = models.DateTimeField(default=datetime.now, blank=True)
     role_id = models.AutoField(primary_key=True)
     role_name = models.CharField(max_length=100)
-
-# #Table1 UserTable
-# class Users(User):
-#     status = models.BooleanField(default=True)
-#     isDeleted = models.BooleanField(default=False)
-#     created = models.DateTimeField(default=datetime.now, blank=True)
-#     updated = models.DateTimeField(default=datetime.now, blank=True)
-#     user_id = models.AutoField(primary_key=True)
-#     photo_file_name = models.CharField(max_length=100)
-#     nationality = models.CharField(max_length=100)
-#     country = models.CharField(max_length=100)
-#     city = models.CharField(max_length=100)
-#     date_of_birth = models.DateField()
-#     contact_number = models.CharField(max_length=12)
-#     role = models.ForeignKey(Roles,on_delete=models.CASCADE)
-#     # display_name = models.CharField(max_length=100,unique=True) #email ID of user to login
-#     # password = models.CharField(max_length=50)
-#     # role = models.CharField(max_length=50)
-
-
-
-        
-# class Profile(models.Model):
-#     user_id = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-#     photo_file_name = models.CharField(default="avatar.png",max_length=100)
-#     nationality = models.CharField(max_length=100, null=False)
-#     country = models.CharField(max_length=100)
-#     city = models.CharField(max_length=100)
-#     date_of_birth = models.DateField(null=True)
-#     contact_number = models.CharField(max_length=12)
-#     role = models.ForeignKey(Roles,on_delete=models.CASCADE)
-
 
 #Table 15 Category table
 class Category(models.Model):
@@ -60,6 +30,7 @@ class Category(models.Model):
 
     def __unicode__(self):
         return str(self.pk)
+
 #Table 16 Brands table
 class Brands(models.Model):
     status = models.BooleanField(default=True)
@@ -72,6 +43,7 @@ class Brands(models.Model):
     
     def __unicode__(self):
         return str(self.pk)
+
 #Table 17 Category table
 class Sku(models.Model):
     status = models.BooleanField(default=True)
@@ -176,36 +148,80 @@ class Areas(models.Model):
     country = models.ForeignKey(Country,on_delete=models.CASCADE) # countryid from country table
     city = models.ForeignKey(City,on_delete=models.CASCADE) # Cityid from city table
 
+class UserManager(BaseUserManager):
 
+    def create_user(self, email, password=None,**kwargs):
 
-#create Users
-class CustomUser(AbstractUser):
-    username = None
-    email = models.EmailField(_('email address'), unique=True)
+        if email is None:
+            raise TypeError('Users must have an email address.')
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+        email = self.normalize_email(email)
+        user = self.model(email=email, **kwargs)
+        user.set_password(password)
+        user.save()
+        return user
 
-    objects = CustomUserManager()
+    def create_superuser(self, email, password):
+        if password is None:
+            raise TypeError('Superusers must have a password.')
 
-    status = models.BooleanField(default=True)
-    isDeleted = models.BooleanField(default=False)
-    created = models.DateTimeField(default=datetime.now, blank=True)
-    updated = models.DateTimeField(default=datetime.now, blank=True)
-    photo_file_name = models.CharField(default="avatar.png",max_length=100)
-    nationality = models.CharField(max_length=100, null=False)
-    #country and city of corresponding tables
-    country = models.ManyToManyField(Country)
-    city = models.ManyToManyField(City)
-    
+        user = self.create_user(email, password)
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+        return user
+
+class User(AbstractBaseUser, PermissionsMixin):
+    choice_roles =(
+    ('1','Admin'),
+    ('2','User')
+    )
+
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    email = models.EmailField(unique=True,null=True)
+    is_active = models.BooleanField(default=True)
+    role = models.PositiveSmallIntegerField(choices=choice_roles, blank=True, null=True, default=1)
+    profile_pic = models.CharField(default="avatar.png",max_length=100)
+    # nationality = models.CharField(max_length=100, null=False)
+    # country = models.ManyToManyField()
+    # city = models.ManyToManyField()
     date_of_birth = models.DateField(null=True)
     contact_number = models.CharField(max_length=12)
-    role = models.ForeignKey(Roles,on_delete=models.CASCADE)
-    
+    username = models.CharField(max_length=100)
+
+    is_staff = models.BooleanField(
+
+            default=False,
+
+        )
+    is_active = models.BooleanField(
+
+        default=True,
+
+    )
+
+    USERNAME_FIELD = 'email'
+
+    objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
+
+    def get_full_name(self):
+        return self.first_name+self.last_name
+
+    def get_short_name(self):
+        return self.first_name
+
+    def get_tokens_for_user(self):
+        refresh = RefreshToken.for_user(self)
+
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
 
 #Table 13 Retailer Table
 class Retailers(models.Model):    
@@ -254,7 +270,7 @@ class SurveyActivities(models.Model):
     updated = models.DateTimeField(default=datetime.now, blank=True)
     survey_activity_id = models.AutoField(primary_key=True)
     survey = models.OneToOneField(Surveys,on_delete=models.CASCADE) # id of survey table
-    user = models.ManyToManyField(CustomUser) #usertable id
+    user = models.ManyToManyField(User) #usertable id
     longitude = models.DecimalField(max_digits=8, decimal_places=3)
     langitude = models.DecimalField(max_digits=8, decimal_places=3) #longitude and latitude of the user send by app while they do this survey
 
@@ -268,7 +284,7 @@ class Answers(models.Model):
     answer_id = models.AutoField(primary_key=True)
     question = models.OneToOneField(Questions,on_delete=models.CASCADE) #Question id of q table
     survey = models.ForeignKey(Surveys,on_delete=models.CASCADE)
-    questionnaire = models.ForeignKey(Questionnaires,on_delete=models.CASCADE) #Questionnaire id of questionnaire table
+    # questionnaire = models.ForeignKey(Surveys,on_delete=models.CASCADE) #Questionnaire id of questionnaire table
     answer = models.CharField(max_length=100)
 
 

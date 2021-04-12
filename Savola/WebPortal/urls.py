@@ -1,19 +1,16 @@
 from django.conf.urls import url
 from WebPortal import views
-# from WebPortal.views import MyObtainTokenPairView, RegisterView
-# from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+
 from django.conf.urls.static import static
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
-from allauth.account.views import confirm_email
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
+from .views import UserSignupView,LoginView
 urlpatterns=[
-    # url(r'^user/$',views.userApi),
-    # url(r'^user/([0-9]+)$',views.userApi),
 
     # url(r'^questionnaires/$',views.questionnairesApi),
     # url(r'^questionnaires/([0-9]+)$',views.questionnairesApi),
@@ -63,17 +60,7 @@ urlpatterns=[
     url(r'^role/$',views.rolesApi),
     url(r'^role/([0-9]+)$',views.rolesApi),
 
-    # url(r'^login/$',views.loginApi),
-
-    
-    # url(r'^login/', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
-    # url(r'^login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    # # url(r'^login/([0-9]+)$',views.loginApi),
-    # url(r'^register/', csrf_exempt(RegisterView.as_view()), name='auth_register'),
-
-    url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
-    url(r'^account/', include('allauth.urls')),
-    url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
-    
+    url(r'^signup', UserSignupView.as_view(), name='signup'),
+    url(r'^login', LoginView.as_view(), name='login'),
+  
 ]

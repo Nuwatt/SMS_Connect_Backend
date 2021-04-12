@@ -1,86 +1,55 @@
 from rest_framework import serializers
 from WebPortal.models import *
-from django.contrib.auth.models import User
-
-from WebPortal.models import CustomUser
 
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-
-# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-
-#     @classmethod
-#     def get_token(cls, user):
-#         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
-
-#         # Add custom claims
-#         token['username'] = user.username
-#         return token
-
-# class RegisterSerializer(serializers.ModelSerializer):
-#     email = serializers.EmailField(
-#             required=True,
-#             validators=[UniqueValidator(queryset=User.objects.all())]
-#             )
-
-#     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-#     password2 = serializers.CharField(write_only=True, required=True)
-
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name', 'role')
-#         extra_kwargs = {
-#             'first_name': {'required': True},
-#             'last_name': {'required': True}
-#         }
-
-#     def validate(self, attrs):
-#         if attrs['password'] != attrs['password2']:
-#             raise serializers.ValidationError({"password": "Password fields didn't match."})
-
-#         return attrs
-
-#     def create(self, validated_data):
-#         user = User.objects.create(
-#             username=validated_data['username'],
-#             email=validated_data['email'],
-#             first_name=validated_data['first_name'],
-#             last_name=validated_data['last_name']
-#         )
-
-        
-#         user.set_password(validated_data['password'])
-#         user.save()
-
-#         return user
-        
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Users
-#         fields = ('photo_file_name',
-#                   'nationality',
-#                   'country',
-#                   'city',
-#                   'date_of_birth',
-#                   'contact_number',
-#                   'role',
-#                   'username',
-#                   'email',
-#                   'password')
-#     def create(self,username,email,password):
-#         user = User.objects.create_user(username, email, password)
-#         return user
-        
-from WebPortal.models import CustomUser
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate, login,logout
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
-        fields = "all"
+        model = User
+        fields = ('email','password','first_name','last_name','role','date_of_birth','contact_number')
+
+    def create(self, validated_data):
+        new_user = User.objects.create_user(**validated_data)
+        print(User.objects.all())
+        return new_user
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(max_length=20, write_only=True)
+    access_token = serializers.CharField(read_only=True)
+    refresh_token = serializers.CharField(read_only=True)
+    role = serializers.CharField(read_only=True)
+
+    def validate(self, data):
+        email = data['email']
+        password = data['password']
+        user = authenticate(email=email, password=password)
+
+        if user is None:
+            raise serializers.ValidationError("Incorrect login credentials")
+
+        try:
+            user_token = RefreshToken.for_user(user)
+            refresh_token = str(user_token)
+            access_token = str(user_token.access_token)
+
+            res = {
+                'access_token': access_token,
+                'refresh_token': refresh_token,
+                'email': user.email,
+            }
+
+            return res
+
+        except user.DoesNotExist:
+            raise serializers.ValidationError("Invalid login credentials")
 
 class QuestionnaireTypeSerializer(serializers.ModelSerializer):
     class Meta:

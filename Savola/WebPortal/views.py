@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
-from django.contrib.auth import authenticate, login
 
 
 from rest_framework import status
@@ -12,45 +11,52 @@ from rest_framework.response import Response
 from WebPortal.models import *
 from WebPortal.serializers import *
 
-# views.
-
-# from django.urls import reverse
-# from users.forms import CustomUserCreationForm
-
-
-# def register(request):
-#     if request.method == "GET":
-#         return render(
-#             request, "users/register.html",
-#             {"form": CustomUserCreationForm}
-#         )
-#     elif request.method == "POST":
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             return redirect(reverse("dashboard"))
-
-#Api for create, delete,update a user role (roles table data )
-
-# from .serializers import MyTokenObtainPairSerializer
-# from rest_framework.permissions import AllowAny
-# from rest_framework_simplejwt.views import TokenObtainPairView
-
-# from django.contrib.auth.models import User
-# from .serializers import RegisterSerializer
-# from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated,IsAdminUser
+from django.contrib.auth import authenticate, login,logout
 
 
+# Create your views here.
+class UserSignupView(APIView):
+    serializer_class = UserSignupSerializer
+    permission_classes = (AllowAny, )
 
-# class MyObtainTokenPairView(TokenObtainPairView):
-#     permission_classes = (AllowAny,)
-#     serializer_class = MyTokenObtainPairSerializer
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        valid = serializer.is_valid(raise_exception=True)
+        if valid:
+            serializer.save()
+            response = {
+                'success': True,
+                'data':serializer.data,
+                'status': status.HTTP_201_CREATED,
+                'message': 'Signup Successfull!',
+            }
 
-# class RegisterView(generics.CreateAPIView):
-#     queryset = User.objects.all()
-#     permission_classes = (AllowAny,)
-#     serializer_class = RegisterSerializer
+            return Response(response)
+
+
+class LoginView(APIView):
+    serializer_class = LoginSerializer
+    permission_classes = (AllowAny, )
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        valid = serializer.is_valid(raise_exception=True)
+
+        if valid:
+
+            response = {
+                'success': True,
+                'status': status.HTTP_200_OK,
+                'message': 'Login Success!',
+                'access_token': serializer.data['access_token'],
+                'refresh_token': serializer.data['refresh_token'],
+                'user':serializer.data['email']
+            }
+
+            return Response(response)
 
 @csrf_exempt
 @api_view(['GET', 'POST','DELETE','PUT'])
@@ -87,52 +93,6 @@ def rolesApi(request,id=0):
         elif request.method == 'DELETE':
             Roles.delete(pk)
             return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-# #UserApi for create,List, Delete and Edit Users
-# @csrf_exempt
-# def userApi(request,id=0):
-#     if request.method=='GET':
-#         if id == 0: #to get detailes of all users
-#             users = Users.objects.all()
-#             user_serializer = UserSerializer(users, many=True)
-#             return JsonResponse(user_serializer.data, safe=False)
-#         else:    #Filter User by Id
-#             user = Users.objects.get(user_id=id)
-#             user_serializer = UserSerializer(user)
-#             return JsonResponse(user_serializer.data, safe=False)
-
-#     elif request.method=='POST': # Create new user
-#         user_data=JSONParser().parse(request)
-#         user_serializer = UserSerializer(data=user_data)
-#         print(user_serializer)
-#         if user_serializer.is_valid():
-#             # new_user = user_serializer.create(username=user_data['username'], email=user_data['email'], password=user_data['password'])
-#             # new_user.photo_file_name = user_data['photo_file_name']
-#             # new_user.nationality = user_data['nationality']
-#             # new_user.country = user_data['country']
-#             # new_user.city = user_data['city']
-#             # new_user.date_of_birth = user_data['date_of_birth']
-#             # new_user.contact_number = user_data['contact_number']
-#             # new_user.save()
-#             user_serializer.save()
-#             return JsonResponse("Added Successfully!!" , safe=False)
-#         return JsonResponse("Failed to Add.",safe=False)
-    
-#     elif request.method=='PUT': # Update existing user
-#         user_data = JSONParser().parse(request)
-#         user=Users.objects.get(user_id=user_data['user_id'])
-#         user_serializer=UserSerializer(user,data=user_data)
-#         if user_serializer.is_valid():
-#             user_serializer.save()
-#             return JsonResponse("Updated Successfully!!", safe=False)
-#         return JsonResponse("Failed to Update.", safe=False)
-
-#     elif request.method=='DELETE': # Delete a Specific user by ID
-#         user=Users.objects.get(user_id=id)
-#         user.delete()
-#         return JsonResponse("Deleted Succeffully!!", safe=False)
-
 
 # # Question Options -> Question Statment -> Question -> ///Questionnaire\\\ <- Question Type 
 # #Api for create, delete,update and get by id of Questionnaire table data 
@@ -707,29 +667,5 @@ def skuApi(request, id = 0):
             Sku.delete(pk)
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-# #Login Api 
-@csrf_exempt
-def loginApi(request):
-#     # if request.method=='GET':
-#     #     form_data = JSONParser().parse(request)
-#     #     table_data = Users.objects.get(DisplayName=form_data['email'])
-#     #     if table_data:
-#     #         if table_data.Password == form_data['password']:
-#     #             table_serializer = UserSerializer(table_data)
-#     #             return JsonResponse("Login success full", safe=False)
-#     #         else:
-#     #             return JsonResponse("check your password", safe=False)
-#     #     else:
-#     #         return JsonResponse("login denied", safe=False)
-    if request.method=='POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request,username=username, password=password)
-        print(username,password,user)
-        if user is not None:
-            login(request, user)
-            return JsonResponse("Login success full", safe=False)
-        else:
-            return JsonResponse("login denied", safe=False)
                 
 
