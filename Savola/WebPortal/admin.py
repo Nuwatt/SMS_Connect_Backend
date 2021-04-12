@@ -4,10 +4,6 @@ from django.contrib.auth.admin import UserAdmin
 from .models import *
 from .managers import CustomUserManager
 
-
-# admin.site.register(CustomUser)
-
-
 class CustomUserAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
@@ -35,9 +31,8 @@ admin.site.register(Brands)
 admin.site.register(Sku)
 admin.site.register(QuestionnaireType)
 admin.site.register(Questions)
-admin.site.register(Questionnaires)
+# admin.site.register(Questionnaires)
 admin.site.register(QuestionOptions)
-admin.site.register(QuestionStatments)
 admin.site.register(Country)
 admin.site.register(City)
 admin.site.register(Areas)

@@ -15,17 +15,14 @@ urlpatterns=[
     # url(r'^user/$',views.userApi),
     # url(r'^user/([0-9]+)$',views.userApi),
 
-    url(r'^questionnaires/$',views.questionnairesApi),
-    url(r'^questionnaires/([0-9]+)$',views.questionnairesApi),
+    # url(r'^questionnaires/$',views.questionnairesApi),
+    # url(r'^questionnaires/([0-9]+)$',views.questionnairesApi),
 
     url(r'^questionnaireType/$',views.questionnaireTypeApi),
     url(r'^questionnaireType/([0-9]+)$',views.questionnaireTypeApi),
 
     url(r'^questions/$',views.questionsApi),
     url(r'^questions/([0-9]+)$',views.questionsApi),
-
-    url(r'^questionStatments/$',views.questionStatmentaApi),
-    url(r'^questionStatments/([0-9]+)$',views.questionStatmentaApi),
 
     url(r'^questionOptions/$',views.questionOptionsApi),
     url(r'^questionOptions/([0-9]+)$',views.questionOptionsApi),
@@ -62,6 +59,9 @@ urlpatterns=[
 
     url(r'^sku/$',views.skuApi),
     url(r'^sku/([0-9]+)$',views.skuApi),
+
+    url(r'^role/$',views.rolesApi),
+    url(r'^role/([0-9]+)$',views.rolesApi),
 
     # url(r'^login/$',views.loginApi),
 

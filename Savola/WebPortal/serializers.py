@@ -87,10 +87,10 @@ class QuestionnaireTypeSerializer(serializers.ModelSerializer):
         model = QuestionnaireType
         fields = "__all__" 
 
-class QuestionnaireSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Questionnaires
-        fields = "__all__"
+# class QuestionnaireSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Questionnaires
+#         fields = "__all__"
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -101,12 +101,7 @@ class QuestionOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionOptions
         fields = "__all__"
-            
 
-class QuestionStatementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = QuestionStatments
-        fields = "__all__"
         
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -152,6 +147,7 @@ class SkuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sku
         fields = "__all__"
+        
 
 class SurveySerializer(serializers.ModelSerializer):
     class Meta:
