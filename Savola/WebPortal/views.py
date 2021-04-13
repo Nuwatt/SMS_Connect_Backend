@@ -3,7 +3,6 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 
-
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -18,6 +17,7 @@ from django.contrib.auth import authenticate, login,logout
 
 
 # Create your views here.
+
 class UserSignupView(APIView):
     serializer_class = UserSignupSerializer
     permission_classes = (AllowAny, )
@@ -36,7 +36,6 @@ class UserSignupView(APIView):
 
             return Response(response)
 
-
 class LoginView(APIView):
     serializer_class = LoginSerializer
     permission_classes = (AllowAny, )
@@ -47,13 +46,28 @@ class LoginView(APIView):
 
         if valid:
 
-            response = {
+            email = serializer.data['email']
+            user_data = User.objects.get(email=email)
+
+            response = {                             
                 'success': True,
-                'status': status.HTTP_200_OK,
-                'message': 'Login Success!',
+                'errorMessage': 'No error, Login Success!',
                 'access_token': serializer.data['access_token'],
                 'refresh_token': serializer.data['refresh_token'],
-                'user':serializer.data['email']
+                'data': {
+                        "userId": user_data.id,
+                        "userName": user_data.username,
+                        "emailId": email,
+                        "nationality": user_data.nationality,
+                        "contactNumber": user_data.contact_number,
+                        "dateOfBirth": user_data.date_of_birth,
+                        "profileImage": user_data.profile_pic,
+                        "bucketDetails": {
+                        "buckeName": "",
+                        "accessKey": "",
+                        "secretKey": ""
+                        }
+                }
             }
 
             return Response(response)
@@ -94,7 +108,7 @@ def rolesApi(request,id=0):
             Roles.delete(pk)
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-# # Question Options -> Question Statment -> Question -> ///Questionnaire\\\ <- Question Type 
+# # Question Options -> Question -> ///Questionnaire\\\ <- Question Type 
 # #Api for create, delete,update and get by id of Questionnaire table data 
 # @csrf_exempt
 # @api_view(['GET', 'POST','DELETE','PUT'])
@@ -250,38 +264,38 @@ def questionOptionsApi(request,id=0):
 #Api for create, delete,update and get by id of Survey table data 
 @csrf_exempt
 @api_view(['GET', 'POST','DELETE','PUT'])
-def surveyApi(request,id=0):
+def questionnairesApi(request,id=0):
     if id == 0:
         if request.method == 'GET':
-            data = Surveys.objects.all()
-            serializer = SurveySerializer(data, many=True)
+            data = Questionnaires.objects.all()
+            serializer = QuestionnaireSerializer(data, many=True)
             return Response(serializer.data)
 
         elif request.method == 'POST':
-            serializer = SurveySerializer(data=request.data)
+            serializer = QuestionnaireSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         try:
-            pk = Surveys.objects.get(survey_id=id)
-        except Surveys.DoesNotExist:
+            pk = Questionnaires.objects.get(survey_id=id)
+        except Questionnaires.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
        
         if request.method == 'GET':
-            serializer = SurveySerializer(pk)
+            serializer = QuestionnaireSerializer(pk)
             return Response(serializer.data)
 
         elif request.method == 'PUT':
-            serializer = SurveySerializer(pk, data=request.data)
+            serializer = QuestionnaireSerializer(pk, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         elif request.method == 'DELETE':
-            Surveys.delete(pk)
+            Questionnaires.delete(pk)
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 

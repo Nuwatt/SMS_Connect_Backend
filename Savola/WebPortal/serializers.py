@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login,logout
 class UserSignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email','password','first_name','last_name','role','date_of_birth','contact_number')
+        fields = ('email','password','full_name','role','date_of_birth','contact_number','username','profile_pic','nationality')
 
     def create(self, validated_data):
         new_user = User.objects.create_user(**validated_data)
@@ -39,7 +39,7 @@ class LoginSerializer(serializers.Serializer):
             user_token = RefreshToken.for_user(user)
             refresh_token = str(user_token)
             access_token = str(user_token.access_token)
-
+            
             res = {
                 'access_token': access_token,
                 'refresh_token': refresh_token,
@@ -56,10 +56,10 @@ class QuestionnaireTypeSerializer(serializers.ModelSerializer):
         model = QuestionnaireType
         fields = "__all__" 
 
-# class QuestionnaireSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Questionnaires
-#         fields = "__all__"
+class QuestionnaireSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Questionnaires
+        fields = "__all__"
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -118,10 +118,10 @@ class SkuSerializer(serializers.ModelSerializer):
         fields = "__all__"
         
 
-class SurveySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Surveys
-        fields = "__all__"
+# class SurveySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Surveys
+#         fields = "__all__"
 
 class SurveyActivitieSerializer(serializers.ModelSerializer):
     class Meta:

@@ -12,8 +12,8 @@ from django.urls import path, include
 from .views import UserSignupView,LoginView
 urlpatterns=[
 
-    # url(r'^questionnaires/$',views.questionnairesApi),
-    # url(r'^questionnaires/([0-9]+)$',views.questionnairesApi),
+    url(r'^questionnaires/$',views.questionnairesApi),
+    url(r'^questionnaires/([0-9]+)$',views.questionnairesApi),
 
     url(r'^questionnaireType/$',views.questionnaireTypeApi),
     url(r'^questionnaireType/([0-9]+)$',views.questionnaireTypeApi),
@@ -24,8 +24,8 @@ urlpatterns=[
     url(r'^questionOptions/$',views.questionOptionsApi),
     url(r'^questionOptions/([0-9]+)$',views.questionOptionsApi),
 
-    url(r'^survey/$',views.surveyApi),
-    url(r'^survey/([0-9]+)$',views.surveyApi),
+    # url(r'^survey/$',views.surveyApi),
+    # url(r'^survey/([0-9]+)$',views.surveyApi),
 
     url(r'^surveyActivity/$',views.surveyActivityApi),
     url(r'^surveyActivity/([0-9]+)$',views.surveyActivityApi),

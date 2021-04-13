@@ -127,7 +127,7 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'savola12',
+        'NAME': 'savola13',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',

@@ -16,7 +16,7 @@ class Roles(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now, blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    role_id = models.AutoField(primary_key=True)
+    #role_id = models.AutoField(primary_key=True)
     role_name = models.CharField(max_length=100)
 
 #Table 15 Category table
@@ -25,7 +25,7 @@ class Category(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    category_id = models.AutoField(primary_key=True)
+    #category_id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=100)
 
     def __unicode__(self):
@@ -37,7 +37,7 @@ class Brands(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    brand_id = models.AutoField(primary_key=True)
+    #brand_id = models.AutoField(primary_key=True)
     brand_name = models.CharField(max_length=100)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     
@@ -50,7 +50,7 @@ class Sku(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    sku_id = models.AutoField(primary_key=True)
+    #sku_id = models.AutoField(primary_key=True)
     sku_name = models.CharField(max_length=100)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     brand = models.ForeignKey(Brands,on_delete=models.CASCADE)
@@ -67,7 +67,7 @@ class QuestionnaireType(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now, blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    questionnaire_type_id = models.AutoField(primary_key=True)
+    #questionnaire_type_id = models.AutoField(primary_key=True)
     questionnaire_type = models.CharField(max_length=100)
     # Questionnaire = models.CharField(max_length=100) # Questionnaire id of Questionnaire table
     
@@ -77,7 +77,7 @@ class Questions(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    questions_id = models.AutoField(primary_key=True)
+    #questions_id = models.AutoField(primary_key=True)
     question_type = models.CharField(max_length=100)
     brand = models.ForeignKey(Brands,on_delete=models.CASCADE)
     sku = models.ForeignKey(Sku,on_delete=models.CASCADE)
@@ -90,7 +90,7 @@ class Questions(models.Model):
 #     isDeleted = models.BooleanField(default=False)
 #     created = models.DateTimeField(default=datetime.now, blank=True)
 #     updated = models.DateTimeField(default=datetime.now, blank=True)
-#     questionnaire_id = models.AutoField(primary_key=True)
+##     questionnaire_id = models.AutoField(primary_key=True)
 #     questionnaire_name = models.CharField(max_length=100) # name display on App carasoul
 #     questionnaire_type = models.ForeignKey(QuestionnaireType,on_delete=models.CASCADE) #Id of questionnaire type table
 #     question = models.ForeignKey(Questions,on_delete=models.CASCADE) # id of question table, one to many dbt delete?
@@ -102,7 +102,7 @@ class QuestionOptions(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    question_options_id = models.AutoField(primary_key=True)
+    #question_options_id = models.AutoField(primary_key=True)
     question_options = models.CharField(max_length=100)
     
 
@@ -112,7 +112,7 @@ class Country(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    country_id = models.AutoField(primary_key=True)
+    #country_id = models.AutoField(primary_key=True)
     country_name = models.CharField(max_length=100)
     longitude = models.DecimalField(max_digits=8, decimal_places=3)
     langitude = models.DecimalField(max_digits=8, decimal_places=3)
@@ -126,7 +126,7 @@ class City(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    city_id = models.AutoField(primary_key=True)
+    #city_id = models.AutoField(primary_key=True)
     city_name = models.CharField(max_length=100)
     longitude = models.DecimalField(max_digits=8, decimal_places=3)
     langitude = models.DecimalField(max_digits=8, decimal_places=3)
@@ -141,7 +141,7 @@ class Areas(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    area_id = models.AutoField(primary_key=True)
+    #area_id = models.AutoField(primary_key=True)
     area_name = models.CharField(max_length=100)
     longitude = models.DecimalField(max_digits=8, decimal_places=3)
     langitude = models.DecimalField(max_digits=8, decimal_places=3)
@@ -177,18 +177,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     ('2','User')
     )
 
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
+    
     email = models.EmailField(unique=True,null=True)
-    is_active = models.BooleanField(default=True)
+    full_name = models.CharField(max_length=200)
     role = models.PositiveSmallIntegerField(choices=choice_roles, blank=True, null=True, default=1)
-    profile_pic = models.CharField(default="avatar.png",max_length=100)
-    # nationality = models.CharField(max_length=100, null=False)
-    # country = models.ManyToManyField()
-    # city = models.ManyToManyField()
     date_of_birth = models.DateField(null=True)
     contact_number = models.CharField(max_length=12)
     username = models.CharField(max_length=100)
+    profile_pic = models.CharField(default="avatar.png",max_length=100)
+    nationality = models.CharField(max_length=100, null=False)
+    # country = models.ManyToManyField(country)
+    # city = models.ManyToManyField(city)
 
     is_staff = models.BooleanField(
 
@@ -208,13 +207,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-
-    def get_full_name(self):
-        return self.first_name+self.last_name
-
-    def get_short_name(self):
-        return self.first_name
-
     def get_tokens_for_user(self):
         refresh = RefreshToken.for_user(self)
 
@@ -229,7 +221,7 @@ class Retailers(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    retailer_id = models.AutoField(primary_key=True)
+    #retailer_id = models.AutoField(primary_key=True)
     reatailer_name = models.CharField(max_length=100)
 
 #Table 14 Store table
@@ -238,21 +230,21 @@ class Stores(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    store_id = models.AutoField(primary_key=True)
+    #store_id = models.AutoField(primary_key=True)
     store_name = models.CharField(max_length=100)
     longitude = models.DecimalField(max_digits=8, decimal_places=3)
     langitude = models.DecimalField(max_digits=8, decimal_places=3)
     retailer = models.ForeignKey(Retailers,on_delete=models.CASCADE)
 
 
-#Table2 Survey Table
-class Surveys(models.Model):
+#Table2 Questionnaire Table
+class Questionnaires(models.Model):
     status = models.BooleanField(default=True)
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now, blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
     time_submited = models.DateTimeField(default=datetime.now) #time of survey submited by agent    #to calculate the estimated time taken for 
-    survey_id = models.AutoField(primary_key=True)
+    #survey_id = models.AutoField(primary_key=True)
     country = models.ForeignKey(Country,on_delete=models.CASCADE) #country Table id multy select
     city = models.ForeignKey(City,on_delete=models.CASCADE) #city Table id all cityes under selected city shoould display here
     area = models.ForeignKey(Areas,on_delete=models.CASCADE) 
@@ -268,8 +260,8 @@ class SurveyActivities(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now, blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    survey_activity_id = models.AutoField(primary_key=True)
-    survey = models.OneToOneField(Surveys,on_delete=models.CASCADE) # id of survey table
+    #survey_activity_id = models.AutoField(primary_key=True)
+    questionnaire = models.OneToOneField(Questionnaires,on_delete=models.CASCADE) # id of survey table
     user = models.ManyToManyField(User) #usertable id
     longitude = models.DecimalField(max_digits=8, decimal_places=3)
     langitude = models.DecimalField(max_digits=8, decimal_places=3) #longitude and latitude of the user send by app while they do this survey
@@ -281,9 +273,9 @@ class Answers(models.Model):
     isDeleted = models.BooleanField(default=False)
     created = models.DateTimeField(default=datetime.now,blank=True)
     updated = models.DateTimeField(default=datetime.now, blank=True)
-    answer_id = models.AutoField(primary_key=True)
+    #answer_id = models.AutoField(primary_key=True)
     question = models.OneToOneField(Questions,on_delete=models.CASCADE) #Question id of q table
-    survey = models.ForeignKey(Surveys,on_delete=models.CASCADE)
+    Questionnaire = models.ForeignKey(Questionnaires,on_delete=models.CASCADE)
     # questionnaire = models.ForeignKey(Surveys,on_delete=models.CASCADE) #Questionnaire id of questionnaire table
     answer = models.CharField(max_length=100)
 
