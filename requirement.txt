@@ -1,0 +1,27 @@
+# base requirements
+
+# Django
+# --------------------------------------------------------------
+Django==3.1.7
+# django-environ
+# argon2-cffi  # password
+
+
+# Rest Framework
+# --------------------------------------------------------------
+djoser
+django-allauth
+django-rest-auth
+djangorestframework
+django-cors-headers
+asgiref==3.3.4
+Django==3.1.7
+djangorestframework==3.12.4
+djangorestframework-simplejwt==4.6.0
+PyJWT==2.0.1
+pytz==2021.1
+sqlparse==0.4.1
+mysqlclient==2.0.3
+# Database
+# --------------------------------------------------------------
+mysqlclient==2.0.3
