@@ -1,0 +1,13 @@
+-r base.txt
+
+# requirements for local development
+
+# Django
+# ------------------------------------------------------------------------------
+
+django-debug-toolbar==3.1  # https://github.com/jazzband/django-debug-toolbar
+django-extensions==3.0.9  # https://github.com/django-extensions/django-extensions
+
+# Database
+# --------------------------------------------------------------
+mysqlclient==2.0.3

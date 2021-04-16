@@ -1,0 +1,29 @@
+from django.urls import path, include
+
+# This file will contain all the end-points
+urlpatterns = [
+    path(
+        'question/',
+        include('apps.question.urls.base_urls')
+    ),
+    path(
+        'user/',
+        include('apps.user.urls')
+    ),
+    path(
+        'localize/',
+        include('apps.localize.urls.base_urls')
+    ),
+    path(
+        'product/',
+        include('apps.product.urls.base_urls')
+    ),
+    path(
+        'market/',
+        include('apps.market.urls.base_urls')
+    ),
+    path(
+        'questionnaire/',
+        include('apps.questionnaire.urls.base_urls')
+    )
+]
