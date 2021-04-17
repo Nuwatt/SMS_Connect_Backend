@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from apps.core import generics
 from apps.core.mixins import ResponseMixin
-from apps.user import serializers, usecases
+from apps.user.serializers import base_serializers
+from apps.user.usecases import base_usecases
 
 
 class UserSignupView(generics.CreateAPIView):
@@ -13,10 +14,10 @@ class UserSignupView(generics.CreateAPIView):
     Use this end-point to signup
     """
     permission_classes = (AllowAny,)
-    serializer_class = serializers.UserSignupSerializer
+    serializer_class = base_serializers.UserSignupSerializer
 
     def perform_create(self, serializer):
-        return usecases.UserSignupUseCase(
+        return base_usecases.UserSignupUseCase(
             serializer=serializer
         ).execute()
 
@@ -25,12 +26,12 @@ class UserLoginView(generics.CreateAPIView, ResponseMixin):
     """
     Use this end-point to login and get access token
     """
-    serializer_class = serializers.UserLoginSerializer
-    response_serializer_class = serializers.UserLoginResponseSerializer
+    serializer_class = base_serializers.UserLoginSerializer
+    response_serializer_class = base_serializers.UserLoginResponseSerializer
     permission_classes = (AllowAny,)
 
     def perform_create(self, serializer):
-        return usecases.UserLoginUseCase(
+        return base_usecases.UserLoginUseCase(
             serializer=serializer
         ).execute()
 
@@ -38,16 +39,6 @@ class UserLoginView(generics.CreateAPIView, ResponseMixin):
         response = self.get_response_serializer(result)
         return Response(response.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(responses={200: serializers.UserLoginResponseSerializer()})
+    @swagger_auto_schema(responses={200: base_serializers.UserLoginResponseSerializer()})
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-
-
-class ListUserView(generics.ListAPIView):
-    """
-    Use this end-point to list all users in the system
-    """
-    serializer_class = serializers.ListUserSerializer
-
-    def get_queryset(self):
-        return usecases.ListUserUseCase().execute()

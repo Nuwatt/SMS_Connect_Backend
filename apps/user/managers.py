@@ -33,3 +33,47 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, **extra_fields)
+
+
+class AgentUserManager(BaseUserManager):
+    def get_queryset(self):
+        return super(AgentUserManager, self).get_queryset().filter(
+            is_staff=False,
+            is_superuser=False,
+            is_portal_user=False,
+            is_agent_user=True,
+        )
+
+    def create(self, email, password, **kwargs):
+        kwargs.update({
+            'is_staff': False,
+            'is_superuser': False,
+            'is_agent_user': True,
+            'is_portal_user': False
+        })
+        user = self.model(email=email, **kwargs)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+
+class PortalUserManager(BaseUserManager):
+    def get_queryset(self):
+        return super(PortalUserManager, self).get_queryset().filter(
+            is_staff=False,
+            is_superuser=False,
+            is_portal_user=True,
+            is_agent_user=False
+        )
+
+    def create(self, email, password, **kwargs):
+        kwargs.update({
+            'is_staff': False,
+            'is_superuser': False,
+            'is_agent_user': False,
+            'is_portal_user': True
+        })
+        user = self.model(email=email, **kwargs)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user

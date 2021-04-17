@@ -8,7 +8,7 @@ urlpatterns = [
     ),
     path(
         'user/',
-        include('apps.user.urls')
+        include('apps.user.urls.base_urls')
     ),
     path(
         'localize/',

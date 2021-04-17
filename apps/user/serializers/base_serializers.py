@@ -54,7 +54,3 @@ class UserLoginResponseSerializer(serializers.Serializer):
     access_token = serializers.CharField()
     refresh_token = serializers.CharField()
     detail = UserDetailSerializer()
-
-
-class ListUserSerializer(UserDetailSerializer):
-    pass
