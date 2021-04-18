@@ -19,6 +19,7 @@ class BaseModelAdmin(ModelAdmin):
         25
     )
     readonly_fields = (
+        'id',
         'created',
         'updated',
     )

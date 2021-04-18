@@ -1,5 +1,6 @@
 from django.db import models
 
+from apps.core.utils import generate_custom_id
 from apps.product.models import SKU, Brand
 from apps.core.models import BaseModel
 from apps.question import validators
@@ -35,13 +36,24 @@ class Question(BaseModel):
     """
     Question model
     """
+    id = models.CharField(
+        max_length=50,
+        unique=True,
+        primary_key=True,
+        editable=False
+    )
     question_type = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
     question_statement = models.ForeignKey(QuestionStatement, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     sku = models.ForeignKey(SKU, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.question_statement.statement
+        return self.id
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.id = generate_custom_id(initial='Q', model=Question)
+        super(Question, self).save(*args, **kwargs)
 
 
 class QuestionOption(BaseModel):
@@ -57,6 +69,3 @@ class QuestionOption(BaseModel):
         max_length=244,
         validators=[validators.validate_question_option]
     )
-
-    def __str__(self):
-        return self.option

@@ -3,18 +3,18 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.admin import BaseModelAdmin
 from apps.user import models
-from apps.user.forms import AgentUserCreationForm, PortalUserCreationForm
 
 User = get_user_model()
 
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
+    list_display = ('id', 'email', 'first_name', 'last_name', 'is_staff')
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': (
-            'email',
             'contact_number',
         )}),
         (_('Permissions'), {
@@ -28,30 +28,23 @@ class UserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'password1', 'password2'),
+            'fields': (
+                'email',
+                'password1',
+                'password2',
+                'is_agent_user',
+                'is_portal_user'
+            ),
         }),
     )
+    ordering = ('-date_joined',)
 
 
 @admin.register(models.AgentUser)
-class AgentUserAdmin(UserAdmin):
-    add_form = AgentUserCreationForm
-
-    fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': (
-            'email',
-            'contact_number',
-        )}),
-        (_('Permissions'), {
-            'fields': (
-                'is_active', 'groups', 'user_permissions',
-            ),
-        }),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-    )
+class AgentUserAdmin(BaseModelAdmin):
+    pass
 
 
 @admin.register(models.PortalUser)
-class PortalUserAdmin(AgentUserAdmin):
-    add_form = PortalUserCreationForm
+class PortalUserAdmin(BaseModelAdmin):
+    pass

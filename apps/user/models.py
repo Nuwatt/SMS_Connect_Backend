@@ -4,10 +4,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core import fields
-from apps.user.managers import UserManager, AgentUserManager, PortalUserManager
+from apps.core.models import BaseModel
+from apps.core.utils import generate_custom_id
+from apps.user.managers import UserManager
 
 
 class User(AbstractUser):
+    username = None
     email = models.EmailField(
         _('email address'),
         unique=True
@@ -61,15 +64,31 @@ class User(AbstractUser):
             )
 
 
-class AgentUser(User):
-    objects = AgentUserManager()
+class BaseUser(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    id = models.CharField(
+        max_length=50,
+        unique=True,
+        primary_key=True,
+        editable=False
+    )
+
+    def __str__(self):
+        return self.id
 
     class Meta:
-        proxy = True
+        abstract = True
 
 
-class PortalUser(User):
-    objects = PortalUserManager()
+class AgentUser(BaseUser):
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.id = generate_custom_id(initial='FW', model=AgentUser)
+        super(AgentUser, self).save(*args, **kwargs)
 
-    class Meta:
-        proxy = True
+
+class PortalUser(BaseUser):
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.id = generate_custom_id(initial='PU', model=PortalUser)
+        super(PortalUser, self).save(*args, **kwargs)

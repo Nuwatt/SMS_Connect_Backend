@@ -63,3 +63,8 @@ if settings.DEBUG:
         import debug_toolbar
 
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+
+
+admin.site.site_header = "SMS Connect Admin"
+admin.site.index_title = "Welcome to SMS Connect Admin Portal"
+admin.site.site_title = "SMS Connect Admin Portal"
