@@ -1,30 +1,30 @@
 from django.urls import path
 
-from apps.market.views import store_views
+from apps.questionnaire.views import questionnaire_type_views
 
 urlpatterns = [
     path(
         'add',
-        store_views.AddStoreView.as_view(),
-        name='add-store'
+        questionnaire_type_views.AddQuestionnaireTypeView.as_view(),
+        name='add-questionnaire-type'
 
     ),
     path(
         'list',
-        store_views.ListStoreView.as_view(),
-        name='list-store'
+        questionnaire_type_views.ListQuestionnaireTypeView.as_view(),
+        name='list-questionnaire-type'
 
     ),
     path(
-        '<str:store_id>/update',
-        store_views.UpdateStoreView.as_view(),
-        name='update-store'
+        '<str:questionnaire_type_id>/update',
+        questionnaire_type_views.UpdateQuestionnaireTypeView.as_view(),
+        name='update-questionnaire-type'
 
     ),
     path(
-        '<str:store_id>/delete',
-        store_views.DeleteStoreView.as_view(),
-        name='delete-store'
+        '<str:questionnaire_type_id>/delete',
+        questionnaire_type_views.DeleteQuestionnaireTypeView.as_view(),
+        name='delete-questionnaire-type'
 
     )
 ]

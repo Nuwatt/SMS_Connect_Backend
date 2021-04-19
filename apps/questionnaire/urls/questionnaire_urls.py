@@ -26,5 +26,11 @@ urlpatterns = [
         questionnaire_views.DeleteQuestionnaireView.as_view(),
         name='delete-questionnaire'
 
+    ),
+    path(
+        '<str:questionnaire_id>/detail',
+        questionnaire_views.QuestionnaireDetailView.as_view(),
+        name='questionnaire-detail'
+
     )
 ]

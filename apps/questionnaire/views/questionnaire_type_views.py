@@ -6,7 +6,7 @@ from apps.questionnaire.serializers import questionnaire_type_serializers
 from apps.questionnaire.usecases import questionnaire_type_usecases
 
 
-class AddStoreView(CreateAPIView):
+class AddQuestionnaireTypeView(CreateAPIView):
     """
     Use this end-point to add new questionnaire type
     """
@@ -18,7 +18,7 @@ class AddStoreView(CreateAPIView):
         ).execute()
 
 
-class ListStoreView(ListAPIView):
+class ListQuestionnaireTypeView(ListAPIView):
     """
     Use this end-point to list all questionnaire type
     """

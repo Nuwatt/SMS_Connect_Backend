@@ -20,11 +20,15 @@ class AddQuestionnaireSerializer(QuestionnaireSerializer):
         )
 
 
-class ListQuestionnaireSerializer(AddQuestionnaireSerializer):
+class QuestionnaireDetailSerializer(QuestionnaireSerializer):
     class Meta(AddQuestionnaireSerializer.Meta):
         fields = (
             'id',
         ) + AddQuestionnaireSerializer.Meta.fields
+
+
+class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
+    pass
 
 
 class UpdateQuestionnaireSerializer(AddQuestionnaireSerializer):

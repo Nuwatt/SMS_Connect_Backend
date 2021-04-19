@@ -1,6 +1,11 @@
+from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_auto_schema
+
 from rest_framework import generics
+from rest_framework.response import Response
 
 from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core.serializers import MessageResponseSerializer
 from apps.questionnaire.filtersets import QuestionnaireFilter
 from apps.questionnaire.mixins import QuestionnaireMixin
 from apps.questionnaire.serializers import questionnaire_serializers
@@ -17,6 +22,15 @@ class AddQuestionnaireView(CreateAPIView):
         return questionnaire_usecases.AddQuestionnaireUseCase(
             serializer=serializer
         ).execute()
+
+    def response(self, result, serializer, status_code):
+        return Response({
+            'message': _('Added successfully.')
+        })
+
+    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class ListQuestionnaireView(ListAPIView):
@@ -58,3 +72,13 @@ class DeleteQuestionnaireView(generics.DestroyAPIView, QuestionnaireMixin):
         return questionnaire_usecases.DeleteQuestionnaireUseCase(
             questionnaire=self.get_object()
         ).execute()
+
+
+class QuestionnaireDetailView(generics.RetrieveAPIView, QuestionnaireMixin):
+    """
+    Use this end-point to get detail of specific questionnaire
+    """
+    serializer_class = questionnaire_serializers.QuestionnaireDetailSerializer
+
+    def get_object(self):
+        return self.get_questionnaire()
