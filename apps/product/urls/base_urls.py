@@ -10,7 +10,7 @@ urlpatterns = [
         include('apps.product.urls.category_urls')
     ),
     path(
-        'product/',
+        'brand/',
         include('apps.product.urls.brand_urls')
     )
 ]

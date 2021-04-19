@@ -19,7 +19,7 @@ class CategoryNameValidator(WordValidator):
     message = _('Enter a valid category name.')
     regex_message = _('Accepted words with letters, digits')
     regex = _lazy_re_compile(
-        r'^[aA-zZ0-9\s]+$'
+        r'^[aA-zZ0-9\-]+$'
     )
 
 
@@ -28,7 +28,7 @@ class BrandNameValidator(WordValidator):
     message = _('Enter a valid product name.')
     regex_message = _('Accepted words with letters, digits')
     regex = _lazy_re_compile(
-        r'^[aA-zZ0-9\s]+$'
+        r'^[aA-zZ0-9\s\-]+$'
     )
 
 

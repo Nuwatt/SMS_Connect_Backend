@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.core.serializers import IdNameSerializer
 from apps.product.models import SKU
 
 
@@ -19,10 +20,13 @@ class AddSKUSerializer(SKUSerializer):
 
 
 class ListSKUSerializer(AddSKUSerializer):
+    category = IdNameSerializer()
+    brand = IdNameSerializer()
+
     class Meta(AddSKUSerializer.Meta):
         fields = (
-            'id',
-        ) + AddSKUSerializer.Meta.fields
+                     'id',
+                 ) + AddSKUSerializer.Meta.fields
 
 
 class UpdateSKUSerializer(AddSKUSerializer):
