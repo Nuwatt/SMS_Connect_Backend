@@ -1,5 +1,5 @@
 from apps.core import usecases
-from apps.market.exceptions import StoreNotFound
+from apps.market.exceptions import ChannelNotFound
 from apps.market.models import Store
 
 
@@ -15,7 +15,7 @@ class GetStoreUseCase(usecases.BaseUseCase):
         try:
             self._store = Store.objects.get(pk=self._store_id)
         except Store.DoesNotExist:
-            raise StoreNotFound
+            raise ChannelNotFound
 
 
 class AddStoreUseCase(usecases.CreateUseCase):

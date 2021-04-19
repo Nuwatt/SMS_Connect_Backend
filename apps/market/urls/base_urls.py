@@ -9,4 +9,8 @@ urlpatterns = [
         'retailer/',
         include('apps.market.urls.retailer_urls')
     ),
+    path(
+        'channel/',
+        include('apps.market.urls.channel_urls')
+    ),
 ]

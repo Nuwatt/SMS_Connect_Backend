@@ -28,3 +28,14 @@ class StoreAdmin(BaseModelAdmin):
     list_filter = (
         'retailer',
     )
+
+
+@admin.register(models.Channel)
+class ChannelAdmin(BaseModelAdmin):
+    list_display = (
+        'name',
+    ) + BaseModelAdmin.list_display
+
+    search_fields = (
+        'name',
+    ) + BaseModelAdmin.search_fields

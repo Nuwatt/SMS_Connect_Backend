@@ -13,9 +13,4 @@ urlpatterns = [
         question_type_views.ListQuestionView.as_view(),
         name='list-question-type'
     ),
-    path(
-        '<str:question_type_id>/detail',
-        question_type_views.QuestionDetailView.as_view(),
-        name='question-type-detail'
-    )
 ]

@@ -21,7 +21,3 @@ class ListQuestionTypeSerializer(AddQuestionTypeSerializer):
         fields = AddQuestionTypeSerializer.Meta.fields + (
             'id',
         )
-
-
-class QuestionDetailSerializer(ListQuestionTypeSerializer):
-    pass

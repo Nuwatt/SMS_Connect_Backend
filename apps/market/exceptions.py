@@ -9,3 +9,7 @@ class RetailerNotFound(NotFound):
 
 class StoreNotFound(NotFound):
     default_detail = _('Store not found.')
+
+
+class ChannelNotFound(NotFound):
+    default_detail = _('Channel not found.')

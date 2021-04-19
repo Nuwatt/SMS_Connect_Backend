@@ -31,13 +31,3 @@ class ListQuestionView(ListAPIView):
 
     def get_queryset(self):
         return question_type_usecases.ListQuestionTypeUseCase().execute()
-
-
-class QuestionDetailView(generics.RetrieveAPIView, QuestionTypeMixin):
-    """
-    Use this end-point to get detail of a specific question type
-    """
-    serializer_class = question_type_serializers.QuestionDetailSerializer
-
-    def get_object(self):
-        return self.get_question_type()
