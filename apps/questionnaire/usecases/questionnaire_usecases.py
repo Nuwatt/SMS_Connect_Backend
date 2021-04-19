@@ -48,4 +48,4 @@ class ListQuestionnaireUseCase(usecases.BaseUseCase):
         return self._questionnaires
 
     def _factory(self):
-        self._questionnaires = Questionnaire.objects.all()
+        self._questionnaires = Questionnaire.objects.unarchived()

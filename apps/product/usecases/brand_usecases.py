@@ -39,5 +39,5 @@ class ListBrandUseCase(usecases.BaseUseCase):
         return self._brands
 
     def _factory(self):
-        self._brands = Brand.objects.all()
+        self._brands = Brand.objects.unarchived()
 

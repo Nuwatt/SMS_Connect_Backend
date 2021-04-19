@@ -39,5 +39,5 @@ class ListStoreUseCase(usecases.BaseUseCase):
         return self._stores
 
     def _factory(self):
-        self._stores = Store.objects.all()
+        self._stores = Store.objects.unarchived()
 

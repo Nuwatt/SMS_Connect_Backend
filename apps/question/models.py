@@ -3,7 +3,6 @@ from django.db import models
 from apps.core.utils import generate_custom_id
 from apps.product.models import SKU, Brand
 from apps.core.models import BaseModel
-from apps.question import validators
 
 
 class QuestionType(BaseModel):
@@ -12,7 +11,6 @@ class QuestionType(BaseModel):
     """
     name = models.CharField(
         max_length=244,
-        validators=[validators.validate_question_type]
     )
 
     def __str__(self):
@@ -25,7 +23,6 @@ class QuestionStatement(BaseModel):
     """
     statement = models.CharField(
         max_length=244,
-        validators=[validators.validate_question_statement]
     )
 
     def __str__(self):
@@ -67,5 +64,4 @@ class QuestionOption(BaseModel):
     )
     option = models.CharField(
         max_length=244,
-        validators=[validators.validate_question_option]
     )

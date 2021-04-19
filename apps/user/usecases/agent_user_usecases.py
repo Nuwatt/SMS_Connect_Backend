@@ -8,5 +8,5 @@ class ListAgentUserUseCase(usecases.BaseUseCase):
         return self._agent_users
 
     def _factory(self):
-        self._agent_users = AgentUser.objects.all()
+        self._agent_users = AgentUser.objects.unarchived()
 

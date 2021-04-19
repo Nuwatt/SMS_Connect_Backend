@@ -39,5 +39,5 @@ class ListCountryUseCase(usecases.BaseUseCase):
         return self._countries
 
     def _factory(self):
-        self._countries = Country.objects.all()
+        self._countries = Country.objects.unarchived()
 

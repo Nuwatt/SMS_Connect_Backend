@@ -1,6 +1,5 @@
 from django.db import models
 
-from apps.product import validators
 from apps.core.models import BaseModel
 
 
@@ -10,7 +9,6 @@ class Category(BaseModel):
     """
     name = models.CharField(
         max_length=224,
-        validators=[validators.validate_category_name]
     )
 
     def __str__(self):
@@ -27,7 +25,11 @@ class Brand(BaseModel):
     """
     name = models.CharField(
         max_length=224,
-        validators=[validators.validate_brand_name]
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        null=True
     )
 
     def __str__(self):
@@ -40,7 +42,6 @@ class SKU(BaseModel):
     """
     name = models.CharField(
         max_length=224,
-        validators=[validators.validate_sku_name]
     )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)

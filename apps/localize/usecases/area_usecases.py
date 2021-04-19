@@ -39,4 +39,4 @@ class ListAreaUseCase(usecases.BaseUseCase):
         return self._areas
 
     def _factory(self):
-        self._areas = Area.objects.all()
+        self._areas = Area.objects.unarchived()

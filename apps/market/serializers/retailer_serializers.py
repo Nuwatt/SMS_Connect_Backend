@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.core.serializers import IdNameSerializer
 from apps.market.models import Retailer
 
 
@@ -13,15 +14,21 @@ class AddRetailerSerializer(RetailerSerializer):
     class Meta(RetailerSerializer.Meta):
         fields = (
             'name',
+            'channel',
+            'country',
+            'city',
         )
 
 
-class ListRetailerSerializer(RetailerSerializer):
-    class Meta(RetailerSerializer.Meta):
+class ListRetailerSerializer(AddRetailerSerializer):
+    channel = IdNameSerializer()
+    country = IdNameSerializer()
+    city = IdNameSerializer()
+
+    class Meta(AddRetailerSerializer.Meta):
         fields = (
             'id',
-            'name'
-        )
+        ) + AddRetailerSerializer.Meta.fields
 
 
 class UpdateRetailerSerializer(AddRetailerSerializer):

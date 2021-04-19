@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.core.serializers import IdNameSerializer
 from apps.product.models import Brand
 
 
@@ -13,15 +14,17 @@ class AddBrandSerializer(BrandSerializer):
     class Meta(BrandSerializer.Meta):
         fields = (
             'name',
+            'category',
         )
 
 
-class ListBrandSerializer(BrandSerializer):
-    class Meta(BrandSerializer.Meta):
+class ListBrandSerializer(AddBrandSerializer):
+    category = IdNameSerializer()
+
+    class Meta(AddBrandSerializer.Meta):
         fields = (
             'id',
-            'name',
-        )
+        ) + AddBrandSerializer.Meta.fields
 
 
 class UpdateBrandSerializer(AddBrandSerializer):

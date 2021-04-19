@@ -39,4 +39,4 @@ class ListRetailerUseCase(usecases.BaseUseCase):
         return self._retailers
 
     def _factory(self):
-        self._retailers = Retailer.objects.all()
+        self._retailers = Retailer.objects.unarchived()

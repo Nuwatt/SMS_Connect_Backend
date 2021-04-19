@@ -39,5 +39,5 @@ class ListCityUseCase(usecases.BaseUseCase):
         return self._cities
 
     def _factory(self):
-        self._cities = City.objects.all()
+        self._cities = City.objects.unarchived()
 

@@ -69,7 +69,4 @@ class DeleteUseCase(BaseUseCase):
         return self._instance
 
     def _factory(self):
-        try:
-            self._instance.delete()
-        except ProtectedError:
-            raise ValidationError({'non_field_errors': _('This Item is protected cannot delete.')})
+        self._instance.archive()

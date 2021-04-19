@@ -31,5 +31,5 @@ class ListQuestionTypeUseCase(usecases.BaseUseCase):
         return self._question_types
 
     def _factory(self):
-        self._question_types = QuestionType.objects.all()
+        self._question_types = QuestionType.objects.unarchived()
 

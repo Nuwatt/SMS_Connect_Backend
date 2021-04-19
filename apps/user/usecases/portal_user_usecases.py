@@ -8,5 +8,5 @@ class ListPortalUserUseCase(usecases.BaseUseCase):
         return self._portal_users
 
     def _factory(self):
-        self._portal_users = PortalUser.objects.all()
+        self._portal_users = PortalUser.objects.unarchived()
 

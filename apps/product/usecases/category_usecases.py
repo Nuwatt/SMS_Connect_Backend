@@ -39,5 +39,5 @@ class ListCategoryUseCase(usecases.BaseUseCase):
         return self._Categories
 
     def _factory(self):
-        self._Categories = Category.objects.all()
+        self._Categories = Category.objects.unarchived()
 
