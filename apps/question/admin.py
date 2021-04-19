@@ -32,8 +32,8 @@ class QuestionOptionAdmin(BaseModelAdmin):
 @admin.register(models.QuestionType)
 class QuestionOptionAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
-        'type',
+        'name',
     )
     search_fields = BaseModelAdmin.search_fields + (
-        'type',
+        'name',
     )

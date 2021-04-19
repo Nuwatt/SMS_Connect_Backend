@@ -10,7 +10,7 @@ class QuestionTypeValidator(WordValidator):
     message = _('Enter a valid question type.')
     regex_message = _('Accepted words with letters digits and &.')
     regex = _lazy_re_compile(
-        r'^[aA-zZ0-9\s\&]+$'
+        r'^[aA-zZ0-9\s\&\-\/]+$'
     )
 
 

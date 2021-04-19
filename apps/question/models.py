@@ -10,13 +10,13 @@ class QuestionType(BaseModel):
     """
     Question Type model
     """
-    type = models.CharField(
+    name = models.CharField(
         max_length=244,
         validators=[validators.validate_question_type]
     )
 
     def __str__(self):
-        return self.type
+        return self.name
 
 
 class QuestionStatement(BaseModel):
