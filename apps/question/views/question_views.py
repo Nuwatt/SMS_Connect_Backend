@@ -22,7 +22,7 @@ class AddQuestionView(CreateAPIView):
             serializer=serializer
         ).execute()
 
-    def response(self, result, status_code):
+    def response(self, result, serializer, status_code):
         return Response({
             'message': _('Question added successfully.')
         }, status=status_code)

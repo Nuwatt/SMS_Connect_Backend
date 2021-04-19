@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.core.serializers import IdNameSerializer
 from apps.localize.models import City
 
 
@@ -18,6 +19,8 @@ class AddCitySerializer(CitySerializer):
 
 
 class ListCitySerializer(CitySerializer):
+    country = IdNameSerializer()
+
     class Meta(CitySerializer.Meta):
         fields = (
             'id',

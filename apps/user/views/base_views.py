@@ -35,7 +35,7 @@ class UserLoginView(generics.CreateAPIView, ResponseMixin):
             serializer=serializer
         ).execute()
 
-    def response(self, result, status_code):
+    def response(self, result, serializer, status_code):
         response = self.get_response_serializer(result)
         return Response(response.data, status=status.HTTP_200_OK)
 

@@ -12,10 +12,9 @@ class CreateAPIView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = self.perform_create(serializer)
-        return self.response(result=result, status_code=status.HTTP_201_CREATED)
+        return self.response(result=result, serializer=serializer, status_code=status.HTTP_201_CREATED)
 
-    def response(self, result, status_code):
-        serializer = self.get_serializer(self.request.data)
+    def response(self, result, serializer, status_code):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status_code, headers=headers)
 
