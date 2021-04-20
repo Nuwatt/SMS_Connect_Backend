@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.user.models import PortalUser
+from apps.user.serializers.base_serializers import UserSignupSerializer
 
 
 class PortalUserSerializer(serializers.ModelSerializer):
@@ -14,3 +15,7 @@ class ListPortalUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
     email = serializers.EmailField(source='user.email')
+
+
+class RegisterPortalUserSerializer(UserSignupSerializer):
+    pass

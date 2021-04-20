@@ -8,4 +8,9 @@ urlpatterns = [
         portal_user_views.ListPortalUserView.as_view(),
         name='list-portal-user'
     ),
+    path(
+        'register',
+        portal_user_views.RegisterPortalUserView.as_view(),
+        name='register-portal-user'
+    ),
 ]
