@@ -284,3 +284,6 @@ if not DEBUG:
 # -----------------------------------------------------------------------------
 PASSWORD_RESET_CONFIRM_URL = 'http://sms-connect.s3-website.ap-south-1.amazonaws.com/password/reset/{}/{}'
 PASSWORD_RESET_TIMEOUT = 1800  # 30 minutes
+
+# INCEPTION
+INCEPTION_SUPPORT_EMAIL = env.str('INCEPTION_SUPPORT_EMAIL')

@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.core import usecases
-from apps.user.email import PasswordResetEmail, PasswordResetConfirmationEmail, PasswordChangeConfirmationEmail
+from apps.user.email import PasswordResetEmail, PasswordResetConfirmationEmail, SupportEmail, \
+    PasswordChangeConfirmationEmail
 from apps.user.exceptions import UserInactive, LoginFailed
 
 User = get_user_model()
@@ -102,3 +104,19 @@ class ChangePasswordUseCase(usecases.CreateUseCase):
         PasswordChangeConfirmationEmail(
             context={"user": self._user}
         ).send(to=[self._user.email])
+
+
+class SupportUseCase(usecases.CreateUseCase):
+    def __init__(self, user: User, serializer):
+        super().__init__(serializer)
+        self._user = user
+
+    def _factory(self):
+        SupportEmail(
+            context={
+                "user": self._user,
+                "text": self._data.get('text'),
+
+            }
+        ).send(to=[settings.INCEPTION_SUPPORT_EMAIL])
+

@@ -1,0 +1,14 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Support{% endblocktrans %}
+{% endblock subject %}
+
+
+{% block html_body %}
+<p>{{ text }}</p>
+<p>Best Regards.</p>
+<p>{{ user.first_name }} {{ user.last_name }}</p>
+<p>{{ user.email }}</p>
+
+{% endblock html_body %}

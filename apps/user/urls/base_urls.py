@@ -29,6 +29,11 @@ urlpatterns = [
         name='password-reset-confirm'
     ),
     path(
+        'support',
+        base_views.SupportView.as_view(),
+        name='support'
+    ),
+    path(
         'agent-user/',
         include('apps.user.urls.agent_user_urls')
     ),

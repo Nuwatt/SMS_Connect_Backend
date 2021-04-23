@@ -27,3 +27,7 @@ class PasswordResetConfirmationEmail(BaseEmailMessage):
 
 class PasswordChangeConfirmationEmail(BaseEmailMessage):
     template_name = "email/change_password_confirmation.html"
+
+
+class SupportEmail(BaseEmailMessage):
+    template_name = "email/support.html"

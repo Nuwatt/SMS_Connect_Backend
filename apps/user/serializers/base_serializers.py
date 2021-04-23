@@ -169,3 +169,7 @@ class ChangePasswordSerializer(PasswordSerializer):
             return value
         else:
             self.fail("invalid_password")
+
+
+class SupportSerializer(serializers.Serializer):
+    text = serializers.CharField()

@@ -81,3 +81,16 @@ class ChangePasswordView(generics.CreateAPIView):
             user=self.request.user,
             serializer=serializer
         ).execute()
+
+
+class SupportView(generics.CreateAPIView):
+    """
+    Use this end-point to send support email to inception
+    """
+    serializer_class = base_serializers.SupportSerializer
+
+    def perform_create(self, serializer):
+        base_usecases.SupportUseCase(
+            user=self.request.user,
+            serializer=serializer
+        ).execute()
