@@ -1,0 +1,7 @@
+from django.utils.translation import gettext_lazy as _
+
+from rest_framework.exceptions import NotFound
+
+
+class TermsAndConditionsNotFound(NotFound):
+    default_detail = _('Terms And Conditions not found.')

@@ -25,7 +25,7 @@ class ListNationalityView(ListAPIView):
     serializer_class = nationality_serializers.ListNationalitySerializer
 
     def get_queryset(self):
-        return nationality_usecases.ListCountryUseCase().execute()
+        return nationality_usecases.ListNationalityUseCase().execute()
 
 
 class UpdateNationalityView(generics.UpdateAPIView, NationalityMixin):

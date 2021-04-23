@@ -25,5 +25,9 @@ urlpatterns = [
     path(
         'questionnaire/',
         include('apps.questionnaire.urls.base_urls')
+    ),
+    path(
+        'terms-and-conditions/',
+        include('apps.terms_and_conditions.urls')
     )
 ]

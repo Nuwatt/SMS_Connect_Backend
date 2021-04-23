@@ -1,6 +1,7 @@
 from apps.localize.usecases.area_usecases import GetAreaUseCase
 from apps.localize.usecases.city_usecases import GetCityUseCase
 from apps.localize.usecases.country_usecases import GetCountryUseCase
+from apps.localize.usecases.nationality_usecases import GetNationalityUseCase
 
 
 class CountryMixin:

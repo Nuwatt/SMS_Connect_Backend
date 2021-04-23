@@ -3,7 +3,7 @@ from apps.localize.exceptions import NationalityNotFound
 from apps.localize.models import Nationality
 
 
-class GetCountryUseCase(usecases.BaseUseCase):
+class GetNationalityUseCase(usecases.BaseUseCase):
     def __init__(self, nationality_id: str):
         self._nationality_id = nationality_id
 
@@ -33,11 +33,11 @@ class DeleteNationalityUseCase(usecases.DeleteUseCase):
         super().__init__(nationality)
 
 
-class ListCountryUseCase(usecases.BaseUseCase):
+class ListNationalityUseCase(usecases.BaseUseCase):
     def execute(self):
         self._factory()
-        return self._countries
+        return self._nationalities
 
     def _factory(self):
-        self._countries = Nationality.objects.unarchived()
+        self._nationalities = Nationality.objects.unarchived()
 
