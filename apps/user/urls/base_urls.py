@@ -21,4 +21,8 @@ urlpatterns = [
         'portal-user/',
         include('apps.user.urls.portal_user_urls')
     ),
+    path(
+        'role/',
+        include('apps.user.urls.role_urls')
+    ),
 ]
