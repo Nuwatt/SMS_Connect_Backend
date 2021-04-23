@@ -84,7 +84,6 @@ LOCAL_APPS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
@@ -186,7 +185,6 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
-
 # FIXTURES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
@@ -202,7 +200,6 @@ CSRF_COOKIE_HTTPONLY = True
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
-
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -224,7 +221,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -252,7 +249,6 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'EXCEPTION_HANDLER': 'apps.core.exceptions.custom_exception_handler',
 }
-
 
 # JWT CONFIGURATION
 # -----------------------------------------------------------------------------
@@ -284,4 +280,7 @@ if not DEBUG:
         'rest_framework.renderers.JSONRenderer',
     )
 
-
+# Reset Password
+# -----------------------------------------------------------------------------
+PASSWORD_RESET_CONFIRM_URL = 'http://sms-connect.s3-website.ap-south-1.amazonaws.com/password/reset/{}/{}'
+PASSWORD_RESET_TIMEOUT = 1800  # 30 minutes
