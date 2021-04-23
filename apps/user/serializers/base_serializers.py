@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+from apps.core.serializers import IdNameSerializer
+
 User = get_user_model()
 
 
@@ -11,12 +13,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(UserSerializer):
+    nationality = IdNameSerializer()
+
     class Meta(UserSerializer.Meta):
         fields = (
             'id',
             'email',
+            'username',
             'first_name',
-            'last_name'
+            'last_name',
+            'contact_number',
+            'date_of_birth',
+            'nationality',
         )
 
 
@@ -27,7 +35,8 @@ class UserSignupSerializer(UserSerializer):
             'username',
             'password',
             'first_name',
-            'last_name'
+            'last_name',
+            'nationality'
         )
         extra_kwargs = {
             'password': {

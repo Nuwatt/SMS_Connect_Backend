@@ -22,3 +22,10 @@ class AreaMixin:
         return GetAreaUseCase(
             area_id=self.kwargs.get('area_id')
         ).execute()
+
+
+class NationalityMixin:
+    def get_nationality(self, *args, **kwargs):
+        return GetNationalityUseCase(
+            nationality_id=self.kwargs.get('nationality_id')
+        ).execute()

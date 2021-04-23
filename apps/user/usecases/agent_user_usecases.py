@@ -26,7 +26,7 @@ class RegisterAgentUserUseCase(usecases.CreateUseCase):
         # 2. create user
         self._user = User.objects.create_user(
             is_agent_user=True,
-            ** self._data
+            **self._data
         )
 
         # 3. create agent user
@@ -36,3 +36,8 @@ class RegisterAgentUserUseCase(usecases.CreateUseCase):
 
         agent_user.operation_city.set(agent_data.get('operation_city'))
         agent_user.operation_country.set(agent_data.get('operation_country'))
+
+
+class UpdateAgentUserProfile(usecases.UpdateUseCase):
+    def __init__(self, user: User, serializer):
+        super().__init__(serializer, user)

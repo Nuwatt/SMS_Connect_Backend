@@ -1,9 +1,12 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from apps.core.serializers import IdNameSerializer
 from apps.localize.models import City, Country
 from apps.user.models import AgentUser
-from apps.user.serializers.base_serializers import UserSignupSerializer
+from apps.user.serializers.base_serializers import UserSignupSerializer, UserDetailSerializer, UserSerializer
+
+User = get_user_model()
 
 
 class AgentSerializer(serializers.ModelSerializer):
@@ -32,4 +35,19 @@ class RegisterAgentUserSerializer(UserSignupSerializer):
             'avatar',
             'operation_city',
             'operation_country'
+        )
+
+
+class AgentUserProfileSerializer(UserDetailSerializer):
+    pass
+
+
+class UpdateAgentUserProfileSerializer(UserSerializer):
+    class Meta(UserSerializer.Meta):
+        fields = (
+            'first_name',
+            'last_name',
+            'contact_number',
+            'date_of_birth',
+            'nationality',
         )
