@@ -18,8 +18,7 @@ class AgentSerializer(serializers.ModelSerializer):
 class ListAgentUserSerializer(serializers.Serializer):
     id = serializers.CharField()
     username = serializers.CharField(source='user.username')
-    first_name = serializers.CharField(source='user.first_name')
-    last_name = serializers.CharField(source='user.last_name')
+    fullname = serializers.CharField(source='user.fullname')
     email = serializers.EmailField(source='user.email')
     operation_city = IdNameSerializer(many=True)
     operation_country = IdNameSerializer(many=True)
@@ -45,8 +44,7 @@ class AgentUserProfileSerializer(UserDetailSerializer):
 class UpdateAgentUserProfileSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = (
-            'first_name',
-            'last_name',
+            'fullname',
             'contact_number',
             'date_of_birth',
             'nationality',

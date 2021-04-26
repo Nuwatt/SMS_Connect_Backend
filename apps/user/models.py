@@ -1,25 +1,35 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
-from apps.localize.models import Country, City, Nationality
+from apps.localize.models import Country, City
 from apps.user.managers import UserManager
-from apps.user.validators import validate_date_of_birth
+from apps.user.validators import validate_date_of_birth, validate_username
 
 
-class User(AbstractUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         _('email address'),
         unique=True
     )
+    fullname = models.CharField(_('fullname'), max_length=200, null=True)
+    username = models.CharField(
+        _('username'),
+        max_length=150,
+        null=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[validate_username],
+    )
     contact_number = fields.PhoneNumberField()
     date_of_birth = models.DateField(null=True, validators=[validate_date_of_birth])
     nationality = models.ForeignKey(
-        Nationality,
+        Country,
         on_delete=models.CASCADE,
         null=True
     )
@@ -43,8 +53,23 @@ class User(AbstractUser):
             'Unselect this if user is not a portal user.'
         ),
     )
+    is_staff = models.BooleanField(
+        _('staff status'),
+        default=False,
+        help_text=_('Designates whether the user can log into this admin site.'),
+    )
+    is_active = models.BooleanField(
+        _('active'),
+        default=True,
+        help_text=_(
+            'Designates whether this user should be treated as active. '
+            'Unselect this instead of deleting accounts.'
+        ),
+    )
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['fullname']
     objects = UserManager()
 
     def __str__(self):
