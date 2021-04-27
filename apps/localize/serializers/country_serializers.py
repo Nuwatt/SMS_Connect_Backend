@@ -12,7 +12,8 @@ class CountrySerializer(serializers.ModelSerializer):
 class AddCountrySerializer(CountrySerializer):
     class Meta(CountrySerializer.Meta):
         fields = (
-            'name',
+            'name', 
+            'region'
         )
 
 
@@ -20,7 +21,8 @@ class ListCountrySerializer(CountrySerializer):
     class Meta(CountrySerializer.Meta):
         fields = (
             'id',
-            'name'
+            'name',
+            'region' 
         )
 
 

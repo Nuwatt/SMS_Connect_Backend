@@ -1,6 +1,7 @@
 from rest_framework import generics
 
 from apps.core.generics import CreateAPIView, ListAPIView
+from apps.localize.filtersets import CountryFilter
 from apps.localize.mixins import CountryMixin
 from apps.localize.serializers import country_serializers
 from apps.localize.usecases import country_usecases

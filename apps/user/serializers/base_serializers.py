@@ -26,8 +26,7 @@ class UserDetailSerializer(UserSerializer):
             'id',
             'email',
             'username',
-            'first_name',
-            'last_name',
+            'fullname',
             'contact_number',
             'date_of_birth',
             'nationality',
@@ -40,8 +39,7 @@ class UserSignupSerializer(UserSerializer):
             'email',
             'username',
             'password',
-            'first_name',
-            'last_name',
+            'fullname',
             'nationality'
         )
         extra_kwargs = {

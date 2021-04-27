@@ -13,4 +13,8 @@ urlpatterns = [
         'area/',
         include('apps.localize.urls.area_urls')
     ),
+    path(
+        'region/',
+        include('apps.localize.urls.region_urls')
+    )
 ]
