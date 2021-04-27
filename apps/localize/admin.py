@@ -30,3 +30,8 @@ class AreaAdmin(LocalizeModelAdmin):
     list_filter = (
         'country',
     )
+
+
+@admin.register(models.Nationality)
+class NationalityAdmin(LocalizeModelAdmin):
+    pass

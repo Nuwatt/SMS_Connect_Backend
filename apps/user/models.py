@@ -6,17 +6,23 @@ from django.utils.translation import gettext_lazy as _
 from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
+from apps.localize.models import Country, City, Nationality
 from apps.user.managers import UserManager
+from apps.user.validators import validate_date_of_birth
 
 
 class User(AbstractUser):
-    username = None
     email = models.EmailField(
         _('email address'),
         unique=True
     )
     contact_number = fields.PhoneNumberField()
-    date_of_birth = models.DateField(null=True)
+    date_of_birth = models.DateField(null=True, validators=[validate_date_of_birth])
+    nationality = models.ForeignKey(
+        Nationality,
+        on_delete=models.CASCADE,
+        null=True
+    )
     avatar = models.ImageField(
         upload_to='avatar/',
         default="default_avatar.png",
@@ -38,7 +44,7 @@ class User(AbstractUser):
         ),
     )
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
     objects = UserManager()
 
     def __str__(self):
@@ -64,6 +70,13 @@ class User(AbstractUser):
             )
 
 
+class Role(BaseModel):
+    name = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class BaseUser(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     id = models.CharField(
@@ -81,6 +94,10 @@ class BaseUser(BaseModel):
 
 
 class AgentUser(BaseUser):
+    operation_city = models.ManyToManyField(City)
+    operation_country = models.ManyToManyField(Country)
+    total_completed_questionnaire = models.PositiveIntegerField(default=0)
+
     def save(self, *args, **kwargs):
         if self._state.adding:
             self.id = generate_custom_id(initial='FW', model=AgentUser)
@@ -88,6 +105,13 @@ class AgentUser(BaseUser):
 
 
 class PortalUser(BaseUser):
+    position = models.CharField(max_length=200)
+    role = models.ForeignKey(
+        Role,
+        on_delete=models.CASCADE,
+        null=True
+    )
+
     def save(self, *args, **kwargs):
         if self._state.adding:
             self.id = generate_custom_id(initial='PU', model=PortalUser)

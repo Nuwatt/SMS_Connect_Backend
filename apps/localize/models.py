@@ -4,7 +4,7 @@ from apps.core.mixins import CoordinatesModelMixin
 from apps.core.models import BaseModel
 
 
-class Country(BaseModel, CoordinatesModelMixin):
+class Country(BaseModel):
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
@@ -15,7 +15,7 @@ class Country(BaseModel, CoordinatesModelMixin):
         verbose_name_plural = 'Countries'
 
 
-class City(BaseModel, CoordinatesModelMixin):
+class City(BaseModel):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
 
@@ -34,10 +34,17 @@ class City(BaseModel, CoordinatesModelMixin):
         ]
 
 
-class Area(BaseModel, CoordinatesModelMixin):
+class Area(BaseModel):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Nationality(BaseModel):
+    name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name

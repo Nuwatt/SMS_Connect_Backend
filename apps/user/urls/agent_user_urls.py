@@ -13,4 +13,14 @@ urlpatterns = [
         agent_user_views.RegisterAgentUserView.as_view(),
         name='register-agent-user'
     ),
+    path(
+        'profile',
+        agent_user_views.AgentUserProfileView.as_view(),
+        name='agent-user-profile'
+    ),
+    path(
+        'profile/update',
+        agent_user_views.UpdateAgentUserProfileView.as_view(),
+        name='update-agent-user-profile'
+    ),
 ]

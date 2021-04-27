@@ -13,7 +13,7 @@ User = get_user_model()
 class UserAdmin(UserAdmin):
     list_display = ('id', 'email', 'first_name', 'last_name', 'is_staff')
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'username', 'password')}),
         (_('Personal info'), {'fields': (
             'contact_number',
         )}),
@@ -30,6 +30,7 @@ class UserAdmin(UserAdmin):
             'classes': ('wide',),
             'fields': (
                 'email',
+                'username',
                 'password1',
                 'password2',
                 'is_agent_user',
@@ -48,3 +49,14 @@ class AgentUserAdmin(BaseModelAdmin):
 @admin.register(models.PortalUser)
 class PortalUserAdmin(BaseModelAdmin):
     pass
+
+
+@admin.register(models.Role)
+class RoleAdmin(BaseModelAdmin):
+    list_display = (
+        'name',
+    ) + BaseModelAdmin.list_display
+
+    search_fields = (
+        'name',
+    ) + BaseModelAdmin.search_fields
