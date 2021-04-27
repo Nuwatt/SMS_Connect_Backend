@@ -22,7 +22,7 @@ urlpatterns = [
 
     ),
     path(
-        '<str:area_id>/delete',
+        '<str:region_id>/delete',
         region_views.DeleteRegionView.as_view(),
         name='delete-region'
 

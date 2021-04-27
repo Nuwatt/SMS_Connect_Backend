@@ -28,5 +28,5 @@ class AreaMixin:
 class RegionMixin:
     def get_region(self, *args, **kwargs):
         return GetRegionUseCase(
-            area_id=self.kwargs.get('region_id')
+            region_id=self.kwargs.get('region_id')
         ).execute()
