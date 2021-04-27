@@ -14,6 +14,7 @@ class Region(BaseModel):
         verbose_name = 'Region'
         verbose_name_plural = 'Regiones'
 
+
 class Country(BaseModel):
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100, unique=True)
@@ -60,5 +61,3 @@ class Area(BaseModel):
 
     def __str__(self):
         return self.name
-
-
