@@ -16,13 +16,13 @@ urlpatterns = [
 
     ),
     path(
-        '<str:area_id>/update',
+        '<str:country_id>/update',
         country_views.UpdateCountryView.as_view(),
         name='update-country'
 
     ),
     path(
-        '<str:area_id>/delete',
+        '<str:country_id>/delete',
         country_views.DeleteCountryView.as_view(),
         name='delete-country'
 
