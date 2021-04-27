@@ -11,7 +11,7 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
-    list_display = ('id', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('id', 'email', 'fullname', 'is_staff')
     fieldsets = (
         (None, {'fields': ('email', 'username', 'password')}),
         (_('Personal info'), {'fields': (
@@ -30,7 +30,7 @@ class UserAdmin(UserAdmin):
             'classes': ('wide',),
             'fields': (
                 'email',
-                'username',
+                'fullname',
                 'password1',
                 'password2',
                 'is_agent_user',

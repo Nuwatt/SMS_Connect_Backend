@@ -31,7 +31,3 @@ class AreaAdmin(LocalizeModelAdmin):
         'country',
     )
 
-
-@admin.register(models.Nationality)
-class NationalityAdmin(LocalizeModelAdmin):
-    pass

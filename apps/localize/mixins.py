@@ -1,7 +1,6 @@
 from apps.localize.usecases.area_usecases import GetAreaUseCase
 from apps.localize.usecases.city_usecases import GetCityUseCase
 from apps.localize.usecases.country_usecases import GetCountryUseCase
-from apps.localize.usecases.nationality_usecases import GetNationalityUseCase
 
 
 class CountryMixin:
@@ -22,11 +21,4 @@ class AreaMixin:
     def get_area(self, *args, **kwargs):
         return GetAreaUseCase(
             area_id=self.kwargs.get('area_id')
-        ).execute()
-
-
-class NationalityMixin:
-    def get_nationality(self, *args, **kwargs):
-        return GetNationalityUseCase(
-            nationality_id=self.kwargs.get('nationality_id')
         ).execute()

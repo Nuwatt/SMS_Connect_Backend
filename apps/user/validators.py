@@ -1,3 +1,4 @@
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
 from django.core.validators import _lazy_re_compile
 from django.utils import timezone
@@ -27,3 +28,4 @@ class DateOfBirthValidator(Validator):
 
 
 validate_date_of_birth = DateOfBirthValidator()
+validate_username = UnicodeUsernameValidator()
