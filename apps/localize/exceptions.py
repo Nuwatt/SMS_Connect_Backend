@@ -17,3 +17,6 @@ class AreaNotFound(NotFound):
 
 class NationalityNotFound(NotFound):
     default_detail = _('Nationality not found.')
+
+class RegionNotFound(NotFound):
+    default_detail = _('Region not found.')
