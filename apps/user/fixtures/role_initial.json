@@ -1,0 +1,1 @@
+[{"model": "user.role", "pk": 1, "fields": {"created": "2021-04-27T11:13:36.535Z", "updated": "2021-04-27T11:13:36.535Z", "is_archived": false, "status": "active", "name": "Admin"}}, {"model": "user.role", "pk": 2, "fields": {"created": "2021-04-27T11:13:48.561Z", "updated": "2021-04-27T11:13:48.562Z", "is_archived": false, "status": "active", "name": "Researcher"}}]
