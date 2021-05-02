@@ -27,6 +27,7 @@ class UserDetailSerializer(UserSerializer):
             'email',
             'username',
             'fullname',
+            'avatar',
             'contact_number',
             'date_of_birth',
             'nationality',
