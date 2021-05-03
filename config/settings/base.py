@@ -293,3 +293,12 @@ SECURE_SSL_REDIRECT = False
 
 # INCEPTION
 INCEPTION_SUPPORT_EMAIL = env.str('INCEPTION_SUPPORT_EMAIL')
+
+# SWAGGER SETTINGS
+# -----------------------------------------------------------------------------
+SWAGGER_SETTINGS = {
+    'DEFAULT_PAGINATOR_INSPECTORS': [
+        'apps.core.inspectors.CustomDjangoRestResponsePagination',
+        'drf_yasg.inspectors.CoreAPICompatInspector'
+    ],
+}
