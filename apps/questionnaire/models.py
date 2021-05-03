@@ -3,6 +3,7 @@ from django.db import models
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
 from apps.localize.models import Country, City, Area
+from apps.user.models import AgentUser
 
 
 class QuestionnaireType(BaseModel):
@@ -43,7 +44,7 @@ class Questionnaire(BaseModel):
         max_length=9,
         default='none'
     )
-    tags = models.ManyToManyField(Tag, blank=True)
+    tags = models.ManyToManyField(AgentUser, blank=True)
 
     def __str__(self):
         return self.id

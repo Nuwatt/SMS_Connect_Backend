@@ -16,7 +16,8 @@ class AddQuestionnaireSerializer(QuestionnaireSerializer):
             'questionnaire_type',
             'city',
             'area',
-            'country'
+            'country',
+            'tag'
         )
 
 
