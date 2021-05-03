@@ -3,16 +3,15 @@
 # Django
 # --------------------------------------------------------------
 Django==3.1.7
-django-environ
-argon2-cffi  # password
-Pillow
+django-environ==0.4.5
+argon2-cffi==20.1.0  # password
+Pillow==8.2.0
 
 # Rest Framework
 # --------------------------------------------------------------
-djoser
-django-allauth
-django-rest-auth
-djangorestframework
-django-cors-headers
-drf-yasg   # API Documentation
-django-filter
+djangorestframework==3.12.4
+django-cors-headers==3.7.0
+drf-yasg==1.20.0   # API Documentation
+django-filter==2.4.0
+djangorestframework-simplejwt==4.6.0  # JWT
+django-templated-mail==1.1.1          # email template
