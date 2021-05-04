@@ -4,7 +4,7 @@ from apps.question.views import question_views
 
 urlpatterns = [
     path(
-        'add',
+        'questionnaire/<str:questionnaire_id>/add',
         question_views.AddQuestionView.as_view(),
         name='add-question'
     ),

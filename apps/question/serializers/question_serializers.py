@@ -1,6 +1,7 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 
+from apps.core.serializers import IdNameSerializer
 from apps.question.models import Question
 
 
@@ -12,12 +13,11 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 class AddQuestionSerializer(QuestionSerializer):
     question_options = serializers.ListSerializer(child=serializers.CharField())
-    question_statement = serializers.CharField()
 
     class Meta(QuestionSerializer.Meta):
         fields = (
             'question_type',
-            'question_statement',
+            'statement',
             'question_options',
             'brand',
             'sku',
@@ -26,11 +26,13 @@ class AddQuestionSerializer(QuestionSerializer):
 
 class ListQuestionSerializer(AddQuestionSerializer):
     question_options = serializers.SerializerMethodField()
+    brand = IdNameSerializer()
+    sku = IdNameSerializer()
 
     class Meta(AddQuestionSerializer.Meta):
-        fields = AddQuestionSerializer.Meta.fields + (
+        fields = (
             'id',
-        )
+        ) + AddQuestionSerializer.Meta.fields
 
     @swagger_serializer_method(serializer_or_field=serializers.ListSerializer(child=serializers.CharField()))
     def get_question_options(self, instance):

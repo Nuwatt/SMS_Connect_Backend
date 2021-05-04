@@ -46,7 +46,7 @@ class Question(BaseModel):
         on_delete=models.CASCADE
     )
     question_type = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
-    question_statement = models.ForeignKey(QuestionStatement, on_delete=models.CASCADE)
+    statement = models.CharField(max_length=255)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     sku = models.ForeignKey(SKU, on_delete=models.CASCADE)
 

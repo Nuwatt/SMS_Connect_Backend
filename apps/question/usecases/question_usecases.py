@@ -1,6 +1,7 @@
 from apps.core import usecases
 from apps.question.exceptions import QuestionNotFound
 from apps.question.models import Question, QuestionStatement, QuestionOption
+from apps.questionnaire.models import Questionnaire
 
 
 class GetQuestionUseCase(usecases.BaseUseCase):
@@ -19,19 +20,17 @@ class GetQuestionUseCase(usecases.BaseUseCase):
 
 
 class AddQuestionUseCase(usecases.CreateUseCase):
+    def __init__(self, serializer, questionnaire: Questionnaire):
+        super().__init__(serializer)
+        self._questionnaire = questionnaire
+
     def _factory(self):
         # 1. pop question options and question statement
         question_options_data = self._data.pop('question_options')
-        question_statement_data = self._data.pop('question_statement')
-
-        # 2. create question statement
-        question_statement = QuestionStatement.objects.create(
-            statement=question_statement_data
-        )
 
         # 2. create question
         question = Question.objects.create(
-            question_statement=question_statement,
+            questionnaire=self._questionnaire,
             **self._data
         )
 

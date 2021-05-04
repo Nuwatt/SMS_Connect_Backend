@@ -6,12 +6,14 @@ from rest_framework.response import Response
 
 from apps.core.generics import ListAPIView, CreateAPIView
 from apps.core.serializers import MessageResponseSerializer
+from apps.question.filtersets import QuestionFilter
 from apps.question.mixins import QuestionMixin
 from apps.question.serializers import question_serializers
 from apps.question.usecases import question_usecases
+from apps.questionnaire.mixins import QuestionnaireMixin
 
 
-class AddQuestionView(CreateAPIView):
+class AddQuestionView(CreateAPIView, QuestionnaireMixin):
     """
     Use this end-point to add new question
     """
@@ -19,6 +21,7 @@ class AddQuestionView(CreateAPIView):
 
     def perform_create(self, serializer):
         return question_usecases.AddQuestionUseCase(
+            questionnaire=self.get_questionnaire(),
             serializer=serializer
         ).execute()
 
@@ -37,6 +40,7 @@ class ListQuestionView(ListAPIView):
     Use this end-point to list all questions
     """
     serializer_class = question_serializers.ListQuestionSerializer
+    filterset_class = QuestionFilter
 
     def get_queryset(self):
         return question_usecases.ListQuestionUseCase().execute()
