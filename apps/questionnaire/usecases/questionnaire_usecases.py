@@ -19,17 +19,24 @@ class GetQuestionnaireUseCase(usecases.BaseUseCase):
 
 
 class AddQuestionnaireUseCase(usecases.CreateUseCase):
+
+    def execute(self):
+        self._factory()
+        return self._questionnaire
+
     def _factory(self):
-        # 1. pop city and country
+        # 1. pop city and country and tags
         city = self._data.pop('city')
         country = self._data.pop('country')
+        tags = self._data.pop('tags')
 
         # 2. create questionnaire
-        questionnaire = Questionnaire.objects.create(**self._data)
+        self._questionnaire = Questionnaire.objects.create(**self._data)
 
-        # 3. set city and country
-        questionnaire.city.set(city)
-        questionnaire.country.set(country)
+        # 3. set city and country and tags
+        self._questionnaire.city.set(city)
+        self._questionnaire.country.set(country)
+        self._questionnaire.tags.set(tags)
 
 
 class UpdateQuestionnaireUseCase(usecases.UpdateUseCase):

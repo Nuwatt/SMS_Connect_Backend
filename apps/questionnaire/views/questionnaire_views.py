@@ -1,11 +1,9 @@
-from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
-
 from rest_framework import generics
 from rest_framework.response import Response
 
 from apps.core.generics import CreateAPIView, ListAPIView
-from apps.core.serializers import MessageResponseSerializer
+from apps.core.serializers import IdCharSerializer
 from apps.questionnaire.filtersets import QuestionnaireFilter
 from apps.questionnaire.mixins import QuestionnaireMixin
 from apps.questionnaire.serializers import questionnaire_serializers
@@ -25,10 +23,10 @@ class AddQuestionnaireView(CreateAPIView):
 
     def response(self, result, serializer, status_code):
         return Response({
-            'message': _('Added successfully.')
+            'id': result.id
         })
 
-    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
+    @swagger_auto_schema(responses={201: IdCharSerializer()})
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 

@@ -3,6 +3,7 @@ from django.db import models
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
 from apps.localize.models import Country, City, Area
+from apps.product.models import Category
 from apps.user.models import AgentUser
 
 
@@ -36,9 +37,13 @@ class Questionnaire(BaseModel):
     )
     name = models.CharField(max_length=200)
     questionnaire_type = models.ForeignKey(QuestionnaireType, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        Category,
+        null=True,
+        on_delete=models.CASCADE
+    )
     country = models.ManyToManyField(Country)
     city = models.ManyToManyField(City)
-    area = models.ForeignKey(Area, on_delete=models.CASCADE)
     repeat_cycle = models.CharField(
         choices=REPEAT_CYCLE_CHOICES,
         max_length=9,
@@ -53,3 +58,7 @@ class Questionnaire(BaseModel):
         if self._state.adding:
             self.id = generate_custom_id(initial='QU', model=Questionnaire)
         super(Questionnaire, self).save(*args, **kwargs)
+
+    @property
+    def number_of_questions(self):
+        return self.question_set.count()

@@ -3,6 +3,7 @@ from django.db import models
 from apps.core.utils import generate_custom_id
 from apps.product.models import SKU, Brand
 from apps.core.models import BaseModel
+from apps.questionnaire.models import Questionnaire
 
 
 class QuestionType(BaseModel):
@@ -38,6 +39,11 @@ class Question(BaseModel):
         unique=True,
         primary_key=True,
         editable=False
+    )
+    questionnaire = models.ForeignKey(
+        Questionnaire,
+        null=True,
+        on_delete=models.CASCADE
     )
     question_type = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
     question_statement = models.ForeignKey(QuestionStatement, on_delete=models.CASCADE)

@@ -15,9 +15,9 @@ class AddQuestionnaireSerializer(QuestionnaireSerializer):
             'name',
             'questionnaire_type',
             'city',
-            'area',
+            'category',
             'country',
-            'tag'
+            'tags'
         )
 
 
@@ -29,7 +29,18 @@ class QuestionnaireDetailSerializer(QuestionnaireSerializer):
 
 
 class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
-    pass
+    number_of_questions = serializers.IntegerField()
+    initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
+    questionnaire_type = serializers.CharField()
+    country = serializers.ListSerializer(child=serializers.CharField())
+    city = serializers.ListSerializer(child=serializers.CharField())
+    tags = serializers.ListSerializer(child=serializers.CharField())
+
+    class Meta(QuestionnaireDetailSerializer.Meta):
+        fields = QuestionnaireDetailSerializer.Meta.fields + (
+            'initiated_data',
+            'number_of_questions',
+        )
 
 
 class UpdateQuestionnaireSerializer(AddQuestionnaireSerializer):

@@ -9,3 +9,11 @@ class IdNameSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
 
+
+class IdCharSerializer(serializers.Serializer):
+    id = serializers.CharField()
+
+
+class IdIntegerSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+

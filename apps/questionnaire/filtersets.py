@@ -10,5 +10,5 @@ class QuestionnaireFilter(filters.FilterSet):
             'questionnaire_type',
             'city',
             'country',
-            'area',
+            'category',
         ]
