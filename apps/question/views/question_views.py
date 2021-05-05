@@ -54,3 +54,28 @@ class QuestionDetailView(generics.RetrieveAPIView, QuestionMixin):
 
     def get_object(self):
         return self.get_question()
+
+
+class ImportQuestionView(generics.CreateAPIView, QuestionnaireMixin):
+    """
+    Use this end-point to import questions in the form of csv file
+    """
+    serializer_class = question_serializers.ImportQuestionSerializer
+
+    def get_object(self):
+        return self.get_questionnaire()
+
+    def perform_create(self, serializer):
+        return question_usecases.ImportQuestionUseCase(
+            serializer=serializer,
+            questionnaire=self.get_object()
+        ).execute()
+
+    def response(self, result, serializer, status_code):
+        return Response({
+            'message': _('Question imported successfully.')
+        }, status=status_code)
+
+    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

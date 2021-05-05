@@ -80,6 +80,19 @@ class LongitudeValidator(Validator):
             raise ValidationError(self.message, code=self.code)
 
 
+@deconstructible
+class CSVFileValidator(Validator):
+    message = _('Provided file is not a csv file.')
+
+    def __call__(self, value):
+        if not value:
+            raise ValidationError(_('This field is required.'), code=self.code)
+
+        if value.content_type != 'text/csv':
+            raise ValidationError(self.message, code=self.code)
+
+
 validate_phone_number = PhoneNumberValidator()
 validate_latitude = LatitudeValidator()
 validate_longitude = LongitudeValidator()
+validate_csv_file = CSVFileValidator()

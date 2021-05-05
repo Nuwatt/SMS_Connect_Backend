@@ -1,7 +1,7 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 
-from apps.core.serializers import IdNameSerializer
+from apps.core.serializers import IdNameSerializer, CSVFileInputSerializer
 from apps.question.models import Question
 
 
@@ -40,4 +40,8 @@ class ListQuestionSerializer(AddQuestionSerializer):
 
 
 class QuestionDetailSerializer(ListQuestionSerializer):
+    pass
+
+
+class ImportQuestionSerializer(CSVFileInputSerializer):
     pass

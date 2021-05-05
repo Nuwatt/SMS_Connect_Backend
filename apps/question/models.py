@@ -58,6 +58,14 @@ class Question(BaseModel):
             self.id = generate_custom_id(initial='Q', model=Question)
         super(Question, self).save(*args, **kwargs)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['questionnaire', 'statement'],
+                name='unique_question'
+            )
+        ]
+
 
 class QuestionOption(BaseModel):
     """

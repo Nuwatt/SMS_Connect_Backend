@@ -9,6 +9,11 @@ urlpatterns = [
         name='add-question'
     ),
     path(
+        'questionnaire/<str:questionnaire_id>/import',
+        question_views.ImportQuestionView.as_view(),
+        name='import-question'
+    ),
+    path(
         'list',
         question_views.ListQuestionView.as_view(),
         name='list-questions'

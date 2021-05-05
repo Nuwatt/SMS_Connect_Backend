@@ -16,7 +16,12 @@ class QuestionStatementAdmin(BaseModelAdmin):
 
 @admin.register(models.Question)
 class QuestionAdmin(BaseModelAdmin):
-    pass
+    list_display = BaseModelAdmin.list_display + (
+        'statement',
+    )
+    search_fields = BaseModelAdmin.search_fields + (
+        'statement',
+    )
 
 
 @admin.register(models.QuestionOption)

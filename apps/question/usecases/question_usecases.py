@@ -1,6 +1,15 @@
+import csv
+from io import StringIO
+
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.utils.translation import gettext_lazy as _
+from rest_framework.exceptions import ValidationError
+
 from apps.core import usecases
+from apps.product.models import Brand, SKU
 from apps.question.exceptions import QuestionNotFound
-from apps.question.models import Question, QuestionStatement, QuestionOption
+from apps.question.models import Question, QuestionOption, QuestionType
+from apps.question.serializers.question_serializers import AddQuestionSerializer
 from apps.questionnaire.models import Questionnaire
 
 
@@ -29,10 +38,15 @@ class AddQuestionUseCase(usecases.CreateUseCase):
         question_options_data = self._data.pop('question_options')
 
         # 2. create question
-        question = Question.objects.create(
+        question = Question(
             questionnaire=self._questionnaire,
             **self._data
         )
+        try:
+            question.full_clean()
+            question.save()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
         # 3. create question options
         question_options = []
@@ -54,3 +68,88 @@ class ListQuestionUseCase(usecases.BaseUseCase):
     def _factory(self):
         self._questions = Question.objects.unarchived()
 
+
+class ImportQuestionUseCase(usecases.CreateUseCase):
+    def __init__(self, serializer, questionnaire: Questionnaire):
+        super().__init__(serializer)
+        self._questionnaire = questionnaire
+        self._item_list = None
+        self._file = StringIO(self._data.get('file').read().decode('utf-8'))
+
+    valid_columns = ['Question Type', 'Question Text', 'Options', 'Brand', 'SKU']
+
+    def execute(self):
+        self.is_valid()
+        self._factory()
+
+    def _factory(self):
+        # create question
+        for item in self._item_list:
+            # 1. get question_type
+            try:
+                question_type = QuestionType.objects.get(name=item.get('Question Type'))
+            except QuestionType.DoesNotExist:
+                raise ValidationError({
+                    'non_field_errors': _('Invalid Question Type')
+                })
+
+            # 2. brand
+            try:
+                brand = Brand.objects.get(name=item.get('Brand'))
+            except Brand.DoesNotExist:
+                raise ValidationError({
+                    'non_field_errors': _('Invalid Brand')
+                })
+
+            # 3. brand
+            try:
+                sku = SKU.objects.get(name=item.get('SKU'))
+            except SKU.DoesNotExist:
+                raise ValidationError({
+                    'non_field_errors': _('Invalid SKU')
+                })
+
+            # 5. options
+            options = item.get('Options').split(',')
+
+            # 6. update or create question
+            question, created = Question.objects.update_or_create(
+                questionnaire=self._questionnaire,
+                statement=item.get('Question Text'),
+                defaults={
+                    'brand': brand,
+                    'sku': sku,
+                    'question_type': question_type
+                }
+            )
+
+            for option in options:
+                question_option, created = QuestionOption.objects.get_or_create(
+                    question=question,
+                    option=option
+                )
+
+    def is_valid(self):
+        # 1. check csv has valid columns
+        csv_reader = csv.DictReader(self._file)
+        self._item_list = list(csv_reader)
+
+        dict_from_csv = dict(self._item_list[0])
+
+        # making a list from the keys of the dict
+        list_of_column_names = list(dict_from_csv.keys())
+        if list_of_column_names != self.valid_columns:
+            raise ValidationError({
+                'non_field_errors': _('CSV doesn\'t have columns in order: [\'Question Type\','
+                                      ' \'Question text\', \'Options\', \'Brand\', \'SKU\']')
+            })
+
+        check_null_columns = self.valid_columns
+        check_null_columns.remove('Options')
+
+        for item in self._item_list:
+            for key in check_null_columns:
+                if not item[key]:
+                    raise ValidationError({
+                        'non_field_errors': _('{} - has null value'.format(key))
+                    })
