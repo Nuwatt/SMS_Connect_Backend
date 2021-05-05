@@ -4,10 +4,11 @@ from rest_framework.response import Response
 
 from apps.core.generics import CreateAPIView, ListAPIView
 from apps.core.serializers import IdCharSerializer
-from apps.questionnaire.filtersets import QuestionnaireFilter
+from apps.questionnaire.filtersets import QuestionnaireFilter, AvailableQuestionnaireForAgentFilter
 from apps.questionnaire.mixins import QuestionnaireMixin
 from apps.questionnaire.serializers import questionnaire_serializers
 from apps.questionnaire.usecases import questionnaire_usecases
+from apps.user.permissions import IsAgentUser
 
 
 class AddQuestionnaireView(CreateAPIView):
@@ -80,3 +81,18 @@ class QuestionnaireDetailView(generics.RetrieveAPIView, QuestionnaireMixin):
 
     def get_object(self):
         return self.get_questionnaire()
+
+
+class ListAvailableQuestionnaireForAgentView(ListAPIView):
+    """
+    Use this end-point to list available questionnaire for a requesting agent-user
+    """
+    permission_classes = (IsAgentUser,)
+    filterset_class = AvailableQuestionnaireForAgentFilter
+
+    serializer_class = questionnaire_serializers.ListAvailableQuestionnaireForAgentSerializer
+
+    def get_queryset(self):
+        return questionnaire_usecases.ListAvailableQuestionnaireForAgentUseCase(
+            agent_user=self.request.user.agentuser
+        ).execute()

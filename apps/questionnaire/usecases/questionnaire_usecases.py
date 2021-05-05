@@ -1,6 +1,9 @@
+from django.db.models import Q
+
 from apps.questionnaire.exceptions import QuestionnaireNotFound
 from apps.core import usecases
 from apps.questionnaire.models import Questionnaire
+from apps.user.models import AgentUser
 
 
 class GetQuestionnaireUseCase(usecases.BaseUseCase):
@@ -56,3 +59,19 @@ class ListQuestionnaireUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._questionnaires = Questionnaire.objects.unarchived()
+
+
+class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
+    def __init__(self, agent_user: AgentUser):
+        self._agent_user = agent_user
+
+    def execute(self):
+        self._factory()
+        return self._questionnaires
+
+    def _factory(self):
+        self._questionnaires = Questionnaire.objects.unarchived().filter(
+            Q(city__in=self._agent_user.operation_city.all()) |
+            Q(tags__in=[self._agent_user])
+        ).distinct()
+

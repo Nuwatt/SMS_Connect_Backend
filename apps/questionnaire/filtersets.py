@@ -12,3 +12,11 @@ class QuestionnaireFilter(filters.FilterSet):
             'country',
             'category',
         ]
+
+
+class AvailableQuestionnaireForAgentFilter(filters.FilterSet):
+    class Meta:
+        model = Questionnaire
+        fields = [
+            'questionnaire_type',
+        ]

@@ -24,8 +24,8 @@ class AddQuestionnaireSerializer(QuestionnaireSerializer):
 class QuestionnaireDetailSerializer(QuestionnaireSerializer):
     class Meta(AddQuestionnaireSerializer.Meta):
         fields = (
-            'id',
-        ) + AddQuestionnaireSerializer.Meta.fields
+                     'id',
+                 ) + AddQuestionnaireSerializer.Meta.fields
 
 
 class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
@@ -45,3 +45,16 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
 
 class UpdateQuestionnaireSerializer(AddQuestionnaireSerializer):
     pass
+
+
+class ListAvailableQuestionnaireForAgentSerializer(QuestionnaireSerializer):
+    number_of_questions = serializers.IntegerField()
+    initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
+
+    class Meta(QuestionnaireSerializer.Meta):
+        fields = (
+            'id',
+            'name',
+            'initiated_data',
+            'number_of_questions'
+        )
