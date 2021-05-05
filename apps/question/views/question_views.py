@@ -56,7 +56,7 @@ class QuestionDetailView(generics.RetrieveAPIView, QuestionMixin):
         return self.get_question()
 
 
-class ImportQuestionView(generics.CreateAPIView, QuestionnaireMixin):
+class ImportQuestionView(CreateAPIView, QuestionnaireMixin):
     """
     Use this end-point to import questions in the form of csv file
     """
@@ -79,3 +79,17 @@ class ImportQuestionView(generics.CreateAPIView, QuestionnaireMixin):
     @swagger_auto_schema(responses={201: MessageResponseSerializer()})
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class ExportQuestionView(generics.GenericAPIView, QuestionnaireMixin):
+    """
+    Use this end-point to export questions to csv file
+    """
+
+    def get_object(self):
+        return self.get_questionnaire()
+
+    def get(self, *args, **kwargs):
+        return question_usecases.ExportQuestionUseCase(
+            questionnaire=self.get_object()
+        ).execute()

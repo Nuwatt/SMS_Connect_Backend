@@ -2,6 +2,7 @@ import csv
 from io import StringIO
 
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
@@ -153,3 +154,35 @@ class ImportQuestionUseCase(usecases.CreateUseCase):
                     raise ValidationError({
                         'non_field_errors': _('{} - has null value'.format(key))
                     })
+
+
+class ExportQuestionUseCase(usecases.BaseUseCase):
+    columns = ['Question Type', 'Question Text', 'Options', 'Brand', 'SKU']
+
+    def __init__(self, questionnaire: Questionnaire):
+        self._questionnaire = questionnaire
+
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        response = HttpResponse(content_type='text/csv')
+        filename = '{}.csv'.format(self._questionnaire.id)
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+
+        # 1. write headers
+        writer = csv.writer(response)
+        writer.writerow(self.columns)
+
+        # 2. write questions
+        questions = self._questionnaire.question_set.unarchived()
+        for question in questions:
+            options = question.questionoption_set.unarchived().values_list('option', flat=True)
+            writer.writerow([
+                question.question_type,
+                question.statement,
+                ','.join(options),
+                question.brand,
+                question.sku
+            ])
+        return response
