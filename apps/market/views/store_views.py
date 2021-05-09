@@ -1,13 +1,11 @@
-from rest_framework import generics
-
-from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core import generics
 from apps.market.filtersets import StoreFilter
 from apps.market.mixins import StoreMixin
 from apps.market.serializers import store_serializers
 from apps.market.usecases import store_usecases
 
 
-class AddStoreView(CreateAPIView):
+class AddStoreView(generics.CreateAPIView):
     """
     Use this end-point to add new store
     """
@@ -19,7 +17,7 @@ class AddStoreView(CreateAPIView):
         ).execute()
 
 
-class ListStoreView(ListAPIView):
+class ListStoreView(generics.ListAPIView):
     """
     Use this end-point to list all store
     """

@@ -1,16 +1,15 @@
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
-from rest_framework import generics
 
-from apps.core.generics import ListAPIView, CreateAPIView
+from apps.core import generics
 from apps.core.serializers import MessageResponseSerializer
 from apps.user.permissions import IsAgentUser
 from apps.user.serializers import agent_user_serializers
 from apps.user.usecases import agent_user_usecases
 
 
-class ListAgentUserView(ListAPIView):
+class ListAgentUserView(generics.ListAPIView):
     """
     Use this end-point to list all agent user
     """
@@ -20,7 +19,7 @@ class ListAgentUserView(ListAPIView):
         return agent_user_usecases.ListAgentUserUseCase().execute()
 
 
-class RegisterAgentUserView(CreateAPIView):
+class RegisterAgentUserView(generics.CreateAPIView):
     """
     Use this end-point to register a new agent
     """

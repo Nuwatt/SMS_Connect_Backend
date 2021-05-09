@@ -1,8 +1,7 @@
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
 from rest_framework.response import Response
 
-from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core import generics
 from apps.core.serializers import IdCharSerializer
 from apps.questionnaire.filtersets import QuestionnaireFilter, AvailableQuestionnaireForAgentFilter
 from apps.questionnaire.mixins import QuestionnaireMixin
@@ -11,7 +10,7 @@ from apps.questionnaire.usecases import questionnaire_usecases
 from apps.user.permissions import IsAgentUser
 
 
-class AddQuestionnaireView(CreateAPIView):
+class AddQuestionnaireView(generics.CreateAPIView):
     """
     Use this end-point to add new questionnaire
     """
@@ -32,7 +31,7 @@ class AddQuestionnaireView(CreateAPIView):
         return self.create(request, *args, **kwargs)
 
 
-class ListQuestionnaireView(ListAPIView):
+class ListQuestionnaireView(generics.ListAPIView):
     """
     Use this end-point to list all questionnaire
     """
@@ -83,7 +82,7 @@ class QuestionnaireDetailView(generics.RetrieveAPIView, QuestionnaireMixin):
         return self.get_questionnaire()
 
 
-class ListAvailableQuestionnaireForAgentView(ListAPIView):
+class ListAvailableQuestionnaireForAgentView(generics.ListAPIView):
     """
     Use this end-point to list available questionnaire for a requesting agent-user
     """

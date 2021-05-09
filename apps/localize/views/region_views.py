@@ -1,12 +1,10 @@
-from rest_framework import generics
-
-from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core import generics
 from apps.localize.mixins import RegionMixin
 from apps.localize.serializers import region_serializers
 from apps.localize.usecases import region_usecases
 
 
-class AddRegionView(CreateAPIView):
+class AddRegionView(generics.CreateAPIView):
     """
     Use this end-point to add new region
     """
@@ -18,7 +16,7 @@ class AddRegionView(CreateAPIView):
         ).execute()
 
 
-class ListRegionView(ListAPIView):
+class ListRegionView(generics.ListAPIView):
     """
     Use this end-point to list all region
     """

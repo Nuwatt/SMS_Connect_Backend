@@ -1,12 +1,10 @@
-from rest_framework import generics
-
+from apps.core import generics
 from apps.market.mixins import RetailerMixin
 from apps.market.serializers import retailer_serializers
 from apps.market.usecases import retailer_usecases
-from apps.core.generics import CreateAPIView, ListAPIView
 
 
-class AddRetailerView(CreateAPIView):
+class AddRetailerView(generics.CreateAPIView):
     """
     Use this end-point to add new retailer
     """
@@ -18,7 +16,7 @@ class AddRetailerView(CreateAPIView):
         ).execute()
 
 
-class ListRetailerView(ListAPIView):
+class ListRetailerView(generics.ListAPIView):
     """
     Use this end-point to list all retailer
     """

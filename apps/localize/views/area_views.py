@@ -1,13 +1,11 @@
-from rest_framework import generics
-
-from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core import generics
 from apps.localize.filtersets import AreaFilter
 from apps.localize.mixins import AreaMixin
 from apps.localize.serializers import area_serializers
 from apps.localize.usecases import area_usecases
 
 
-class AddAreaView(CreateAPIView):
+class AddAreaView(generics.CreateAPIView):
     """
     Use this end-point to add new area
     """
@@ -19,7 +17,7 @@ class AddAreaView(CreateAPIView):
         ).execute()
 
 
-class ListAreaView(ListAPIView):
+class ListAreaView(generics.ListAPIView):
     """
     Use this end-point to list all areas
     """
@@ -56,5 +54,5 @@ class DeleteAreaView(generics.DestroyAPIView, AreaMixin):
 
     def perform_destroy(self, instance):
         return area_usecases.DeleteAreaUseCase(
-            city=self.get_object()
+            area=self.get_object()
         ).execute()

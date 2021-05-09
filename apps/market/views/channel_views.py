@@ -1,12 +1,10 @@
-from rest_framework import generics
-
-from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core import generics
 from apps.market.mixins import ChannelMixin
 from apps.market.serializers import channel_serializers
 from apps.market.usecases import channel_usecases
 
 
-class AddChannelView(CreateAPIView):
+class AddChannelView(generics.CreateAPIView):
     """
     Use this end-point to add new channel
     """
@@ -18,7 +16,7 @@ class AddChannelView(CreateAPIView):
         ).execute()
 
 
-class ListChannelView(ListAPIView):
+class ListChannelView(generics.ListAPIView):
     """
     Use this end-point to list all channel
     """

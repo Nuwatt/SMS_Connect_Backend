@@ -1,17 +1,9 @@
-from django.utils.translation import gettext_lazy as _
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
-
-from rest_framework.response import Response
-
-from apps.core.generics import ListAPIView, CreateAPIView
-from apps.core.serializers import MessageResponseSerializer
-from apps.question.mixins import QuestionTypeMixin
+from apps.core import generics
 from apps.question.serializers import question_type_serializers
 from apps.question.usecases import question_type_usecases
 
 
-class AddQuestionView(CreateAPIView):
+class AddQuestionView(generics.CreateAPIView):
     """
     Use this end-point to add new question type
     """
@@ -23,7 +15,7 @@ class AddQuestionView(CreateAPIView):
         ).execute()
 
 
-class ListQuestionView(ListAPIView):
+class ListQuestionView(generics.ListAPIView):
     """
     Use this end-point to list all question types
     """

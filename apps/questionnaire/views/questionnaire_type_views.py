@@ -1,12 +1,10 @@
-from rest_framework import generics
-
-from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core import generics
 from apps.questionnaire.mixins import QuestionnaireTypeMixin
 from apps.questionnaire.serializers import questionnaire_type_serializers
 from apps.questionnaire.usecases import questionnaire_type_usecases
 
 
-class AddQuestionnaireTypeView(CreateAPIView):
+class AddQuestionnaireTypeView(generics.CreateAPIView):
     """
     Use this end-point to add new questionnaire type
     """
@@ -18,7 +16,7 @@ class AddQuestionnaireTypeView(CreateAPIView):
         ).execute()
 
 
-class ListQuestionnaireTypeView(ListAPIView):
+class ListQuestionnaireTypeView(generics.ListAPIView):
     """
     Use this end-point to list all questionnaire type
     """

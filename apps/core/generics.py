@@ -4,22 +4,34 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from apps.core.exceptions import NoContent
+from apps.core.mixins import LoggingErrorsMixin
 
 
-class CreateAPIView(generics.CreateAPIView):
+class GenericAPIView(LoggingErrorsMixin, generics.GenericAPIView):
+    logging_methods = ['GET']
+
+
+class CreateAPIView(LoggingErrorsMixin, generics.CreateAPIView):
+    logging_methods = ['POST']
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = self.perform_create(serializer)
-        return self.response(result=result, serializer=serializer, status_code=status.HTTP_201_CREATED)
+        return self.response(
+            result=result,
+            serializer=serializer,
+            status_code=status.HTTP_201_CREATED
+        )
 
     def response(self, result, serializer, status_code):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status_code, headers=headers)
 
 
-class ListAPIView(generics.ListAPIView):
+class ListAPIView(LoggingErrorsMixin, generics.ListAPIView):
+    logging_methods = ['GET']
+
     no_content_error_message = _('No Content At The Moment.')
 
     def filter_queryset(self, queryset):
@@ -33,7 +45,9 @@ class ListAPIView(generics.ListAPIView):
         return queryset
 
 
-class UpdateAPIView(generics.UpdateAPIView):
+class UpdateAPIView(LoggingErrorsMixin, generics.UpdateAPIView):
+    logging_methods = ['PUT', 'PATCH']
+
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -50,3 +64,11 @@ class UpdateAPIView(generics.UpdateAPIView):
 
     def response(self, serializer):
         return Response(serializer.data)
+
+
+class DestroyAPIView(LoggingErrorsMixin, generics.DestroyAPIView):
+    logging_methods = ['DELETE']
+
+
+class RetrieveAPIView(LoggingErrorsMixin, generics.RetrieveAPIView):
+    logging_methods = ['GET']

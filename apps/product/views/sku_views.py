@@ -1,13 +1,11 @@
-from rest_framework import generics
-
+from apps.core import generics
 from apps.product.filtersets import SKUFilter
 from apps.product.mixins import SKUMixin
 from apps.product.serializers import sku_serializers
 from apps.product.usecases import sku_usecases
-from apps.core.generics import CreateAPIView, ListAPIView
 
 
-class AddSKUView(CreateAPIView):
+class AddSKUView(generics.CreateAPIView):
     """
     Use this end-point to add new sku
     """
@@ -19,7 +17,7 @@ class AddSKUView(CreateAPIView):
         ).execute()
 
 
-class ListSKUView(ListAPIView):
+class ListSKUView(generics.ListAPIView):
     """
     Use this end-point to list all sku
     """

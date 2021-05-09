@@ -1,11 +1,9 @@
-from rest_framework import generics
-
-from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core import generics
 from apps.terms_and_conditions import serializers, usecases
 from apps.terms_and_conditions.mixins import TermsAndConditionsMixin
 
 
-class AddTermsAndConditionsView(CreateAPIView):
+class AddTermsAndConditionsView(generics.CreateAPIView):
     """
     Use this end-point to add new terms and conditions
     """

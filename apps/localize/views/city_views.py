@@ -1,13 +1,11 @@
-from rest_framework import generics
-
-from apps.core.generics import CreateAPIView, ListAPIView
+from apps.core import generics
 from apps.localize.filtersets import CityFilter
 from apps.localize.mixins import CityMixin
 from apps.localize.serializers import city_serializers
 from apps.localize.usecases import city_usecases
 
 
-class AddCityView(CreateAPIView):
+class AddCityView(generics.CreateAPIView):
     """
     Use this end-point to add new city
     """
@@ -19,7 +17,7 @@ class AddCityView(CreateAPIView):
         ).execute()
 
 
-class ListCityView(ListAPIView):
+class ListCityView(generics.ListAPIView):
     """
     Use this end-point to list all cities
     """

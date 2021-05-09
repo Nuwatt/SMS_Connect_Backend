@@ -1,12 +1,10 @@
-from rest_framework import generics
-
+from apps.core import generics
 from apps.product.mixins import BrandMixin
 from apps.product.serializers import brand_serializers
 from apps.product.usecases import brand_usecases
-from apps.core.generics import CreateAPIView, ListAPIView
 
 
-class AddBrandView(CreateAPIView):
+class AddBrandView(generics.CreateAPIView):
     """
     Use this end-point to add new product
     """
@@ -18,7 +16,7 @@ class AddBrandView(CreateAPIView):
         ).execute()
 
 
-class ListBrandView(ListAPIView):
+class ListBrandView(generics.ListAPIView):
     """
     Use this end-point to list all product
     """

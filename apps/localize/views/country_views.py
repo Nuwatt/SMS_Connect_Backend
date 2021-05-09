@@ -1,13 +1,10 @@
-from rest_framework import generics
-
-from apps.core.generics import CreateAPIView, ListAPIView
-from apps.localize.filtersets import CountryFilter
+from apps.core import generics
 from apps.localize.mixins import CountryMixin
 from apps.localize.serializers import country_serializers
 from apps.localize.usecases import country_usecases
 
 
-class AddCountryView(CreateAPIView):
+class AddCountryView(generics.CreateAPIView):
     """
     Use this end-point to add new country
     """
@@ -19,7 +16,7 @@ class AddCountryView(CreateAPIView):
         ).execute()
 
 
-class ListCountryView(ListAPIView):
+class ListCountryView(generics.ListAPIView):
     """
     Use this end-point to list all country
     """

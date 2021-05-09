@@ -1,17 +1,16 @@
 from django.utils.translation import gettext_lazy as _
 
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
 from rest_framework.response import Response
 
-from apps.core.generics import ListAPIView, CreateAPIView, UpdateAPIView
+from apps.core import generics
 from apps.core.serializers import MessageResponseSerializer
 from apps.user.mixins import PortalUserMixin
 from apps.user.serializers import portal_user_serializers
 from apps.user.usecases import portal_user_usecases
 
 
-class ListPortalUserView(ListAPIView):
+class ListPortalUserView(generics.ListAPIView):
     """
     Use this end-point to list all portal user
     """
@@ -21,7 +20,7 @@ class ListPortalUserView(ListAPIView):
         return portal_user_usecases.ListPortalUserUseCase().execute()
 
 
-class RegisterPortalUserView(CreateAPIView):
+class RegisterPortalUserView(generics.CreateAPIView):
     """
     Use this end-point to register a new Portal user
     """
@@ -52,7 +51,7 @@ class PortalUserDetailView(generics.RetrieveAPIView, PortalUserMixin):
         return self.get_portal_user()
 
 
-class UpdatePortalUserView(UpdateAPIView, PortalUserMixin):
+class UpdatePortalUserView(generics.UpdateAPIView, PortalUserMixin):
     """
     Use this end-point to update specific portal user detail
     """

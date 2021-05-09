@@ -1,10 +1,9 @@
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
 
 from rest_framework.response import Response
 
-from apps.core.generics import ListAPIView, CreateAPIView
+from apps.core import generics
 from apps.core.serializers import MessageResponseSerializer
 from apps.question.filtersets import QuestionFilter
 from apps.question.mixins import QuestionMixin
@@ -13,7 +12,7 @@ from apps.question.usecases import question_usecases
 from apps.questionnaire.mixins import QuestionnaireMixin
 
 
-class AddQuestionView(CreateAPIView, QuestionnaireMixin):
+class AddQuestionView(generics.CreateAPIView, QuestionnaireMixin):
     """
     Use this end-point to add new question
     """
@@ -35,7 +34,7 @@ class AddQuestionView(CreateAPIView, QuestionnaireMixin):
         return self.create(request, *args, **kwargs)
 
 
-class ListQuestionView(ListAPIView):
+class ListQuestionView(generics.ListAPIView):
     """
     Use this end-point to list all questions
     """
@@ -56,7 +55,7 @@ class QuestionDetailView(generics.RetrieveAPIView, QuestionMixin):
         return self.get_question()
 
 
-class ImportQuestionView(CreateAPIView, QuestionnaireMixin):
+class ImportQuestionView(generics.CreateAPIView, QuestionnaireMixin):
     """
     Use this end-point to import questions in the form of csv file
     """

@@ -1,12 +1,10 @@
-from rest_framework import generics
-
+from apps.core import generics
 from apps.product.mixins import CategoryMixin
 from apps.product.serializers import category_serializers
 from apps.product.usecases import category_usecases
-from apps.core.generics import CreateAPIView, ListAPIView
 
 
-class AddCategoryView(CreateAPIView):
+class AddCategoryView(generics.CreateAPIView):
     """
     Use this end-point to add new category
     """
@@ -18,7 +16,7 @@ class AddCategoryView(CreateAPIView):
         ).execute()
 
 
-class ListCategoryView(ListAPIView):
+class ListCategoryView(generics.ListAPIView):
     """
     Use this end-point to list all category
     """
