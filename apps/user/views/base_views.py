@@ -9,19 +9,6 @@ from apps.user.serializers import base_serializers
 from apps.user.usecases import base_usecases
 
 
-class UserSignupView(generics.CreateAPIView):
-    """
-    Use this end-point to signup
-    """
-    permission_classes = (AllowAny,)
-    serializer_class = base_serializers.UserSignupSerializer
-
-    def perform_create(self, serializer):
-        return base_usecases.UserSignupUseCase(
-            serializer=serializer
-        ).execute()
-
-
 class UserLoginView(generics.CreateAPIView, ResponseMixin):
     """
     Use this end-point to login and get access token

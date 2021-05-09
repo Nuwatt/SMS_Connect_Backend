@@ -46,6 +46,7 @@ class UserSignupSerializer(UserSerializer):
         extra_kwargs = {
             'password': {
                 'write_only': True,
+                'required': True,
                 'style': {
                     'input_type': 'password'
                 }

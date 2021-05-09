@@ -10,14 +10,6 @@ from apps.user.exceptions import UserInactive, LoginFailed
 User = get_user_model()
 
 
-class UserSignupUseCase(usecases.CreateUseCase):
-
-    def _factory(self):
-        self._user = User.objects.create_user(
-            **self._data
-        )
-
-
 class UserLoginUseCase(usecases.CreateUseCase):
     def execute(self):
         super(UserLoginUseCase, self).execute()
