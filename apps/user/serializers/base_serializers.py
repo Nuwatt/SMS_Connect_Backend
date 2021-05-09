@@ -41,7 +41,9 @@ class UserSignupSerializer(UserSerializer):
             'username',
             'password',
             'fullname',
-            'nationality'
+            'nationality',
+            'date_of_birth',
+            'avatar'
         )
         extra_kwargs = {
             'password': {

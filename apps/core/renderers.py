@@ -49,7 +49,6 @@ class CustomJSONRenderer(JSONRenderer):
                 )
             custom_formatted_data['success'] = False
             custom_formatted_data['error_message'] = message
-            custom_formatted_data['data'] = None
 
         ret = json.dumps(
             custom_formatted_data, cls=self.encoder_class,

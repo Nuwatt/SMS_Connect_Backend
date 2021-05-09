@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import raise_errors_on_nested_writes
 from rest_framework.utils import model_meta
 
+from apps.core.utils import update
+
 User = get_user_model()
 
 
@@ -46,16 +48,7 @@ class UpdateUseCase(BaseUseCase):
 
     def _factory(self):
         raise_errors_on_nested_writes('update', self._serializer, self._data)
-        info = model_meta.get_field_info(self._instance)
-
-        for attr, value in self._data.items():
-            if attr in info.relations and info.relations[attr].to_many:
-                field = getattr(self._instance, attr)
-                field.set(value)
-            else:
-                setattr(self._instance, attr, value)
-        self._instance.updated_at = timezone.now()
-        self._instance.save()
+        update(instance=self._instance, data=self._data)
 
 
 class DeleteUseCase(BaseUseCase):

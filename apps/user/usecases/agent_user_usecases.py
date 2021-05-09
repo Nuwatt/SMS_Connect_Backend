@@ -1,9 +1,25 @@
 from django.contrib.auth import get_user_model
 
 from apps.core import usecases
+from apps.user.exceptions import AgentUserNotFound
 from apps.user.models import AgentUser
 
 User = get_user_model()
+
+
+class GetAgentUserUseCase(usecases.BaseUseCase):
+    def __init__(self, agent_user_id: str):
+        self._agent_user_id = agent_user_id
+
+    def execute(self):
+        self._factory()
+        return self._agent_user
+
+    def _factory(self):
+        try:
+            self._agent_user = AgentUser.objects.get(pk=self._agent_user_id)
+        except AgentUser.DoesNotExist:
+            raise AgentUserNotFound
 
 
 class ListAgentUserUseCase(usecases.BaseUseCase):

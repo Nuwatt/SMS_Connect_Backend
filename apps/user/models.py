@@ -26,7 +26,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
         validators=[validate_username],
     )
-    contact_number = fields.PhoneNumberField()
+    contact_number = fields.PhoneNumberField(null=True)
     date_of_birth = models.DateField(null=True, validators=[validate_date_of_birth])
     nationality = models.ForeignKey(
         Country,
@@ -93,6 +93,11 @@ class User(AbstractBaseUser, PermissionsMixin):
             raise DjangoValidationError(
                 _('User can\'t be agent user and django user at once')
             )
+
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = self.email
+        super(User, self).save(*args, **kwargs)
 
 
 class Role(BaseModel):

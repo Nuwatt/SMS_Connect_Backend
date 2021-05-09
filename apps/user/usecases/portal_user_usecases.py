@@ -1,9 +1,26 @@
 from django.contrib.auth import get_user_model
 
 from apps.core import usecases
+from apps.core.utils import update
+from apps.user.exceptions import PortalUserNotFound
 from apps.user.models import PortalUser
 
 User = get_user_model()
+
+
+class GetPortalUserUseCase(usecases.BaseUseCase):
+    def __init__(self, portal_user_id: str):
+        self._portal_user_id = portal_user_id
+
+    def execute(self):
+        self._factory()
+        return self._portal_user
+
+    def _factory(self):
+        try:
+            self._portal_user = PortalUser.objects.get(pk=self._portal_user_id)
+        except PortalUser.DoesNotExist:
+            raise PortalUserNotFound
 
 
 class ListPortalUserUseCase(usecases.BaseUseCase):
@@ -19,7 +36,8 @@ class RegisterPortalUserUseCase(usecases.CreateUseCase):
     def _factory(self):
         # 1. pop portal user data
         portal_user_data = {
-            'role': self._data.pop('role')
+            'role': self._data.pop('role'),
+            'position': self._data.pop('position'),
         }
 
         # 2. create user
@@ -33,3 +51,30 @@ class RegisterPortalUserUseCase(usecases.CreateUseCase):
             user=self._user,
             defaults=portal_user_data
         )
+
+
+class UpdatePortalUserUseCase(usecases.UpdateUseCase):
+    def __init__(self, serializer, portal_user: PortalUser):
+        super().__init__(serializer, portal_user)
+
+    def _factory(self):
+        # 1. pop portal user data
+        portal_user_data = {}
+
+        if 'role' in self._data:
+            portal_user_data['role'] = self._data.pop('role')
+
+        if 'position' in self._data:
+            portal_user_data['position'] = self._data.pop('position')
+
+        # 2. update user
+        update(instance=self._instance.user, data=self._data)
+
+        # 3. update portal user
+        if portal_user_data:
+            update(instance=self._instance, data=portal_user_data)
+
+
+class DeletePortalUserUseCase(usecases.DeleteUseCase):
+    def __init__(self, portal_user: PortalUser):
+        super().__init__(portal_user)

@@ -1,10 +1,12 @@
 from django.utils.translation import gettext_lazy as _
 
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import generics
 from rest_framework.response import Response
 
-from apps.core.generics import ListAPIView, CreateAPIView
+from apps.core.generics import ListAPIView, CreateAPIView, UpdateAPIView
 from apps.core.serializers import MessageResponseSerializer
+from apps.user.mixins import PortalUserMixin
 from apps.user.serializers import portal_user_serializers
 from apps.user.usecases import portal_user_usecases
 
@@ -38,3 +40,56 @@ class RegisterPortalUserView(CreateAPIView):
     @swagger_auto_schema(responses={201: MessageResponseSerializer()})
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class PortalUserDetailView(generics.RetrieveAPIView, PortalUserMixin):
+    """
+    Use this end-point to get detail of a specific portal user
+    """
+    serializer_class = portal_user_serializers.PortalUserDetailSerializer
+
+    def get_object(self):
+        return self.get_portal_user()
+
+
+class UpdatePortalUserView(UpdateAPIView, PortalUserMixin):
+    """
+    Use this end-point to update specific portal user detail
+    """
+    serializer_class = portal_user_serializers.UpdatePortalUserSerializer
+
+    def get_object(self):
+        return self.get_portal_user()
+
+    def perform_update(self, serializer):
+        return portal_user_usecases.UpdatePortalUserUseCase(
+            portal_user=self.get_object(),
+            serializer=serializer
+        ).execute()
+
+    def response(self, serializer):
+        return Response({
+            'message': _('Updated successfully.')
+        })
+
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+
+class DeletePortalUserView(generics.DestroyAPIView, PortalUserMixin):
+    """
+    Use this end-point to delete a specific portal user
+    """
+
+    def get_object(self):
+        return self.get_portal_user()
+
+    def perform_destroy(self, instance):
+        return portal_user_usecases.DeletePortalUserUseCase(
+            portal_user=self.get_object()
+        ).execute()

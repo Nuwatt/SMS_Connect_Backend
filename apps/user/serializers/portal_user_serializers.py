@@ -1,7 +1,15 @@
+from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from apps.core.serializer_fields import PhoneNumberField
+from apps.core.serializers import IdNameSerializer
+from apps.localize.models import Country
 from apps.user.models import PortalUser, Role
-from apps.user.serializers.base_serializers import UserSignupSerializer
+from apps.user.serializers.base_serializers import UserSerializer
+from apps.user.validators import validate_username, validate_date_of_birth
+
+User = get_user_model()
 
 
 class PortalUserSerializer(serializers.ModelSerializer):
@@ -12,16 +20,67 @@ class PortalUserSerializer(serializers.ModelSerializer):
 
 class ListPortalUserSerializer(serializers.Serializer):
     id = serializers.CharField()
-    username = serializers.CharField(source='user.username')
-    # first_name = serializers.CharField(source='user.first_name')
-    # last_name = serializers.CharField(source='user.last_name')
-    email = serializers.EmailField(source='user.email')
+    fullname = serializers.CharField(source='user.fullname')
+    nationality = serializers.CharField(source='user.nationality')
+    position = serializers.CharField()
+    date_of_birth = serializers.DateField(source='user.date_of_birth', format='%d-%m-%Y')
+    contact_number = PhoneNumberField(source='user.contact_number')
 
 
-class RegisterPortalUserSerializer(UserSignupSerializer):
+class RegisterPortalUserSerializer(UserSerializer):
     role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
+    position = serializers.CharField()
+    username = serializers.CharField(validators=[validate_username])
+    fullname = serializers.CharField()
 
-    class Meta(UserSignupSerializer.Meta):
-        fields = UserSignupSerializer.Meta.fields + (
+    class Meta(UserSerializer.Meta):
+        fields = (
+            'email',
+            'username',
+            'password',
+            'fullname',
+            'nationality',
+            'contact_number',
+            'date_of_birth',
+            'avatar',
+            'position',
             'role',
         )
+
+
+class PortalUserDetailSerializer(ListPortalUserSerializer):
+    avatar = serializers.ImageField(source='user.avatar')
+    email = serializers.EmailField(source='user.email')
+    nationality = IdNameSerializer(source='user.nationality')
+    role = IdNameSerializer()
+    position = serializers.CharField()
+    username = serializers.CharField(source='user.username')
+
+
+class UpdatePortalUserSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    username = serializers.CharField()
+    fullname = serializers.CharField()
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
+    contact_number = PhoneNumberField()
+    date_of_birth = serializers.DateField(validators=[validate_date_of_birth])
+    avatar = serializers.ImageField()
+    role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
+    position = serializers.CharField()
+
+    default_error_messages = {
+        'duplicate_email': _('Email already exists in another user.'),
+        'duplicate_username': _('Username already exists in another user.'),
+    }
+
+    def validate_username(self, data):
+        if self.instance.user.username != data:
+            if User.objects.filter(username=data).exists():
+                self.fail('duplicate_username')
+        return data
+
+    def validate_email(self, data):
+        if self.instance.user.email != data:
+            if User.objects.filter(email=data).exists():
+                self.fail('duplicate_email')
+        return data
