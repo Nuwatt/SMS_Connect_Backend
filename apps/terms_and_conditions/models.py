@@ -13,5 +13,5 @@ class TermsAndConditions(BaseModel):
 
     def clean(self):
         # 1. there can be only one terms and conditions
-        if TermsAndConditions.objects.count() > 0:
+        if TermsAndConditions.objects.unarchived().count() > 0:
             raise DjangoValidationError(_('Only one record is allowed.'))

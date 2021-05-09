@@ -12,7 +12,7 @@ class GetTermsAndConditionsUseCase(usecases.BaseUseCase):
         return self._terms_and_conditions
 
     def _factory(self):
-        self._terms_and_conditions = TermsAndConditions.objects.first()
+        self._terms_and_conditions = TermsAndConditions.objects.unarchived().first()
         if not self._terms_and_conditions:
             raise TermsAndConditionsNotFound
 
