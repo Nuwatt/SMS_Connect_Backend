@@ -192,5 +192,6 @@ LOGGING = {
     },
 }
 
-# Your stuff...
-# ------------------------------------------------------------------------------
+# DJANGO-CORS-HEADERS settings
+# ---------------------------------------------------------------------------
+CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST')
