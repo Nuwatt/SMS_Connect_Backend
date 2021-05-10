@@ -1,3 +1,5 @@
 -r base.txt
 
 # requirements for deployment
+gunicorn==20.1.0
+Collectfast==2.2.0

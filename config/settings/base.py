@@ -19,7 +19,7 @@ if READ_DOT_ENV_FILE:
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True
+DEBUG = env.bool("DJANGO_DEBUG", default=False)
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -207,7 +207,7 @@ X_FRAME_OPTIONS = "DENY"
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admin
-ADMINS = [("""admin""", "admin@inception.ae")]
+ADMINS = [("""admin""", "sbishnu019@gmail.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
@@ -289,8 +289,6 @@ if not DEBUG:
 # -----------------------------------------------------------------------------
 PASSWORD_RESET_CONFIRM_URL = 'http://sms-connect.s3-website.ap-south-1.amazonaws.com/password/reset/{}/{}'
 PASSWORD_RESET_TIMEOUT = 1800  # 30 minutes
-
-SECURE_SSL_REDIRECT = False
 
 # INCEPTION
 INCEPTION_SUPPORT_EMAIL = env.str('INCEPTION_SUPPORT_EMAIL')
