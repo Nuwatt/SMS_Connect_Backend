@@ -1,6 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
+
+from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
+from apps.core.utils import update
 from apps.user.exceptions import AgentUserNotFound
 from apps.user.models import AgentUser
 
@@ -53,7 +57,53 @@ class RegisterAgentUserUseCase(usecases.CreateUseCase):
         agent_user.operation_city.set(agent_data.get('operation_city'))
         agent_user.operation_country.set(agent_data.get('operation_country'))
 
+    def is_valid(self):
+        countries = self._data.get('operation_country', None)
+
+        if countries and 'operation_city' in self._data:
+            for city in self._data.get('operation_city'):
+                if city.country not in countries:
+                    raise ValidationError({
+                        'operation_city': _('City:{} not belongs to submitted country.'.format(
+                            city
+                        ))
+                    })
+
 
 class UpdateAgentUserProfile(usecases.UpdateUseCase):
     def __init__(self, user: User, serializer):
         super().__init__(serializer, user)
+
+
+class UpdateAgentUserUseCase(usecases.UpdateUseCase):
+    def __init__(self, serializer, agent_user: AgentUser):
+        super().__init__(serializer, agent_user)
+
+    def _factory(self):
+        # 1. pop portal user data
+
+        if 'operation_city' in self._data:
+            self._instance.operation_city.set(self._data.pop('operation_city'))
+
+        if 'operation_country' in self._data:
+            self._instance.operation_country.set(self._data.pop('operation_country'))
+
+        # 2. update user
+        update(instance=self._instance.user, data=self._data)
+
+    def is_valid(self):
+        countries = self._data.get('operation_country', self._instance.operation_country.all())
+
+        if countries and 'operation_city' in self._data:
+            for city in self._data.get('operation_city'):
+                if city.country not in countries:
+                    raise ValidationError({
+                        'operation_city': _('City:{} not belongs to submitted country.'.format(
+                            city
+                        ))
+                    })
+
+
+class DeleteAgentUserUseCase(usecases.DeleteUseCase):
+    def __init__(self, agent_user: AgentUser):
+        super().__init__(agent_user)

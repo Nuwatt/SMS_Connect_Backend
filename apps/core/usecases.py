@@ -43,6 +43,7 @@ class UpdateUseCase(BaseUseCase):
         self._instance = instance
 
     def execute(self):
+        self.is_valid()
         self._factory()
         return self._instance
 

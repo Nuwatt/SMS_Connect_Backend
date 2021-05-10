@@ -1,6 +1,24 @@
-from django.urls import path
+from django.urls import path, include
 
 from apps.user.views import agent_user_views
+
+agent_user_urls = [
+    path(
+        'detail',
+        agent_user_views.AgentUserDetailView.as_view(),
+        name='portal-agent-detail'
+    ),
+    path(
+        'update',
+        agent_user_views.UpdateAgentUserView.as_view(),
+        name='update-agent-user'
+    ),
+    path(
+        'delete',
+        agent_user_views.DeleteAgentUserView.as_view(),
+        name='delete-agent-user'
+    ),
+]
 
 urlpatterns = [
     path(
@@ -22,5 +40,9 @@ urlpatterns = [
         'profile/update',
         agent_user_views.UpdateAgentUserProfileView.as_view(),
         name='update-agent-user-profile'
+    ),
+    path(
+        '<str:agent_user_id>/',
+        include(agent_user_urls)
     ),
 ]

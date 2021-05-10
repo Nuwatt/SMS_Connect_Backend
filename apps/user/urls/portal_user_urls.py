@@ -1,6 +1,24 @@
-from django.urls import path
+from django.urls import path, include
 
 from apps.user.views import portal_user_views
+
+portal_user_urls = [
+    path(
+        'detail',
+        portal_user_views.PortalUserDetailView.as_view(),
+        name='portal-user-detail'
+    ),
+    path(
+        'update',
+        portal_user_views.UpdatePortalUserView.as_view(),
+        name='update-portal-user'
+    ),
+    path(
+        'delete',
+        portal_user_views.DeletePortalUserView.as_view(),
+        name='delete-portal-user'
+    ),
+]
 
 urlpatterns = [
     path(
@@ -14,18 +32,7 @@ urlpatterns = [
         name='register-portal-user'
     ),
     path(
-        '<str:portal_user_id>/detail',
-        portal_user_views.PortalUserDetailView.as_view(),
-        name='portal-user-detail'
-    ),
-    path(
-        '<str:portal_user_id>/update',
-        portal_user_views.UpdatePortalUserView.as_view(),
-        name='update-portal-user'
-    ),
-    path(
-        '<str:portal_user_id>/delete',
-        portal_user_views.DeletePortalUserView.as_view(),
-        name='delete-portal-user'
+        '<str:portal_user_id>/',
+        include(portal_user_urls)
     ),
 ]
