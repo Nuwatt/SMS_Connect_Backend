@@ -4,13 +4,15 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from apps.core.exceptions import NoContent
+from apps.core.mixins import LoggingErrorsMixin
 
 
 class GenericAPIView(generics.GenericAPIView):
-    pass
+    logging_methods = ['GET']
 
 
-class CreateAPIView(generics.CreateAPIView):
+class CreateAPIView(LoggingErrorsMixin, generics.CreateAPIView):
+    logging_methods = ['POST']
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -27,7 +29,8 @@ class CreateAPIView(generics.CreateAPIView):
         return Response(serializer.data, status=status_code, headers=headers)
 
 
-class ListAPIView(generics.ListAPIView):
+class ListAPIView(LoggingErrorsMixin, generics.ListAPIView):
+    logging_methods = ['GET']
 
     no_content_error_message = _('No Content At The Moment.')
 
@@ -42,7 +45,8 @@ class ListAPIView(generics.ListAPIView):
         return queryset
 
 
-class UpdateAPIView(generics.UpdateAPIView):
+class UpdateAPIView(LoggingErrorsMixin, generics.UpdateAPIView):
+    logging_methods = ['PUT', 'PATCH']
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -62,9 +66,10 @@ class UpdateAPIView(generics.UpdateAPIView):
         return Response(serializer.data)
 
 
-class DestroyAPIView(generics.DestroyAPIView):
-    pass
+class DestroyAPIView(LoggingErrorsMixin, generics.DestroyAPIView):
+    logging_methods = ['DELETE']
 
 
-class RetrieveAPIView(generics.RetrieveAPIView):
-    pass
+class RetrieveAPIView(LoggingErrorsMixin, generics.RetrieveAPIView):
+    logging_methods = ['GET']
+

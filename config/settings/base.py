@@ -34,7 +34,7 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-l10n
 USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
-USE_TZ = True
+# USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 
@@ -68,7 +68,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_yasg",
     "django_filters",
-    # "rest_framework_tracking",
+    "rest_framework_tracking",
 ]
 
 LOCAL_APPS = [
