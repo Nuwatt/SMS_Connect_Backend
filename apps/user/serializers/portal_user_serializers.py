@@ -58,13 +58,19 @@ class PortalUserDetailSerializer(ListPortalUserSerializer):
 
 
 class UpdatePortalUserSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    username = serializers.CharField()
-    fullname = serializers.CharField()
-    nationality = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
-    contact_number = PhoneNumberField()
-    date_of_birth = serializers.DateField(validators=[validate_date_of_birth])
-    avatar = serializers.ImageField()
+    email = serializers.EmailField(write_only=True)
+    username = serializers.CharField(write_only=True)
+    fullname = serializers.CharField(write_only=True)
+    nationality = serializers.PrimaryKeyRelatedField(
+        queryset=Country.objects.all(),
+        write_only=True
+    )
+    contact_number = PhoneNumberField(write_only=True)
+    date_of_birth = serializers.DateField(
+        validators=[validate_date_of_birth],
+        write_only=True
+    )
+    avatar = serializers.ImageField(write_only=True)
     role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
     position = serializers.CharField()
 
