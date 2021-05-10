@@ -182,3 +182,5 @@ class ChangePasswordSerializer(PasswordSerializer):
 
 class SupportSerializer(serializers.Serializer):
     text = serializers.CharField()
+    fullname = serializers.CharField()
+    email = serializers.EmailField()

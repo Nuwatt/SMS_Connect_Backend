@@ -105,10 +105,6 @@ class SupportUseCase(usecases.CreateUseCase):
 
     def _factory(self):
         SupportEmail(
-            context={
-                "user": self._user,
-                "text": self._data.get('text'),
-
-            }
+            context=self._data
         ).send(to=[settings.INCEPTION_SUPPORT_EMAIL])
 
