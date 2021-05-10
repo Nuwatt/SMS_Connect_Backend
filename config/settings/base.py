@@ -68,7 +68,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_yasg",
     "django_filters",
-    "rest_framework_tracking",
+    # "rest_framework_tracking",
 ]
 
 LOCAL_APPS = [
