@@ -27,7 +27,10 @@ def custom_exception_handler(exc, context):
         for key, value in response.data.items():
             if isinstance(value, ErrorDetail):
                 value = [value]
-            error = {'field': key, 'message': value}
+            if key == 'detail':
+                error = {'field': 'non_field_errors', 'message': value}
+            else:
+                error = {'field': key, 'message': value}
             customized_response['errors'].append(error)
 
         response.data = customized_response

@@ -30,25 +30,29 @@ class CustomJSONRenderer(JSONRenderer):
         custom_formatted_data = {
             'success': False,
             'error_message': None,
-            'data': data
         }
 
         # 2. if status_code is between 200 - 299
         if 200 <= status_code < 300:
             custom_formatted_data['success'] = True
+            custom_formatted_data['data'] = data
         # 2. if status_code is between 400 - 499
         elif 400 <= status_code < 500:
-            key = list(data.keys())[0]
-            if key in ['message', 'detail', 'non_field_errors']:
-                message = data.get(key)
-            else:
-                value = data.get(key)
-                message = '{} - {}'.format(
-                    key,
-                    value if isinstance(value, str) else value[0]
-                )
+            errors = data.get('errors')
+            print(errors[0].get('message'))
+            # key = list(errors.keys())[0]
+            # print(key)
+            # if key in ['message', 'detail', 'non_field_errors']:
+            #     message = data.get(key)
+            # else:
+            #     value = data.get(key)
+            #     message = '{} - {}'.format(
+            #         key,
+            #         value if isinstance(value, str) else value[0]
+            #     )
             custom_formatted_data['success'] = False
-            custom_formatted_data['error_message'] = message
+            custom_formatted_data['error_message'] = errors[0].get('message')[0]
+            custom_formatted_data['errors'] = errors
 
         ret = json.dumps(
             custom_formatted_data, cls=self.encoder_class,
