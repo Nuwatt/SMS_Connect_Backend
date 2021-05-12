@@ -22,6 +22,11 @@ portal_user_urls = [
 
 urlpatterns = [
     path(
+        'login',
+        portal_user_views.PortalUserLoginView.as_view(),
+        name='portal-login'
+    ),
+    path(
         'list',
         portal_user_views.ListPortalUserView.as_view(),
         name='list-portal-user'

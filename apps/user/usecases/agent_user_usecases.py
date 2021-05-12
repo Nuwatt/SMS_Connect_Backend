@@ -7,6 +7,7 @@ from apps.core import usecases
 from apps.core.utils import update
 from apps.user.exceptions import AgentUserNotFound
 from apps.user.models import AgentUser
+from apps.user.usecases.base_usecases import UserLoginUseCase
 
 User = get_user_model()
 
@@ -107,3 +108,7 @@ class UpdateAgentUserUseCase(usecases.UpdateUseCase):
 class DeleteAgentUserUseCase(usecases.DeleteUseCase):
     def __init__(self, agent_user: AgentUser):
         super().__init__(agent_user)
+
+
+class AgentUserLoginUseCase(UserLoginUseCase):
+    pass

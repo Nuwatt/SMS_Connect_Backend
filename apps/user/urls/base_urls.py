@@ -4,11 +4,6 @@ from apps.user.views import base_views
 
 urlpatterns = [
     path(
-        'login',
-        base_views.UserLoginView.as_view(),
-        name='user-login'
-    ),
-    path(
         'password/change',
         base_views.ChangePasswordView.as_view(),
         name='change-password'

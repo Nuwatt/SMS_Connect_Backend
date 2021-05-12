@@ -4,6 +4,7 @@ from apps.core import usecases
 from apps.core.utils import update
 from apps.user.exceptions import PortalUserNotFound
 from apps.user.models import PortalUser
+from apps.user.usecases.base_usecases import UserLoginUseCase
 
 User = get_user_model()
 
@@ -78,3 +79,7 @@ class UpdatePortalUserUseCase(usecases.UpdateUseCase):
 class DeletePortalUserUseCase(usecases.DeleteUseCase):
     def __init__(self, portal_user: PortalUser):
         super().__init__(portal_user)
+
+
+class PortalUserLoginUseCase(UserLoginUseCase):
+    pass

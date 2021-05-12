@@ -7,7 +7,8 @@ from apps.core.serializer_fields import PhoneNumberField
 from apps.core.serializers import IdNameSerializer
 from apps.localize.models import City, Country
 from apps.user.models import AgentUser
-from apps.user.serializers.base_serializers import UserSignupSerializer, UserDetailSerializer, UserSerializer
+from apps.user.serializers.base_serializers import UserSignupSerializer, UserDetailSerializer, UserSerializer, \
+    UserLoginSerializer, UserLoginResponseSerializer
 from apps.user.validators import validate_date_of_birth
 
 User = get_user_model()
@@ -101,3 +102,10 @@ class UpdateAgentUserSerializer(serializers.Serializer):
                 self.fail('duplicate_email')
         return data
 
+
+class AgentUserLoginSerializer(UserLoginSerializer):
+    pass
+
+
+class AgentUserLoginResponseSerializer(UserLoginResponseSerializer):
+    pass

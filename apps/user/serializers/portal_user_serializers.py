@@ -6,7 +6,7 @@ from apps.core.serializer_fields import PhoneNumberField
 from apps.core.serializers import IdNameSerializer
 from apps.localize.models import Country
 from apps.user.models import PortalUser, Role
-from apps.user.serializers.base_serializers import UserSerializer
+from apps.user.serializers.base_serializers import UserSerializer, UserLoginSerializer, UserLoginResponseSerializer
 from apps.user.validators import validate_username, validate_date_of_birth
 
 User = get_user_model()
@@ -90,3 +90,15 @@ class UpdatePortalUserSerializer(serializers.Serializer):
             if User.objects.filter(email=data).exists():
                 self.fail('duplicate_email')
         return data
+
+
+class PortalUserLoginSerializer(UserLoginSerializer):
+    pass
+
+
+class PortalUserLoginResponseSerializer(UserLoginResponseSerializer):
+    role = serializers.SerializerMethodField()
+
+    def get_role(self, instance):
+        user = instance.get('detail')
+        return user.portaluser.role.name

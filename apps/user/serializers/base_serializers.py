@@ -69,14 +69,7 @@ class UserLoginSerializer(serializers.Serializer):
 class UserLoginResponseSerializer(serializers.Serializer):
     access_token = serializers.CharField()
     refresh_token = serializers.CharField()
-    role = serializers.SerializerMethodField()
     detail = UserDetailSerializer()
-
-    def get_role(self, instance):
-        user = instance.get('detail')
-        if user.is_portal_user:
-            return user.portaluser.role.name
-        return None
 
 
 class RegisterUserResponseSerializer(serializers.Serializer):

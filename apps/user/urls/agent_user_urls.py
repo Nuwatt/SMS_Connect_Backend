@@ -22,6 +22,11 @@ agent_user_urls = [
 
 urlpatterns = [
     path(
+        'login',
+        agent_user_views.AgentUserLoginView.as_view(),
+        name='agent-login'
+    ),
+    path(
         'list',
         agent_user_views.ListAgentUserView.as_view(),
         name='list-agent-user'
