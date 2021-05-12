@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
 from apps.core.utils import update
-from apps.user.exceptions import AgentUserNotFound
+from apps.user.exceptions import AgentUserNotFound, LoginFailed
 from apps.user.models import AgentUser
 from apps.user.usecases.base_usecases import UserLoginUseCase
 
@@ -111,7 +111,10 @@ class DeleteAgentUserUseCase(usecases.DeleteUseCase):
 
 
 class AgentUserLoginUseCase(UserLoginUseCase):
-    pass
+    def _validate(self, user):
+        if not user.is_agent_user:
+            raise LoginFailed
+        super(AgentUserLoginUseCase, self)._validate(user)
 
 
 class UploadAgentUserAvatarUseCase(usecases.CreateUseCase):

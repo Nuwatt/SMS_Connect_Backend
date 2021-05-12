@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 
 from apps.core import usecases
 from apps.core.utils import update
-from apps.user.exceptions import PortalUserNotFound
+from apps.user.exceptions import PortalUserNotFound, LoginFailed
 from apps.user.models import PortalUser
 from apps.user.usecases.base_usecases import UserLoginUseCase
 
@@ -82,7 +82,10 @@ class DeletePortalUserUseCase(usecases.DeleteUseCase):
 
 
 class PortalUserLoginUseCase(UserLoginUseCase):
-    pass
+    def _validate(self, user):
+        if not user.is_portal_user:
+            raise LoginFailed
+        super(PortalUserLoginUseCase, self)._validate(user)
 
 
 class UploadPortalUserAvatarUseCase(usecases.CreateUseCase):

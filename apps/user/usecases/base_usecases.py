@@ -21,14 +21,11 @@ class UserLoginUseCase(usecases.CreateUseCase):
             email=self._data.get('email'),
             password=self._data.get('password')
         )
-
-        # 1a. if not authenticated raise LoginFailed Exception
+        # 1. if not authenticated raise LoginFailed Exception
         if not user:
             raise LoginFailed
 
-        # 1b. if user is not active raise UserInactive Exception
-        if not user.is_active:
-            raise UserInactive
+        self._validate(user)
 
         # 3. Get user token for user
         user_token = RefreshToken.for_user(user)
@@ -40,6 +37,11 @@ class UserLoginUseCase(usecases.CreateUseCase):
             'refresh_token': refresh_token,
             'detail': user
         }
+
+    def _validate(self, user):
+        # 1b. if user is not active raise UserInactive Exception
+        if not user.is_active:
+            raise UserInactive
 
 
 class ListUserUseCase(usecases.BaseUseCase):
@@ -63,12 +65,12 @@ class ResetPasswordConfirmBaseUseCase(usecases.CreateUseCase):
     def execute(self):
         super(ResetPasswordConfirmBaseUseCase, self).execute()
         self._notify_to_email()
-        
+
     def _factory(self):
         self._user = self._serializer.user
         self._user.set_password(self._data.get('new_password'))
         self._user.save()
-    
+
     def _notify_to_email(self):
         PasswordResetConfirmationEmail(
             context={"user": self._user}
@@ -107,4 +109,3 @@ class SupportUseCase(usecases.CreateUseCase):
         SupportEmail(
             context=self._data
         ).send(to=[settings.INCEPTION_SUPPORT_EMAIL])
-
