@@ -39,7 +39,11 @@ class UserLoginUseCase(usecases.CreateUseCase):
         }
 
     def _validate(self, user):
-        # 1b. if user is not active raise UserInactive Exception
+        # 1. if user is not active raise UserInactive Exception
+        if user.is_archived:
+            raise LoginFailed
+
+        # 2. if user is not active raise UserInactive Exception
         if not user.is_active:
             raise UserInactive
 

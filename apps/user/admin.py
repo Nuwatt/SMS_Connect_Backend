@@ -19,7 +19,7 @@ class UserAdmin(UserAdmin):
         )}),
         (_('Permissions'), {
             'fields': (
-                'is_active', 'is_staff', 'is_superuser', 'is_agent_user',
+                'is_active', 'is_staff', 'is_superuser', 'is_agent_user', 'is_archived',
                 'is_portal_user', 'groups', 'user_permissions',
             ),
         }),
@@ -39,6 +39,7 @@ class UserAdmin(UserAdmin):
         }),
     )
     ordering = ('-date_joined',)
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'is_archived', 'groups')
 
 
 @admin.register(models.AgentUser)
