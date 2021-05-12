@@ -71,7 +71,6 @@ class UpdatePortalUserSerializer(serializers.Serializer):
         validators=[validate_date_of_birth],
         write_only=True
     )
-    avatar = serializers.ImageField(write_only=True)
     role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
     position = serializers.CharField()
 

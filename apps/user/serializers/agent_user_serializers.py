@@ -81,7 +81,6 @@ class UpdateAgentUserSerializer(serializers.Serializer):
         validators=[validate_date_of_birth],
         write_only=True
     )
-    avatar = serializers.ImageField(write_only=True)
     operation_city = serializers.PrimaryKeyRelatedField(many=True, queryset=City.objects.all())
     operation_country = serializers.PrimaryKeyRelatedField(many=True, queryset=Country.objects.all())
 
