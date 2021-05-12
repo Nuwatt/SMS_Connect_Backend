@@ -112,3 +112,14 @@ class DeleteAgentUserUseCase(usecases.DeleteUseCase):
 
 class AgentUserLoginUseCase(UserLoginUseCase):
     pass
+
+
+class UploadAgentUserAvatarUseCase(usecases.CreateUseCase):
+    def __init__(self, agent_user: AgentUser, serializer):
+        super().__init__(serializer)
+        self._agent_user = agent_user
+
+    def _factory(self):
+        user = self._agent_user.user
+        user.avatar = self._data.get('avatar')
+        user.save()

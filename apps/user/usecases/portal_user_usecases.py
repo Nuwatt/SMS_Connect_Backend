@@ -83,3 +83,15 @@ class DeletePortalUserUseCase(usecases.DeleteUseCase):
 
 class PortalUserLoginUseCase(UserLoginUseCase):
     pass
+
+
+class UploadPortalUserAvatarUseCase(usecases.CreateUseCase):
+    def __init__(self, portal_user: PortalUser, serializer):
+        super().__init__(serializer)
+        self._portal_user = portal_user
+
+    def _factory(self):
+        user = self._portal_user.user
+        user.avatar = self._data.get('avatar')
+        user.save()
+

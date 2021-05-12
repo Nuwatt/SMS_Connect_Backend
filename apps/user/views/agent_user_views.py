@@ -145,3 +145,19 @@ class AgentUserLoginView(generics.CreateAPIView, ResponseMixin):
     @swagger_auto_schema(responses={200: agent_user_serializers.AgentUserLoginResponseSerializer()})
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class UploadPortalUserAvatarView(generics.CreateAPIView, AgentUserMixin):
+    """
+    Use this end-point to upload avatar of a specific agent user
+    """
+    serializer_class = agent_user_serializers.UploadAgentUserAvatarSerializer
+
+    def get_object(self):
+        return self.get_agent_user()
+
+    def perform_create(self, serializer):
+        return agent_user_usecases.UploadAgentUserAvatarUseCase(
+            agent_user=self.get_object(),
+            serializer=serializer
+        ).execute()

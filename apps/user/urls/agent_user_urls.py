@@ -18,6 +18,11 @@ agent_user_urls = [
         agent_user_views.DeleteAgentUserView.as_view(),
         name='delete-agent-user'
     ),
+    path(
+        'avatar/upload',
+        agent_user_views.UploadPortalUserAvatarView.as_view(),
+        name='upload-agent-user-avatar'
+    ),
 ]
 
 urlpatterns = [

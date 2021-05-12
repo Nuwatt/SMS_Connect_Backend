@@ -18,6 +18,11 @@ portal_user_urls = [
         portal_user_views.DeletePortalUserView.as_view(),
         name='delete-portal-user'
     ),
+    path(
+        'avatar/upload',
+        portal_user_views.UploadPortalUserAvatarView.as_view(),
+        name='upload-portal-user-avatar'
+    ),
 ]
 
 urlpatterns = [

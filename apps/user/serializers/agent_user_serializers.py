@@ -8,7 +8,7 @@ from apps.core.serializers import IdNameSerializer
 from apps.localize.models import City, Country
 from apps.user.models import AgentUser
 from apps.user.serializers.base_serializers import UserSignupSerializer, UserDetailSerializer, UserSerializer, \
-    UserLoginSerializer, UserLoginResponseSerializer
+    UserLoginSerializer, UserLoginResponseSerializer, AvatarSerializer
 from apps.user.validators import validate_date_of_birth
 
 User = get_user_model()
@@ -108,4 +108,8 @@ class AgentUserLoginSerializer(UserLoginSerializer):
 
 
 class AgentUserLoginResponseSerializer(UserLoginResponseSerializer):
+    pass
+
+
+class UploadAgentUserAvatarSerializer(AvatarSerializer):
     pass

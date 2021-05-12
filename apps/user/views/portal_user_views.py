@@ -117,3 +117,19 @@ class PortalUserLoginView(generics.CreateAPIView, ResponseMixin):
     @swagger_auto_schema(responses={200: portal_user_serializers.PortalUserLoginResponseSerializer()})
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class UploadPortalUserAvatarView(generics.CreateAPIView, PortalUserMixin):
+    """
+    Use this end-point to upload avatar of a specific portal user
+    """
+    serializer_class = portal_user_serializers.UploadPortalUserAvatarSerializer
+
+    def get_object(self):
+        return self.get_portal_user()
+
+    def perform_create(self, serializer):
+        return portal_user_usecases.UploadPortalUserAvatarUseCase(
+            portal_user=self.get_object(),
+            serializer=serializer
+        ).execute()

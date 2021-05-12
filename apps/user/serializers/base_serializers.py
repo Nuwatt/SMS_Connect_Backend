@@ -43,7 +43,6 @@ class UserSignupSerializer(UserSerializer):
             'fullname',
             'nationality',
             'date_of_birth',
-            'avatar'
         )
         extra_kwargs = {
             'password': {
@@ -177,3 +176,7 @@ class SupportSerializer(serializers.Serializer):
     text = serializers.CharField()
     fullname = serializers.CharField()
     email = serializers.EmailField()
+
+
+class AvatarSerializer(serializers.Serializer):
+    avatar = serializers.ImageField()

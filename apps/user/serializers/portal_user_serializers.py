@@ -6,7 +6,8 @@ from apps.core.serializer_fields import PhoneNumberField
 from apps.core.serializers import IdNameSerializer
 from apps.localize.models import Country
 from apps.user.models import PortalUser, Role
-from apps.user.serializers.base_serializers import UserSerializer, UserLoginSerializer, UserLoginResponseSerializer
+from apps.user.serializers.base_serializers import UserSerializer, UserLoginSerializer, UserLoginResponseSerializer, \
+    AvatarSerializer
 from apps.user.validators import validate_username, validate_date_of_birth
 
 User = get_user_model()
@@ -102,3 +103,7 @@ class PortalUserLoginResponseSerializer(UserLoginResponseSerializer):
     def get_role(self, instance):
         user = instance.get('detail')
         return user.portaluser.role.name
+
+
+class UploadPortalUserAvatarSerializer(AvatarSerializer):
+    pass
