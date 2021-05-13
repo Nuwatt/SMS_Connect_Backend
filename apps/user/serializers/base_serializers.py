@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_serializer_method
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -20,6 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserDetailSerializer(UserSerializer):
     nationality = IdNameSerializer()
+    id = serializers.SerializerMethodField()
 
     class Meta(UserSerializer.Meta):
         fields = (
@@ -32,6 +34,13 @@ class UserDetailSerializer(UserSerializer):
             'date_of_birth',
             'nationality',
         )
+
+    @swagger_serializer_method(serializer_or_field=serializers.CharField())
+    def get_id(self, instance):
+        if instance.is_agent_user:
+            return instance.agentuser.id
+        elif instance.is_portal_user:
+            return instance.portaluser.id
 
 
 class UserSignupSerializer(UserSerializer):

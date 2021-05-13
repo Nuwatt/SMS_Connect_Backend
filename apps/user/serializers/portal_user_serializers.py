@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 
 from apps.core.serializer_fields import PhoneNumberField
@@ -99,6 +100,7 @@ class PortalUserLoginSerializer(UserLoginSerializer):
 class PortalUserLoginResponseSerializer(UserLoginResponseSerializer):
     role = serializers.SerializerMethodField()
 
+    @swagger_serializer_method(serializer_or_field=serializers.CharField())
     def get_role(self, instance):
         user = instance.get('detail')
         return user.portaluser.role.name
