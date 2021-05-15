@@ -74,6 +74,7 @@ class UpdatePortalUserSerializer(serializers.Serializer):
     )
     role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
     position = serializers.CharField()
+    avatar = serializers.ImageField()
 
     default_error_messages = {
         'duplicate_email': _('Email already exists in another user.'),

@@ -7,8 +7,14 @@ from apps.core.serializer_fields import PhoneNumberField
 from apps.core.serializers import IdNameSerializer
 from apps.localize.models import City, Country
 from apps.user.models import AgentUser
-from apps.user.serializers.base_serializers import UserSignupSerializer, UserDetailSerializer, UserSerializer, \
-    UserLoginSerializer, UserLoginResponseSerializer, AvatarSerializer
+from apps.user.serializers.base_serializers import (
+    UserSignupSerializer,
+    UserDetailSerializer,
+    UserSerializer,
+    UserLoginSerializer,
+    UserLoginResponseSerializer,
+    AvatarSerializer
+)
 from apps.user.validators import validate_date_of_birth
 
 User = get_user_model()
@@ -56,6 +62,7 @@ class UpdateAgentUserProfileSerializer(UserSerializer):
             'contact_number',
             'date_of_birth',
             'nationality',
+            'avatar'
         )
 
 
@@ -83,6 +90,7 @@ class UpdateAgentUserSerializer(serializers.Serializer):
     )
     operation_city = serializers.PrimaryKeyRelatedField(many=True, queryset=City.objects.all())
     operation_country = serializers.PrimaryKeyRelatedField(many=True, queryset=Country.objects.all())
+    avatar = serializers.ImageField()
 
     default_error_messages = {
         'duplicate_email': _('Email already exists in another user.'),
