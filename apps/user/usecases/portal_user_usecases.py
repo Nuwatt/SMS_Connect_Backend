@@ -98,3 +98,6 @@ class UploadPortalUserAvatarUseCase(usecases.CreateUseCase):
         user.avatar = self._data.get('avatar')
         user.save()
 
+    def execute(self):
+        super(UploadPortalUserAvatarUseCase, self).execute()
+        return self._portal_user
