@@ -17,7 +17,7 @@ class LoggingErrorsMixin(LoggingMixin):
         else:
             if request.method not in self.logging_methods:
                 return False
-            return response.status_code >= 400
+            return response.status_code >= 200
 
 
 class ResponseMixin:
