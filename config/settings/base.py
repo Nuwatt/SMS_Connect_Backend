@@ -282,7 +282,7 @@ SIMPLE_JWT = {
 # Stop template view on DEBUG = False
 if not DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = (
-        'rest_framework.renderers.JSONRenderer',
+        'apps.core.renderers.CustomJSONRenderer',
     )
 
 # Reset Password
