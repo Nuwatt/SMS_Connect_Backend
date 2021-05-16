@@ -10,6 +10,7 @@ from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
 from apps.localize.models import Country, City
 from apps.user.managers import UserManager
+from apps.user.utils import upload_avatar_to
 from apps.user.validators import validate_date_of_birth, validate_username
 
 
@@ -34,7 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True
     )
     avatar = models.ImageField(
-        upload_to='avatar/',
+        upload_to=upload_avatar_to,
         default="default_avatar.png",
     )
     is_agent_user = models.BooleanField(
