@@ -47,7 +47,7 @@ class WordValidator(Validator):
 @deconstructible
 class PhoneNumberValidator(Validator):
     message = _('Enter a valid phone number.')
-    phone_number_regex = _lazy_re_compile(r'^[0-9]+$')
+    phone_number_regex = _lazy_re_compile(r'^[0-9/+]+$')
 
     def __call__(self, value):
         if not value:
