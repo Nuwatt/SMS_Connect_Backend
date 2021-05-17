@@ -31,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_of_birth = models.DateField(null=True, validators=[validate_date_of_birth])
     nationality = models.ForeignKey(
         Country,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True
     )
     avatar = models.ImageField(
