@@ -42,6 +42,7 @@ class UserAdmin(UserAdmin):
     )
     ordering = ('-date_joined',)
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'is_archived', 'groups')
+    search_fields = ('username', 'fullname', 'email')
 
 
 @admin.register(models.AgentUser)
