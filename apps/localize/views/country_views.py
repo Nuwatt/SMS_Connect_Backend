@@ -1,4 +1,5 @@
 from apps.core import generics
+from apps.localize.filtersets import CountryFilter
 from apps.localize.mixins import CountryMixin
 from apps.localize.serializers import country_serializers
 from apps.localize.usecases import country_usecases
@@ -21,6 +22,7 @@ class ListCountryView(generics.ListAPIView):
     Use this end-point to list all country
     """
     serializer_class = country_serializers.ListCountrySerializer
+    filterset_class = CountryFilter
 
     def get_queryset(self):
         return country_usecases.ListCountryUseCase().execute()
