@@ -10,8 +10,8 @@ from apps.core import usecases
 from apps.product.models import Brand, SKU
 from apps.question.exceptions import QuestionNotFound
 from apps.question.models import Question, QuestionOption, QuestionType
-from apps.question.serializers.question_serializers import AddQuestionSerializer
 from apps.questionnaire.models import Questionnaire
+from apps.user.models import AgentUser
 
 
 class GetQuestionUseCase(usecases.BaseUseCase):
@@ -36,7 +36,7 @@ class AddQuestionUseCase(usecases.CreateUseCase):
 
     def _factory(self):
         # 1. pop question options and question statement
-        question_options_data = self._data.pop('question_options')
+        question_options_data = self._data.pop('question_options', None)
 
         # 2. create question
         question = Question(
@@ -50,15 +50,16 @@ class AddQuestionUseCase(usecases.CreateUseCase):
             raise ValidationError(e.message_dict)
 
         # 3. create question options
-        question_options = []
-        for data in question_options_data:
-            question_options.append(
-                QuestionOption(
-                    question=question,
-                    option=data
+        if question_options_data:
+            question_options = []
+            for data in question_options_data:
+                question_options.append(
+                    QuestionOption(
+                        question=question,
+                        option=data
+                    )
                 )
-            )
-        QuestionOption.objects.bulk_create(question_options)
+            QuestionOption.objects.bulk_create(question_options)
 
 
 class ListQuestionUseCase(usecases.BaseUseCase):
@@ -186,3 +187,26 @@ class ExportQuestionUseCase(usecases.BaseUseCase):
                 question.sku
             ])
         return response
+
+
+class ListQuestionForAgentUseCase(usecases.BaseUseCase):
+    def __init__(self, agent_user: AgentUser, questionnaire: Questionnaire):
+        self._agent_user = agent_user
+        self._questionnaire = questionnaire
+
+    def execute(self):
+        self.is_valid()
+        self._factory()
+        return self._questions
+
+    def _factory(self):
+        self._questions = self._questionnaire.question_set.unarchived().select_related(
+            'question_type'
+        )
+
+    def is_valid(self):
+        # 1. check if agent has access to questionnaire
+        if not self._questionnaire.has_access_for_agent(agent=self._agent_user):
+            raise ValidationError({
+                'non_field_errors': _('Questionnaire is not assigned to agent.')
+            })

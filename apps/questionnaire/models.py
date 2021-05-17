@@ -62,3 +62,9 @@ class Questionnaire(BaseModel):
     @property
     def number_of_questions(self):
         return self.question_set.count()
+
+    def has_access_for_agent(self, agent):
+        if agent not in self.tags.all():
+            if not any(item in self.country.all() for item in agent.operation_country.all()):
+                return False
+        return True

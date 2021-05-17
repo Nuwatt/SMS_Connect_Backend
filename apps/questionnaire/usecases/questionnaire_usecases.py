@@ -1,4 +1,7 @@
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
+
+from rest_framework.exceptions import ValidationError
 
 from apps.questionnaire.exceptions import QuestionnaireNotFound
 from apps.core import usecases
@@ -24,6 +27,7 @@ class GetQuestionnaireUseCase(usecases.BaseUseCase):
 class AddQuestionnaireUseCase(usecases.CreateUseCase):
 
     def execute(self):
+        self.is_valid()
         self._factory()
         return self._questionnaire
 
@@ -40,6 +44,18 @@ class AddQuestionnaireUseCase(usecases.CreateUseCase):
         self._questionnaire.city.set(city)
         self._questionnaire.country.set(country)
         self._questionnaire.tags.set(tags)
+
+    def is_valid(self):
+        countries = self._data.get('country', None)
+
+        if countries and 'city' in self._data:
+            for city in self._data.get('city'):
+                if city.country not in countries:
+                    raise ValidationError({
+                        'city': _('City:{} not belongs to submitted country.'.format(
+                            city
+                        ))
+                    })
 
 
 class UpdateQuestionnaireUseCase(usecases.UpdateUseCase):
@@ -58,7 +74,12 @@ class ListQuestionnaireUseCase(usecases.BaseUseCase):
         return self._questionnaires
 
     def _factory(self):
-        self._questionnaires = Questionnaire.objects.unarchived()
+        self._questionnaires = Questionnaire.objects.unarchived().prefetch_related(
+            'city',
+            'country'
+        ).select_related(
+            'questionnaire_type',
+        )
 
 
 class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):

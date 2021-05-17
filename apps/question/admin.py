@@ -35,10 +35,21 @@ class QuestionOptionAdmin(BaseModelAdmin):
 
 
 @admin.register(models.QuestionType)
-class QuestionOptionAdmin(BaseModelAdmin):
+class QuestionTypeAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'name',
     )
     search_fields = BaseModelAdmin.search_fields + (
         'name',
+    )
+
+
+@admin.register(models.QuestionTypeChoice)
+class QuestionTypeChoiceAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'question_type',
+        'choice',
+    )
+    search_fields = BaseModelAdmin.search_fields + (
+        'choice',
     )

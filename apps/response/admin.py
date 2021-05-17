@@ -12,3 +12,23 @@ class ResponseAdmin(BaseModelAdmin):
 @admin.register(models.Answer)
 class AnswerAdmin(BaseModelAdmin):
     pass
+
+
+@admin.register(models.ImageAnswer)
+class ImageAnswerAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(models.InputAnswer)
+class InputAnswerAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(models.OptionAnswer)
+class OptionAnswerAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(models.ChoiceAnswer)
+class ChoiceAnswerAdmin(BaseModelAdmin):
+    pass

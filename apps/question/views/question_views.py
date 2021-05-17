@@ -10,6 +10,7 @@ from apps.question.mixins import QuestionMixin
 from apps.question.serializers import question_serializers
 from apps.question.usecases import question_usecases
 from apps.questionnaire.mixins import QuestionnaireMixin
+from apps.user.permissions import IsAgentUser
 
 
 class AddQuestionView(generics.CreateAPIView, QuestionnaireMixin):
@@ -38,8 +39,8 @@ class ListQuestionView(generics.ListAPIView):
     """
     Use this end-point to list all questions
     """
-    serializer_class = question_serializers.ListQuestionSerializer
     filterset_class = QuestionFilter
+    serializer_class = question_serializers.ListQuestionForAgentUserSerializer
 
     def get_queryset(self):
         return question_usecases.ListQuestionUseCase().execute()
@@ -90,5 +91,22 @@ class ExportQuestionView(generics.GenericAPIView, QuestionnaireMixin):
 
     def get(self, *args, **kwargs):
         return question_usecases.ExportQuestionUseCase(
+            questionnaire=self.get_object()
+        ).execute()
+
+
+class ListQuestionForAgentView(generics.ListAPIView, QuestionnaireMixin):
+    """
+    Use this end-point to list all question of a specific questionnaire for an agent user only
+    """
+    permission_classes = (IsAgentUser,)
+    serializer_class = question_serializers.ListQuestionForAgentUserSerializer
+
+    def get_object(self):
+        return self.get_questionnaire()
+
+    def get_queryset(self):
+        return question_usecases.ListQuestionForAgentUseCase(
+            agent_user=self.request.user.agentuser,
             questionnaire=self.get_object()
         ).execute()

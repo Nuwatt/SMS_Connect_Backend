@@ -29,5 +29,9 @@ urlpatterns = [
     path(
         'terms-and-conditions/',
         include('apps.terms_and_conditions.urls')
+    ),
+    path(
+        'response/',
+        include('apps.response.urls')
     )
 ]
