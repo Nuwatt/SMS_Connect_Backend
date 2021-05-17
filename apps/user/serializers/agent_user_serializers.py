@@ -91,7 +91,7 @@ class UpdateAgentUserSerializer(serializers.Serializer):
     )
     operation_city = serializers.PrimaryKeyRelatedField(many=True, queryset=City.objects.all())
     operation_country = serializers.PrimaryKeyRelatedField(many=True, queryset=Country.objects.all())
-    avatar = serializers.ImageField()
+    avatar = serializers.ImageField(required=False)
 
     default_error_messages = {
         'duplicate_email': _('Email already exists in another user.'),
