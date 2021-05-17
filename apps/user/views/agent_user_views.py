@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from apps.core import generics
 from apps.core.mixins import ResponseMixin
 from apps.core.serializers import MessageResponseSerializer
+from apps.user import filtersets
 from apps.user.mixins import AgentUserMixin
 from apps.user.permissions import IsAgentUser
 from apps.user.serializers import agent_user_serializers
@@ -18,6 +19,7 @@ class ListAgentUserView(generics.ListAPIView):
     Use this end-point to list all agent user
     """
     serializer_class = agent_user_serializers.ListAgentUserSerializer
+    filterset_class = filtersets.AgentUserFilter
 
     def get_queryset(self):
         return agent_user_usecases.ListAgentUserUseCase().execute()

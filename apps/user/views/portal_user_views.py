@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from apps.core import generics
 from apps.core.mixins import ResponseMixin
 from apps.core.serializers import MessageResponseSerializer
+from apps.user import filtersets
 from apps.user.mixins import PortalUserMixin
 from apps.user.serializers import portal_user_serializers
 from apps.user.usecases import portal_user_usecases
@@ -18,6 +19,7 @@ class ListPortalUserView(generics.ListAPIView):
     Use this end-point to list all portal user
     """
     serializer_class = portal_user_serializers.ListPortalUserSerializer
+    filterset_class = filtersets.PortalUserFilter
 
     def get_queryset(self):
         return portal_user_usecases.ListPortalUserUseCase().execute()

@@ -46,12 +46,26 @@ class UserAdmin(UserAdmin):
 
 @admin.register(models.AgentUser)
 class AgentUserAdmin(BaseModelAdmin):
-    pass
+    list_display = (
+        'id',
+        'email',
+        'updated'
+    )
+
+    def email(self, instance):
+        return instance.user.email
 
 
 @admin.register(models.PortalUser)
 class PortalUserAdmin(BaseModelAdmin):
-    pass
+    list_display = (
+        'id',
+        'email',
+        'updated'
+    )
+
+    def email(self, instance):
+        return instance.user.email
 
 
 @admin.register(models.Role)
