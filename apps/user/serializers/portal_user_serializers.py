@@ -34,6 +34,7 @@ class RegisterPortalUserSerializer(UserSerializer):
     position = serializers.CharField()
     username = serializers.CharField(validators=[validate_username])
     fullname = serializers.CharField()
+    avatar = serializers.ImageField(required=False)
 
     class Meta(UserSerializer.Meta):
         fields = (
