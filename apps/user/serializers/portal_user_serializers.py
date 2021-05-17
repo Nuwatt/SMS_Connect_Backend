@@ -25,6 +25,7 @@ class ListPortalUserSerializer(serializers.Serializer):
     fullname = serializers.CharField(source='user.fullname')
     nationality = serializers.CharField(source='user.nationality')
     position = serializers.CharField()
+    role = serializers.CharField()
     date_of_birth = serializers.DateField(source='user.date_of_birth', format='%d-%m-%Y')
     contact_number = PhoneNumberField(source='user.contact_number')
 
