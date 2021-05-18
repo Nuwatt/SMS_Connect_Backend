@@ -53,3 +53,6 @@ class QuestionTypeChoiceAdmin(BaseModelAdmin):
     search_fields = BaseModelAdmin.search_fields + (
         'choice',
     )
+    list_filter = (
+        'question_type',
+    )

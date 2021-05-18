@@ -1,6 +1,10 @@
-from rest_framework import serializers
+from django.utils.translation import gettext_lazy as _
 
-from apps.response.models import Response
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
+from apps.question.models import QuestionTypeChoice, QuestionOption
+from apps.response.models import Response, Answer
 
 
 class ResponseSerializer(serializers.ModelSerializer):
@@ -16,3 +20,113 @@ class StartQuestionnaireSerializer(ResponseSerializer):
             'latitude',
             'longitude'
         )
+
+
+class SummitQuestionnaireResponseSerializer(serializers.ModelSerializer):
+    text_answer = serializers.CharField(required=False)
+    image_answer = serializers.ListSerializer(
+        child=serializers.ImageField(),
+        required=False
+    )
+    choice_answer = serializers.PrimaryKeyRelatedField(
+        required=False,
+        queryset=QuestionTypeChoice.objects.unarchived()
+    )
+    option_answer = serializers.PrimaryKeyRelatedField(
+        required=False,
+        queryset=QuestionOption.objects.unarchived(),
+        many=True
+    )
+
+    class Meta:
+        model = Answer
+        fields = (
+            'question',
+            'text_answer',
+            'choice_answer',
+            'text_answer',
+            'option_answer',
+            'image_answer'
+        )
+
+    def validate(self, attrs):
+        # 1. check for field required
+        question_type = attrs.get('question').question_type
+        if question_type.has_options or question_type.has_default_choices:
+            if question_type.has_options:
+                if not attrs.get('option_answer', None):
+                    raise ValidationError({
+                        'option_answer': _('Option Answer is required for this question.')
+                    })
+                self.validate_option(attrs.get('question'), attrs.get('option_answer'))
+            elif question_type.has_default_choices:
+                if not attrs.get('choice_answer', None):
+                    raise ValidationError({
+                        'choice_answer': _('Choice Answer is required for this question.')
+                    })
+                self.validate_choice(question_type, attrs.get('choice_answer'))
+        else:
+            if question_type.name == 'Pictures' and not attrs.get('image_answer', None):
+                raise ValidationError({
+                    'image_answer': _('Image Answer is required for this question.')
+                })
+            elif not attrs.get('text_answer', None):
+                raise ValidationError({
+                    'text_answer': _('Text Answer is required for this question.')
+                })
+        return attrs
+
+    def validate_option(self, question, option):
+        if not all(question == item.question for item in option):
+            raise ValidationError({
+                'option_answer': _('Options don\'t belong to same question.')
+            })
+
+    def validate_choice(self, question_type, choice):
+        if question_type != choice.question_type:
+            raise ValidationError({
+                'choice_answer': _('Choice don\'t belong to same question type.')
+            })
+
+
+class BulkSummitQuestionnaireResponseSerializer(serializers.Serializer):
+    data = SummitQuestionnaireResponseSerializer(many=True, required=True)
+
+    def validate(self, attrs):
+        # 1. check duplicate of question
+        unique_question = []
+        for item in attrs.get('data'):
+            if item.get('question') in unique_question:
+                raise ValidationError({
+                    'data': _('Data has duplicate questions.')
+                })
+            unique_question.append(item.get('question'))
+        return attrs
+
+
+class ListQuestionnaireResponseSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    questionnaire = serializers.CharField()
+    questionnaire_type = serializers.CharField(source='questionnaire.questionnaire_type')
+    start_date_time = serializers.DateTimeField(source='created', format='%d-%m-%Y - %H:%M %p')
+    completed_date_time = serializers.DateTimeField(format='%d-%m-%Y - %H:%M %p')
+
+
+data = [
+    {
+        "question": "Q0001",
+        "text_answer": "20"
+    },
+    {
+        "question": "Q0002",
+        "image_answer": "image file"
+    },
+    {
+        "question": "Q0003",
+        "choice_answer": "1"
+    },
+    {
+        "question": "Q0004",
+        "option_answer": ["1", "2"]
+    },
+]

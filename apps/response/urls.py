@@ -8,4 +8,14 @@ urlpatterns = [
         views.StartQuestionnaireView.as_view(),
         name='start-questionnaire'
     ),
+    path(
+        '<str:response_id>/submit',
+        views.SummitQuestionnaireResponseView.as_view(),
+        name='submit-questionnaire-response'
+    ),
+    path(
+        'agent-user/<str:agent_user_id>/list',
+        views.ListQuestionnaireResponseView.as_view(),
+        name='list-agent-questionnaire-response'
+    ),
 ]
