@@ -1,6 +1,7 @@
 from apps.core import usecases
 from apps.localize.exceptions import CityNotFound
 from apps.localize.models import City
+from apps.user.models import AgentUser
 
 
 class GetCityUseCase(usecases.BaseUseCase):
@@ -40,4 +41,16 @@ class ListCityUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._cities = City.objects.unarchived()
+
+
+class ListCityForAgentUserUseCase(usecases.BaseUseCase):
+    def __init__(self, agent_user: AgentUser):
+        self._agent_user = agent_user
+
+    def execute(self):
+        self._factory()
+        return self._cities
+
+    def _factory(self):
+        self._cities = self._agent_user.operation_city.all()
 

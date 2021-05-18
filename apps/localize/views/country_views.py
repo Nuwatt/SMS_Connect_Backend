@@ -25,6 +25,11 @@ class ListCountryView(generics.ListAPIView):
     filterset_class = CountryFilter
 
     def get_queryset(self):
+        user = self.request.user
+        if user.is_agent_user:
+            return country_usecases.ListCountryForAgentUserUseCase(
+                agent_user=user.agentuser
+            ).execute()
         return country_usecases.ListCountryUseCase().execute()
 
 
