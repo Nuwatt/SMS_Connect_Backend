@@ -1,6 +1,7 @@
 from apps.market.exceptions import RetailerNotFound
 from apps.market.models import Retailer
 from apps.core import usecases
+from apps.user.models import AgentUser
 
 
 class GetRetailerUseCase(usecases.BaseUseCase):
@@ -40,3 +41,18 @@ class ListRetailerUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._retailers = Retailer.objects.unarchived()
+
+
+class ListRetailerForAgentUserUseCase(usecases.BaseUseCase):
+    def __init__(self, agent_user: AgentUser):
+        self._agent_user = agent_user
+
+    def execute(self):
+        self._factory()
+        return self._retailers
+
+    def _factory(self):
+        self._retailers = Retailer.objects.filter(
+            country__in=self._agent_user.operation_country,
+            city__in=self._agent_user.operation_city
+        ).unarchived()

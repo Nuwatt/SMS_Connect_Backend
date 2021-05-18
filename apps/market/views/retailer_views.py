@@ -23,6 +23,11 @@ class ListRetailerView(generics.ListAPIView):
     serializer_class = retailer_serializers.ListRetailerSerializer
 
     def get_queryset(self):
+        user = self.request.user
+        if user.is_agent_user:
+            return retailer_usecases.ListRetailerForAgentUserUseCase(
+                agent_user=user.agentuser
+            ).execute()
         return retailer_usecases.ListRetailerUseCase().execute()
 
 
