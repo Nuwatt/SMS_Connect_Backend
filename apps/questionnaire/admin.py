@@ -17,6 +17,10 @@ class QuestionnaireTypeAdmin(BaseModelAdmin):
 
 @admin.register(models.Questionnaire)
 class QuestionnaireAdmin(BaseModelAdmin):
+    raw_id_fields = (
+        'city',
+        'country'
+    )
     list_display = (
         'name',
     ) + BaseModelAdmin.list_display

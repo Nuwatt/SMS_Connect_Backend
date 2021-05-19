@@ -17,6 +17,7 @@ class UserAdmin(UserAdmin):
         (_('Personal info'), {'fields': (
             'fullname',
             'contact_number',
+            'nationality',
             'avatar',
         )}),
         (_('Permissions'), {
@@ -44,9 +45,17 @@ class UserAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'is_archived', 'groups')
     search_fields = ('username', 'fullname', 'email')
 
+    raw_id_fields = (
+        'nationality',
+    )
+
 
 @admin.register(models.AgentUser)
 class AgentUserAdmin(BaseModelAdmin):
+    raw_id_fields = (
+        'operation_city',
+        'operation_country'
+    )
     list_display = (
         'id',
         'email',
@@ -72,9 +81,9 @@ class PortalUserAdmin(BaseModelAdmin):
 @admin.register(models.Role)
 class RoleAdmin(BaseModelAdmin):
     list_display = (
-        'name',
-    ) + BaseModelAdmin.list_display
+                       'name',
+                   ) + BaseModelAdmin.list_display
 
     search_fields = (
-        'name',
-    ) + BaseModelAdmin.search_fields
+                        'name',
+                    ) + BaseModelAdmin.search_fields

@@ -6,6 +6,11 @@ from apps.market import models
 
 @admin.register(models.Retailer)
 class RetailerAdmin(BaseModelAdmin):
+    raw_id_fields = (
+        'city',
+        'country'
+    )
+
     list_display = (
         'name',
     ) + BaseModelAdmin.list_display
