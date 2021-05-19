@@ -24,8 +24,7 @@ class ListCitySerializer(CitySerializer):
     class Meta(CitySerializer.Meta):
         fields = (
             'id',
-            'name',
-            'country'
+            'name'
         )
 
 
