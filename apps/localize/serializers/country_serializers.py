@@ -22,7 +22,6 @@ class ListCountrySerializer(CountrySerializer):
         fields = (
             'id',
             'name',
-            'region' 
         )
 
 

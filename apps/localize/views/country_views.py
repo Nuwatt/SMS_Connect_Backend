@@ -33,6 +33,17 @@ class ListCountryView(generics.ListAPIView):
         return country_usecases.ListCountryUseCase().execute()
 
 
+class ListNationalityView(generics.ListAPIView):
+    """
+    Use this end-point to list all nationality
+    """
+    serializer_class = country_serializers.ListCountrySerializer
+    filterset_class = CountryFilter
+
+    def get_queryset(self):
+        return country_usecases.ListCountryUseCase().execute()
+
+
 class UpdateCountryView(generics.UpdateAPIView, CountryMixin):
     """
     Use this end-point to update specific country

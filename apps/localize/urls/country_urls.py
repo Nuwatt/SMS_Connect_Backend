@@ -16,6 +16,12 @@ urlpatterns = [
 
     ),
     path(
+        'nationality/list',
+        country_views.ListNationalityView.as_view(),
+        name='list-nationality'
+
+    ),
+    path(
         '<str:country_id>/update',
         country_views.UpdateCountryView.as_view(),
         name='update-country'
