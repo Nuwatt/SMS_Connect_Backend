@@ -19,8 +19,6 @@ class AddCitySerializer(CitySerializer):
 
 
 class ListCitySerializer(CitySerializer):
-    country = IdNameSerializer()
-
     class Meta(CitySerializer.Meta):
         fields = (
             'id',
