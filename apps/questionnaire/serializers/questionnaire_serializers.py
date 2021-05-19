@@ -56,7 +56,7 @@ class ListAvailableQuestionnaireForAgentSerializer(QuestionnaireSerializer):
         fields = (
             'id',
             'name',
-            'questionnaire_type'
+            'questionnaire_type',
             'initiated_data',
             'number_of_questions'
         )
