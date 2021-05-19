@@ -7,8 +7,12 @@ from apps.core.serializer_fields import PhoneNumberField
 from apps.core.serializers import IdNameSerializer
 from apps.localize.models import Country
 from apps.user.models import PortalUser, Role
-from apps.user.serializers.base_serializers import UserSerializer, UserLoginSerializer, UserLoginResponseSerializer, \
+from apps.user.serializers.base_serializers import (
+    UserSerializer,
+    UserLoginSerializer,
+    UserLoginResponseSerializer,
     AvatarSerializer
+)
 from apps.user.validators import validate_username, validate_date_of_birth
 
 User = get_user_model()
@@ -31,7 +35,12 @@ class ListPortalUserSerializer(serializers.Serializer):
 
 
 class RegisterPortalUserSerializer(UserSerializer):
-    role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
+    role = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(),
+        error_messages={
+            'does_not_exist': _('Invalid role - submitted role does not exist.'),
+        }
+    )
     position = serializers.CharField()
     username = serializers.CharField(validators=[validate_username])
     fullname = serializers.CharField()
@@ -67,20 +76,28 @@ class UpdatePortalUserSerializer(serializers.Serializer):
     fullname = serializers.CharField(write_only=True)
     nationality = serializers.PrimaryKeyRelatedField(
         queryset=Country.objects.all(),
-        write_only=True
+        write_only=True,
+        error_messages={
+            'does_not_exist': _('Invalid nationality - submitted nationality does not exist.'),
+        }
     )
     contact_number = PhoneNumberField(write_only=True)
     date_of_birth = serializers.DateField(
         validators=[validate_date_of_birth],
         write_only=True
     )
-    role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
+    role = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(),
+        error_messages={
+            'does_not_exist': _('Invalid role - submitted role does not exist.'),
+        }
+    )
     position = serializers.CharField()
     avatar = serializers.ImageField(required=False)
 
     default_error_messages = {
-        'duplicate_email': _('Email already exists in another user.'),
-        'duplicate_username': _('Username already exists in another user.'),
+        'duplicate_email': _('Email is already been used by another user.'),
+        'duplicate_username': _('Username is already been used by another user.'),
     }
 
     def validate_username(self, data):

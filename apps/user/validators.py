@@ -1,6 +1,5 @@
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
-from django.core.validators import _lazy_re_compile
 from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
@@ -21,10 +20,10 @@ class DateOfBirthValidator(Validator):
         age = now - value.year
 
         if age < 10:
-            raise ValidationError(_('Under age: 10 is not accepted.'), code=self.code)
+            raise ValidationError(_('Invalid DOB - Under: 10 is not accepted.'), code=self.code)
 
         if age > 90:
-            raise ValidationError(_('Above age: 90 is not accepted.'), code=self.code)
+            raise ValidationError(_('Invalid DOB - Above: 90 is not accepted.'), code=self.code)
 
 
 validate_date_of_birth = DateOfBirthValidator()
