@@ -6,29 +6,50 @@ from apps.response import models
 
 @admin.register(models.Response)
 class ResponseAdmin(BaseModelAdmin):
-    pass
+    readonly_fields = (
+        'agent',
+        'questionnaire',
+    )
+    raw_id_fields = (
+        'retailer',
+    )
 
 
 @admin.register(models.Answer)
 class AnswerAdmin(BaseModelAdmin):
-    pass
+    readonly_fields = (
+        'response',
+        'question',
+    )
 
 
 @admin.register(models.ImageAnswer)
 class ImageAnswerAdmin(BaseModelAdmin):
-    pass
+    readonly_fields = (
+        'answer',
+        'image',
+    )
 
 
 @admin.register(models.InputAnswer)
 class InputAnswerAdmin(BaseModelAdmin):
-    pass
+    readonly_fields = (
+        'answer',
+        'body',
+    )
 
 
 @admin.register(models.OptionAnswer)
 class OptionAnswerAdmin(BaseModelAdmin):
-    pass
+    readonly_fields = (
+        'answer',
+        'option',
+    )
 
 
 @admin.register(models.ChoiceAnswer)
 class ChoiceAnswerAdmin(BaseModelAdmin):
-    pass
+    readonly_fields = (
+        'answer',
+        'choice',
+    )
