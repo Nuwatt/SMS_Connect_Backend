@@ -27,6 +27,9 @@ class QuestionAdmin(BaseModelAdmin):
         'questionnaire',
         'sku'
     )
+    list_filter = (
+        'question_type',
+    )
 
 
 @admin.register(models.QuestionOption)
