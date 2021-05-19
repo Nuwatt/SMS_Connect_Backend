@@ -40,6 +40,9 @@ class QuestionOptionAdmin(BaseModelAdmin):
     search_fields = BaseModelAdmin.search_fields + (
         'option',
     )
+    raw_id_fields = (
+        'question',
+    )
 
 
 @admin.register(models.QuestionType)

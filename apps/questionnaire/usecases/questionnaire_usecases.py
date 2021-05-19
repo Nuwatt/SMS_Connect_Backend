@@ -1,4 +1,5 @@
-from django.db.models import Q
+from django.db import models
+from django.db.models import Q, OuterRef, Value, Subquery
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
@@ -6,6 +7,7 @@ from rest_framework.exceptions import ValidationError
 from apps.questionnaire.exceptions import QuestionnaireNotFound
 from apps.core import usecases
 from apps.questionnaire.models import Questionnaire
+from apps.response.models import Response
 from apps.user.models import AgentUser
 
 
@@ -91,8 +93,20 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
         return self._questionnaires
 
     def _factory(self):
-        self._questionnaires = Questionnaire.objects.unarchived().filter(
-            Q(city__in=self._agent_user.operation_city.all()) |
-            Q(tags__in=[self._agent_user])
-        ).distinct()
+        responses = Response.objects.filter(
+            questionnaire=OuterRef('pk'),
+            agent=self._agent_user,
+        )
+        self._questionnaires = Questionnaire.objects.unarchived().annotate(
+            response_count=Subquery(responses.values('id')[:1])
+        )
+
+        print(self._questionnaires)
+        for item in self._questionnaires:
+            print(item.response_count)
+
+        # ).filter(
+        #     Q(city__in=self._agent_user.operation_city.all()) |
+        #     Q(tags__in=[self._agent_user])
+        # ).distinct()
 

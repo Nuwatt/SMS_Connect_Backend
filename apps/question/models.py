@@ -116,7 +116,8 @@ class QuestionOption(BaseModel):
     question = models.ForeignKey(
         Question,
         on_delete=models.CASCADE,
-        null=True
+        null=True,
+        limit_choices_to={'question_type__has_options': True}
     )
     option = models.CharField(
         max_length=244,
