@@ -22,6 +22,11 @@ class QuestionAdmin(BaseModelAdmin):
     search_fields = BaseModelAdmin.search_fields + (
         'statement',
     )
+    raw_id_fields = (
+        'brand',
+        'questionnaire',
+        'sku'
+    )
 
 
 @admin.register(models.QuestionOption)
