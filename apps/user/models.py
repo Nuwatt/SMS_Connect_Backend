@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     avatar = models.ImageField(
         upload_to=upload_avatar_to,
-        default="default_avatar.png",
+        default="avatar/default_avatar.png",
     )
     is_agent_user = models.BooleanField(
         _('agent user'),
