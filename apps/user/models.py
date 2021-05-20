@@ -27,12 +27,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
         validators=[validate_username],
     )
-    contact_number = fields.PhoneNumberField(null=True)
+    contact_number = fields.PhoneNumberField(null=True, blank=True)
     date_of_birth = models.DateField(null=True, validators=[validate_date_of_birth])
     nationality = models.ForeignKey(
         Country,
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        blank=True
     )
     avatar = models.ImageField(
         upload_to=upload_avatar_to,
