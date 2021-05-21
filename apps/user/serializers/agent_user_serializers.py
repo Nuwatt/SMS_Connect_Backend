@@ -71,6 +71,7 @@ class AgentUserDetailSerializer(ListAgentUserSerializer):
     avatar = serializers.ImageField(source='user.avatar')
     email = serializers.EmailField(source='user.email')
     nationality = IdNameSerializer(source='user.nationality')
+    date_of_birth = serializers.DateField(source='user.date_of_birth')
     operation_city = IdNameSerializer(many=True)
     operation_country = IdNameSerializer(many=True)
     total_completed_questionnaire = None
