@@ -44,12 +44,21 @@ class RegisterAgentUserSerializer(UserSignupSerializer):
     operation_country = serializers.PrimaryKeyRelatedField(many=True, queryset=Country.objects.all())
     avatar = serializers.ImageField(required=False)
 
+    default_error_messages = {
+        'empty_operation_country': 'Empty Operation Country is not allowed.'
+    }
+
     class Meta(UserSignupSerializer.Meta):
         fields = UserSignupSerializer.Meta.fields + (
             'avatar',
             'operation_city',
             'operation_country'
         )
+
+    def validate_operation_country(self, data):
+        if len(data) == 0:
+            self.fail('empty_operation_country')
+        return data
 
 
 class AgentUserProfileSerializer(UserDetailSerializer):
