@@ -67,19 +67,19 @@ class ListQuestionForAgentUserSerializer(QuestionSerializer):
 
     @swagger_serializer_method(serializer_or_field=IdNameSerializer())
     def get_question_options(self, instance):
-        # question_type = instance.question_type
-        # if question_type.has_options:
-        #     return instance.questionoption_set.extra(
-        #         select={
-        #             'name': 'option'
-        #         }
-        #     ).values('id', 'name')
-        # elif question_type.has_default_choices:
-        #     return question_type.questiontypechoice_set.extra(
-        #         select={
-        #             'name': 'choice'
-        #         }
-        #     ).values('id', 'name')
+        question_type = instance.question_type
+        if question_type.has_options:
+            return instance.questionoption_set.extra(
+                select={
+                    'name': 'option'
+                }
+            ).values('id', 'name')
+        elif question_type.has_default_choices:
+            return question_type.questiontypechoice_set.extra(
+                select={
+                    'name': 'choice'
+                }
+            ).values('id', 'name')
         return None
 
 
