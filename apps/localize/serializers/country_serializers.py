@@ -19,7 +19,7 @@ class AddCountrySerializer(CountrySerializer):
 
 
 class ListCountrySerializer(CountrySerializer):
-    city = IdNameSerializer(many=True)
+    city = IdNameSerializer(many=True, source='city_set')
 
     class Meta(CountrySerializer.Meta):
         fields = (
