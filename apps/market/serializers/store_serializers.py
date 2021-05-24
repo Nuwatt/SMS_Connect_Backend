@@ -18,9 +18,12 @@ class AddStoreSerializer(StoreSerializer):
 
 
 class ListStoreSerializer(StoreSerializer):
+    retailer = serializers.CharField()
+
     class Meta(StoreSerializer.Meta):
         fields = (
             'id',
+            'retailer',
             'name',
         )
 

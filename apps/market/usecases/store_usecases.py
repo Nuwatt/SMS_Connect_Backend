@@ -39,5 +39,7 @@ class ListStoreUseCase(usecases.BaseUseCase):
         return self._stores
 
     def _factory(self):
-        self._stores = Store.objects.unarchived()
+        self._stores = Store.objects.unarchived().select_related(
+            'retailer'
+        )
 
