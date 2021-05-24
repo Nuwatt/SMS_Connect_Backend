@@ -25,11 +25,6 @@ class ListCityView(generics.ListAPIView):
     filterset_class = CityFilter
 
     def get_queryset(self):
-        user = self.request.user
-        if user.is_agent_user:
-            return city_usecases.ListCityForAgentUserUseCase(
-                agent_user=user.agentuser
-            ).execute()
         return city_usecases.ListCityUseCase().execute()
 
 

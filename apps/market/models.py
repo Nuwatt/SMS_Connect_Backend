@@ -34,7 +34,7 @@ class Retailer(BaseModel):
         return self.name
 
 
-class Store(BaseModel, CoordinatesModelMixin):
+class Store(BaseModel):
     name = models.CharField(max_length=100)
     retailer = models.ForeignKey(Retailer, on_delete=models.CASCADE)
 

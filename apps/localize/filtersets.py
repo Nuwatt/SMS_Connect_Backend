@@ -14,18 +14,30 @@ class AreaFilter(filters.FilterSet):
 
 
 class CityFilter(NameSearchFilter):
+    questionnaire = filters.CharFilter(
+        label='questionnaire',
+        field_name='questionnaire__id',
+    )
+
     class Meta:
         model = City
         fields = [
             'country',
-            'search'
+            'search',
+            'questionnaire'
         ]
 
 
 class CountryFilter(NameSearchFilter):
+    questionnaire = filters.CharFilter(
+        label='questionnaire',
+        field_name='questionnaire__id',
+    )
+
     class Meta:
         model = Country
         fields = [
             'region',
+            'questionnaire',
             'search'
         ]
