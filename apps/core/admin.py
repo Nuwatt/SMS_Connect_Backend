@@ -23,3 +23,5 @@ class BaseModelAdmin(ModelAdmin):
         'created',
         'updated',
     )
+    list_filter = ('is_archived',)
+
