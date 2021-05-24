@@ -1,3 +1,6 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from apps.core import generics
 from apps.localize.filtersets import CountryFilter
 from apps.localize.mixins import CountryMixin
@@ -26,6 +29,10 @@ class ListCountryView(generics.ListAPIView):
 
     def get_queryset(self):
         return country_usecases.ListCountryUseCase().execute()
+
+    @method_decorator(cache_page(60*60*2))
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 class ListNationalityView(generics.ListAPIView):
