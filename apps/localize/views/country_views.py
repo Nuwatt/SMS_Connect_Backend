@@ -32,11 +32,11 @@ class ListNationalityView(generics.ListAPIView):
     """
     Use this end-point to list all nationality
     """
-    serializer_class = country_serializers.ListCountrySerializer
+    serializer_class = country_serializers.ListNationalitySerializer
     filterset_class = CountryFilter
 
     def get_queryset(self):
-        return country_usecases.ListCountryUseCase().execute()
+        return country_usecases.ListNationalityUseCase().execute()
 
 
 class UpdateCountryView(generics.UpdateAPIView, CountryMixin):

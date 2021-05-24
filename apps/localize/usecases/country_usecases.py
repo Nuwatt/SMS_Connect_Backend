@@ -40,6 +40,17 @@ class ListCountryUseCase(usecases.BaseUseCase):
         return self._countries
 
     def _factory(self):
+        self._countries = Country.objects.prefetch_related(
+            'city_set'
+        ).unarchived()
+
+
+class ListNationalityUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._countries
+
+    def _factory(self):
         self._countries = Country.objects.unarchived()
 
 
