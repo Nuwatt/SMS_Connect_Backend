@@ -53,6 +53,6 @@ class ListRetailerForAgentUserUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._retailers = Retailer.objects.filter(
-            country__in=self._agent_user.operation_country,
-            city__in=self._agent_user.operation_city
+            country__in=self._agent_user.operation_country.all(),
+            city__in=self._agent_user.operation_city.all()
         ).unarchived()

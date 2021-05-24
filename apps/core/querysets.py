@@ -6,6 +6,7 @@ class ArchiveMixin:
     """
     Mixin for archive instance of model
     """
+
     def archive(self):
         kwargs = {
             'is_archived': True,
@@ -19,6 +20,9 @@ class ArchiveMixin:
             'updated': timezone.now()
         }
         self.update(**kwargs)
+
+    def unarchived(self):
+        return self.filter(is_archived=False)
 
 
 class BaseModelQuerySet(models.QuerySet, ArchiveMixin):
