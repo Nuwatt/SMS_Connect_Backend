@@ -14,8 +14,6 @@ class AddStoreSerializer(StoreSerializer):
         fields = (
             'name',
             'retailer',
-            'latitude',
-            'longitude'
         )
 
 
