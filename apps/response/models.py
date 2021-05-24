@@ -40,20 +40,21 @@ class Response(BaseModel):
         super(Response, self).save(*args, **kwargs)
 
     def clean(self):
-        # 1. if has uncompleted response
-        if Response.objects.filter(
-                agent=self.agent,
-                questionnaire=self.questionnaire,
-                is_completed=False
-        ):
-            raise DjangoValidationError('Agent has uncompleted record same questionnaire')
+        if self._state.adding:
+            # 1. if has uncompleted response
+            if Response.objects.filter(
+                    agent=self.agent,
+                    questionnaire=self.questionnaire,
+                    is_completed=False
+            ):
+                raise DjangoValidationError('Agent has uncompleted record same questionnaire')
 
-        # 2. retailer must be under agent operation
-        if self.agent not in self.questionnaire.tags.all():
-            if self.retailer.country not in self.agent.operation_country.all():
-                raise DjangoValidationError({
-                    'retailer': _('Agent is not in operation on this retailer.')
-                })
+            # 2. retailer must be under agent operation
+            if self.agent not in self.questionnaire.tags.all():
+                if self.retailer.country not in self.agent.operation_country.all():
+                    raise DjangoValidationError({
+                        'retailer': _('Agent is not in operation on this retailer.')
+                    })
 
 
 class Answer(BaseModel):

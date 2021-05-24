@@ -16,3 +16,4 @@ django-filter==2.4.0
 djangorestframework-simplejwt==4.6.0  # JWT
 django-templated-mail==1.1.1          # email template
 drf-api-tracking==1.8.0                   # api tracking
+django-sql-utils==0.6.1

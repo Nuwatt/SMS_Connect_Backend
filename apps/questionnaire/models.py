@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
@@ -22,13 +25,6 @@ class Tag(BaseModel):
 
 
 class Questionnaire(BaseModel):
-    REPEAT_CYCLE_CHOICES = (
-        ('none', 'None'),
-        ('weekly', 'Weekly'),
-        ('monthly', 'Monthly'),
-        ('quarterly', 'Quarterly'),
-        ('yearly', 'Yearly'),
-    )
     id = models.CharField(
         max_length=50,
         unique=True,
@@ -44,10 +40,11 @@ class Questionnaire(BaseModel):
     )
     country = models.ManyToManyField(Country)
     city = models.ManyToManyField(City)
-    repeat_cycle = models.CharField(
-        choices=REPEAT_CYCLE_CHOICES,
-        max_length=9,
-        default='none'
+    can_repeat = models.BooleanField(default=False)
+    repeat_cycle = models.DurationField(
+        null=True,
+        blank=True,
+        help_text=_('Repeat Cycle in week, ex: 1 week , 2 week and so on.')
     )
     tags = models.ManyToManyField(AgentUser, blank=True)
 
@@ -55,6 +52,8 @@ class Questionnaire(BaseModel):
         return self.id
 
     def save(self, *args, **kwargs):
+        # if self.repeat_cycle:
+        #     self.can_repeat = True
         if self._state.adding:
             self.id = generate_custom_id(initial='QU', model=Questionnaire)
         super(Questionnaire, self).save(*args, **kwargs)
