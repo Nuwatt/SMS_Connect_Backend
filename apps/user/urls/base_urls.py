@@ -1,4 +1,5 @@
 from django.urls import path, include
+from rest_framework_simplejwt.views import token_verify, token_refresh
 
 from apps.user.views import base_views
 
@@ -34,5 +35,15 @@ urlpatterns = [
     path(
         'role/',
         include('apps.user.urls.role_urls')
+    ),
+    path(
+        'login-refresh',
+        token_refresh,
+        name='login-refresh'
+    ),
+    path(
+        'login-verify',
+        token_verify,
+        name='login-verify'
     ),
 ]
