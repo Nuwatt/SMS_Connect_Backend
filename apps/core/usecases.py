@@ -1,10 +1,10 @@
+import csv
+from io import StringIO
+
 from django.contrib.auth import get_user_model
-from django.db.models import ProtectedError
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import raise_errors_on_nested_writes
-from rest_framework.utils import model_meta
 
 from apps.core.utils import update
 
@@ -64,3 +64,44 @@ class DeleteUseCase(BaseUseCase):
 
     def _factory(self):
         self._instance.archive()
+
+
+class ImportCSVUseCase(CreateUseCase):
+    def __init__(self, serializer):
+        super().__init__(serializer)
+        self._item_list = None
+        self._file = StringIO(self._data.get('file').read().decode('utf-8'))
+
+    valid_columns = []
+    null_columns = []
+
+    def execute(self):
+        self.is_valid()
+        self._factory()
+
+    def is_valid(self):
+        # 1. check csv has valid columns
+        csv_reader = csv.DictReader(self._file)
+        self._item_list = list(csv_reader)
+
+        dict_from_csv = dict(self._item_list[0])
+
+        # making a list from the keys of the dict
+        list_of_column_names = list(dict_from_csv.keys())
+        if list_of_column_names != self.valid_columns:
+            columns_string = ','.join(self.valid_columns)
+            raise ValidationError({
+                'non_field_errors': _('CSV doesn\'t have columns in order: [{}]'.format(columns_string))
+            })
+
+        check_null_columns = self.valid_columns
+
+        for item in sorted(self.null_columns, reverse=True):
+            del check_null_columns[item]
+
+        for item in self._item_list:
+            for key in check_null_columns:
+                if not item[key]:
+                    raise ValidationError({
+                        'non_field_errors': _('{} - has null value'.format(key))
+                    })
