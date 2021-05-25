@@ -71,18 +71,13 @@ class ListQuestionUseCase(usecases.BaseUseCase):
         self._questions = Question.objects.unarchived()
 
 
-class ImportQuestionUseCase(usecases.CreateUseCase):
+class ImportQuestionUseCase(usecases.ImportCSVUseCase):
     def __init__(self, serializer, questionnaire: Questionnaire):
         super().__init__(serializer)
         self._questionnaire = questionnaire
-        self._item_list = None
-        self._file = StringIO(self._data.get('file').read().decode('utf-8'))
 
     valid_columns = ['Question Type', 'Question Text', 'Options', 'Brand', 'SKU']
-
-    def execute(self):
-        self.is_valid()
-        self._factory()
+    null_columns = ['Options']
 
     def _factory(self):
         # create question
@@ -111,7 +106,7 @@ class ImportQuestionUseCase(usecases.CreateUseCase):
                     'non_field_errors': _('Invalid SKU')
                 })
 
-            # 5. options
+            # 4. options
             options = item.get('Options').split(',')
 
             # 6. update or create question
@@ -125,36 +120,16 @@ class ImportQuestionUseCase(usecases.CreateUseCase):
                 }
             )
 
-            for option in options:
-                question_option, created = QuestionOption.objects.get_or_create(
-                    question=question,
-                    option=option
-                )
-
-    def is_valid(self):
-        # 1. check csv has valid columns
-        csv_reader = csv.DictReader(self._file)
-        self._item_list = list(csv_reader)
-
-        dict_from_csv = dict(self._item_list[0])
-
-        # making a list from the keys of the dict
-        list_of_column_names = list(dict_from_csv.keys())
-        if list_of_column_names != self.valid_columns:
-            raise ValidationError({
-                'non_field_errors': _('CSV doesn\'t have columns in order: [\'Question Type\','
-                                      ' \'Question text\', \'Options\', \'Brand\', \'SKU\']')
-            })
-
-        check_null_columns = self.valid_columns
-        check_null_columns.remove('Options')
-
-        for item in self._item_list:
-            for key in check_null_columns:
-                if not item[key]:
+            if question.question_type.has_options:
+                if not options[0]:
                     raise ValidationError({
-                        'non_field_errors': _('{} - has null value'.format(key))
+                        'non_field_errors': _('Options required for this question type')
                     })
+                for option in options:
+                    question_option, created = QuestionOption.objects.get_or_create(
+                        question=question,
+                        option=option
+                    )
 
 
 class ExportQuestionUseCase(usecases.BaseUseCase):

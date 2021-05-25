@@ -95,9 +95,8 @@ class ImportCSVUseCase(CreateUseCase):
             })
 
         check_null_columns = self.valid_columns
-
         for item in sorted(self.null_columns, reverse=True):
-            del check_null_columns[item]
+            check_null_columns.remove(item)
 
         for item in self._item_list:
             for key in check_null_columns:
