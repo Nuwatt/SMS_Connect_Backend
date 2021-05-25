@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.core.serializers import IdNameSerializer
+from apps.core.serializers import IdNameSerializer, CSVFileInputSerializer
 from apps.product.models import SKU
 
 
@@ -30,4 +30,8 @@ class ListSKUSerializer(AddSKUSerializer):
 
 
 class UpdateSKUSerializer(AddSKUSerializer):
+    pass
+
+
+class ImportSKUSerializer(CSVFileInputSerializer):
     pass

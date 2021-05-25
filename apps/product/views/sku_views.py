@@ -1,4 +1,10 @@
+from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_auto_schema
+
+from rest_framework.response import Response
+
 from apps.core import generics
+from apps.core.serializers import MessageResponseSerializer
 from apps.product.filtersets import SKUFilter
 from apps.product.mixins import SKUMixin
 from apps.product.serializers import sku_serializers
@@ -56,3 +62,24 @@ class DeleteSKUView(generics.DestroyAPIView, SKUMixin):
         return sku_usecases.DeleteSKUUseCase(
             sku=self.get_object()
         ).execute()
+
+
+class ImportSKUView(generics.CreateAPIView):
+    """
+    Use this end-point to import sku from the csv file
+    """
+    serializer_class = sku_serializers.ImportSKUSerializer
+
+    def perform_create(self, serializer):
+        return sku_usecases.ImportSKUUseCase(
+            serializer=serializer
+        ).execute()
+
+    def response(self, result, serializer, status_code):
+        return Response({
+            'message': _('Imported and saved successfully.')
+        })
+
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

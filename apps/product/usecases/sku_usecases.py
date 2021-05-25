@@ -1,5 +1,7 @@
+from django.db import transaction
+
 from apps.product.exceptions import SKUNotFound
-from apps.product.models import SKU
+from apps.product.models import SKU, Category, Brand
 from apps.core import usecases
 
 
@@ -40,3 +42,20 @@ class ListSKUUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._sku_list = SKU.objects.unarchived()
+
+
+class ImportSKUUseCase(usecases.ImportCSVUseCase):
+    valid_columns = ['SKU Name', 'Brand Name', 'Category Name']
+
+    @transaction.atomic
+    def _factory(self):
+        for item in self._item_list:
+            category, created = Category.objects.get_or_create(name=item.get('Category Name'))
+            brand, created = Brand.objects.get_or_create(name=item.get('Brand Name'), category=category)
+            sku, created = SKU.objects.update_or_create(
+                name=item.get('SKU Name'),
+                defaults={
+                    'brand': brand,
+                    'category': category,
+                }
+            )

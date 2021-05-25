@@ -26,5 +26,11 @@ urlpatterns = [
         sku_views.DeleteSKUView.as_view(),
         name='delete-sku'
 
+    ),
+    path(
+        'import',
+        sku_views.ImportSKUView.as_view(),
+        name='import-sku'
+
     )
 ]
