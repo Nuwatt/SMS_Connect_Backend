@@ -67,7 +67,7 @@ class ImportRetailerUseCase(usecases.ImportCSVUseCase):
     @transaction.atomic
     def _factory(self):
         for item in self._item_list:
-            country, created = Country.objects.get_or_create(name=item.get('City'))
+            country, created = Country.objects.get_or_create(name=item.get('Country'))
             city, created = City.objects.get_or_create(name=item.get('City'), country=country)
             channel, created = Channel.objects.get_or_create(name=item.get('Channel'))
             retailer, created = Retailer.objects.update_or_create(
