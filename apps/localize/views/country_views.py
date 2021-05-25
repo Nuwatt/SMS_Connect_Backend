@@ -28,11 +28,11 @@ class ListCountryView(generics.ListAPIView):
     serializer_class = country_serializers.ListCountrySerializer
     filterset_class = CountryFilter
 
-    @method_decorator(cache_page(60 * 60 * 2))
-    @method_decorator(vary_on_headers("Authorization", ))
     def get_queryset(self):
         return country_usecases.ListCountryUseCase().execute()
 
+    @method_decorator(cache_page(60 * 60 * 2))
+    @method_decorator(vary_on_headers("Authorization", ))
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
