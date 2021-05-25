@@ -1,3 +1,6 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from apps.core import generics
 from apps.localize.filtersets import CityFilter
 from apps.localize.mixins import CityMixin
@@ -27,6 +30,10 @@ class ListCityView(generics.ListAPIView):
     def get_queryset(self):
         return city_usecases.ListCityUseCase().execute()
 
+    @method_decorator(cache_page(60 * 60 * 2))
+    # @method_decorator(vary_on_headers("Authorization", ))
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 class UpdateCityView(generics.UpdateAPIView, CityMixin):
     """
