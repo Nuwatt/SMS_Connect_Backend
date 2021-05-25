@@ -1,5 +1,6 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers
 
 from apps.core import generics
 from apps.localize.filtersets import CountryFilter
@@ -27,10 +28,11 @@ class ListCountryView(generics.ListAPIView):
     serializer_class = country_serializers.ListCountrySerializer
     filterset_class = CountryFilter
 
+    @method_decorator(cache_page(60 * 60 * 2))
+    @method_decorator(vary_on_headers("Authorization", ))
     def get_queryset(self):
         return country_usecases.ListCountryUseCase().execute()
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
