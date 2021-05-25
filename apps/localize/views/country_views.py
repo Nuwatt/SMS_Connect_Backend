@@ -31,8 +31,6 @@ class ListCountryView(generics.ListAPIView):
     def get_queryset(self):
         return country_usecases.ListCountryUseCase().execute()
 
-    @method_decorator(cache_page(60 * 60 * 2))
-    @method_decorator(vary_on_headers("Authorization", ))
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
