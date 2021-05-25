@@ -1,5 +1,8 @@
+from django.db import transaction
+
+from apps.localize.models import Country, City
 from apps.market.exceptions import RetailerNotFound
-from apps.market.models import Retailer
+from apps.market.models import Retailer, Channel, Store
 from apps.core import usecases
 from apps.user.models import AgentUser
 
@@ -56,3 +59,26 @@ class ListRetailerForAgentUserUseCase(usecases.BaseUseCase):
             country__in=self._agent_user.operation_country.all(),
             city__in=self._agent_user.operation_city.all()
         ).unarchived()
+
+
+class ImportRetailerUseCase(usecases.ImportCSVUseCase):
+    valid_columns = ['Retailer Name', 'Retailer Branch Name', 'Channel', 'Country', 'City']
+
+    @transaction.atomic
+    def _factory(self):
+        for item in self._item_list:
+            country, created = Country.objects.get_or_create(name=item.get('City'))
+            city, created = City.objects.get_or_create(name=item.get('City'), country=country)
+            channel, created = Channel.objects.get_or_create(name=item.get('Channel'))
+            retailer, created = Retailer.objects.update_or_create(
+                name=item.get('Retailer Name'),
+                defaults={
+                    'channel': channel,
+                    'country': country,
+                    'city': city
+                }
+            )
+            store, created = Store.objects.get_or_create(
+                name=item.get('Retailer Branch Name'),
+                retailer=retailer
+            )

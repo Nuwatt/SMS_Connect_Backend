@@ -1,4 +1,10 @@
+from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_auto_schema
+
+from rest_framework.response import Response
+
 from apps.core import generics
+from apps.core.serializers import MessageResponseSerializer
 from apps.market.mixins import RetailerMixin
 from apps.market.serializers import retailer_serializers
 from apps.market.usecases import retailer_usecases
@@ -59,3 +65,24 @@ class DeleteRetailerView(generics.DestroyAPIView, RetailerMixin):
         return retailer_usecases.DeleteRetailerUseCase(
             retailer=self.get_object()
         ).execute()
+
+
+class ImportRetailerView(generics.CreateAPIView):
+    """
+    Use this end-point to import retailer from csv format
+    """
+    serializer_class = retailer_serializers.ImportRetailerSerializer
+
+    def perform_create(self, serializer):
+        return retailer_usecases.ImportRetailerUseCase(
+            serializer=serializer
+        ).execute()
+
+    def response(self, result, serializer, status_code):
+        return Response({
+            'message': _('Imported and saved successfully.')
+        })
+
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

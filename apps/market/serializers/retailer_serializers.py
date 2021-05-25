@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.core.serializers import IdNameSerializer
+from apps.core.serializers import IdNameSerializer, CSVFileInputSerializer
 from apps.market.models import Retailer
 
 
@@ -27,9 +27,13 @@ class ListRetailerSerializer(AddRetailerSerializer):
 
     class Meta(AddRetailerSerializer.Meta):
         fields = (
-            'id',
-        ) + AddRetailerSerializer.Meta.fields
+                     'id',
+                 ) + AddRetailerSerializer.Meta.fields
 
 
 class UpdateRetailerSerializer(AddRetailerSerializer):
+    pass
+
+
+class ImportRetailerSerializer(CSVFileInputSerializer):
     pass

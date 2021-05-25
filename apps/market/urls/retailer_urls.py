@@ -22,5 +22,10 @@ urlpatterns = [
         '<str:retailer_id>/delete',
         retailer_views.DeleteRetailerView.as_view(),
         name='delete-retailer'
+    ),
+    path(
+        'import',
+        retailer_views.ImportRetailerView.as_view(),
+        name='import-retailer'
     )
 ]
