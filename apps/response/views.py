@@ -61,6 +61,10 @@ class SummitQuestionnaireResponseView(generics.CreateAPIView, ResponseMixin):
             'message': _('Submitted successfully.')
         })
 
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
 
 class ListQuestionnaireResponseView(generics.ListAPIView, AgentUserMixin):
     """
