@@ -29,6 +29,8 @@ class QuestionAdmin(BaseModelAdmin):
     )
     list_filter = (
         'question_type',
+        'is_archived',
+        'questionnaire__questionnaire_type',
     )
 
 
