@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from apps.core.filtersets import NameSearchFilter
+from apps.core.filtersets import NameSearchFilter, IdInFilter
 from apps.localize.models import Area, City, Country, Region
 
 
@@ -17,6 +17,11 @@ class CityFilter(NameSearchFilter):
     questionnaire = filters.CharFilter(
         label='questionnaire',
         field_name='questionnaire__id',
+    )
+    country = IdInFilter(
+        field_name="country",
+        lookup_expr='in',
+        label='country'
     )
 
     class Meta:
