@@ -24,6 +24,7 @@ class StartQuestionnaireSerializer(ResponseSerializer):
 
 class SummitQuestionnaireResponseSerializer(serializers.ModelSerializer):
     text_answer = serializers.CharField(required=False)
+    numeric_answer = serializers.FloatField(required=False)
     image_answer = serializers.ListSerializer(
         child=serializers.ImageField(),
         required=False
@@ -43,6 +44,7 @@ class SummitQuestionnaireResponseSerializer(serializers.ModelSerializer):
         fields = (
             'question',
             'text_answer',
+            'numeric_answer',
             'choice_answer',
             'text_answer',
             'option_answer',
@@ -70,9 +72,13 @@ class SummitQuestionnaireResponseSerializer(serializers.ModelSerializer):
                 raise ValidationError({
                     'image_answer': _('Image Answer is required for this question.')
                 })
-            elif not attrs.get('text_answer', None):
+            elif question_type.name.lower() == 'text' and not attrs.get('text_answer', None):
                 raise ValidationError({
                     'text_answer': _('Text Answer is required for this question.')
+                })
+            elif question_type.name.lower() == 'numeric' and not attrs.get('numeric_answer', None):
+                raise ValidationError({
+                    'numeric_answer': _('Numeric Answer is required for this question.')
                 })
         return attrs
 

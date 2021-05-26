@@ -6,7 +6,14 @@ from rest_framework.exceptions import ValidationError
 from apps.core import usecases
 from apps.questionnaire.models import Questionnaire
 from apps.response.exceptions import ResponseNotFound
-from apps.response.models import Response, Answer, ChoiceAnswer, OptionAnswer, ImageAnswer, InputAnswer
+from apps.response.models import (
+    Response,
+    Answer,
+    ChoiceAnswer,
+    OptionAnswer,
+    ImageAnswer,
+    TextAnswer, NumericAnswer
+)
 from apps.user.models import AgentUser
 
 
@@ -68,8 +75,10 @@ class SummitQuestionnaireResponseUseCase(usecases.CreateUseCase):
             elif question_type.name == 'Pictures':
                 for picture in data.get('picture_answer'):
                     ImageAnswer.objects.create(answer=answer, image=picture)
-            else:
-                InputAnswer.objects.create(answer=answer, body=data.get('text_answer'))
+            elif question_type.name.lower() == 'text':
+                TextAnswer.objects.create(answer=answer, text=data.get('text_answer'))
+            elif question_type.name.lower() == 'numeric':
+                NumericAnswer.objects.create(answer=answer, numeric=data.get('numeric_answer'))
 
         self._response.is_completed = True
         self._response.completed_date_time = now()

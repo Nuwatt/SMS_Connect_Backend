@@ -31,11 +31,19 @@ class ImageAnswerAdmin(BaseModelAdmin):
     )
 
 
-@admin.register(models.InputAnswer)
-class InputAnswerAdmin(BaseModelAdmin):
+@admin.register(models.TextAnswer)
+class TextAnswerAdmin(BaseModelAdmin):
     readonly_fields = (
         'answer',
-        'body',
+        'text',
+    )
+
+
+@admin.register(models.NumericAnswer)
+class NumericAnswerAdmin(BaseModelAdmin):
+    readonly_fields = (
+        'answer',
+        'numeric',
     )
 
 

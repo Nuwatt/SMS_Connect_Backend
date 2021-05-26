@@ -76,9 +76,17 @@ class Answer(BaseModel):
         super(Answer, self).save(*args, **kwargs)
 
 
-class InputAnswer(BaseModel):
+class TextAnswer(BaseModel):
     answer = models.OneToOneField(Answer, on_delete=models.CASCADE)
-    body = models.CharField(max_length=255)
+    text = models.CharField(max_length=255)
+
+    def __str__(self):
+        return str(self.pk)
+
+
+class NumericAnswer(BaseModel):
+    answer = models.OneToOneField(Answer, on_delete=models.CASCADE)
+    numeric = models.FloatField()
 
     def __str__(self):
         return str(self.pk)
