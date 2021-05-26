@@ -88,6 +88,12 @@ class SummitQuestionnaireResponseSerializer(serializers.ModelSerializer):
                 'choice_answer': _('Choice don\'t belong to same question type.')
             })
 
+    def validate_question(self, value):
+        questionnaire = self.context['view'].get_object().questionnaire
+        if value.questionnaire != questionnaire:
+            raise ValidationError(_('Question is not of same questionnaire.'))
+        return value
+
 
 class BulkSummitQuestionnaireResponseSerializer(serializers.Serializer):
     data = SummitQuestionnaireResponseSerializer(many=True, required=True)
