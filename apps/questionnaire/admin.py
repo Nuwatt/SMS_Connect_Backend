@@ -32,4 +32,5 @@ class QuestionnaireAdmin(BaseModelAdmin):
 
     list_filter = (
         'questionnaire_type',
+        'is_archived',
     )
