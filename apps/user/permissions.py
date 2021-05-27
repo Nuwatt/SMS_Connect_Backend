@@ -11,7 +11,7 @@ class IsAgentUser(BasePermission):
 
 class IsPortalUser(BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_portal_user)
+        return bool(request.user.is_authenticated and request.user.is_portal_user)
 
     def has_object_permission(self, request, view, obj):
         return bool(request.user == obj)
