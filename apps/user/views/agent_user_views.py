@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from apps.core import generics
 from apps.core.mixins import ResponseMixin
-from apps.core.serializers import MessageResponseSerializer
+from apps.core.serializers import MessageResponseSerializer, CSVFileInputSerializer
 from apps.user import filtersets
 from apps.user.mixins import AgentUserMixin
 from apps.user.permissions import IsAgentUser
@@ -163,3 +163,24 @@ class UploadPortalUserAvatarView(generics.CreateAPIView, AgentUserMixin):
             agent_user=self.get_object(),
             serializer=serializer
         ).execute()
+
+
+class ImportAgentUserView(generics.CreateAPIView):
+    """
+    Use this end-point to import agent user from a csv file
+    """
+    serializer_class = CSVFileInputSerializer
+
+    def perform_create(self, serializer):
+        return agent_user_usecases.ImportAgentUserUseCase(
+            serializer=serializer
+        ).execute()
+
+    def response(self, result, serializer, status_code):
+        return Response({
+            'message': _('Agent User imported successfully.')
+        })
+
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

@@ -1,10 +1,12 @@
 from django.contrib.auth import get_user_model
+from django.db import transaction, IntegrityError
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
 from apps.core.utils import update
+from apps.localize.models import Country, City
 from apps.user.exceptions import AgentUserNotFound, LoginFailed
 from apps.user.models import AgentUser
 from apps.user.usecases.base_usecases import UserLoginUseCase
@@ -126,3 +128,53 @@ class UploadAgentUserAvatarUseCase(usecases.CreateUseCase):
         user = self._agent_user.user
         user.avatar = self._data.get('avatar')
         user.save()
+
+
+class ImportAgentUserUseCase(usecases.ImportCSVUseCase):
+    valid_columns = ['Field Worker Name', 'Country of Operation', 'City of Operation', 'Email', 'Password']
+
+    @transaction.atomic
+    def _factory(self):
+        # create user
+        for item in self._item_list:
+            try:
+                user, created = User.objects.update_or_create(
+                    email=item.get('Email'),
+                    is_agent_user=True,
+                    defaults={
+                        'fullname': item.get('Field Worker Name')
+                    }
+                )
+            except IntegrityError:
+                raise ValidationError({
+                    'email': _('Email: {} is used in portal user.'.format(item.get('Email')))
+                })
+            user.set_password(item.get('Password'))
+            user.save()
+
+            # create agent
+            agent, created = AgentUser.objects.get_or_create(user=user)
+
+            countries = item.get('Country of Operation').split(',')
+            cities = item.get('City of Operation').split(',')
+
+            country_of_operation = []
+            for country in countries:
+                try:
+                    country_of_operation.append(Country.objects.get(name=country))
+                except Country.DoesNotExist:
+                    raise ValidationError({
+                        'Country of Operation': _('Contains invalid country')
+                    })
+
+            city_of_operation = []
+            for city in cities:
+                try:
+                    city_of_operation.append(City.objects.get(name=city, country__in=country_of_operation))
+                except City.DoesNotExist:
+                    raise ValidationError({
+                        'City of Operation': _('Contains invalid city')
+                    })
+
+            agent.operation_country.set(country_of_operation)
+            agent.operation_city.set(city_of_operation)

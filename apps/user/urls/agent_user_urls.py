@@ -37,6 +37,11 @@ urlpatterns = [
         name='list-agent-user'
     ),
     path(
+        'import',
+        agent_user_views.ImportAgentUserView.as_view(),
+        name='import-agent-user'
+    ),
+    path(
         'register',
         agent_user_views.RegisterAgentUserView.as_view(),
         name='register-agent-user'
