@@ -33,6 +33,9 @@ class ImageAnswerAdmin(BaseModelAdmin):
 
 @admin.register(models.TextAnswer)
 class TextAnswerAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'text',
+    )
     readonly_fields = (
         'answer',
         'text',
@@ -41,6 +44,9 @@ class TextAnswerAdmin(BaseModelAdmin):
 
 @admin.register(models.NumericAnswer)
 class NumericAnswerAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'numeric',
+    )
     readonly_fields = (
         'answer',
         'numeric',
@@ -49,6 +55,9 @@ class NumericAnswerAdmin(BaseModelAdmin):
 
 @admin.register(models.OptionAnswer)
 class OptionAnswerAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'option',
+    )
     readonly_fields = (
         'answer',
         'option',
@@ -57,6 +66,9 @@ class OptionAnswerAdmin(BaseModelAdmin):
 
 @admin.register(models.ChoiceAnswer)
 class ChoiceAnswerAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'choice',
+    )
     readonly_fields = (
         'answer',
         'choice',
