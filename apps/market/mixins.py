@@ -5,8 +5,8 @@ from apps.market.usecases.channel_usecases import GetChannelUseCase
 
 class StoreMixin:
     def get_store(self, *args, **kwargs):
-        return GetChannelUseCase(
-            channel_id=self.kwargs.get('store_id')
+        return GetStoreUseCase(
+            store_id=self.kwargs.get('store_id')
         ).execute()
 
 
