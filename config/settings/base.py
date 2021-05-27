@@ -81,6 +81,7 @@ LOCAL_APPS = [
     "apps.questionnaire.apps.QuestionnaireConfig",
     "apps.response.apps.ResponseConfig",
     "apps.terms_and_conditions.apps.TermsAndConditionsConfig",
+    "apps.report.apps.ReportConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

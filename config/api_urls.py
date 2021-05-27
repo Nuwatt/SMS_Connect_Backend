@@ -33,5 +33,9 @@ urlpatterns = [
     path(
         'response/',
         include('apps.response.urls')
+    ),
+    path(
+        'report/',
+        include('apps.report.urls.base_urls')
     )
 ]
