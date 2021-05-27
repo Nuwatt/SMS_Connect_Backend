@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
+from apps.core.validators import validate_image
 from apps.localize.models import Country, City
 from apps.user.managers import UserManager
 from apps.user.utils import upload_avatar_to
@@ -37,6 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     avatar = models.ImageField(
         upload_to=upload_avatar_to,
+        validators=[validate_image],
         default="avatar/default_avatar.png",
     )
     is_agent_user = models.BooleanField(

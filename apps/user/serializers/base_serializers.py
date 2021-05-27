@@ -8,6 +8,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from apps.core.serializers import IdNameSerializer
+from apps.core.validators import validate_image
 from apps.user import utils
 
 User = get_user_model()
@@ -189,4 +190,4 @@ class SupportSerializer(serializers.Serializer):
 
 
 class AvatarSerializer(serializers.Serializer):
-    avatar = serializers.ImageField()
+    avatar = serializers.ImageField(validators=[validate_image])

@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 from apps.core.serializer_fields import PhoneNumberField
 from apps.core.serializers import IdNameSerializer
+from apps.core.validators import validate_image
 from apps.localize.models import Country
 from apps.user.models import PortalUser, Role
 from apps.user.serializers.base_serializers import (
@@ -44,7 +45,7 @@ class RegisterPortalUserSerializer(UserSerializer):
     position = serializers.CharField()
     username = serializers.CharField(validators=[validate_username], required=False)
     fullname = serializers.CharField()
-    avatar = serializers.ImageField(required=False)
+    avatar = serializers.ImageField(validators=[validate_image], required=False)
 
     class Meta(UserSerializer.Meta):
         fields = (
@@ -93,7 +94,7 @@ class UpdatePortalUserSerializer(serializers.Serializer):
         }
     )
     position = serializers.CharField()
-    avatar = serializers.ImageField(required=False)
+    avatar = serializers.ImageField(validators=[validate_image], required=False)
 
     default_error_messages = {
         'duplicate_email': _('Email is already been used by another user.'),

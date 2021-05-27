@@ -92,7 +92,21 @@ class CSVFileValidator(Validator):
             raise ValidationError(self.message, code=self.code)
 
 
+@deconstructible
+class ImageValidator(Validator):
+    message = _('The maximum image file size that can be uploaded is 4MB')
+    file_size = 4194304
+
+    def __call__(self, value):
+        if not value:
+            raise ValidationError(self.message, code=self.code)
+
+        if value.size > self.file_size:
+            raise ValidationError(self.message, code=self.code)
+
+
 validate_phone_number = PhoneNumberValidator()
 validate_latitude = LatitudeValidator()
 validate_longitude = LongitudeValidator()
 validate_csv_file = CSVFileValidator()
+validate_image = ImageValidator()
