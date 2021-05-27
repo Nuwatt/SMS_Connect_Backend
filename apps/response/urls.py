@@ -14,8 +14,13 @@ urlpatterns = [
         name='submit-questionnaire-response'
     ),
     path(
+        'agent-user/history',
+        views.ListAgentResponseHistoryView.as_view(),
+        name='list-agent-response-history'
+    ),
+    path(
         'agent-user/<str:agent_user_id>/list',
-        views.ListQuestionnaireResponseView.as_view(),
-        name='list-agent-questionnaire-response'
+        views.ListAgentResponseView.as_view(),
+        name='list-agent-response'
     ),
 ]

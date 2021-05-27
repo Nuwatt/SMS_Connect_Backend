@@ -56,6 +56,23 @@ class Response(BaseModel):
                         'retailer': _('Agent is not in operation on this retailer.')
                     })
 
+    @property
+    def coordinates(self):
+        if self.longitude and self.latitude:
+            return '{},{}'.format(
+                self.latitude,
+                self.longitude
+            )
+        return None
+
+    @property
+    def completed_duration(self):
+        if self.completed_date_time:
+            difference = self.completed_date_time - self.created
+            minutes = int(divmod(difference.total_seconds(), 60)[0])
+            return 'min {}'.format(minutes)
+        return None
+
 
 class Answer(BaseModel):
     id = models.CharField(

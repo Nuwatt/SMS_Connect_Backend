@@ -92,7 +92,7 @@ class SummitQuestionnaireResponseUseCase(usecases.CreateUseCase):
             })
 
 
-class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
+class ListAgentResponseHistoryUseCase(usecases.BaseUseCase):
     def __init__(self, agent_user: AgentUser):
         self._agent_user = agent_user
 
@@ -104,4 +104,16 @@ class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
         self._responses = self._agent_user.response_set.unarchived().select_related(
             'questionnaire',
             'questionnaire__questionnaire_type'
+        )
+
+
+class ListAgentResponseUseCase(ListAgentResponseHistoryUseCase):
+    def _factory(self):
+        self._responses = self._agent_user.response_set.unarchived().select_related(
+            'questionnaire',
+            'questionnaire__questionnaire_type',
+            'retailer__country',
+            'retailer__city',
+            'retailer',
+            'retailer__channel'
         )

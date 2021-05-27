@@ -10,7 +10,7 @@ from apps.response import serializers, usecases
 from apps.response.filtersets import ResponseFilter
 from apps.response.mixins import ResponseMixin
 from apps.user.mixins import AgentUserMixin
-from apps.user.permissions import IsAgentUser
+from apps.user.permissions import IsAgentUser, IsPortalUser
 
 
 class StartQuestionnaireView(generics.CreateAPIView, QuestionnaireMixin):
@@ -66,18 +66,31 @@ class SummitQuestionnaireResponseView(generics.CreateAPIView, ResponseMixin):
         return self.create(request, *args, **kwargs)
 
 
-class ListQuestionnaireResponseView(generics.ListAPIView, AgentUserMixin):
+class ListAgentResponseHistoryView(generics.ListAPIView):
     """
-    Use this end-point to list all responses of a specific agent user
+    Use this end-point to list all responses of a requesting agent user
     """
-    serializer_class = serializers.ListQuestionnaireResponseSerializer
+    serializer_class = serializers.ListAgentResponseHistorySerializer
     permission_classes = (IsAgentUser,)
     filterset_class = ResponseFilter
+
+    def get_queryset(self):
+        return usecases.ListAgentResponseHistoryUseCase(
+            agent_user=self.request.user.agentuser
+        ).execute()
+
+
+class ListAgentResponseView(generics.ListAPIView, AgentUserMixin):
+    """
+    Use this end-point to list all responses of a specific agent
+    """
+    serializer_class = serializers.ListAgentResponseSerializer
+    permission_classes = (IsPortalUser,)
 
     def get_object(self):
         return self.get_agent_user()
 
     def get_queryset(self):
-        return usecases.ListQuestionnaireResponseUseCase(
+        return usecases.ListAgentResponseUseCase(
             agent_user=self.get_object()
         ).execute()
