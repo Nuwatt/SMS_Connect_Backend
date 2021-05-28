@@ -29,7 +29,7 @@ class Response(BaseModel):
     latitude = fields.LatitudeField(null=True, blank=True)
     longitude = fields.LongitudeField(null=True, blank=True)
     is_completed = models.BooleanField(default=False)
-    completed_date_time = models.DateTimeField(null=True)
+    completed_at = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.id
@@ -67,8 +67,8 @@ class Response(BaseModel):
 
     @property
     def completed_duration(self):
-        if self.completed_date_time:
-            difference = self.completed_date_time - self.created
+        if self.completed_at:
+            difference = self.completed_at - self.created
             minutes = int(divmod(difference.total_seconds(), 60)[0])
             return 'min {}'.format(minutes)
         return None

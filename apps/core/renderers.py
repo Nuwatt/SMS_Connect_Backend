@@ -39,17 +39,7 @@ class CustomJSONRenderer(JSONRenderer):
         # 2. if status_code is between 400 - 499
         elif 400 <= status_code < 500:
             errors = data.get('errors')
-            print(errors[0].get('message'))
-            # key = list(errors.keys())[0]
-            # print(key)
-            # if key in ['message', 'detail', 'non_field_errors']:
-            #     message = data.get(key)
-            # else:
-            #     value = data.get(key)
-            #     message = '{} - {}'.format(
-            #         key,
-            #         value if isinstance(value, str) else value[0]
-            #     )
+
             custom_formatted_data['success'] = False
             custom_formatted_data['error_message'] = errors[0].get('message')[0]
             custom_formatted_data['errors'] = errors

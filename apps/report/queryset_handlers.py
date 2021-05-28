@@ -7,8 +7,7 @@ def sku_min_max_queryset_handler(queryset):
         'answer__question__sku__name',
     ).distinct()
 
-    for index, sku in enumerate(skus):
-        print(sku)
+    for sku in skus:
         sku_answer = queryset.filter(
             answer__question__sku__name=sku.get('answer__question__sku__name')
         )
@@ -28,5 +27,4 @@ def sku_min_max_queryset_handler(queryset):
             'min': statistics.get('min'),
             'max': statistics.get('max')
         })
-        print('-'*100)
     return result

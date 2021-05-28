@@ -49,7 +49,7 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
             **self._data
         )
         try:
-            self._response.full_clean(exclude=['completed_date_time'])
+            self._response.full_clean(exclude=['completed_at'])
             self._response.save()
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)
@@ -81,7 +81,7 @@ class SummitQuestionnaireResponseUseCase(usecases.CreateUseCase):
                 NumericAnswer.objects.create(answer=answer, numeric=data.get('numeric_answer'))
 
         self._response.is_completed = True
-        self._response.completed_date_time = now()
+        self._response.completed_at = now()
         self._response.save()
 
     def is_valid(self):

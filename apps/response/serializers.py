@@ -121,7 +121,7 @@ class ListAgentResponseHistorySerializer(serializers.Serializer):
     questionnaire = serializers.CharField()
     questionnaire_type = serializers.CharField(source='questionnaire.questionnaire_type')
     start_date_time = serializers.DateTimeField(source='created', format='%d-%m-%Y - %H:%M %p')
-    completed_date_time = serializers.DateTimeField(format='%d-%m-%Y - %H:%M %p')
+    completed_at = serializers.DateTimeField(format='%d-%m-%Y - %H:%M %p')
 
 
 data = [
@@ -148,8 +148,8 @@ class ListAgentResponseSerializer(serializers.Serializer):
     questionnaire = serializers.CharField()
     questionnaire_type = serializers.CharField(source='questionnaire.questionnaire_type')
     start_time = serializers.DateTimeField(source='created', format='%p %H:%M')
-    finish_time = serializers.DateTimeField(source='completed_date_time', format='%p %H:%M')
-    completed_date = serializers.DateTimeField(source='completed_date_time', format='%d/%m/%Y')
+    finish_time = serializers.DateTimeField(source='completed_at', format='%p %H:%M')
+    completed_date = serializers.DateTimeField(source='completed_at', format='%d/%m/%Y')
     completed_duration = serializers.CharField()
     country = serializers.CharField(source='retailer.country')
     city = serializers.CharField(source='retailer.city')

@@ -98,7 +98,7 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
             eligible=Case(
                 When(
                     response__agent=self._agent_user,
-                    response__completed_date_time__gte=now() - F('repeat_cycle'),
+                    response__completed_at__gte=now() - F('repeat_cycle'),
                     can_repeat=True,
                     then=True
                 ),

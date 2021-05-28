@@ -14,3 +14,13 @@ class SKUMinMaxFilter(filters.FilterSet):
         field_name='answer__question__sku',
         label='sku'
     )
+    from_date = filters.DateFilter(
+        field_name='answer__response__completed_at__date',
+        label='from date',
+        lookup_expr='gte'
+    )
+    till_date = filters.DateFilter(
+        field_name='answer__response__completed_at__date',
+        label='till date',
+        lookup_expr='lte'
+    )
