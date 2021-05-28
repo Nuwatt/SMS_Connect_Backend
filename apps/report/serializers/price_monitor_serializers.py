@@ -7,3 +7,28 @@ class SKUMinMaxReportSerializer(serializers.Serializer):
     min = serializers.FloatField()
     mode = serializers.FloatField()
     mean = serializers.FloatField()
+
+
+class MonthReportSerializer(serializers.Serializer):
+    month = serializers.DateTimeField(source='date_time', format='%B')
+    value = serializers.FloatField()
+
+
+class SKUMonthReportSerializer(serializers.Serializer):
+    sku = serializers.CharField()
+    statistics = MonthReportSerializer(many=True)
+
+
+class CountryReportSerializer(serializers.Serializer):
+    country = serializers.CharField()
+    value = serializers.FloatField()
+
+
+class SKUCountryReportSerializer(serializers.Serializer):
+    sku = serializers.CharField()
+    statistics = CountryReportSerializer(many=True)
+
+
+class AnswerReportSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    value = serializers.IntegerField()
