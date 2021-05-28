@@ -46,11 +46,15 @@ class TextAnswerAdmin(BaseModelAdmin):
 class NumericAnswerAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'numeric',
+        'sku',
     )
     readonly_fields = (
         'answer',
         'numeric',
     )
+
+    def sku(self, instance):
+        return instance.answer.question.sku
 
 
 @admin.register(models.OptionAnswer)
