@@ -20,6 +20,11 @@ class StartQuestionnaireSerializer(ResponseSerializer):
             'latitude',
             'longitude'
         )
+        extra_kwargs = {
+            'retailer': {
+                'required': True
+            }
+        }
 
 
 class SummitQuestionnaireResponseSerializer(serializers.ModelSerializer):
