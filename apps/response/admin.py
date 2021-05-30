@@ -10,14 +10,14 @@ class ResponseAdmin(BaseModelAdmin):
         'agent',
         'questionnaire',
     )
-    raw_id_fields = (
+    raw_id_fields = BaseModelAdmin.readonly_fields + (
         'retailer',
     )
 
 
 @admin.register(models.Answer)
 class AnswerAdmin(BaseModelAdmin):
-    readonly_fields = (
+    readonly_fields = BaseModelAdmin.readonly_fields + (
         'response',
         'question',
     )
@@ -25,7 +25,7 @@ class AnswerAdmin(BaseModelAdmin):
 
 @admin.register(models.ImageAnswer)
 class ImageAnswerAdmin(BaseModelAdmin):
-    readonly_fields = (
+    readonly_fields = BaseModelAdmin.readonly_fields + (
         'answer',
         'image',
     )
@@ -36,7 +36,7 @@ class TextAnswerAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'text',
     )
-    readonly_fields = (
+    readonly_fields = BaseModelAdmin.readonly_fields + (
         'answer',
         'text',
     )

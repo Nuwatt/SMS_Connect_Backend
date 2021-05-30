@@ -43,16 +43,22 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
         return self._response
 
     def _factory(self):
-        self._response = Response(
+        self._response, created = Response.objects.get_or_create(
             agent=self._agent_user,
             questionnaire=self._questionnaire,
-            **self._data
+            is_completed=False,
+            retailer=self._data.pop('retailer'),
+            defaults=self._data
         )
-        try:
-            self._response.full_clean(exclude=['completed_at'])
-            self._response.save()
-        except DjangoValidationError as e:
-            raise ValidationError(e.message_dict)
+        self._response.created = now()
+        self._response.save()
+
+    def is_valid(self):
+        if self._agent_user not in self._questionnaire.tags.all():
+            if self._data.get('retailer').country not in self._agent_user.operation_country.all():
+                raise DjangoValidationError({
+                    'retailer': _('Agent is not in operation on this retailer.')
+                })
 
 
 class SummitQuestionnaireResponseUseCase(usecases.CreateUseCase):

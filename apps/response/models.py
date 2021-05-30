@@ -54,9 +54,10 @@ class Response(BaseModel):
             if Response.objects.filter(
                     agent=self.agent,
                     questionnaire=self.questionnaire,
+                    retailer=self.retailer,
                     is_completed=False
             ):
-                raise DjangoValidationError('Agent has uncompleted record same questionnaire')
+                raise DjangoValidationError('Agent has uncompleted record of same questionnaire')
 
             # 2. retailer must be under agent operation
             if self.agent not in self.questionnaire.tags.all():
