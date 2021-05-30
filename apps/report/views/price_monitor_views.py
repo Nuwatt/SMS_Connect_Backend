@@ -2,13 +2,14 @@ from apps.core import generics
 from apps.report.filtersets import (
     SKUMinMaxFilter,
     AnswerPerSKUFilter,
-    AnswerPerCityFilter,
-    AnswerPerCountryFilter
+    AnswerPerCityFilter
 )
 from apps.report.queryset_handlers import (
     sku_min_max_queryset_handler,
     SKUCountryQuerysetHandler,
-    SKUMonthQuerysetHandler
+    SKUMonthQuerysetHandler,
+    answer_per_county_handler,
+    answer_per_city_handler
 )
 from apps.report.serializers import price_monitor_serializers
 from apps.report.usecases import price_monitor_usecases
@@ -128,14 +129,17 @@ class SKUCountryModeReportView(SKUCountryReportView):
 
 class AnswerPerCountryReportView(generics.ListAPIView):
     """
-    Use this end-point to list report of answer per city for price monitor
+    Use this end-point to list report of answer per country for price monitor
     """
     pagination_class = None
-    serializer_class = price_monitor_serializers.AnswerReportSerializer
-    filterset_class = AnswerPerCountryFilter
+    serializer_class = price_monitor_serializers.AnswerPerCountryReportSerializer
+    filterset_class = SKUMinMaxFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerCountryReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        return answer_per_county_handler(queryset)
 
 
 class AnswerPerCityReportView(generics.ListAPIView):
@@ -143,11 +147,14 @@ class AnswerPerCityReportView(generics.ListAPIView):
     Use this end-point to list report of answer per country for price monitor
     """
     pagination_class = None
-    serializer_class = price_monitor_serializers.AnswerReportSerializer
-    filterset_class = AnswerPerCityFilter
+    serializer_class = price_monitor_serializers.AnswerPerCityReportSerializer
+    filterset_class = SKUMinMaxFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerCityReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        return answer_per_city_handler(queryset)
 
 
 class AnswerPerSKUReportView(generics.ListAPIView):
@@ -160,3 +167,15 @@ class AnswerPerSKUReportView(generics.ListAPIView):
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerSKUReportUseCase().execute()
+
+
+class TotalVisitReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of total visit for price monitor
+    """
+    pagination_class = None
+    serializer_class = price_monitor_serializers.AnswerReportSerializer
+    filterset_class = AnswerPerCityFilter
+
+    def get_queryset(self):
+        return price_monitor_usecases.TotalVisitReportUseCase().execute()

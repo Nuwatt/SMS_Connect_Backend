@@ -68,5 +68,11 @@ urlpatterns = [
         price_monitor_views.AnswerPerSKUReportView.as_view(),
         name='answer-per-sku-report'
     ),
+    # total visit
+    path(
+        'total-visit',
+        price_monitor_views.TotalVisitReportView.as_view(),
+        name='total-visit-report'
+    ),
 
 ]

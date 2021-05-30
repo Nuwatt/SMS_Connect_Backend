@@ -24,6 +24,11 @@ class CountryReportSerializer(serializers.Serializer):
     value = serializers.FloatField()
 
 
+class CityReportSerializer(serializers.Serializer):
+    city = serializers.CharField()
+    value = serializers.FloatField()
+
+
 class SKUCountryReportSerializer(serializers.Serializer):
     sku = serializers.CharField()
     statistics = CountryReportSerializer(many=True)
@@ -32,3 +37,13 @@ class SKUCountryReportSerializer(serializers.Serializer):
 class AnswerReportSerializer(serializers.Serializer):
     name = serializers.CharField()
     value = serializers.IntegerField()
+
+
+class AnswerPerCountryReportSerializer(serializers.Serializer):
+    sku = serializers.CharField()
+    statistics = CountryReportSerializer(many=True)
+
+
+class AnswerPerCityReportSerializer(serializers.Serializer):
+    sku = serializers.CharField()
+    statistics = CityReportSerializer(many=True)

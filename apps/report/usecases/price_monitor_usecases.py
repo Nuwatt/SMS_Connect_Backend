@@ -44,26 +44,12 @@ class SKUCountryReportUseCase(SKUReportUseCase):
     pass
 
 
-class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        self._factory()
-        return self._results
-
-    def _factory(self):
-        self._results = Country.objects.annotate(
-            value=Count('retailer__response')
-        ).values('name', 'value')
+class AnswerPerCountryReportUseCase(SKUReportUseCase):
+    pass
 
 
-class AnswerPerCityReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        self._factory()
-        return self._results
-
-    def _factory(self):
-        self._results = City.objects.annotate(
-            value=Count('retailer__response')
-        ).values('name', 'value')
+class AnswerPerCityReportUseCase(SKUReportUseCase):
+    pass
 
 
 class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
@@ -75,3 +61,14 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.annotate(
             value=Count('question__answer__response')
         ).values('name', 'value')
+
+
+class TotalVisitReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._results
+
+    def _factory(self):
+        self._results = City.objects.annotate(
+            value=Count('retailer__response')
+        ).values('name', 'value').filter(value__gt=0)

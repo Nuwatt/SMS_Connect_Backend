@@ -31,6 +31,68 @@ def sku_min_max_queryset_handler(queryset):
     return result
 
 
+def answer_per_county_handler(queryset):
+    result = []
+    skus = queryset.values(
+        'answer__question__sku__name',
+    ).distinct()
+
+    countries = queryset.values(
+        'answer__response__retailer__country__name'
+    ).distinct()
+
+    for sku in skus:
+        sku_answer = queryset.filter(
+            answer__question__sku__name=sku.get('answer__question__sku__name')
+        )
+        country_result = []
+        for country in countries:
+            statistics = sku_answer.filter(
+                answer__response__retailer__country__name=country.get('answer__response__retailer__country__name')
+            )
+            country_result.append({
+                'country': country.get('answer__response__retailer__country__name'),
+                'value': len(statistics)
+            })
+        result.append({
+            'sku': sku.get('answer__question__sku__name'),
+            'statistics': country_result
+        })
+
+    return result
+
+
+def answer_per_city_handler(queryset):
+    result = []
+    skus = queryset.values(
+        'answer__question__sku__name',
+    ).distinct()
+
+    cities = queryset.values(
+        'answer__response__retailer__city__name'
+    ).distinct()
+
+    for sku in skus:
+        sku_answer = queryset.filter(
+            answer__question__sku__name=sku.get('answer__question__sku__name')
+        )
+        city_result = []
+        for city in cities:
+            statistics = sku_answer.filter(
+                answer__response__retailer__city__name=city.get('answer__response__retailer__city__name')
+            )
+            city_result.append({
+                'city': city.get('answer__response__retailer__city__name'),
+                'value': len(statistics)
+            })
+        result.append({
+            'sku': sku.get('answer__question__sku__name'),
+            'statistics': city_result
+        })
+
+    return result
+
+
 class SKUQuerysetHandler:
     result = []
 
