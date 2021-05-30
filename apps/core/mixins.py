@@ -53,8 +53,3 @@ class ResponseMixin:
         )
 
         return self.response_serializer_class
-
-
-class CoordinatesModelMixin:
-    latitude = fields.LatitudeField()
-    longitude = fields.LongitudeField()

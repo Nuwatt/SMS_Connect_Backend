@@ -1,6 +1,5 @@
 from django.db import models
 
-from apps.core.mixins import CoordinatesModelMixin
 from apps.core.models import BaseModel
 from apps.localize.models import Country, City
 

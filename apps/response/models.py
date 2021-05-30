@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
+from apps.core.validators import validate_latitude, validate_longitude
 from apps.market.models import Retailer
 from apps.question.models import Question, QuestionOption, QuestionTypeChoice
 from apps.questionnaire.models import Questionnaire
@@ -26,8 +27,16 @@ class Response(BaseModel):
         null=True,
         on_delete=models.CASCADE
     )
-    latitude = fields.LatitudeField(null=True, blank=True)
-    longitude = fields.LongitudeField(null=True, blank=True)
+    latitude = models.FloatField(
+        null=True,
+        blank=True,
+        validators=[validate_latitude]
+    )
+    longitude = models.FloatField(
+        null=True,
+        blank=True,
+        validators=[validate_longitude]
+    )
     is_completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(null=True)
 

@@ -59,6 +59,5 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=(models.Model, apps.core.mixins.CoordinatesModelMixin),
         ),
     ]
