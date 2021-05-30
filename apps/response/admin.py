@@ -6,11 +6,11 @@ from apps.response import models
 
 @admin.register(models.Response)
 class ResponseAdmin(BaseModelAdmin):
-    readonly_fields = (
+    readonly_fields = BaseModelAdmin.readonly_fields + (
         'agent',
         'questionnaire',
     )
-    raw_id_fields = BaseModelAdmin.readonly_fields + (
+    raw_id_fields = (
         'retailer',
     )
 
