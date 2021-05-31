@@ -106,6 +106,11 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
                     response=None,
                     then=True
                 ),
+                When(
+                    response__agent=self._agent_user,
+                    response__is_completed=False,
+                    then=True
+                ),
                 default=False,
                 output_field=models.BooleanField()
             ),

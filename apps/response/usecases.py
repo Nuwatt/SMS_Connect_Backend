@@ -110,6 +110,8 @@ class ListAgentResponseHistoryUseCase(usecases.BaseUseCase):
         self._responses = self._agent_user.response_set.unarchived().select_related(
             'questionnaire',
             'questionnaire__questionnaire_type'
+        ).filter(
+            is_completed=True
         )
 
 
