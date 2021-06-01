@@ -11,26 +11,36 @@ class SKUSerializer(serializers.ModelSerializer):
 
 
 class AddSKUSerializer(SKUSerializer):
+    names = serializers.ListSerializer(child=serializers.CharField())
+
     class Meta(SKUSerializer.Meta):
         fields = (
+            'names',
+            'category',
+            'brand'
+        )
+
+
+class ListSKUSerializer(SKUSerializer):
+    category = IdNameSerializer()
+    brand = IdNameSerializer()
+
+    class Meta(SKUSerializer.Meta):
+        fields = (
+            'id',
             'name',
             'category',
             'brand'
         )
 
 
-class ListSKUSerializer(AddSKUSerializer):
-    category = IdNameSerializer()
-    brand = IdNameSerializer()
-
-    class Meta(AddSKUSerializer.Meta):
+class UpdateSKUSerializer(SKUSerializer):
+    class Meta(SKUSerializer.Meta):
         fields = (
-                     'id',
-                 ) + AddSKUSerializer.Meta.fields
-
-
-class UpdateSKUSerializer(AddSKUSerializer):
-    pass
+            'name',
+            'category',
+            'brand'
+        )
 
 
 class ImportSKUSerializer(CSVFileInputSerializer):

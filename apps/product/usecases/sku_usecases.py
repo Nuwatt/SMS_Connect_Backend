@@ -22,7 +22,16 @@ class GetSKUUseCase(usecases.BaseUseCase):
 
 class AddSKUUseCase(usecases.CreateUseCase):
     def _factory(self):
-        SKU.objects.create(**self._data)
+        sku_names = self._data.get('names')
+        skus = []
+        for name in sku_names:
+            store = SKU(
+                category=self._data.get('category'),
+                brand=self._data.get('brand'),
+                name=name
+            )
+            skus.append(store)
+        SKU.objects.bulk_create(skus)
 
 
 class UpdateSKUUseCase(usecases.UpdateUseCase):
@@ -41,7 +50,10 @@ class ListSKUUseCase(usecases.BaseUseCase):
         return self._sku_list
 
     def _factory(self):
-        self._sku_list = SKU.objects.unarchived()
+        self._sku_list = SKU.objects.unarchived().select_related(
+            'brand',
+            'category'
+        )
 
 
 class ImportSKUUseCase(usecases.ImportCSVUseCase):
