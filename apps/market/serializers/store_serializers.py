@@ -11,9 +11,11 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class AddStoreSerializer(StoreSerializer):
+    names = serializers.ListSerializer(child=serializers.CharField())
+
     class Meta(StoreSerializer.Meta):
         fields = (
-            'name',
+            'names',
             'retailer',
         )
 

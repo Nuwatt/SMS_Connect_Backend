@@ -20,7 +20,15 @@ class GetStoreUseCase(usecases.BaseUseCase):
 
 class AddStoreUseCase(usecases.CreateUseCase):
     def _factory(self):
-        Store.objects.create(**self._data)
+        store_names = self._data.get('names')
+        stores = []
+        for name in store_names:
+            store = Store(
+                retailer=self._data.get('retailer'),
+                name=name
+            )
+            stores.append(store)
+        Store.objects.bulk_create(stores)
 
 
 class UpdateStoreUseCase(usecases.UpdateUseCase):
