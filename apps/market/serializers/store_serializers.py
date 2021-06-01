@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.core.serializers import IdNameSerializer
 from apps.market.models import Store
 
 
@@ -18,7 +19,7 @@ class AddStoreSerializer(StoreSerializer):
 
 
 class ListStoreSerializer(StoreSerializer):
-    retailer = serializers.CharField()
+    retailer = IdNameSerializer()
 
     class Meta(StoreSerializer.Meta):
         fields = (
