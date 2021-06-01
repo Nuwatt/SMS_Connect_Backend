@@ -1,34 +1,74 @@
 from dateutil import rrule
-from django.db.models import Max, Min, Avg, Count
+from django.db import models
+from django.db.models import Max, Min, Avg, Count, OuterRef, Subquery, F, Value
+from django_mysql.models import GroupConcat
+from sql_util.aggregates import SubqueryCount, SubqueryMax
+
+from apps.response.models import Answer, NumericAnswer
 
 
 def sku_min_max_queryset_handler(queryset):
-    result = []
-    skus = queryset.values(
-        'answer__question__sku__name',
-    ).distinct()
+    numeric_answer = Answer.objects.filter(
+        question__sku=OuterRef('pk'),
+        response__retailer=OuterRef('question__answer__response__retailer')
+    ).annotate(
+        frequency=Count('numericanswer__numeric')
+    ).order_by(
+        '-frequency'
+    ).values('numericanswer__numeric')[:1]
 
-    for sku in skus:
-        sku_answer = queryset.filter(
-            answer__question__sku__name=sku.get('answer__question__sku__name')
-        )
-        statistics = sku_answer.aggregate(
-            max=Max('numeric'),
-            min=Min('numeric'),
-            mean=Avg('numeric'),
-        )
-        mode = sku_answer.order_by(
-            '-frequency'
-        ).values('numeric').first()
+    return queryset.annotate(
+        max=Max('question__answer__numericanswer__numeric'),
+        min=Min('question__answer__numericanswer__numeric'),
+        mean=Avg('question__answer__numericanswer__numeric'),
+        mode=Subquery(numeric_answer)
+    )
+    # for sku in queryset:
 
-        result.append({
-            'sku': sku.get('answer__question__sku__name'),
-            'mode': mode.get('numeric', None),
-            'mean': statistics.get('mean'),
-            'min': statistics.get('min'),
-            'max': statistics.get('max')
-        })
-    return result
+    # questions = sku.question_set.all()
+    # for question in questions:
+    #     answers = question.answer_set.select_related(
+    #         'numeric'
+    #     ).values('numericanswer__numeric')
+    #     print(answers)
+    #     # statistics = answers.aggregate(
+    #     #     max=Max('numericanswer__numeric'),
+    #     #     min=Min('numericanswer__numeric'),
+    #     #     mean=Avg('numericanswer__numeric'),
+    #     # )
+    #     # result.append({
+    #     #         'sku': sku.name,
+    #     #         'mode': None,
+    #     #         'mean': statistics.get('mean'),
+    #     #         'min': statistics.get('min'),
+    #     #         'max': statistics.get('max')
+    #     #     })
+
+    # skus = queryset.values(
+    #     'answer__question__sku__name',
+    # ).distinct()
+    #
+    # for sku in skus:
+    #     sku_answer = queryset.filter(
+    #         answer__question__sku__name=sku.get('answer__question__sku__name')
+    #     )
+    #     statistics = sku_answer.aggregate(
+    #         max=Max('numeric'),
+    #         min=Min('numeric'),
+    #         mean=Avg('numeric'),
+    #     )
+    #     mode = sku_answer.order_by(
+    #         '-frequency'
+    #     ).values('numeric').first()
+    #
+    #     result.append({
+    #         'sku': sku.get('answer__question__sku__name'),
+    #         'mode': mode.get('numeric', None),
+    #         'mean': statistics.get('mean'),
+    #         'min': statistics.get('min'),
+    #         'max': statistics.get('max')
+    #     })
+    # return result
 
 
 def answer_per_county_handler(queryset):
@@ -195,3 +235,40 @@ class SKUMonthQuerysetHandler(SKUQuerysetHandler):
             })
         return self.result
 
+
+def sku_mon_max_handler(queryset):
+    result = []
+    # skus = queryset.values('name')
+    answer = queryset.annotate(
+        date=F('question__answer__response__completed_at'),
+        value=Max('question__answer__numericanswer__numeric')
+    ).values('date', 'value')
+
+    # for item in answer:
+    #     print(item.value, item.date)
+    for sku in answer:
+        print(sku.get('value'), sku.get('date').strftime('%b'))
+
+        # for dt in rrule.rrule(rrule.MONTHLY, dtstart=date_range.get('min'), until=date_range.get('max')):
+        #     print(answer[0].get('value'))
+    #     #     statistics.append({
+    #     #         'date': dt,
+    #     #         'value': answer.get('max')
+    #     #     })
+    #     # result.append({
+    #     #     'name': sku,
+    #     #     'statistics': statistics
+    #     # })
+    return result
+    # print(len(queryset))
+    # numeric_answer = Answer.objects.filter(
+    #     question__sku=OuterRef('pk'),
+    #     response__retailer=OuterRef('question__answer__response__retailer')
+    # ).values('numericanswer__numeric', 'response__completed_at')
+    #
+    # a = queryset.annotate(
+    #     statistics=GroupConcat(numeric_answer)
+    # )
+    # for i in a:
+    #     print(i.statistics)
+    # return a

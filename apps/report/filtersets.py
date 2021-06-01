@@ -1,18 +1,24 @@
 from django_filters import rest_framework as filters
 
+from apps.core.filtersets import IdInFilter
+
 
 class SKUMinMaxFilter(filters.FilterSet):
-    city = filters.CharFilter(
+    city = IdInFilter(
         field_name='answer__response__retailer__city',
-        label='city'
+        label='city',
+        lookup_expr='in'
     )
-    retailer = filters.CharFilter(
+    retailer = IdInFilter(
         field_name='answer__response__retailer',
-        label='retailer'
+        label='retailer',
+        lookup_expr='in'
+
     )
-    sku = filters.CharFilter(
+    sku = IdInFilter(
         field_name='answer__question__sku',
-        label='sku'
+        label='sku',
+        lookup_expr='in'
     )
     from_date = filters.DateFilter(
         field_name='answer__response__completed_at__date',
@@ -21,6 +27,35 @@ class SKUMinMaxFilter(filters.FilterSet):
     )
     till_date = filters.DateFilter(
         field_name='answer__response__completed_at__date',
+        label='till date',
+        lookup_expr='lte'
+    )
+
+
+class SKUReportFilter(filters.FilterSet):
+    city = IdInFilter(
+        field_name='question__answer__response__retailer__city',
+        label='city',
+        lookup_expr='in'
+    )
+    retailer = IdInFilter(
+        field_name='question__answer__response__retailer',
+        label='retailer',
+        lookup_expr='in'
+
+    )
+    sku = IdInFilter(
+        field_name='id',
+        label='sku',
+        lookup_expr='in'
+    )
+    from_date = filters.DateFilter(
+        field_name='question__answer__response__completed_at__date',
+        label='from date',
+        lookup_expr='gte'
+    )
+    till_date = filters.DateFilter(
+        field_name='question__answer__response__completed_at__date',
         label='till date',
         lookup_expr='lte'
     )
@@ -44,21 +79,25 @@ class AnswerFilter(filters.FilterSet):
 
 
 class AnswerPerCityFilter(AnswerFilter):
-    city = filters.CharFilter(
+    city = IdInFilter(
         field_name='id',
-        label='city'
+        label='city',
+        lookup_expr='in'
     )
 
 
 class AnswerPerCountryFilter(AnswerFilter):
-    country = filters.CharFilter(
+    country = IdInFilter(
         field_name='id',
-        label='country'
+        label='country',
+        lookup_expr='in'
+
     )
 
 
 class AnswerPerSKUFilter(AnswerFilter):
-    sku = filters.CharFilter(
+    sku = IdInFilter(
         field_name='id',
-        label='sku'
+        label='sku',
+        lookup_expr='in'
     )

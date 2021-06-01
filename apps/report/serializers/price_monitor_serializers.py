@@ -2,21 +2,17 @@ from rest_framework import serializers
 
 
 class SKUMinMaxReportSerializer(serializers.Serializer):
-    sku = serializers.CharField()
-    max = serializers.FloatField()
-    min = serializers.FloatField()
-    mode = serializers.FloatField()
-    mean = serializers.FloatField()
-
-
-class MonthReportSerializer(serializers.Serializer):
-    month = serializers.DateTimeField(source='date_time', format='%B')
-    value = serializers.FloatField()
+    sku = serializers.CharField(source='name')
+    max = serializers.FloatField(default=0)
+    min = serializers.FloatField(default=0)
+    mode = serializers.FloatField(default=0)
+    mean = serializers.FloatField(default=0)
 
 
 class SKUMonthReportSerializer(serializers.Serializer):
-    sku = serializers.CharField()
-    statistics = MonthReportSerializer(many=True)
+    sku = serializers.CharField(source='name')
+    month = serializers.DateTimeField(format='%b')
+    value = serializers.FloatField()
 
 
 class CountryReportSerializer(serializers.Serializer):
@@ -30,8 +26,9 @@ class CityReportSerializer(serializers.Serializer):
 
 
 class SKUCountryReportSerializer(serializers.Serializer):
-    sku = serializers.CharField()
-    statistics = CountryReportSerializer(many=True)
+    sku = serializers.CharField(source='name')
+    country = serializers.CharField()
+    value = serializers.FloatField()
 
 
 class AnswerReportSerializer(serializers.Serializer):
@@ -39,11 +36,13 @@ class AnswerReportSerializer(serializers.Serializer):
     value = serializers.IntegerField()
 
 
-class AnswerPerCountryReportSerializer(serializers.Serializer):
-    sku = serializers.CharField()
-    statistics = CountryReportSerializer(many=True)
+class AnswerPerCountryReportSerializer(SKUCountryReportSerializer):
+    pass
+    # sku = serializers.CharField()
+    # statistics = CountryReportSerializer(many=True)
 
 
 class AnswerPerCityReportSerializer(serializers.Serializer):
-    sku = serializers.CharField()
-    statistics = CityReportSerializer(many=True)
+    sku = serializers.CharField(source='name')
+    city = serializers.CharField()
+    value = serializers.FloatField()
