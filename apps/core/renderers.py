@@ -40,8 +40,13 @@ class CustomJSONRenderer(JSONRenderer):
         elif 400 <= status_code < 500:
             errors = data.get('errors')
 
+            if isinstance(errors[0].get('message'), list):
+                message = errors[0].get('message')[0]
+            else:
+                message = errors[0].get('message').get('non_field_errors')[0]
+
             custom_formatted_data['success'] = False
-            custom_formatted_data['error_message'] = errors[0].get('message')[0]
+            custom_formatted_data['error_message'] = message
             custom_formatted_data['errors'] = errors
 
         ret = json.dumps(

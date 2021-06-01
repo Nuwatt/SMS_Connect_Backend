@@ -20,7 +20,7 @@ class GetStoreUseCase(usecases.BaseUseCase):
 
 class AddStoreUseCase(usecases.CreateUseCase):
     def _factory(self):
-        store_names = self._data.get('names')
+        store_names = self._data.get('name')
         stores = []
         for name in store_names:
             store = Store(

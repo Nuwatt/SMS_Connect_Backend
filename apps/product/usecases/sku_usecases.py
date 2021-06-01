@@ -22,7 +22,7 @@ class GetSKUUseCase(usecases.BaseUseCase):
 
 class AddSKUUseCase(usecases.CreateUseCase):
     def _factory(self):
-        sku_names = self._data.get('names')
+        sku_names = self._data.get('name')
         skus = []
         for name in sku_names:
             store = SKU(

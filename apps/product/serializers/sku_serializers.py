@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
 
 from apps.core.serializers import IdNameSerializer, CSVFileInputSerializer
@@ -11,14 +13,23 @@ class SKUSerializer(serializers.ModelSerializer):
 
 
 class AddSKUSerializer(SKUSerializer):
-    names = serializers.ListSerializer(child=serializers.CharField())
+    name = serializers.ListSerializer(child=serializers.CharField())
+
+    default_error_messages = {
+        'empty_name': _('Requires in list.')
+    }
 
     class Meta(SKUSerializer.Meta):
         fields = (
-            'names',
+            'name',
             'category',
             'brand'
         )
+
+    def validate_name(self, data):
+        if len(data) == 0:
+            self.fail('empty_name')
+        return data
 
 
 class ListSKUSerializer(SKUSerializer):
