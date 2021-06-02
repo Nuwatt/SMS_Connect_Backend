@@ -4,7 +4,7 @@ from django.db.models.functions import TruncMonth
 from apps.core import usecases
 from apps.localize.models import City
 from apps.product.models import SKU
-from apps.response.models import Answer
+from apps.response.models import NumericAnswer
 
 
 class SKUMinMaxReportUseCase(usecases.BaseUseCase):
@@ -13,14 +13,13 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        numeric_answer = Answer.objects.filter(
-            question__sku=OuterRef('pk'),
-            response__retailer=OuterRef('question__answer__response__retailer')
+        numeric_answer = NumericAnswer.objects.filter(
+            answer__question=OuterRef('question'),
         ).annotate(
-            frequency=Count('numericanswer__numeric')
+            frequency=Count('numeric')
         ).order_by(
             '-frequency'
-        ).values('numericanswer__numeric')[:1]
+        ).values('numeric')[:1]
 
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
@@ -95,19 +94,19 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        numeric_answer = Answer.objects.filter(
-            question__sku=OuterRef('pk'),
+        numeric_answer = NumericAnswer.objects.filter(
+            answer__question=OuterRef('question'),
         ).annotate(
-            frequency=Count('numericanswer__numeric')
+            frequency=Count('numeric')
         ).order_by(
             '-frequency'
-        ).values('frequency')[:1]
+        ).values('numeric')[:1]
 
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
-        ).values('name').annotate(
+        ).annotate(
             month=TruncMonth('question__answer__response__completed_at'),
-        ).values('name', 'month').annotate(
+        ).values('month').distinct().annotate(
             value=Subquery(numeric_answer),
         ).values(
             'month',
@@ -179,24 +178,26 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        numeric_answer = Answer.objects.filter(
-            question__sku=OuterRef('pk'),
+        numeric_answer = NumericAnswer.objects.filter(
+            answer__question=OuterRef('question'),
         ).annotate(
-            frequency=Count('numericanswer__numeric')
+            frequency=Count('numeric')
         ).order_by(
             '-frequency'
-        ).values('frequency')[:1]
+        ).values('numeric')[:1]
 
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
-        ).values('name').annotate(
+        ).annotate(
             country=F('question__answer__response__retailer__country__name'),
-        ).values('name', 'country').annotate(
+        ).values(
+            'country',
+        ).distinct().annotate(
             value=Subquery(numeric_answer),
         ).values(
             'country',
-            'value',
             'name',
+            'value'
         )
 
 

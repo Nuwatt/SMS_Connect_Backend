@@ -1,7 +1,8 @@
 from apps.core import generics
 from apps.report.filtersets import (
     AnswerPerSKUFilter,
-    AnswerPerCityFilter, SKUReportFilter
+    AnswerPerCityFilter,
+    SKUReportFilter
 )
 from apps.report.serializers import price_monitor_serializers
 from apps.report.usecases import price_monitor_usecases
@@ -60,7 +61,7 @@ class SKUMonthMeanReportView(SKUMonthReportView):
         return price_monitor_usecases.SKUMonthMeanReportUseCase().execute()
 
 
-# not optimized
+# optimized
 class SKUMonthModeReportView(SKUMonthReportView):
     """
     Use this end-point to list report of all sku mode vs month for price monitor
