@@ -21,11 +21,16 @@ class ListStoreView(generics.ListAPIView):
     """
     Use this end-point to list all store
     """
-    serializer_class = store_serializers.ListStoreSerializer
     filterset_class = StoreFilter
 
     def get_queryset(self):
         return store_usecases.ListStoreUseCase().execute()
+
+    def get_serializer_class(self):
+        user = self.request.user
+        if user.is_agent_user:
+            return store_serializers.ListStoreForAgentUserSerializer
+        return store_serializers.ListStoreSerializer
 
 
 class UpdateStoreView(generics.UpdateAPIView, StoreMixin):

@@ -42,6 +42,14 @@ class ListStoreSerializer(StoreSerializer):
         )
 
 
+class ListStoreForAgentUserSerializer(StoreSerializer):
+    class Meta(StoreSerializer.Meta):
+        fields = (
+            'id',
+            'name',
+        )
+
+
 class UpdateStoreSerializer(StoreSerializer):
     class Meta(StoreSerializer.Meta):
         fields = (
