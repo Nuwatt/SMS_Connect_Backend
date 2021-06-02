@@ -47,7 +47,6 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
             agent=self._agent_user,
             questionnaire=self._questionnaire,
             is_completed=False,
-            retailer=self._data.pop('retailer'),
             defaults=self._data
         )
         self._response.created = now()
