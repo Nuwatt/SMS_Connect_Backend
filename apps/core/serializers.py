@@ -16,6 +16,10 @@ class IdCharSerializer(serializers.Serializer):
     id = serializers.CharField()
 
 
+class IdNameCharSerializer(IdCharSerializer):
+    name = serializers.CharField()
+
+
 class IdIntegerSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
