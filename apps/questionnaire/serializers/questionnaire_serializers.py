@@ -47,6 +47,7 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
     country = serializers.SerializerMethodField()
     city = serializers.ListSerializer(child=serializers.CharField())
     tags = serializers.ListSerializer(child=serializers.CharField())
+    repeat_cycle = serializers.SerializerMethodField()
 
     class Meta(QuestionnaireDetailSerializer.Meta):
         fields = QuestionnaireDetailSerializer.Meta.fields + (
@@ -58,6 +59,13 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
     @swagger_serializer_method(serializer_or_field=serializers.ListSerializer(child=serializers.CharField()))
     def get_country(self, instance):
         return Country.objects.filter(city__in=instance.city.all()).values_list('name', flat=True).distinct()
+
+    @swagger_serializer_method(serializer_or_field=serializers.IntegerField())
+    def get_repeat_cycle(self, instance):
+        weeks = instance.repeat_cycle.days / 7
+        if weeks:
+            return weeks
+        return None
 
 
 class UpdateQuestionnaireSerializer(AddQuestionnaireSerializer):
