@@ -62,9 +62,10 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
 
     @swagger_serializer_method(serializer_or_field=serializers.IntegerField())
     def get_repeat_cycle(self, instance):
-        weeks = instance.repeat_cycle.days / 7
-        if weeks:
-            return weeks
+        if instance.repeat_cycle:
+            weeks = instance.repeat_cycle.days / 7
+            if weeks:
+                return weeks
         return None
 
 
