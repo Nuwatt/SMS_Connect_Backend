@@ -52,7 +52,7 @@ class ListSKUUseCase(usecases.BaseUseCase):
     def _factory(self):
         self._sku_list = SKU.objects.unarchived().select_related(
             'brand',
-            'category'
+            'brand__category'
         )
 
 
