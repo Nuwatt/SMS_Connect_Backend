@@ -157,7 +157,7 @@ class ListAgentResponseSerializer(serializers.Serializer):
     finish_time = serializers.DateTimeField(source='completed_at', format='%p %H:%M')
     completed_date = serializers.DateTimeField(source='completed_at', format='%d/%m/%Y')
     completed_duration = serializers.CharField()
-    country = serializers.CharField(source='store.country')
+    country = serializers.CharField(source='store.city.country')
     city = serializers.CharField(source='store.city')
     retailer = serializers.CharField(source='store.retailer')
     channel = serializers.CharField(source='store.retailer.channel')
