@@ -25,8 +25,9 @@ class StoreAdmin(BaseModelAdmin):
         'name',
     ) + BaseModelAdmin.search_fields
 
-    list_filter = (
-        'retailer',
+    raw_id_fields = (
+        'city',
+        'retailer'
     )
 
 
