@@ -1,8 +1,7 @@
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework import serializers
 
-from apps.core.serializers import IdNameSerializer, CSVFileInputSerializer
+from apps.core.serializers import CSVFileInputSerializer, IdNameCharSerializer
 from apps.product.models import SKU
 
 
@@ -32,8 +31,8 @@ class AddSKUSerializer(SKUSerializer):
 
 
 class ListSKUSerializer(SKUSerializer):
-    category = IdNameSerializer(source='brand.category')
-    brand = IdNameSerializer()
+    category = IdNameCharSerializer(source='brand.category')
+    brand = IdNameCharSerializer()
 
     class Meta(SKUSerializer.Meta):
         fields = (
