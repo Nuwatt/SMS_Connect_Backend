@@ -12,7 +12,8 @@ from apps.response.models import (
     ChoiceAnswer,
     OptionAnswer,
     ImageAnswer,
-    TextAnswer, NumericAnswer
+    TextAnswer,
+    NumericAnswer
 )
 from apps.user.models import AgentUser
 
@@ -123,4 +124,27 @@ class ListAgentResponseUseCase(ListAgentResponseHistoryUseCase):
             'store__retailer__channel',
             'store__city',
             'store__city__country'
+        )
+
+
+class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
+    def __init__(self, questionnaire: Questionnaire):
+        self._questionnaire = questionnaire
+
+    def execute(self):
+        self._factory()
+        return self._responses
+
+    def _factory(self):
+        self._responses = Response.objects.filter(
+            is_completed=True,
+            is_archived=False,
+            questionnaire=self._questionnaire
+        ).select_related(
+            'store',
+            'store__retailer__channel',
+            'store__city',
+            'store__city__country'
+        ).prefetch_related(
+            'answer_set'
         )

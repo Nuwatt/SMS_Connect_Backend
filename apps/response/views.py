@@ -94,3 +94,18 @@ class ListAgentResponseView(generics.ListAPIView, AgentUserMixin):
         return usecases.ListAgentResponseUseCase(
             agent_user=self.get_object()
         ).execute()
+
+
+class ListQuestionnaireResponseView(generics.ListAPIView, QuestionnaireMixin):
+    """
+    Use this end-point to list response of a specific questionnaire
+    """
+    serializer_class = serializers.ListQuestionnaireResponseSerializer
+
+    def get_object(self):
+        return self.get_questionnaire()
+
+    def get_queryset(self):
+        return usecases.ListQuestionnaireResponseUseCase(
+            questionnaire=self.get_object()
+        ).execute()

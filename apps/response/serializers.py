@@ -163,3 +163,17 @@ class ListAgentResponseSerializer(serializers.Serializer):
     store = serializers.CharField()
     channel = serializers.CharField(source='store.retailer.channel')
     gps = serializers.CharField(source='coordinates')
+
+
+class ListQuestionnaireResponseSerializer(serializers.Serializer):
+    user_id = serializers.CharField(source='agent.id')
+    username = serializers.CharField(source='agent.user.username')
+    completed_date = serializers.DateTimeField(source='completed_at', format='%d/%m/%Y')
+    number_of_answers = serializers.IntegerField()
+    start_time = serializers.DateTimeField(source='created', format='%p %H:%M')
+    finish_time = serializers.DateTimeField(source='completed_at', format='%p %H:%M')
+    country = serializers.CharField(source='store.city.country')
+    city = serializers.CharField(source='store.city')
+    retailer = serializers.CharField(source='store.retailer')
+    store = serializers.CharField()
+    channel = serializers.CharField(source='store.retailer.channel')
