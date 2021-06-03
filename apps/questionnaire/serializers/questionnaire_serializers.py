@@ -1,8 +1,10 @@
 from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_serializer_method
 
 from rest_framework import serializers
 
 from apps.core.validators import validate_non_zero_integer
+from apps.localize.models import Country
 from apps.questionnaire.models import Questionnaire
 
 
@@ -42,7 +44,7 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
     number_of_questions = serializers.IntegerField()
     initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
     questionnaire_type = serializers.CharField()
-    country = serializers.ListSerializer(child=serializers.CharField(), source='city__country')
+    country = serializers.SerializerMethodField()
     city = serializers.ListSerializer(child=serializers.CharField())
     tags = serializers.ListSerializer(child=serializers.CharField())
 
@@ -52,6 +54,10 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
             'number_of_questions',
             'country',
         )
+
+    @swagger_serializer_method(serializer_or_field=serializers.ListSerializer(child=serializers.CharField()))
+    def get_country(self, instance):
+        return Country.objects.filter(city__in=instance.city.all()).values_list('name', flat=True).distinct()
 
 
 class UpdateQuestionnaireSerializer(AddQuestionnaireSerializer):

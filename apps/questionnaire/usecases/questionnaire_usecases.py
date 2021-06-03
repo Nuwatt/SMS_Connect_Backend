@@ -72,7 +72,7 @@ class ListQuestionnaireUseCase(usecases.BaseUseCase):
     def _factory(self):
         self._questionnaires = Questionnaire.objects.unarchived().prefetch_related(
             'city',
-            'country'
+            'city__country'
         ).select_related(
             'questionnaire_type',
         )
