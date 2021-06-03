@@ -56,7 +56,7 @@ class Questionnaire(BaseModel):
         return self.id
 
     def save(self, *args, **kwargs):
-        if self.repeat_cycle > timedelta(weeks=0):
+        if self.repeat_cycle and (self.repeat_cycle > timedelta(weeks=0)):
             self.can_repeat = True
         else:
             self.can_repeat = False
