@@ -160,5 +160,6 @@ class ListAgentResponseSerializer(serializers.Serializer):
     country = serializers.CharField(source='store.city.country')
     city = serializers.CharField(source='store.city')
     retailer = serializers.CharField(source='store.retailer')
+    store = serializers.CharField(source='store')
     channel = serializers.CharField(source='store.retailer.channel')
     gps = serializers.CharField(source='coordinates')
