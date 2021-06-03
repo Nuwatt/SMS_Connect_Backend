@@ -14,7 +14,7 @@ class ResponseAdmin(BaseModelAdmin):
         'questionnaire',
     )
     raw_id_fields = (
-        'retailer',
+        'store',
     )
 
 

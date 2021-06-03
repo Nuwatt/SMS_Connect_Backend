@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.db.models import Q, Subquery, Case, When, F
 from django.utils.timezone import now
@@ -35,28 +37,21 @@ class AddQuestionnaireUseCase(usecases.CreateUseCase):
     def _factory(self):
         # 1. pop city and country and tags
         city = self._data.pop('city')
-        country = self._data.pop('country')
-        tags = self._data.pop('tags')
+        tags = self._data.pop('tags', None)
+        repeat_cycle = self._data.pop('repeat_cycle', None)
 
         # 2. create questionnaire
         self._questionnaire = Questionnaire.objects.create(**self._data)
 
         # 3. set city and country and tags
         self._questionnaire.city.set(city)
-        self._questionnaire.country.set(country)
-        self._questionnaire.tags.set(tags)
+        if tags:
+            self._questionnaire.tags.set(tags)
 
-    def is_valid(self):
-        countries = self._data.get('country', None)
-
-        if countries and 'city' in self._data:
-            for city in self._data.get('city'):
-                if city.country not in countries:
-                    raise ValidationError({
-                        'city': _('City:{} not belongs to submitted country.'.format(
-                            city
-                        ))
-                    })
+        # 4. repeat cycle
+        if repeat_cycle:
+            self._questionnaire.repeat_cycle = timedelta(weeks=repeat_cycle)
+            self._questionnaire.save()
 
 
 class UpdateQuestionnaireUseCase(usecases.UpdateUseCase):

@@ -9,7 +9,6 @@ class QuestionnaireFilter(filters.FilterSet):
         fields = [
             'questionnaire_type',
             'city',
-            'country',
             'category',
         ]
 

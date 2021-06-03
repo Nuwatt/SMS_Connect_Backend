@@ -53,18 +53,6 @@ class QuestionTypeChoice(BaseModel):
             })
 
 
-class QuestionStatement(BaseModel):
-    """
-    Question Statement model
-    """
-    statement = models.CharField(
-        max_length=244,
-    )
-
-    def __str__(self):
-        return self.statement
-
-
 class Question(BaseModel):
     """
     Question model
@@ -82,7 +70,6 @@ class Question(BaseModel):
     )
     question_type = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
     statement = models.CharField(max_length=255)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     sku = models.ForeignKey(SKU, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -100,13 +87,6 @@ class Question(BaseModel):
                 name='unique_question'
             )
         ]
-
-    def clean(self):
-        # 1. sku must be of same brand
-        if self.sku.brand != self.brand:
-            raise DjangoValidationError({
-                'sku': _('SKU must be of same brand.')
-            })
 
 
 class QuestionOption(BaseModel):

@@ -30,10 +30,13 @@ class CityAdmin(LocalizeModelAdmin):
     list_filter = (
         'country',
     )
+    raw_id_fields = (
+        'country',
+    )
 
 
 @admin.register(models.Area)
 class AreaAdmin(LocalizeModelAdmin):
-    list_filter = (
-        'country',
+    raw_id_fields = (
+        'city',
     )

@@ -55,7 +55,6 @@ class City(BaseModel):
 
 class Area(BaseModel):
     name = models.CharField(max_length=100)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
 
     def __str__(self):

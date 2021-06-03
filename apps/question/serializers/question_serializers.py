@@ -25,7 +25,6 @@ class AddQuestionSerializer(QuestionSerializer):
             'question_type',
             'statement',
             'question_options',
-            'brand',
             'sku',
         )
 

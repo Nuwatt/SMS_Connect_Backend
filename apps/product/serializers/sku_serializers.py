@@ -22,7 +22,6 @@ class AddSKUSerializer(SKUSerializer):
     class Meta(SKUSerializer.Meta):
         fields = (
             'name',
-            'category',
             'brand'
         )
 
@@ -33,7 +32,7 @@ class AddSKUSerializer(SKUSerializer):
 
 
 class ListSKUSerializer(SKUSerializer):
-    category = IdNameSerializer()
+    category = IdNameSerializer(source='brand.category')
     brand = IdNameSerializer()
 
     class Meta(SKUSerializer.Meta):
@@ -49,7 +48,6 @@ class UpdateSKUSerializer(SKUSerializer):
     class Meta(SKUSerializer.Meta):
         fields = (
             'name',
-            'category',
             'brand'
         )
 

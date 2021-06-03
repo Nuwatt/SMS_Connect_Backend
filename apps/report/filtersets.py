@@ -5,12 +5,12 @@ from apps.core.filtersets import IdInFilter
 
 class SKUMinMaxFilter(filters.FilterSet):
     city = IdInFilter(
-        field_name='answer__response__retailer__city',
+        field_name='answer__response__store__city',
         label='city',
         lookup_expr='in'
     )
-    retailer = IdInFilter(
-        field_name='answer__response__retailer',
+    store = IdInFilter(
+        field_name='answer__response__store',
         label='retailer',
         lookup_expr='in'
 
@@ -34,12 +34,12 @@ class SKUMinMaxFilter(filters.FilterSet):
 
 class SKUReportFilter(filters.FilterSet):
     city = IdInFilter(
-        field_name='question__answer__response__retailer__city',
+        field_name='question__answer__response__store__city',
         label='city',
         lookup_expr='in'
     )
-    retailer = IdInFilter(
-        field_name='question__answer__response__retailer',
+    store = IdInFilter(
+        field_name='question__answer__response__store',
         label='retailer',
         lookup_expr='in'
 

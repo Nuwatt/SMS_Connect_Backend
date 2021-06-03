@@ -68,6 +68,6 @@ class ImportSKUUseCase(usecases.ImportCSVUseCase):
                 name=item.get('SKU Name'),
                 defaults={
                     'brand': brand,
-                    'category': category,
+                    # 'category': category,
                 }
             )

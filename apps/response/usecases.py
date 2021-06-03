@@ -119,8 +119,8 @@ class ListAgentResponseUseCase(ListAgentResponseHistoryUseCase):
         self._responses = self._agent_user.response_set.unarchived().select_related(
             'questionnaire',
             'questionnaire__questionnaire_type',
-            'retailer__country',
-            'retailer__city',
-            'retailer',
-            'retailer__channel'
+            'store',
+            'store__retailer__channel',
+            'store__city',
+            'store__city__country'
         )

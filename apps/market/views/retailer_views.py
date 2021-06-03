@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from apps.core import generics
 from apps.core.serializers import MessageResponseSerializer
+from apps.market.filtersets import RetailerFilter
 from apps.market.mixins import RetailerMixin
 from apps.market.serializers import retailer_serializers
 from apps.market.usecases import retailer_usecases
@@ -27,6 +28,7 @@ class ListRetailerView(generics.ListAPIView):
     Use this end-point to list all retailer
     """
     serializer_class = retailer_serializers.ListRetailerSerializer
+    filterset_class = RetailerFilter
 
     def get_queryset(self):
         user = self.request.user

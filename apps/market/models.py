@@ -1,11 +1,11 @@
 from django.db import models
 
 from apps.core.models import BaseModel
-from apps.localize.models import Country, City
+from apps.localize.models import City
 
 
 class Channel(BaseModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -18,16 +18,6 @@ class Retailer(BaseModel):
         on_delete=models.CASCADE,
         null=True
     )
-    country = models.ForeignKey(
-        Country,
-        null=True,
-        on_delete=models.CASCADE
-    )
-    city = models.ForeignKey(
-        City,
-        null=True,
-        on_delete=models.CASCADE
-    )
 
     def __str__(self):
         return self.name
@@ -36,6 +26,19 @@ class Retailer(BaseModel):
 class Store(BaseModel):
     name = models.CharField(max_length=100)
     retailer = models.ForeignKey(Retailer, on_delete=models.CASCADE)
+    city = models.ForeignKey(
+        City,
+        null=True,
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'retailer', 'city'],
+                name='unique_store'
+            )
+        ]
 
     def __str__(self):
         return self.name

@@ -8,7 +8,6 @@ class AreaFilter(filters.FilterSet):
     class Meta:
         model = Area
         fields = [
-            'country',
             'city',
         ]
 

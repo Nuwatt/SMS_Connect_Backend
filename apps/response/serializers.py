@@ -16,12 +16,12 @@ class ResponseSerializer(serializers.ModelSerializer):
 class StartQuestionnaireSerializer(ResponseSerializer):
     class Meta(ResponseSerializer.Meta):
         fields = (
-            'retailer',
+            'store',
             'latitude',
             'longitude'
         )
         extra_kwargs = {
-            'retailer': {
+            'store': {
                 'required': True
             }
         }
@@ -150,14 +150,15 @@ data = [
 
 
 class ListAgentResponseSerializer(serializers.Serializer):
-    questionnaire = serializers.CharField()
+    questionnaire_id = serializers.CharField(source='questionnaire.id')
+    questionnaire_name = serializers.CharField(source='questionnaire.name')
     questionnaire_type = serializers.CharField(source='questionnaire.questionnaire_type')
     start_time = serializers.DateTimeField(source='created', format='%p %H:%M')
     finish_time = serializers.DateTimeField(source='completed_at', format='%p %H:%M')
     completed_date = serializers.DateTimeField(source='completed_at', format='%d/%m/%Y')
     completed_duration = serializers.CharField()
-    country = serializers.CharField(source='retailer.country')
-    city = serializers.CharField(source='retailer.city')
-    retailer = serializers.CharField()
+    country = serializers.CharField(source='store.retailer.country')
+    city = serializers.CharField(source='store.retailer.city')
+    retailer = serializers.CharField(source='store.retailer')
     channel = serializers.CharField(source='retailer.channel')
     gps = serializers.CharField(source='coordinates')

@@ -27,9 +27,9 @@ class ListStoreView(generics.ListAPIView):
         return store_usecases.ListStoreUseCase().execute()
 
     def get_serializer_class(self):
-        # user = self.request.user
-        # if user.is_agent_user:
-        #     return store_serializers.ListStoreForAgentUserSerializer
+        user = self.request.user
+        if user.is_agent_user:
+            return store_serializers.ListStoreForAgentUserSerializer
         return store_serializers.ListStoreSerializer
 
 

@@ -105,8 +105,21 @@ class ImageValidator(Validator):
             raise ValidationError(self.message, code=self.code)
 
 
+@deconstructible
+class NonZeroIntegerValidator(Validator):
+    message = _('Enter a valid integer.')
+
+    def __call__(self, value):
+        if not value:
+            raise ValidationError(self.message, code=self.code)
+
+        if value == 0:
+            raise ValidationError(_('Integer can\'t be zero.'), code=self.code)
+
+
 validate_phone_number = PhoneNumberValidator()
 validate_latitude = LatitudeValidator()
 validate_longitude = LongitudeValidator()
 validate_csv_file = CSVFileValidator()
 validate_image = ImageValidator()
+validate_non_zero_integer = NonZeroIntegerValidator()

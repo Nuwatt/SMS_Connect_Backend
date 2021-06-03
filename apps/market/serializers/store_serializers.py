@@ -19,6 +19,7 @@ class AddStoreSerializer(StoreSerializer):
         fields = (
             'name',
             'retailer',
+            'city',
         )
 
     default_error_messages = {
@@ -33,19 +34,24 @@ class AddStoreSerializer(StoreSerializer):
 
 class ListStoreSerializer(StoreSerializer):
     retailer = IdNameSerializer()
+    city = IdNameSerializer()
 
     class Meta(StoreSerializer.Meta):
         fields = (
             'id',
             'retailer',
             'name',
+            'city',
         )
 
 
 class ListStoreForAgentUserSerializer(StoreSerializer):
+    retailer = IdNameSerializer()
+
     class Meta(StoreSerializer.Meta):
         fields = (
             'id',
+            'retailer',
             'name',
         )
 

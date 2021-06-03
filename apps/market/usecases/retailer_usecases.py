@@ -56,8 +56,7 @@ class ListRetailerForAgentUserUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._retailers = Retailer.objects.filter(
-            country__in=self._agent_user.operation_country.all(),
-            city__in=self._agent_user.operation_city.all()
+            store__city__in=self._agent_user.operation_city.all()
         ).unarchived()
 
 
@@ -74,11 +73,10 @@ class ImportRetailerUseCase(usecases.ImportCSVUseCase):
                 name=item.get('Retailer Name'),
                 defaults={
                     'channel': channel,
-                    'country': country,
-                    'city': city
                 }
             )
             store, created = Store.objects.get_or_create(
                 name=item.get('Retailer Branch Name'),
-                retailer=retailer
+                retailer=retailer,
+                city=city
             )

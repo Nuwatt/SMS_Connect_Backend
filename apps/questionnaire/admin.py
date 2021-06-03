@@ -19,7 +19,6 @@ class QuestionnaireTypeAdmin(BaseModelAdmin):
 class QuestionnaireAdmin(BaseModelAdmin):
     raw_id_fields = (
         'city',
-        'country',
         'tags'
     )
     list_display = (

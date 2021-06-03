@@ -25,6 +25,7 @@ class AddStoreUseCase(usecases.CreateUseCase):
         for name in store_names:
             store = Store(
                 retailer=self._data.get('retailer'),
+                city=self._data.get('city'),
                 name=name
             )
             stores.append(store)

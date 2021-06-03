@@ -6,7 +6,7 @@ from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
 from apps.core.validators import validate_latitude, validate_longitude
-from apps.market.models import Retailer
+from apps.market.models import Retailer, Store
 from apps.question.models import Question, QuestionOption, QuestionTypeChoice
 from apps.questionnaire.models import Questionnaire
 from apps.response.utils import upload_answer_image_to
@@ -22,8 +22,8 @@ class Response(BaseModel):
     )
     questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
     agent = models.ForeignKey(AgentUser, on_delete=models.CASCADE)
-    retailer = models.ForeignKey(
-        Retailer,
+    store = models.ForeignKey(
+        Store,
         null=True,
         on_delete=models.CASCADE
     )
@@ -54,14 +54,14 @@ class Response(BaseModel):
             if Response.objects.filter(
                     agent=self.agent,
                     questionnaire=self.questionnaire,
-                    retailer=self.retailer,
+                    store=self.store,
                     is_completed=False
             ):
                 raise DjangoValidationError('Agent has uncompleted record of same questionnaire')
 
             # 2. retailer must be under agent operation
             if self.agent not in self.questionnaire.tags.all():
-                if self.retailer.country not in self.agent.operation_country.all():
+                if self.store.city not in self.agent.operation_city.all():
                     raise DjangoValidationError({
                         'retailer': _('Agent is not in operation on this retailer.')
                     })

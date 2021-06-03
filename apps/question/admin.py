@@ -4,16 +4,6 @@ from apps.core.admin import BaseModelAdmin
 from apps.question import models
 
 
-@admin.register(models.QuestionStatement)
-class QuestionStatementAdmin(BaseModelAdmin):
-    list_display = BaseModelAdmin.list_display + (
-        'statement',
-    )
-    search_fields = BaseModelAdmin.search_fields + (
-        'statement',
-    )
-
-
 @admin.register(models.Question)
 class QuestionAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
@@ -23,7 +13,6 @@ class QuestionAdmin(BaseModelAdmin):
         'statement',
     )
     raw_id_fields = (
-        'brand',
         'questionnaire',
         'sku'
     )

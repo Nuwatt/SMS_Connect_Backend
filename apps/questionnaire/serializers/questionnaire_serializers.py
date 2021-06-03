@@ -1,5 +1,8 @@
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
 
+from apps.core.validators import validate_non_zero_integer
 from apps.questionnaire.models import Questionnaire
 
 
@@ -10,15 +13,22 @@ class QuestionnaireSerializer(serializers.ModelSerializer):
 
 
 class AddQuestionnaireSerializer(QuestionnaireSerializer):
+    repeat_cycle = serializers.IntegerField(required=False, validators=[validate_non_zero_integer])
+
     class Meta(QuestionnaireSerializer.Meta):
         fields = (
             'name',
             'questionnaire_type',
+            'repeat_cycle',
             'city',
-            'category',
-            'country',
-            'tags'
+            'tags',
+            'category'
         )
+        extra_kwargs = {
+            'category': {
+                'required': True
+            }
+        }
 
 
 class QuestionnaireDetailSerializer(QuestionnaireSerializer):

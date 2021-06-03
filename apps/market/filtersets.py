@@ -9,3 +9,14 @@ class StoreFilter(filters.FilterSet):
         fields = [
             'retailer',
         ]
+
+
+class RetailerFilter(filters.FilterSet):
+    city = filters.CharFilter(
+        field_name='store__city',
+        label='city'
+    )
+    channel = filters.CharFilter(
+        field_name='channel',
+        label='channel'
+    )
