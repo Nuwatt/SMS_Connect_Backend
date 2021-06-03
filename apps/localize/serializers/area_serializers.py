@@ -13,7 +13,6 @@ class AddAreaSerializer(AreaSerializer):
     class Meta(AreaSerializer.Meta):
         fields = (
             'name',
-            'country',
             'city'
         )
 

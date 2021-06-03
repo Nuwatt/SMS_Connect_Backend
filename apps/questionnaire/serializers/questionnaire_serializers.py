@@ -42,7 +42,7 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
     number_of_questions = serializers.IntegerField()
     initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
     questionnaire_type = serializers.CharField()
-    country = serializers.ListSerializer(child=serializers.CharField())
+    country = serializers.ListSerializer(child=serializers.CharField(), source='city__country')
     city = serializers.ListSerializer(child=serializers.CharField())
     tags = serializers.ListSerializer(child=serializers.CharField())
 
@@ -50,6 +50,7 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
         fields = QuestionnaireDetailSerializer.Meta.fields + (
             'initiated_data',
             'number_of_questions',
+            'country',
         )
 
 

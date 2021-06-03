@@ -15,15 +15,11 @@ class AddRetailerSerializer(RetailerSerializer):
         fields = (
             'name',
             'channel',
-            'country',
-            'city',
         )
 
 
 class ListRetailerSerializer(AddRetailerSerializer):
     channel = IdNameSerializer()
-    country = IdNameSerializer()
-    city = IdNameSerializer()
 
     class Meta(AddRetailerSerializer.Meta):
         fields = (
