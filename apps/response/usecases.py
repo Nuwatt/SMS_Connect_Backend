@@ -162,33 +162,22 @@ class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
         return self._answers
 
     def _factory(self):
-        latest_response = Response.objects.filter(
+        latest_response = Response.objects.prefetch_related(
+            'answer_set'
+        ).filter(
             agent=self._agent_user,
             questionnaire=self._questionnaire,
             is_archived=False,
             is_completed=True
         ).latest('completed_at')
 
-        self._answers = Answer.objects.filter(
-            response=latest_response,
-        ).values('question').distinct().annotate(
-            answer=Case(
-                When(
-                    question__question_type__name='Numeric',
-                    then=F('numericanswer__numeric')
-                ),
-                When(
-                    question__question_type__name='Text',
-                    then=F('textanswer__text')
-                ),
-                default=False,
-                output_field=models.CharField()
-            ),
-        ).values(
-            'question_id',
-            'question__question_type__name',
-            'question__statement',
-            'answer'
+        self._answers = latest_response.answer_set.select_related(
+            'question',
+            'question__question_type',
+            'numericanswer',
+            'textanswer',
+            'choiceanswer',
+        ).prefetch_related(
+            'imageanswer_set',
+            'optionanswer_set'
         )
-
-        # TODO: make answer dynamic

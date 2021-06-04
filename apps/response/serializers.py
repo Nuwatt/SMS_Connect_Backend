@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_serializer_method
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -181,6 +182,21 @@ class ListQuestionnaireResponseSerializer(serializers.Serializer):
 
 class ListQuestionnaireAnswerSerializer(serializers.Serializer):
     question_id = serializers.CharField()
-    question_type = serializers.CharField(source='question__question_type__name')
-    question = serializers.CharField(source='question__statement')
-    answer = serializers.CharField()
+    question_type = serializers.CharField(source='question.question_type.name')
+    question = serializers.CharField(source='question.statement')
+    answer = serializers.SerializerMethodField()
+
+    @swagger_serializer_method(serializer_or_field=serializers.ListSerializer(child=serializers.CharField()))
+    def get_answer(self, instance):
+        question_type = instance.question.question_type
+        if question_type.name == 'Numeric':
+            return [instance.numericanswer.numeric]
+        elif question_type.name == 'Text':
+            return [instance.textanswer.text]
+        elif question_type.name == 'Image':
+            return [item.image.url for item in instance.imageanswer_set.all()]
+        elif question_type.has_default_choices:
+            return instance.choiceanswer_set.values_list('choice__choice', flat=True)
+        elif question_type.has_options:
+            return instance.optionanswer_set.values_list('option__option', flat=True)
+        return None
