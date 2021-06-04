@@ -2,6 +2,7 @@ import csv
 from io import StringIO
 
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import transaction
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -60,6 +61,42 @@ class AddQuestionUseCase(usecases.CreateUseCase):
                     )
                 )
             QuestionOption.objects.bulk_create(question_options)
+
+
+class BulkAddQuestionUseCase(usecases.CreateUseCase):
+    def __init__(self, serializer, questionnaire: Questionnaire):
+        super().__init__(serializer)
+        self._questionnaire = questionnaire
+
+    @transaction.atomic()
+    def _factory(self):
+        for item in self._data.get('data'):
+
+            # 1. pop question options and question statement
+            question_options_data = item.pop('question_options', None)
+
+            # 2. create question
+            question = Question(
+                questionnaire=self._questionnaire,
+                **item
+            )
+            try:
+                question.full_clean()
+                question.save()
+            except DjangoValidationError as e:
+                raise ValidationError(e.message_dict)
+
+            # 3. create question options
+            if question_options_data:
+                question_options = []
+                for data in question_options_data:
+                    question_options.append(
+                        QuestionOption(
+                            question=question,
+                            option=data
+                        )
+                    )
+                QuestionOption.objects.bulk_create(question_options)
 
 
 class ListQuestionUseCase(usecases.BaseUseCase):

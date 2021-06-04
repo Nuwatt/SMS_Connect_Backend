@@ -37,6 +37,29 @@ class AddQuestionSerializer(QuestionSerializer):
         return attrs
 
 
+class BulkAddQuestionSerializer(QuestionSerializer):
+    data = AddQuestionSerializer(many=True)
+
+    default_error_messages = {
+        'empty_data': _('No question provided.')
+    }
+
+    def validate_data(self, data):
+        if len(data) == 0:
+            self.fail('empty_data')
+        return data
+
+    def validate(self, attrs):
+        unique_statement = []
+        for item in attrs.get('data'):
+            if item.get('statement') in unique_statement:
+                raise ValidationError({
+                    'data': _('Statement: {} is duplicated.'.format(item.get('statement')))
+                })
+            unique_statement.append(item.get('statement'))
+        return attrs
+
+
 class ListQuestionSerializer(AddQuestionSerializer):
     question_options = serializers.SerializerMethodField()
     brand = IdNameSerializer()

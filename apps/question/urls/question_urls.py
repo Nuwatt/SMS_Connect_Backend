@@ -9,6 +9,11 @@ urlpatterns = [
         name='add-question'
     ),
     path(
+        'questionnaire/<str:questionnaire_id>/bulk-add',
+        question_views.BulkAddQuestionView.as_view(),
+        name='bulk-add-question'
+    ),
+    path(
         'questionnaire/<str:questionnaire_id>/list',
         question_views.ListQuestionForAgentView.as_view(),
         name='list-question-for-agent-user'

@@ -35,6 +35,28 @@ class AddQuestionView(generics.CreateAPIView, QuestionnaireMixin):
         return self.create(request, *args, **kwargs)
 
 
+class BulkAddQuestionView(generics.CreateAPIView, QuestionnaireMixin):
+    """
+    Use this end-point to add new question in bulk
+    """
+    serializer_class = question_serializers.BulkAddQuestionSerializer
+
+    def perform_create(self, serializer):
+        return question_usecases.BulkAddQuestionUseCase(
+            questionnaire=self.get_questionnaire(),
+            serializer=serializer
+        ).execute()
+
+    def response(self, result, serializer, status_code):
+        return Response({
+            'message': _('Question added successfully.')
+        }, status=status_code)
+
+    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
 class ListQuestionView(generics.ListAPIView):
     """
     Use this end-point to list all questions
