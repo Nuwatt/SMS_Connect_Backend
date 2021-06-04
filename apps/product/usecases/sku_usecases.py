@@ -1,4 +1,6 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
+from rest_framework.exceptions import ValidationError
 
 from apps.product.exceptions import SKUNotFound
 from apps.product.models import SKU, Category, Brand
@@ -26,10 +28,13 @@ class AddSKUUseCase(usecases.CreateUseCase):
         skus = []
         for name in sku_names:
             store = SKU(
-                category=self._data.get('category'),
                 brand=self._data.get('brand'),
                 name=name
             )
+            try:
+                store.full_clean()
+            except DjangoValidationError as e:
+                raise ValidationError(e.message_dict)
             skus.append(store)
         SKU.objects.bulk_create(skus)
 
