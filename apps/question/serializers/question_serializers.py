@@ -37,7 +37,7 @@ class AddQuestionSerializer(QuestionSerializer):
         return attrs
 
 
-class BulkAddQuestionSerializer(QuestionSerializer):
+class BulkAddQuestionSerializer(serializers.Serializer):
     data = AddQuestionSerializer(many=True)
 
     default_error_messages = {
