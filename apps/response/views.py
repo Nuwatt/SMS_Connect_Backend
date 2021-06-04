@@ -109,3 +109,16 @@ class ListQuestionnaireResponseView(generics.ListAPIView, QuestionnaireMixin):
         return usecases.ListQuestionnaireResponseUseCase(
             questionnaire=self.get_object()
         ).execute()
+
+
+class ListQuestionnaireAnswerView(generics.ListAPIView, QuestionnaireMixin, AgentUserMixin):
+    """
+    Use this end-point to list answer of a questionnaire of specific user from latest response
+    """
+    serializer_class = serializers.ListQuestionnaireAnswerSerializer
+
+    def get_queryset(self):
+        return usecases.ListQuestionnaireAnswerUseCase(
+            questionnaire=self.get_questionnaire(),
+            agent_user=self.get_agent_user()
+        ).execute()

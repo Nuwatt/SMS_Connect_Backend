@@ -177,3 +177,10 @@ class ListQuestionnaireResponseSerializer(serializers.Serializer):
     retailer = serializers.CharField(source='store.retailer')
     store = serializers.CharField()
     channel = serializers.CharField(source='store.retailer.channel')
+
+
+class ListQuestionnaireAnswerSerializer(serializers.Serializer):
+    question_id = serializers.CharField()
+    question_type = serializers.CharField(source='question__question_type__name')
+    question = serializers.CharField(source='question__statement')
+    answer = serializers.CharField()

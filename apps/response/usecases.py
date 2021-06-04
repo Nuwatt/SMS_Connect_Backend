@@ -1,4 +1,6 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import models
+from django.db.models import F, Case, When
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -148,3 +150,45 @@ class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
         ).prefetch_related(
             'answer_set'
         )
+
+
+class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
+    def __init__(self, questionnaire: Questionnaire, agent_user: AgentUser):
+        self._agent_user = agent_user
+        self._questionnaire = questionnaire
+
+    def execute(self):
+        self._factory()
+        return self._answers
+
+    def _factory(self):
+        latest_response = Response.objects.filter(
+            agent=self._agent_user,
+            questionnaire=self._questionnaire,
+            is_archived=False,
+            is_completed=True
+        ).latest('completed_at')
+
+        self._answers = Answer.objects.filter(
+            response=latest_response,
+        ).values('question').distinct().annotate(
+            answer=Case(
+                When(
+                    question__question_type__name='Numeric',
+                    then=F('numericanswer__numeric')
+                ),
+                When(
+                    question__question_type__name='Text',
+                    then=F('textanswer__text')
+                ),
+                default=False,
+                output_field=models.CharField()
+            ),
+        ).values(
+            'question_id',
+            'question__question_type__name',
+            'question__statement',
+            'answer'
+        )
+
+        # TODO: make answer dynamic

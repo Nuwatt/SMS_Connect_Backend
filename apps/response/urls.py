@@ -28,4 +28,9 @@ urlpatterns = [
         views.ListQuestionnaireResponseView.as_view(),
         name='list-questionnaire-response'
     ),
+    path(
+        'answer/questionnaire/<str:questionnaire_id>/agent-user/<str:agent_user_id>/list',
+        views.ListQuestionnaireAnswerView.as_view(),
+        name='list-questionnaire-answer'
+    ),
 ]
