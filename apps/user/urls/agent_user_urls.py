@@ -37,6 +37,11 @@ urlpatterns = [
         name='list-agent-user'
     ),
     path(
+        'basic-list',
+        agent_user_views.BasicListAgentUserView.as_view(),
+        name='basic-list-agent-user'
+    ),
+    path(
         'import',
         agent_user_views.ImportAgentUserView.as_view(),
         name='import-agent-user'

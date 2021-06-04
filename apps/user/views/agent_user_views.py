@@ -184,3 +184,13 @@ class ImportAgentUserView(generics.CreateAPIView):
     @swagger_auto_schema(responses={200: MessageResponseSerializer()})
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class BasicListAgentUserView(generics.ListAPIView):
+    """
+    Use this end-point to list all agent with basic details
+    """
+    serializer_class = agent_user_serializers.BasicListAgentUserSerializer
+
+    def get_queryset(self):
+        return agent_user_usecases.ListAgentUserUseCase().execute()

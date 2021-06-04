@@ -133,3 +133,8 @@ class AgentUserLoginResponseSerializer(UserLoginResponseSerializer):
 
 class UploadAgentUserAvatarSerializer(AvatarSerializer):
     pass
+
+
+class BasicListAgentUserSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    username = serializers.CharField(source='user.username')

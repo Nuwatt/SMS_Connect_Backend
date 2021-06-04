@@ -35,7 +35,9 @@ class ListAgentUserUseCase(usecases.BaseUseCase):
         return self._agent_users
 
     def _factory(self):
-        self._agent_users = AgentUser.objects.unarchived()
+        self._agent_users = AgentUser.objects.unarchived().select_related(
+            'user'
+        )
 
 
 class RegisterAgentUserUseCase(usecases.CreateUseCase):
