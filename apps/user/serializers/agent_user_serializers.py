@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_serializer_method
 
 from rest_framework import serializers
 
@@ -137,4 +138,12 @@ class UploadAgentUserAvatarSerializer(AvatarSerializer):
 
 class BasicListAgentUserSerializer(serializers.Serializer):
     id = serializers.CharField()
-    username = serializers.CharField(source='user.username')
+    name = serializers.SerializerMethodField()
+
+    @swagger_serializer_method(serializer_or_field=serializers.CharField())
+    def get_name(self, instance):
+        user = instance.user
+        return '{}({})'.format(
+            user.fullname,
+            user.username
+        )
