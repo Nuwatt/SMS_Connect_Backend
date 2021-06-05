@@ -113,7 +113,7 @@ class ImportQuestionUseCase(usecases.ImportCSVUseCase):
         super().__init__(serializer)
         self._questionnaire = questionnaire
 
-    valid_columns = ['Question Type', 'Question Text', 'Options', 'Brand', 'SKU']
+    valid_columns = ['Question Type', 'Question Text', 'Options', 'SKU']
     null_columns = ['Options']
 
     def _factory(self):
@@ -170,7 +170,7 @@ class ImportQuestionUseCase(usecases.ImportCSVUseCase):
 
 
 class ExportQuestionUseCase(usecases.BaseUseCase):
-    columns = ['Question Type', 'Question Text', 'Options', 'Brand', 'SKU']
+    columns = ['Question Type', 'Question Text', 'Options', 'SKU']
 
     def __init__(self, questionnaire: Questionnaire):
         self._questionnaire = questionnaire
@@ -195,7 +195,6 @@ class ExportQuestionUseCase(usecases.BaseUseCase):
                 question.question_type,
                 question.statement,
                 ','.join(options),
-                question.sku.brand,
                 question.sku
             ])
         return response
