@@ -32,7 +32,7 @@ class SummitQuestionnaireResponseSerializer(serializers.ModelSerializer):
     text_answer = serializers.CharField(required=False)
     numeric_answer = serializers.FloatField(required=False)
     image_answer = serializers.ListSerializer(
-        child=serializers.ImageField(),
+        child=serializers.CharField(),
         required=False
     )
     choice_answer = serializers.PrimaryKeyRelatedField(

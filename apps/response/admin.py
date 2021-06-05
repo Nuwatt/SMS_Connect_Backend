@@ -63,12 +63,15 @@ class NumericAnswerAdmin(BaseModelAdmin):
 @admin.register(models.OptionAnswer)
 class OptionAnswerAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
-        'option',
+        'text',
     )
     readonly_fields = (
         'answer',
         'option',
     )
+
+    def text(self, instance):
+        return instance.option.option
 
 
 @admin.register(models.ChoiceAnswer)

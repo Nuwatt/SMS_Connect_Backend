@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.db import models
-from django.db.models import F, Case, When
+from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -68,6 +67,7 @@ class SummitQuestionnaireResponseUseCase(usecases.CreateUseCase):
         super().__init__(serializer)
         self._response = response
 
+    @transaction.atomic()
     def _factory(self):
         for data in self._data.get('data'):
             question_type = data.get('question').question_type
@@ -80,8 +80,8 @@ class SummitQuestionnaireResponseUseCase(usecases.CreateUseCase):
             elif question_type.has_options:
                 for option in data.get('option_answer'):
                     OptionAnswer.objects.create(answer=answer, option=option)
-            elif question_type.name == 'Pictures':
-                for picture in data.get('picture_answer'):
+            elif question_type.name.lower() == 'image':
+                for picture in data.get('image_answer'):
                     ImageAnswer.objects.create(answer=answer, image=picture)
             elif question_type.name.lower() == 'text':
                 TextAnswer.objects.create(answer=answer, text=data.get('text_answer'))
