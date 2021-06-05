@@ -1,4 +1,6 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
+from rest_framework.exceptions import ValidationError
 
 from apps.localize.models import Country, City
 from apps.market.exceptions import RetailerNotFound
@@ -24,7 +26,18 @@ class GetRetailerUseCase(usecases.BaseUseCase):
 
 class AddRetailerUseCase(usecases.CreateUseCase):
     def _factory(self):
-        Retailer.objects.create(**self._data)
+        retailers = []
+        for name in self._data.get('name'):
+            retailer = Retailer(
+                name=name,
+                channel=self._data.get('channel')
+            )
+            try:
+                retailer.full_clean()
+            except DjangoValidationError as e:
+                raise ValidationError(e.message_dict)
+            retailers.append(retailer)
+        Retailer.objects.bulk_create(retailers)
 
 
 class UpdateRetailerUseCase(usecases.UpdateUseCase):

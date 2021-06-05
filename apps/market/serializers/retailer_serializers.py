@@ -11,6 +11,8 @@ class RetailerSerializer(serializers.ModelSerializer):
 
 
 class AddRetailerSerializer(RetailerSerializer):
+    name = serializers.ListSerializer(child=serializers.CharField())
+
     class Meta(RetailerSerializer.Meta):
         fields = (
             'name',
@@ -18,17 +20,23 @@ class AddRetailerSerializer(RetailerSerializer):
         )
 
 
-class ListRetailerSerializer(AddRetailerSerializer):
+class ListRetailerSerializer(RetailerSerializer):
     channel = IdNameSerializer()
 
-    class Meta(AddRetailerSerializer.Meta):
+    class Meta(RetailerSerializer.Meta):
         fields = (
-                     'id',
-                 ) + AddRetailerSerializer.Meta.fields
+            'id',
+            'name',
+            'channel',
+        )
 
 
-class UpdateRetailerSerializer(AddRetailerSerializer):
-    pass
+class UpdateRetailerSerializer(RetailerSerializer):
+    class Meta(RetailerSerializer.Meta):
+        fields = (
+            'name',
+            'channel',
+        )
 
 
 class ImportRetailerSerializer(CSVFileInputSerializer):
