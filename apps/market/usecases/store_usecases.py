@@ -71,6 +71,19 @@ class ListStoreUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._stores = Store.objects.unarchived().select_related(
+            'retailer',
+            'city',
+            'city__country'
+        )
+
+
+class ListStoreForAgentUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._stores
+
+    def _factory(self):
+        self._stores = Store.objects.unarchived().select_related(
             'retailer'
         )
 

@@ -50,6 +50,7 @@ class AddStoreSerializer(StoreSerializer):
 class ListStoreSerializer(StoreSerializer):
     retailer = IdNameSerializer()
     city = IdNameSerializer()
+    country = IdNameSerializer(source='city.country')
 
     class Meta(StoreSerializer.Meta):
         fields = (
@@ -57,6 +58,7 @@ class ListStoreSerializer(StoreSerializer):
             'retailer',
             'name',
             'city',
+            'country',
         )
 
 

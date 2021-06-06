@@ -36,6 +36,9 @@ class ListStoreView(generics.ListAPIView):
     filterset_class = StoreFilter
 
     def get_queryset(self):
+        user = self.request.user
+        if user.is_agent_user:
+            return store_usecases.ListStoreForAgentUseCase().execute()
         return store_usecases.ListStoreUseCase().execute()
 
     def get_serializer_class(self):
