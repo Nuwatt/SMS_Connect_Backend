@@ -39,6 +39,17 @@ class ListRetailerView(generics.ListAPIView):
         return retailer_usecases.ListRetailerUseCase().execute()
 
 
+class BasicListRetailerView(generics.ListAPIView):
+    """
+    Use this end-point to list all retailer with basic list
+    """
+    serializer_class = retailer_serializers.BasicListRetailerSerializer
+    filterset_class = RetailerFilter
+
+    def get_queryset(self):
+        return retailer_usecases.BasicListRetailerUseCase().execute()
+
+
 class UpdateRetailerView(generics.UpdateAPIView, RetailerMixin):
     """
     Use this end-point to update specific retailer

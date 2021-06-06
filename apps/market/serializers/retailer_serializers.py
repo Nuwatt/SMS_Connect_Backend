@@ -31,6 +31,15 @@ class ListRetailerSerializer(RetailerSerializer):
         )
 
 
+class BasicListRetailerSerializer(RetailerSerializer):
+
+    class Meta(RetailerSerializer.Meta):
+        fields = (
+            'id',
+            'name'
+        )
+
+
 class UpdateRetailerSerializer(RetailerSerializer):
     class Meta(RetailerSerializer.Meta):
         fields = (

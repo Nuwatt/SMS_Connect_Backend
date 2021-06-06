@@ -56,6 +56,17 @@ class ListRetailerUseCase(usecases.BaseUseCase):
         return self._retailers
 
     def _factory(self):
+        self._retailers = Retailer.objects.unarchived().select_related(
+            'channel'
+        )
+
+
+class BasicListRetailerUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._retailers
+
+    def _factory(self):
         self._retailers = Retailer.objects.unarchived()
 
 

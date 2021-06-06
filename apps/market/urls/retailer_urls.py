@@ -14,6 +14,11 @@ urlpatterns = [
         name='list-retailer'
     ),
     path(
+        'basic-list',
+        retailer_views.BasicListRetailerView.as_view(),
+        name='basic-list-retailer'
+    ),
+    path(
         '<str:retailer_id>/update',
         retailer_views.UpdateRetailerView.as_view(),
         name='update-retailer'
