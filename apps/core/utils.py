@@ -23,6 +23,14 @@ def generate_custom_id(initial: str, model):
     return custom_id
 
 
+def last_id_for_bulk_create(initial: str, model):
+    try:
+        last_record = model.objects.latest('created')
+        return int(last_record.id[len(initial):])
+    except model.DoesNotExist:
+        return 0
+
+
 def update(instance, data):
     info = model_meta.get_field_info(instance)
 
