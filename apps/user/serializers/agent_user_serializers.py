@@ -95,12 +95,14 @@ class UpdateAgentUserSerializer(serializers.Serializer):
     fullname = serializers.CharField(write_only=True)
     nationality = serializers.PrimaryKeyRelatedField(
         queryset=Country.objects.all(),
-        write_only=True
+        write_only=True,
+        required=False
     )
-    contact_number = PhoneNumberField(write_only=True)
+    contact_number = PhoneNumberField(write_only=True, required=False)
     date_of_birth = serializers.DateField(
         validators=[validate_date_of_birth],
-        write_only=True
+        write_only=True,
+        required=True
     )
     operation_city = serializers.PrimaryKeyRelatedField(many=True, queryset=City.objects.all())
     operation_country = serializers.PrimaryKeyRelatedField(many=True, queryset=Country.objects.all())
