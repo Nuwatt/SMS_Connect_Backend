@@ -16,9 +16,10 @@ class AddStoreView(generics.CreateAPIView):
             serializer=serializer
         ).execute()
 
+
 class AddStoreRetailerView(generics.CreateAPIView):
     """
-    Use this end-point to add new store with retialer
+    Use this end-point to add new store with retailer
     """
     serializer_class = store_serializers.AddStoreRetailerSerializer
 

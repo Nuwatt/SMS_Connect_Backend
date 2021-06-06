@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.core.serializers import IdNameSerializer
-from apps.market.models import Store
+from apps.market.models import Store, Channel
 
 
 class StoreSerializer(serializers.ModelSerializer):
@@ -12,32 +12,20 @@ class StoreSerializer(serializers.ModelSerializer):
         model = Store
         fields = '__all__'
 
+
 class AddStoreRetailerSerializer(StoreSerializer):
     # for adding store and retailer
-    name = serializers.ListSerializer(child=serializers.CharField())
-    retailer = serializers.ListSerializer(child=serializers.CharField())
+    channel = serializers.PrimaryKeyRelatedField(queryset=Channel.objects.unarchived())
+    retailer = serializers.CharField()
 
-    class meta(StoreSerializer.Meta):
+    class Meta(StoreSerializer.Meta):
         fields = (
             'name',
             'channel',
             'retailer',
             'city'
         )
-    
-    default_error_messages = {
-        'empty_name': _('Requires in list.'),
-        'empty_retailer': _('Retailer name is required')
 
-    }
-
-    def validate_name(self, data):
-        if len(data.name) == 0:
-            self.fail('empty_name')
-        if len(data.retailer) == 0:
-            self.fail('empty_retailer')
-        return data
-    
 
 class AddStoreSerializer(StoreSerializer):
     name = serializers.ListSerializer(child=serializers.CharField())

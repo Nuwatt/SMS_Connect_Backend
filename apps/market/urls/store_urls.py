@@ -11,8 +11,8 @@ urlpatterns = [
     ),
     path(
         'agent-user/add',
-        store_views.AddStoreView.as_view(),
-        name='add-store'
+        store_views.AddStoreRetailerView.as_view(),
+        name='add-store-by-agent-user'
 
     ),
     path(
