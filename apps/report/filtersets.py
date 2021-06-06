@@ -111,11 +111,6 @@ class AnswerPerSKUFilter(AnswerFilter):
 
 
 class TotalVisitFilter(AnswerFilter):
-    sku = IdInFilter(
-        field_name='sku',
-        label='sku',
-        lookup_expr='in'
-    )
     city = IdInFilter(
         field_name='id',
         label='city',

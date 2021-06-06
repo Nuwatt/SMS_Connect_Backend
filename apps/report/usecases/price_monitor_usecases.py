@@ -259,13 +259,10 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = City.objects.annotate(
-            sku=F('store__response__answer__question__sku'),
-        ).values('sku').distinct().annotate(
-            sku_name=F('store__response__answer__question__sku__name'),
             value=Count(
                 'store__response',
                 filter=Q(
                     store__response__questionnaire__questionnaire_type__name='Price Monitor',
                 )
             )
-        ).values('name', 'value', 'sku_name').filter(value__gt=0)
+        ).values('name', 'value').filter(value__gt=0)

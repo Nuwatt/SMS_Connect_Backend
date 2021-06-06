@@ -234,5 +234,4 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
                     store__response__questionnaire__questionnaire_type__name='Out Of Stock',
                 )
             ),
-            sku=F('store__response__answer__question__sku'),
         ).values('name', 'value',).filter(value__gt=0)
