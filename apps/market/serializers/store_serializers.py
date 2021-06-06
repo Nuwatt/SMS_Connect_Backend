@@ -78,4 +78,5 @@ class UpdateStoreSerializer(StoreSerializer):
         fields = (
             'name',
             'retailer',
+            'city'
         )
