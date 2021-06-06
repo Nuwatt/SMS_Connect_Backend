@@ -1,6 +1,7 @@
 from apps.core import usecases
 from apps.market.exceptions import ChannelNotFound
-from apps.market.models import Store
+from apps.market.models import Channel, Store
+from apps.market.models import Retailer
 
 
 class GetStoreUseCase(usecases.BaseUseCase):
@@ -25,6 +26,28 @@ class AddStoreUseCase(usecases.CreateUseCase):
         for name in store_names:
             store = Store(
                 retailer=self._data.get('retailer'),
+                city=self._data.get('city'),
+                name=name
+            )
+            stores.append(store)
+        Store.objects.bulk_create(stores)
+
+
+class AddStoreRetailerUseCase(usecases.CreateUseCase):
+    def _factory(self):
+        store_names = self._data.get('name')
+        retailer_name = self._data.get('retailer')
+        if retailer_name == "Others":
+            retailer, created = Retailer.objects.get_or_create(
+                name=self._data.get('retailer'),
+                Channel = self._data.get('channel')
+            )
+        else:
+            retailer = retailer_name
+        stores = []
+        for name in store_names:
+            store = Store(
+                retailer,
                 city=self._data.get('city'),
                 name=name
             )
