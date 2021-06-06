@@ -1,4 +1,4 @@
-from django.db.models import Count, Max, Min, Avg, OuterRef, Subquery, F
+from django.db.models import Count, Max, Min, Avg, OuterRef, Subquery, F, Q
 from django.db.models.functions import TruncMonth
 
 from apps.core import usecases
@@ -124,7 +124,7 @@ class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
         ).values('name').annotate(
-            country=F('question__answer__response__retailer__country__name'),
+            country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
             value=Max('question__answer__numericanswer__numeric'),
         ).values(
@@ -143,7 +143,7 @@ class SKUCountryMinReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
         ).values('name').annotate(
-            country=F('question__answer__response__retailer__country__name'),
+            country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
             value=Min('question__answer__numericanswer__numeric'),
         ).values(
@@ -162,7 +162,7 @@ class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
         ).values('name').annotate(
-            country=F('question__answer__response__retailer__country__name'),
+            country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
             value=Avg('question__answer__numericanswer__numeric'),
         ).values(
@@ -189,7 +189,7 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
         ).annotate(
-            country=F('question__answer__response__retailer__country__name'),
+            country=F('question__answer__response__store__city__country__name'),
         ).values(
             'country',
         ).distinct().annotate(
@@ -210,7 +210,7 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
         ).values('name').annotate(
-            country=F('question__answer__response__retailer__country__name'),
+            country=F('question__answer__response__store__city__name'),
         ).values('name', 'country').annotate(
             value=Count('question__answer__response'),
         ).values(
@@ -229,7 +229,7 @@ class AnswerPerCityReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
         ).values('name').annotate(
-            city=F('question__answer__response__retailer__city__name'),
+            city=F('question__answer__response__store__city__name'),
         ).values('name', 'city').annotate(
             value=Count('question__answer__response'),
         ).values(
@@ -246,7 +246,9 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.annotate(
-            value=Count('question__answer__response')
+            value=Count(
+                'question__answer__response',
+            )
         ).values('name', 'value')
 
 
@@ -257,5 +259,13 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = City.objects.annotate(
-            value=Count('retailer__response')
-        ).values('name', 'value').filter(value__gt=0)
+            sku=F('store__response__answer__question__sku'),
+        ).values('sku').distinct().annotate(
+            sku_name=F('store__response__answer__question__sku__name'),
+            value=Count(
+                'store__response',
+                filter=Q(
+                    store__response__questionnaire__questionnaire_type__name='Price Monitor',
+                )
+            )
+        ).values('name', 'value', 'sku_name').filter(value__gt=0)

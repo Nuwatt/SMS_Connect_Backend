@@ -46,3 +46,9 @@ class AnswerPerCityReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='name')
     city = serializers.CharField()
     value = serializers.FloatField()
+
+
+class TotalVisitReportSerializer(serializers.Serializer):
+    sku = serializers.CharField(source='sku_name')
+    city = serializers.CharField(source='name')
+    value = serializers.IntegerField()

@@ -2,7 +2,7 @@ from apps.core import generics
 from apps.report.filtersets import (
     AnswerPerSKUFilter,
     AnswerPerCityFilter,
-    SKUReportFilter
+    SKUReportFilter, TotalVisitFilter
 )
 from apps.report.serializers import price_monitor_serializers
 from apps.report.usecases import price_monitor_usecases
@@ -165,8 +165,8 @@ class TotalVisitReportView(generics.ListAPIView):
     Use this end-point to list report of total visit for price monitor
     """
     pagination_class = None
-    serializer_class = price_monitor_serializers.AnswerReportSerializer
-    filterset_class = AnswerPerCityFilter
+    serializer_class = price_monitor_serializers.TotalVisitReportSerializer
+    filterset_class = TotalVisitFilter
 
     def get_queryset(self):
         return price_monitor_usecases.TotalVisitReportUseCase().execute()

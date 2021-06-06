@@ -1,0 +1,56 @@
+from django.urls import path, include
+
+from apps.report.views import out_of_stock_views
+
+urlpatterns = [
+    path(
+        'overall',
+        out_of_stock_views.SKUOverallReportView.as_view(),
+        name='sku-overall-out-of-stock-report'
+    ),
+    path(
+        'month-available',
+        out_of_stock_views.SKUMonthAvailableReportView.as_view(),
+        name='sku-month-available-report'
+    ),
+    path(
+        'month-not-available',
+        out_of_stock_views.SKUMonthNotAvailableReportView.as_view(),
+        name='sku-month-not-available-report'
+    ),
+    path(
+        'month-less',
+        out_of_stock_views.SKUMonthLessReportView.as_view(),
+        name='sku-month-less-report'
+    ),
+    path(
+        'city-available',
+        out_of_stock_views.SKUCityAvailableReportView.as_view(),
+        name='sku-city-available-report'
+    ),
+    path(
+        'city-not-available',
+        out_of_stock_views.SKUCityNotAvailableReportView.as_view(),
+        name='sku-city-not-available-report'
+    ),
+    path(
+        'city-less',
+        out_of_stock_views.SKUCityLessReportView.as_view(),
+        name='sku-city-less-report'
+    ),
+    path(
+        'store-less',
+        out_of_stock_views.SKUStoreLessReportView.as_view(),
+        name='sku-store-less-report'
+    ),
+    path(
+        'retailer-less',
+        out_of_stock_views.SKURetailerLessReportView.as_view(),
+        name='sku-retailer-less-report'
+    ),
+    path(
+        'total-visit',
+        out_of_stock_views.TotalVisitReportView.as_view(),
+        name='total-visit-report'
+    ),
+]

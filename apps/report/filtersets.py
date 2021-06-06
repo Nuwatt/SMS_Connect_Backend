@@ -11,7 +11,7 @@ class SKUMinMaxFilter(filters.FilterSet):
     )
     store = IdInFilter(
         field_name='answer__response__store',
-        label='retailer',
+        label='store',
         lookup_expr='in'
 
     )
@@ -40,7 +40,7 @@ class SKUReportFilter(filters.FilterSet):
     )
     store = IdInFilter(
         field_name='question__answer__response__store',
-        label='retailer',
+        label='store',
         lookup_expr='in'
 
     )
@@ -62,19 +62,26 @@ class SKUReportFilter(filters.FilterSet):
 
 
 class AnswerFilter(filters.FilterSet):
-    sku = filters.CharFilter(
-        field_name='retailer__response__answer__question__sku',
-        label='sku'
+    sku = IdInFilter(
+        field_name='store__response__answer__question__sku',
+        label='sku',
+        lookup_expr='in'
     )
     from_date = filters.DateFilter(
-        field_name='retailer__response__completed_at__date',
+        field_name='store__response__completed_at__date',
         label='from date',
         lookup_expr='gte'
     )
     till_date = filters.DateFilter(
-        field_name='retailer__response__completed_at__date',
+        field_name='store__response__completed_at__date',
         label='till date',
         lookup_expr='lte'
+    )
+    store = IdInFilter(
+        field_name='store',
+        label='store',
+        lookup_expr='in'
+
     )
 
 
@@ -99,5 +106,18 @@ class AnswerPerSKUFilter(AnswerFilter):
     sku = IdInFilter(
         field_name='id',
         label='sku',
+        lookup_expr='in'
+    )
+
+
+class TotalVisitFilter(AnswerFilter):
+    sku = IdInFilter(
+        field_name='sku',
+        label='sku',
+        lookup_expr='in'
+    )
+    city = IdInFilter(
+        field_name='id',
+        label='city',
         lookup_expr='in'
     )
