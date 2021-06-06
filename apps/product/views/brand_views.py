@@ -1,4 +1,5 @@
 from apps.core import generics
+from apps.product.filtersets import BrandFilter
 from apps.product.mixins import BrandMixin
 from apps.product.serializers import brand_serializers
 from apps.product.usecases import brand_usecases
@@ -21,6 +22,7 @@ class ListBrandView(generics.ListAPIView):
     Use this end-point to list all product
     """
     serializer_class = brand_serializers.ListBrandSerializer
+    filterset_class = BrandFilter
 
     def get_queryset(self):
         return brand_usecases.ListBrandUseCase().execute()

@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from apps.product.models import SKU
+from apps.product.models import SKU, Brand
 
 
 class SKUFilter(filters.FilterSet):
@@ -12,5 +12,13 @@ class SKUFilter(filters.FilterSet):
         model = SKU
         fields = [
             'brand',
+            'category',
+        ]
+
+
+class BrandFilter(filters.FilterSet):
+    class Meta:
+        model = Brand
+        fields = [
             'category',
         ]
