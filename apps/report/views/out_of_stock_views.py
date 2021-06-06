@@ -1,7 +1,8 @@
 from apps.core import generics
-from apps.report.filtersets import SKUReportFilter, AnswerPerCityFilter, TotalVisitFilter
+from apps.report.filtersets import SKUReportFilter, TotalVisitFilter
 
 from apps.report.serializers import out_of_stock_serializers
+from apps.report.serializers.price_monitor_serializers import SKUMonthReportSerializer, TotalVisitReportSerializer
 from apps.report.usecases import out_of_stock_usecases
 
 
@@ -27,7 +28,7 @@ class SKUMonthAvailableReportView(OutOfStockReportView):
     """
     Use this end-point to list report of month vs available sku for out of stock
     """
-    serializer_class = out_of_stock_serializers.SKUMonthReportSerializer
+    serializer_class = SKUMonthReportSerializer
 
     def get_queryset(self):
         return out_of_stock_usecases.SKUMonthAvailableReportUseCase().execute()
@@ -37,7 +38,7 @@ class SKUMonthNotAvailableReportView(OutOfStockReportView):
     """
     Use this end-point to list report of month vs not available sku for out of stock
     """
-    serializer_class = out_of_stock_serializers.SKUMonthReportSerializer
+    serializer_class = SKUMonthReportSerializer
 
     def get_queryset(self):
         return out_of_stock_usecases.SKUMonthNotAvailableReportUseCase().execute()
@@ -47,7 +48,7 @@ class SKUMonthLessReportView(OutOfStockReportView):
     """
     Use this end-point to list report of month vs less than 6 sku for out of stock
     """
-    serializer_class = out_of_stock_serializers.SKUMonthReportSerializer
+    serializer_class = SKUMonthReportSerializer
 
     def get_queryset(self):
         return out_of_stock_usecases.SKUMonthLessReportUseCase().execute()
@@ -107,7 +108,7 @@ class TotalVisitReportView(OutOfStockReportView):
     """
     Use this end-point to list report of total visit for out of stock
     """
-    serializer_class = out_of_stock_serializers.TotalVisitReportSerializer
+    serializer_class = TotalVisitReportSerializer
     filterset_class = TotalVisitFilter
 
     def get_queryset(self):
