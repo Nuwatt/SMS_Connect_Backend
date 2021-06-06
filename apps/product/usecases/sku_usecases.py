@@ -27,15 +27,15 @@ class AddSKUUseCase(usecases.CreateUseCase):
         sku_names = self._data.get('name')
         skus = []
         for name in sku_names:
-            store = SKU(
+            sku = SKU(
                 brand=self._data.get('brand'),
                 name=name
             )
             try:
-                store.full_clean()
+                sku.full_clean()
             except DjangoValidationError as e:
                 raise ValidationError(e.message_dict)
-            skus.append(store)
+            skus.append(sku)
         SKU.objects.bulk_create(skus)
 
 
