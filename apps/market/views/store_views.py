@@ -17,6 +17,18 @@ class AddStoreView(generics.CreateAPIView):
         ).execute()
 
 
+class AddStoreRetailerView(generics.CreateAPIView):
+    """
+    Use this end-point to add new store with retailer
+    """
+    serializer_class = store_serializers.AddStoreRetailerSerializer
+
+    def perform_create(self, serializer):
+        return store_usecases.AddStoreRetailerUseCase(
+            serializer=serializer
+        ).execute()
+
+
 class ListStoreView(generics.ListAPIView):
     """
     Use this end-point to list all store

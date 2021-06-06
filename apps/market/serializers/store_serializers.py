@@ -1,15 +1,30 @@
+from django.db.models import fields
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
 from apps.core.serializers import IdNameSerializer
-from apps.market.models import Store
+from apps.market.models import Store, Channel
 
 
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
         fields = '__all__'
+
+
+class AddStoreRetailerSerializer(StoreSerializer):
+    # for adding store and retailer
+    channel = serializers.PrimaryKeyRelatedField(queryset=Channel.objects.unarchived())
+    retailer = serializers.CharField()
+
+    class Meta(StoreSerializer.Meta):
+        fields = (
+            'name',
+            'channel',
+            'retailer',
+            'city'
+        )
 
 
 class AddStoreSerializer(StoreSerializer):

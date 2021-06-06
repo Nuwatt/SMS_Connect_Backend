@@ -1,6 +1,10 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework.exceptions import ValidationError
+
 from apps.core import usecases
 from apps.market.exceptions import ChannelNotFound
-from apps.market.models import Store
+from apps.market.models import Channel, Store
+from apps.market.models import Retailer
 
 
 class GetStoreUseCase(usecases.BaseUseCase):
@@ -30,6 +34,24 @@ class AddStoreUseCase(usecases.CreateUseCase):
             )
             stores.append(store)
         Store.objects.bulk_create(stores)
+
+
+class AddStoreRetailerUseCase(usecases.CreateUseCase):
+    def _factory(self):
+        retailer, created = Retailer.objects.get_or_create(
+            name=self._data.get('retailer'),
+            channel=self._data.get('channel')
+        )
+        store = Store(
+            retailer=retailer,
+            city=self._data.get('city'),
+            name=self._data.get('name')
+        )
+        try:
+            store.full_clean()
+            store.save()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
 
 class UpdateStoreUseCase(usecases.UpdateUseCase):
