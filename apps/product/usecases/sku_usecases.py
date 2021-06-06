@@ -31,8 +31,9 @@ class AddSKUUseCase(usecases.CreateUseCase):
         last_id = last_id_for_bulk_create(initial='SKU', model=SKU)
 
         for name in sku_names:
+            next_id = last_id + 1
             sku = SKU(
-                id='SKU{0:04}'.format(last_id + 1),
+                id='SKU{0:04}'.format(next_id),
                 brand=self._data.get('brand'),
                 name=name
             )
@@ -41,6 +42,7 @@ class AddSKUUseCase(usecases.CreateUseCase):
             except DjangoValidationError as e:
                 raise ValidationError(e.message_dict)
             skus.append(sku)
+            last_id = next_id
         SKU.objects.bulk_create(skus)
 
 
