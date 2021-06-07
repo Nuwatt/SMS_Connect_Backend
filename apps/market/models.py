@@ -12,7 +12,7 @@ class Channel(BaseModel):
 
 
 class Retailer(BaseModel):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     channel = models.ForeignKey(
         Channel,
         on_delete=models.CASCADE,
@@ -21,6 +21,14 @@ class Retailer(BaseModel):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'channel'],
+                name='unique_retailer'
+            )
+        ]
 
 
 class Store(BaseModel):
