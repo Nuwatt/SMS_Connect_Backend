@@ -1,8 +1,6 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_serializer_method
-
 from rest_framework import serializers
 
 from apps.core.serializer_fields import PhoneNumberField
@@ -132,9 +130,9 @@ class AgentUserLoginSerializer(UserLoginSerializer):
 
 
 class BucketDetailSerializer(serializers.Serializer):
-    name = serializers.CharField(default=settings.AWS_STORAGE_BUCKET_NAME)
-    assess_key = serializers.CharField(default=settings.AWS_ACCESS_KEY_ID)
-    secret_key = serializers.CharField(default=settings.AWS_SECRET_ACCESS_KEY)
+    name = serializers.CharField()
+    assess_key = serializers.CharField()
+    secret_key = serializers.CharField()
 
 
 class AgentUserLoginResponseSerializer(UserLoginResponseSerializer):

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction, IntegrityError
 from django.utils.translation import gettext_lazy as _
@@ -115,6 +116,15 @@ class DeleteAgentUserUseCase(usecases.DeleteUseCase):
 
 
 class AgentUserLoginUseCase(UserLoginUseCase):
+
+    def _factory(self):
+        super(AgentUserLoginUseCase, self)._factory()
+        self._result['bucket_detail'] = {
+            'name': settings.AWS_STORAGE_BUCKET_NAME,
+            'assess_key': settings.AWS_ACCESS_KEY_ID,
+            'secret_key': settings.AWS_SECRET_ACCESS_KEY
+        }
+
     def _validate(self, user):
         if not user.is_agent_user:
             raise LoginFailed
