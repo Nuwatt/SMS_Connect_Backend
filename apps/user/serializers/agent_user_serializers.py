@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_serializer_method
@@ -130,8 +131,14 @@ class AgentUserLoginSerializer(UserLoginSerializer):
     pass
 
 
+class BucketDetailSerializer(serializers.Serializer):
+    name = serializers.CharField(default=settings.AWS_STORAGE_BUCKET_NAME)
+    assess_key = serializers.CharField(default=settings.AWS_ACCESS_KEY_ID)
+    secret_key = serializers.CharField(default=settings.AWS_SECRET_ACCESS_KEY)
+
+
 class AgentUserLoginResponseSerializer(UserLoginResponseSerializer):
-    pass
+    bucket_detail = BucketDetailSerializer()
 
 
 class UploadAgentUserAvatarSerializer(AvatarSerializer):
