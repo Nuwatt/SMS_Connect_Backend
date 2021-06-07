@@ -8,6 +8,7 @@ class StoreFilter(filters.FilterSet):
         model = Store
         fields = [
             'retailer',
+            'city'
         ]
 
 
