@@ -89,29 +89,30 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
     def _factory(self):
         self._questionnaires = Questionnaire.objects.unarchived().select_related(
             'questionnaire_type'
-        ).annotate(
-            eligible=Case(
-                When(
-                    response__isnull=True,
-                    then=True
-                ),
-                When(
-                    response__agent=self._agent_user,
-                    response__completed_at__gte=now() - F('repeat_cycle'),
-                    can_repeat=True,
-                    then=True
-                ),
-                When(
-                    response__agent=self._agent_user,
-                    response__is_completed=False,
-                    then=True
-                ),
-                default=False,
-                output_field=models.BooleanField()
-            ),
-        ).filter(
-            eligible=True
         ).filter(
             Q(city__in=self._agent_user.operation_city.all()) |
             Q(tags__in=[self._agent_user])
         ).distinct()
+        # ).annotate(
+        #     eligible=Case(
+        #         When(
+        #             response__isnull=True,
+        #             then=True
+        #         ),
+        #         When(
+        #             response__agent=self._agent_user,
+        #             response__completed_at__gte=now() - F('repeat_cycle'),
+        #             can_repeat=True,
+        #             then=True
+        #         ),
+        #         When(
+        #             response__agent=self._agent_user,
+        #             response__is_completed=False,
+        #             then=True
+        #         ),
+        #         default=False,
+        #         output_field=models.BooleanField()
+        #     ),
+        # ).filter(
+        #     eligible=True
+
