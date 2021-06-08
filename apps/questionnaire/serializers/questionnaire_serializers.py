@@ -45,7 +45,7 @@ class QuestionnaireDetailSerializer(QuestionnaireSerializer):
 
     @swagger_serializer_method(serializer_or_field=serializers.ListSerializer(child=serializers.CharField()))
     def get_country(self, instance):
-        return Country.objects.filter(city__in=instance.city.all()).values_list('name', flat=True).distinct()
+        return Country.objects.filter(city__in=instance.city.all()).values_list('id', flat=True).distinct()
 
     @swagger_serializer_method(serializer_or_field=serializers.IntegerField())
     def get_repeat_cycle(self, instance):
