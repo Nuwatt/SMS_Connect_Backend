@@ -94,8 +94,8 @@ class CSVFileValidator(Validator):
 
 @deconstructible
 class ImageValidator(Validator):
-    message = _('The maximum image file size that can be uploaded is 4MB')
-    file_size = 4194304
+    message = _('The maximum image file size that can be uploaded is 8MB')
+    file_size = 8194304
 
     def __call__(self, value):
         if not value:
