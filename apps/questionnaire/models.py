@@ -71,6 +71,6 @@ class Questionnaire(BaseModel):
 
     def has_access_for_agent(self, agent):
         if agent not in self.tags.all():
-            if not any(item in self.country.all() for item in agent.operation_country.all()):
+            if not any(item in self.city.all() for item in agent.operation_city.all()):
                 return False
         return True
