@@ -141,6 +141,10 @@ class UploadAgentUserAvatarUseCase(usecases.CreateUseCase):
         user.avatar = self._data.get('avatar')
         user.save()
 
+    def execute(self):
+        super(UploadAgentUserAvatarUseCase, self).execute()
+        return self._agent_user
+
 
 class ImportAgentUserUseCase(usecases.ImportCSVUseCase):
     valid_columns = ['Field Worker Name', 'Country of Operation', 'City of Operation', 'Email', 'Password']
