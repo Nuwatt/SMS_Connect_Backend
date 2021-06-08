@@ -48,7 +48,6 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
         self._response, created = Response.objects.get_or_create(
             agent=self._agent_user,
             questionnaire=self._questionnaire,
-            is_completed=False,
             defaults=self._data
         )
         self._response.created = now()
