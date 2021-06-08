@@ -92,13 +92,13 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
         ).annotate(
             eligible=Case(
                 When(
-                    response__agent=self._agent_user,
-                    response__completed_at__gte=now() - F('repeat_cycle'),
-                    can_repeat=True,
+                    response__isnull=True,
                     then=True
                 ),
                 When(
-                    response=None,
+                    response__agent=self._agent_user,
+                    response__completed_at__gte=now() - F('repeat_cycle'),
+                    can_repeat=True,
                     then=True
                 ),
                 When(
