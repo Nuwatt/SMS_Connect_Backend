@@ -56,9 +56,9 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
 
     def is_valid(self):
         if self._agent_user not in self._questionnaire.tags.all():
-            if self._data.get('retailer').country not in self._agent_user.operation_country.all():
+            if self._data.get('store').city not in self._agent_user.operation_city.all():
                 raise DjangoValidationError({
-                    'retailer': _('Agent is not in operation on this retailer.')
+                    'retailer': _('Agent is not in operation on this store.')
                 })
 
 
