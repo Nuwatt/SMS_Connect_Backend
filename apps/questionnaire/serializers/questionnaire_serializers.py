@@ -34,25 +34,12 @@ class AddQuestionnaireSerializer(QuestionnaireSerializer):
 
 
 class QuestionnaireDetailSerializer(QuestionnaireSerializer):
-    class Meta(AddQuestionnaireSerializer.Meta):
-        fields = (
-                     'id',
-                 ) + AddQuestionnaireSerializer.Meta.fields
-
-
-class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
-    number_of_questions = serializers.IntegerField()
-    initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
-    questionnaire_type = serializers.CharField()
     country = serializers.SerializerMethodField()
-    city = serializers.ListSerializer(child=serializers.CharField())
-    tags = serializers.ListSerializer(child=serializers.CharField())
     repeat_cycle = serializers.SerializerMethodField()
 
-    class Meta(QuestionnaireDetailSerializer.Meta):
-        fields = QuestionnaireDetailSerializer.Meta.fields + (
-            'initiated_data',
-            'number_of_questions',
+    class Meta(AddQuestionnaireSerializer.Meta):
+        fields = AddQuestionnaireSerializer.Meta.fields + (
+            'id',
             'country',
         )
 
@@ -67,6 +54,21 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
             if weeks:
                 return weeks
         return None
+
+
+class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
+    number_of_questions = serializers.IntegerField()
+    initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
+    questionnaire_type = serializers.CharField()
+    city = serializers.ListSerializer(child=serializers.CharField())
+    tags = serializers.ListSerializer(child=serializers.CharField())
+
+    class Meta(QuestionnaireDetailSerializer.Meta):
+        fields = QuestionnaireDetailSerializer.Meta.fields + (
+            'initiated_data',
+            'number_of_questions',
+            'country',
+        )
 
 
 class UpdateQuestionnaireSerializer(AddQuestionnaireSerializer):
