@@ -65,10 +65,6 @@ class Questionnaire(BaseModel):
             self.id = generate_custom_id(initial='QU', model=Questionnaire)
         super(Questionnaire, self).save(*args, **kwargs)
 
-    @property
-    def number_of_questions(self):
-        return self.question_set.count()
-
     def has_access_for_agent(self, agent):
         if agent not in self.tags.all():
             if not any(item in self.city.all() for item in agent.operation_city.all()):

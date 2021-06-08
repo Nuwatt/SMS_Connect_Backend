@@ -1,11 +1,10 @@
-from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_serializer_method
-
 from rest_framework import serializers
 
+from apps.core.serializers import IdNameSerializer
 from apps.core.validators import validate_non_zero_integer
-from apps.localize.models import Country
 from apps.questionnaire.models import Questionnaire
+from apps.user.serializers.agent_user_serializers import BasicListAgentUserSerializer
 
 
 class QuestionnaireSerializer(serializers.ModelSerializer):
@@ -35,6 +34,7 @@ class AddQuestionnaireSerializer(QuestionnaireSerializer):
 
 class QuestionnaireDetailSerializer(QuestionnaireSerializer):
     country = serializers.SerializerMethodField()
+    city = IdNameSerializer(many=True)
     repeat_cycle = serializers.SerializerMethodField()
 
     class Meta(AddQuestionnaireSerializer.Meta):
@@ -45,7 +45,11 @@ class QuestionnaireDetailSerializer(QuestionnaireSerializer):
 
     @swagger_serializer_method(serializer_or_field=serializers.ListSerializer(child=serializers.CharField()))
     def get_country(self, instance):
-        return Country.objects.filter(city__in=instance.city.all()).values_list('id', flat=True).distinct()
+        countries = [{
+            'id': item.country.id,
+            'name': item.country.name
+        } for item in instance.city.all()]
+        return IdNameSerializer(countries, many=True).data
 
     @swagger_serializer_method(serializer_or_field=serializers.IntegerField())
     def get_repeat_cycle(self, instance):
@@ -60,8 +64,7 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
     number_of_questions = serializers.IntegerField()
     initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
     questionnaire_type = serializers.CharField()
-    city = serializers.ListSerializer(child=serializers.CharField())
-    tags = serializers.ListSerializer(child=serializers.CharField())
+    tags = BasicListAgentUserSerializer(many=True)
 
     class Meta(QuestionnaireDetailSerializer.Meta):
         fields = QuestionnaireDetailSerializer.Meta.fields + (

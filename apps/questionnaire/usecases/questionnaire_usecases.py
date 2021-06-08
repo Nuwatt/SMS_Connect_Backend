@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.db import models
-from django.db.models import Q, Subquery, Case, When, F
+from django.db.models import Q, Subquery, Case, When, F, Count
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -71,10 +71,12 @@ class ListQuestionnaireUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._questionnaires = Questionnaire.objects.unarchived().prefetch_related(
-            'city',
-            'city__country'
+            'city__country',
+            'tags__user'
         ).select_related(
             'questionnaire_type',
+        ).annotate(
+            number_of_questions=Count('question')
         )
 
 
