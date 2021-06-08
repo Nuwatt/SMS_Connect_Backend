@@ -8,8 +8,13 @@ def generate_custom_id(initial: str, model):
     try:
         last_record = model.objects.latest('created')
 
+        if len(last_record.id) > len(initial):
+            next_id = int(last_record.id[len(initial):]) + 1
+        else:
+            next_id = int(last_record.id) + 1
+
         last_record_id = '{0:04}'.format(
-            int(last_record.id[len(initial):]) + 1
+            next_id
         )
         custom_id = '{}{}'.format(
             initial,
