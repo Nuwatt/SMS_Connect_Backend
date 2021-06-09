@@ -52,9 +52,9 @@ class QuestionnaireDetailSerializer(QuestionnaireSerializer):
     @swagger_serializer_method(serializer_or_field=serializers.ListSerializer(child=serializers.CharField()))
     def get_country(self, instance):
         countries = [{
-            'id': item.country.id,
-            'name': item.country.name
-        } for item in instance.city.all()]
+            'id': item.get('country_id'),
+            'name': item.get('country__name')
+        } for item in instance.city.values('country__name', 'country_id').distinct()]
         return IdNameSerializer(countries, many=True).data
 
     @swagger_serializer_method(serializer_or_field=serializers.IntegerField())
