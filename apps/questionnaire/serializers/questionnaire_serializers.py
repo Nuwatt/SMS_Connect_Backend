@@ -37,6 +37,7 @@ class QuestionnaireDetailSerializer(QuestionnaireSerializer):
     city = IdNameSerializer(many=True)
     category = IdNameCharSerializer()
     repeat_cycle = serializers.SerializerMethodField()
+    tags = BasicListAgentUserSerializer(many=True)
 
     class Meta(AddQuestionnaireSerializer.Meta):
         fields = AddQuestionnaireSerializer.Meta.fields + (
@@ -65,7 +66,7 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
     number_of_questions = serializers.IntegerField()
     initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
     questionnaire_type = serializers.CharField()
-    tags = BasicListAgentUserSerializer(many=True)
+    tags = serializers.ListSerializer(child=serializers.CharField())
 
     class Meta(QuestionnaireDetailSerializer.Meta):
         fields = QuestionnaireDetailSerializer.Meta.fields + (
