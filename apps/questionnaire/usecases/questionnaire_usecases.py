@@ -91,6 +91,8 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
     def _factory(self):
         self._questionnaires = Questionnaire.objects.unarchived().select_related(
             'questionnaire_type'
+        ).annotate(
+            number_of_questions=Count('question')
         ).filter(
             Q(city__in=self._agent_user.operation_city.all()) |
             Q(tags__in=[self._agent_user])
