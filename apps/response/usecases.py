@@ -182,7 +182,7 @@ class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
         #     'imageanswer_set',
         #     'optionanswer_set'
         # )
-        self._results = [
+        self._answers = [
             {
                 "question_id": "Q0003",
                 "question_type": "Numeric",
