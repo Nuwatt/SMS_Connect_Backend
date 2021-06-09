@@ -75,6 +75,7 @@ class ListQuestionnaireUseCase(usecases.BaseUseCase):
             'tags__user'
         ).select_related(
             'questionnaire_type',
+            'category',
         ).annotate(
             number_of_questions=Count('question')
         )

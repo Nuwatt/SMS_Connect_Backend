@@ -1,7 +1,7 @@
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 
-from apps.core.serializers import IdNameSerializer
+from apps.core.serializers import IdNameSerializer, IdNameCharSerializer
 from apps.core.validators import validate_non_zero_integer
 from apps.questionnaire.models import Questionnaire
 from apps.user.serializers.agent_user_serializers import BasicListAgentUserSerializer
@@ -35,6 +35,7 @@ class AddQuestionnaireSerializer(QuestionnaireSerializer):
 class QuestionnaireDetailSerializer(QuestionnaireSerializer):
     country = serializers.SerializerMethodField()
     city = IdNameSerializer(many=True)
+    category = IdNameCharSerializer()
     repeat_cycle = serializers.SerializerMethodField()
 
     class Meta(AddQuestionnaireSerializer.Meta):
