@@ -58,6 +58,12 @@ class UpdateQuestionnaireUseCase(usecases.UpdateUseCase):
     def __init__(self, serializer, questionnaire: Questionnaire):
         super().__init__(serializer, questionnaire)
 
+    def _factory(self):
+        if 'repeat_cycle' in self._data:
+            self._data['repeat_cycle'] = timedelta(weeks=self._data.get('repeat_cycle'))
+
+        super(UpdateQuestionnaireUseCase, self)._factory()
+
 
 class DeleteQuestionnaireUseCase(usecases.DeleteUseCase):
     def __init__(self, questionnaire: Questionnaire):
