@@ -14,7 +14,11 @@ class QuestionnaireSerializer(serializers.ModelSerializer):
 
 
 class AddQuestionnaireSerializer(QuestionnaireSerializer):
-    repeat_cycle = serializers.IntegerField(required=False, validators=[validate_non_zero_integer])
+    repeat_cycle = serializers.IntegerField(
+        required=False,
+        validators=[validate_non_zero_integer],
+        write_only=True
+    )
 
     class Meta(QuestionnaireSerializer.Meta):
         fields = (
