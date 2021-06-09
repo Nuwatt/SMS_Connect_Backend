@@ -163,22 +163,63 @@ class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
         return self._answers
 
     def _factory(self):
-        latest_response = Response.objects.prefetch_related(
-            'answer_set'
-        ).filter(
-            agent=self._agent_user,
-            questionnaire=self._questionnaire,
-            is_archived=False,
-            is_completed=True
-        ).latest('completed_at')
-
-        self._answers = latest_response.answer_set.select_related(
-            'question',
-            'question__question_type',
-            'numericanswer',
-            'textanswer',
-            'choiceanswer',
-        ).prefetch_related(
-            'imageanswer_set',
-            'optionanswer_set'
-        )
+        # latest_response = Response.objects.prefetch_related(
+        #     'answer_set'
+        # ).filter(
+        #     agent=self._agent_user,
+        #     questionnaire=self._questionnaire,
+        #     is_archived=False,
+        #     is_completed=True
+        # ).latest('completed_at')
+        #
+        # self._answers = latest_response.answer_set.select_related(
+        #     'question',
+        #     'question__question_type',
+        #     'numericanswer',
+        #     'textanswer',
+        #     'choiceanswer',
+        # ).prefetch_related(
+        #     'imageanswer_set',
+        #     'optionanswer_set'
+        # )
+        self._results = [
+            {
+                "question_id": "Q0003",
+                "question_type": "Numeric",
+                "question": "What is the price for Afia corn 1.5L?",
+                "answer": [50.878]
+            },
+            {
+                "question_id": "Q0005",
+                "question_type": "Multiple options multiple selection",
+                "question": "How is the quality of Afia corn 1.5L?",
+                "answer": ["Good", "smooth"]
+            },
+            {
+                "question_id": "Q0007",
+                "question_type": "Multiple options single selection",
+                "question": "How is the taste of Afia corn 1.5L?",
+                "answer": ["Good"]
+            },
+            {
+                "question_id": "Q0087",
+                "question_type": "Rating 1 to 10",
+                "question": "Rate the taste of Afia corn 1.5L?",
+                "answer": ["Worst"]
+            },
+            {
+                "question_id": "Q0887",
+                "question_type": "Text",
+                "question": "Opinion on of Afia corn 1.5L?",
+                "answer": ["Worst product ever"]
+            },
+            {
+                "question_id": "Q8887",
+                "question_type": "Image",
+                "question": "Opinion on of Afia corn 1.5L?",
+                "answer": [
+                    "https://www.luluhypermarket.com/medias/1671735-01.jpg-1200Wx1200H?context=bWFzdGVyfGltYWdlc3wyMTk1Mzh8aW1hZ2UvanBlZ3xpbWFnZXMvaDQxL2gyNy9oMDAvOTQ2NDIyMzg1ODcxOC5qcGd8YmVlMDJiY2VmMzZiNGI3YzVhYTkwZWYwOTJhYzEwM2M1MjBmMmFlY2EyNTZiYTgxMDFmNDNjYWZhMDJhZTA2OQ",
+                    "https://aqsaalmadina.com/wp-content/uploads/2021/04/Afia-Corn-Oil-9Litre-104.00.jpg"
+                ]
+            }
+        ]
