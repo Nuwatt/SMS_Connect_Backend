@@ -80,8 +80,20 @@ class ListQuestionnaireSerializer(QuestionnaireDetailSerializer):
         )
 
 
-class UpdateQuestionnaireSerializer(AddQuestionnaireSerializer):
-    pass
+class UpdateQuestionnaireSerializer(QuestionnaireSerializer):
+    repeat_cycle = serializers.IntegerField(
+        required=False,
+        validators=[validate_non_zero_integer],
+        write_only=True
+    )
+
+    class Meta(QuestionnaireSerializer.Meta):
+        fields = (
+            'name',
+            'repeat_cycle',
+            'city',
+            'tags',
+        )
 
 
 class ListAvailableQuestionnaireForAgentSerializer(QuestionnaireSerializer):
