@@ -27,8 +27,17 @@ class UserLoginUseCase(usecases.CreateUseCase):
 
         self._validate(user)
 
+        # if portal user get role:
+        if user.is_portal_user:
+            role = user.portaluser.role.name
+        else:
+            role = 'agent'
+
         # 3. Get user token for user
         user_token = RefreshToken.for_user(user)
+
+        # add role in token
+        user_token['role'] = role
         refresh_token = str(user_token)
         access_token = str(user_token.access_token)
 
