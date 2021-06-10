@@ -70,7 +70,12 @@ class ImportCSVUseCase(CreateUseCase):
     def __init__(self, serializer):
         super().__init__(serializer)
         self._item_list = None
-        self._file = StringIO(self._data.get('file').read().decode('utf-8'))
+        try:
+            self._file = StringIO(self._data.get('file').read().decode('utf-8'))
+        except UnicodeDecodeError:
+            raise ValidationError({
+                'non_field_errors': _('File contains data not in unicode.')
+            })
 
     valid_columns = []
     null_columns = []
