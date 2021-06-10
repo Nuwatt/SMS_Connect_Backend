@@ -28,7 +28,7 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             min=Min('question__answer__numericanswer__numeric'),
             mean=Avg('question__answer__numericanswer__numeric'),
             mode=Subquery(numeric_answer)
-        )
+        ).unarchived()
 
 
 class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
@@ -47,7 +47,7 @@ class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUMonthMinReportUseCase(usecases.BaseUseCase):
@@ -66,7 +66,7 @@ class SKUMonthMinReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
@@ -85,7 +85,7 @@ class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUMonthModeReportUseCase(usecases.BaseUseCase):
@@ -112,7 +112,7 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
@@ -131,7 +131,7 @@ class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
             'country',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUCountryMinReportUseCase(usecases.BaseUseCase):
@@ -150,7 +150,7 @@ class SKUCountryMinReportUseCase(usecases.BaseUseCase):
             'country',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
@@ -169,7 +169,7 @@ class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
             'country',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUCountryModeReportUseCase(usecases.BaseUseCase):
@@ -198,7 +198,7 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
             'country',
             'name',
             'value'
-        )
+        ).unarchived()
 
 
 class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
@@ -217,7 +217,7 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
             'country',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class AnswerPerCityReportUseCase(usecases.BaseUseCase):
@@ -236,7 +236,7 @@ class AnswerPerCityReportUseCase(usecases.BaseUseCase):
             'city',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
@@ -249,7 +249,7 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
             value=Count(
                 'question__answer__response',
             )
-        ).values('name', 'value')
+        ).values('name', 'value').unarchived()
 
 
 class TotalVisitReportUseCase(usecases.BaseUseCase):
@@ -265,4 +265,4 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
                     store__response__questionnaire__questionnaire_type__name='Price Monitor',
                 )
             )
-        ).values('name', 'value').filter(value__gt=0)
+        ).values('name', 'value').filter(value__gt=0).unarchived()

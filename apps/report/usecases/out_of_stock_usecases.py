@@ -1,10 +1,9 @@
-from django.db.models import Count, Max, Min, Avg, OuterRef, Subquery, Q, F
+from django.db.models import Count, Q, F
 from django.db.models.functions import TruncMonth
 
 from apps.core import usecases
 from apps.localize.models import City
 from apps.product.models import SKU
-from apps.response.models import NumericAnswer, ChoiceAnswer
 
 
 class SKUOverallReportUseCase(usecases.BaseUseCase):
@@ -34,7 +33,7 @@ class SKUOverallReportUseCase(usecases.BaseUseCase):
             'name',
             'not_available',
             'less'
-        )
+        ).unarchived()
 
 
 class SKUMonthAvailableReportUseCase(usecases.BaseUseCase):
@@ -57,7 +56,7 @@ class SKUMonthAvailableReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUMonthNotAvailableReportUseCase(usecases.BaseUseCase):
@@ -80,7 +79,7 @@ class SKUMonthNotAvailableReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUMonthLessReportUseCase(usecases.BaseUseCase):
@@ -103,7 +102,7 @@ class SKUMonthLessReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUCityAvailableReportUseCase(usecases.BaseUseCase):
@@ -126,7 +125,7 @@ class SKUCityAvailableReportUseCase(usecases.BaseUseCase):
             'city',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUCityNotAvailableReportUseCase(usecases.BaseUseCase):
@@ -149,7 +148,7 @@ class SKUCityNotAvailableReportUseCase(usecases.BaseUseCase):
             'city',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUCityLessReportUseCase(usecases.BaseUseCase):
@@ -172,7 +171,7 @@ class SKUCityLessReportUseCase(usecases.BaseUseCase):
             'city',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKUStoreLessReportUseCase(usecases.BaseUseCase):
@@ -195,7 +194,7 @@ class SKUStoreLessReportUseCase(usecases.BaseUseCase):
             'store',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class SKURetailerLessReportUseCase(usecases.BaseUseCase):
@@ -218,7 +217,7 @@ class SKURetailerLessReportUseCase(usecases.BaseUseCase):
             'retailer',
             'value',
             'name',
-        )
+        ).unarchived()
 
 
 class TotalVisitReportUseCase(usecases.BaseUseCase):
@@ -234,4 +233,4 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
                     store__response__questionnaire__questionnaire_type__name='Out Of Stock',
                 )
             ),
-        ).values('name', 'value',).filter(value__gt=0)
+        ).values('name', 'value',).filter(value__gt=0).unarchived()
