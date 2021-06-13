@@ -1,14 +1,13 @@
 from datetime import timedelta
 
 from django.db import models
-from django.db.models import Q, Subquery, Case, When, F, Count
+from django.db.models import Q, Case, When, F, Count, Subquery, OuterRef, Value
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
 from apps.questionnaire.exceptions import QuestionnaireNotFound
 from apps.questionnaire.models import Questionnaire
+from apps.response.models import Response
 from apps.user.models import AgentUser
 
 
@@ -96,14 +95,34 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
         return self._questionnaires
 
     def _factory(self):
-        self._questionnaires = Questionnaire.objects.unarchived().select_related(
+        agent_operation_cities = self._agent_user.operation_city.all()
+        # agent_responses = Response.objects.filter(
+        #     questionnaire=OuterRef('id'),
+        #     is_completed=True,
+        #     agent=self._agent_user
+        # ).annotate(
+        #     future_date=Case(
+        #         When(
+        #             questionnaire__can_repeat=True,
+        #             then=F('completed_at') + F('questionnaire__repeat_cycle')
+        #         ),
+        #         default=None,
+        #         output_field=models.DateTimeField()
+        #     )
+        # ).filter(
+        #     future_date__gte=now()
+        # ).order_by(
+        #     'completed_at'
+        # ).values('id')[:1]
+
+        self._questionnaires = self._questionnaires = Questionnaire.objects.unarchived().select_related(
             'questionnaire_type'
         ).annotate(
-            number_of_questions=Count('question')
+            number_of_questions=Count('question'),
         ).filter(
-            Q(city__in=self._agent_user.operation_city.all()) |
+            Q(city__in=agent_operation_cities) |
             Q(tags__in=[self._agent_user])
-        ).distinct().annotate(
+        ).annotate(
             eligible=Case(
                 When(
                     response=None,
@@ -114,17 +133,45 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
                     response__is_completed=False,
                     then=True
                 ),
-                When(
-                    response__agent=self._agent_user,
-                    response__is_completed=True,
-                    response__completed_at__gte=now() - F('repeat_cycle'),
-                    can_repeat=True,
-                    then=True
-                ),
                 default=False,
                 output_field=models.BooleanField()
             ),
         ).filter(
             eligible=True
         )
+
+        # for item in self._questionnaires:
+        #     print(item.id, item.eligible)
+        # print('-'*10)
+        # self._questionnaires = Questionnaire.objects.unarchived().select_related(
+        #     'questionnaire_type'
+        # ).annotate(
+        #     number_of_questions=Count('question')
+        # ).filter(
+        #     Q(city__in=self._agent_user.operation_city.all()) |
+        #     Q(tags__in=[self._agent_user])
+        # ).distinct().annotate(
+        #     eligible=Case(
+        #         When(
+        #             response=None,
+        #             then=True
+        #         ),
+        #         When(
+        #             response__agent=self._agent_user,
+        #             response__is_completed=False,
+        #             then=True
+        #         ),
+        #         When(
+        #             response__agent=self._agent_user,
+        #             response__is_completed=True,
+        #             response__completed_at__gte=now() - F('repeat_cycle'),
+        #             can_repeat=True,
+        #             then=True
+        #         ),
+        #         default=False,
+        #         output_field=models.BooleanField()
+        #     ),
+        # ).filter(
+        #     eligible=True
+        # )
 
