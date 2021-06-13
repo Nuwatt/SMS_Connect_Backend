@@ -196,7 +196,7 @@ class ListQuestionnaireAnswerSerializer(serializers.Serializer):
         elif question_type.name == 'Image':
             return [item.image.url for item in instance.imageanswer_set.all()]
         elif question_type.has_default_choices:
-            return instance.choiceanswer_set.values_list('choice__choice', flat=True)
+            return [instance.choiceanswer.choice]
         elif question_type.has_options:
             return instance.optionanswer_set.values_list('option__option', flat=True)
         return None
