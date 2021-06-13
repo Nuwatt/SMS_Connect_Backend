@@ -50,8 +50,9 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
             questionnaire=self._questionnaire,
             store=self._data.pop('store'),
             is_completed=False,
-            defaults=self._data
         )
+        self._response.latitude = self._data.get('latitude')
+        self._response.longitude = self._data.get('longitude')
         self._response.created = now()
         self._response.save()
 
