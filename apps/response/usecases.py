@@ -66,6 +66,7 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
             )
             try:
                 self._response.clean()
+                self._response.save()
             except DjangoValidationError as e:
                 raise ValidationError(e.message_dict)
 
