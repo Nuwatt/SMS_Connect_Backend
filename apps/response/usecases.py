@@ -45,16 +45,26 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
         return self._response
 
     def _factory(self):
-        self._response, created = Response.objects.get_or_create(
-            agent=self._agent_user,
-            questionnaire=self._questionnaire,
-            store=self._data.pop('store'),
-            is_completed=False,
-        )
-        self._response.latitude = self._data.get('latitude')
-        self._response.longitude = self._data.get('longitude')
-        self._response.created = now()
-        self._response.save()
+        try:
+            self._response = Response.objects.get(
+                agent=self._agent_user,
+                questionnaire=self._questionnaire,
+                store=self._data.get('store'),
+                is_completed=False
+            )
+            self._response.latitude = self._data.get('latitude')
+            self._response.longitude = self._data.get('longitude')
+            self._response.created = now()
+            self._response.save()
+        except Response.DoesNotExist:
+            self._response = Response(
+                agent=self._agent_user,
+                questionnaire=self._questionnaire,
+                store=self._data.get('store'),
+                latitude=self._data.get('latitude'),
+                longitude=self._data.get('longitude')
+            )
+            self._response.save()
 
     def is_valid(self):
         if self._agent_user not in self._questionnaire.tags.all():
