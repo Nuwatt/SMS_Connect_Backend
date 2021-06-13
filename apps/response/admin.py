@@ -8,6 +8,7 @@ from apps.response import models
 class ResponseAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'completed_at',
+        'created'
     )
     readonly_fields = BaseModelAdmin.readonly_fields + (
         'agent',
