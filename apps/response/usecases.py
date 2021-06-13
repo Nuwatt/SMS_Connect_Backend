@@ -57,14 +57,13 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
             self._response.created = now()
             self._response.save()
         except Response.DoesNotExist:
-            self._response = Response(
+            self._response = Response.objects.create(
                 agent=self._agent_user,
                 questionnaire=self._questionnaire,
                 store=self._data.get('store'),
                 latitude=self._data.get('latitude'),
                 longitude=self._data.get('longitude')
             )
-            self._response.save()
 
     def is_valid(self):
         if self._agent_user not in self._questionnaire.tags.all():
