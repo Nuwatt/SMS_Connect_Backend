@@ -4,8 +4,8 @@ from apps.core.admin import BaseModelAdmin
 from apps.response import models
 
 
-@admin.register(models.Response)
-class ResponseAdmin(BaseModelAdmin):
+@admin.register(models.ResponseCycle)
+class ResponseCycleAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'completed_at',
         'created'
@@ -14,8 +14,23 @@ class ResponseAdmin(BaseModelAdmin):
         'agent',
         'questionnaire',
     )
+    list_filter = BaseModelAdmin.list_filter + (
+        'is_completed',
+    )
+
+
+@admin.register(models.Response)
+class ResponseAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'completed_at',
+        'created'
+    )
     raw_id_fields = (
         'store',
+    )
+
+    list_filter = BaseModelAdmin.list_filter + (
+        'is_completed',
     )
 
 

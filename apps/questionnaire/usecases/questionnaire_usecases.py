@@ -1,13 +1,11 @@
 from datetime import timedelta
 
-from django.db import models
-from django.db.models import Q, Case, When, F, Count, Subquery, OuterRef, Value
-from django.utils.timezone import now
+from django.db.models import Q, Count
 
 from apps.core import usecases
 from apps.questionnaire.exceptions import QuestionnaireNotFound
 from apps.questionnaire.models import Questionnaire
-from apps.response.models import Response
+from apps.response.models import ResponseCycle
 from apps.user.models import AgentUser
 
 
@@ -96,49 +94,23 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         agent_operation_cities = self._agent_user.operation_city.all()
-        # agent_responses = Response.objects.filter(
-        #     questionnaire=OuterRef('id'),
-        #     is_completed=True,
-        #     agent=self._agent_user
-        # ).annotate(
-        #     future_date=Case(
-        #         When(
-        #             questionnaire__can_repeat=True,
-        #             then=F('completed_at') + F('questionnaire__repeat_cycle')
-        #         ),
-        #         default=None,
-        #         output_field=models.DateTimeField()
-        #     )
-        # ).filter(
-        #     future_date__gte=now()
-        # ).order_by(
-        #     'completed_at'
-        # ).values('id')[:1]
 
-        self._questionnaires = self._questionnaires = Questionnaire.objects.unarchived().select_related(
-            'questionnaire_type'
-        ).annotate(
-            number_of_questions=Count('question'),
-        ).filter(
-            Q(city__in=agent_operation_cities) |
-            Q(tags__in=[self._agent_user])
-        ).annotate(
-            eligible=Case(
-                When(
-                    response=None,
-                    then=True
-                ),
-                When(
-                    response__agent=self._agent_user,
-                    response__is_completed=False,
-                    then=True
-                ),
-                default=False,
-                output_field=models.BooleanField()
-            ),
-        ).filter(
-            eligible=True
-        )
+        # 1. check incomplete response cycle
+        completed_questionnaire = self._agent_user.responsecycle_set.filter(
+            is_completed=True
+        ).values('questionnaire', 'completed_at')
+
+        if completed_questionnaire:
+            self._questionnaires = []
+        else:
+            self._questionnaires = self._questionnaires = Questionnaire.objects.unarchived().select_related(
+                'questionnaire_type'
+            ).annotate(
+                number_of_questions=Count('question'),
+            ).filter(
+                Q(city__in=agent_operation_cities) |
+                Q(tags__in=[self._agent_user])
+            )
 
         # for item in self._questionnaires:
         #     print(item.id, item.eligible)
@@ -175,3 +147,24 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
         #     eligible=True
         # )
 
+
+class ListCompletedQuestionnaireStoresForAgentUseCase(usecases.BaseUseCase):
+    def __init__(self, agent_user: AgentUser, questionnaire: Questionnaire):
+        self._questionnaire = questionnaire
+        self._agent_user = agent_user
+
+    def execute(self):
+        self._factory()
+        return self._stores
+
+    def _factory(self):
+        try:
+            latest_response_cycle = self._agent_user.responsecycle_set.get(
+                questionnaire=self._questionnaire,
+                is_completed=False
+            )
+            self._stores = latest_response_cycle.response_set.filter(
+                is_completed=True
+            ).values('store_id', 'store__name')
+        except ResponseCycle.DoesNotExist:
+            self._stores = []

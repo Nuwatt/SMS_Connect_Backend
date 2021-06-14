@@ -95,3 +95,18 @@ class ListAvailableQuestionnaireForAgentView(generics.ListAPIView):
         return questionnaire_usecases.ListAvailableQuestionnaireForAgentUseCase(
             agent_user=self.request.user.agentuser
         ).execute()
+
+
+class ListCompletedQuestionnaireStoresForAgentView(generics.ListAPIView, QuestionnaireMixin):
+    """
+    Use this end-point to list completes questionnaire store for a requesting agent-user
+    """
+    permission_classes = (IsAgentUser,)
+
+    serializer_class = questionnaire_serializers.ListCompletedQuestionnaireStoresForAgentSerializer
+
+    def get_queryset(self):
+        return questionnaire_usecases.ListCompletedQuestionnaireStoresForAgentUseCase(
+            agent_user=self.request.user.agentuser,
+            questionnaire=self.get_questionnaire()
+        ).execute()

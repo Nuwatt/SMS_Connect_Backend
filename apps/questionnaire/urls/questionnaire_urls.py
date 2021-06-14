@@ -38,5 +38,11 @@ urlpatterns = [
         questionnaire_views.ListAvailableQuestionnaireForAgentView.as_view(),
         name='list-available-questionnaire-for-agent'
 
+    ),
+    path(
+        '<str:questionnaire_id>/completed-stores',
+        questionnaire_views.ListCompletedQuestionnaireStoresForAgentView.as_view(),
+        name='list-completed-questionnaire-stores-for-agent'
+
     )
 ]

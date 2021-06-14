@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -14,7 +14,7 @@ from apps.response.models import (
     OptionAnswer,
     ImageAnswer,
     TextAnswer,
-    NumericAnswer
+    NumericAnswer, ResponseCycle
 )
 from apps.user.models import AgentUser
 
@@ -45,36 +45,58 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
         return self._response
 
     def _factory(self):
+        # 1. get response cycle
+        response_cycle, created = ResponseCycle.objects.get_or_create(
+            agent=self._agent_user,
+            questionnaire=self._questionnaire,
+            is_completed=False
+        )
+
+        # 2. get response
         try:
-            self._response = Response.objects.get(
-                agent=self._agent_user,
-                questionnaire=self._questionnaire,
-                store=self._data.get('store'),
-                is_completed=False
+            self._response, created = Response.objects.get_or_create(
+                response_cycle=response_cycle,
+                store=self._data.pop('store'),
+                is_completed=False,
+                defaults=self._data
             )
-            self._response.latitude = self._data.get('latitude')
-            self._response.longitude = self._data.get('longitude')
             self._response.created = now()
             self._response.save()
-        except Response.DoesNotExist:
-            self._response = Response(
-                agent=self._agent_user,
-                questionnaire=self._questionnaire,
-                store=self._data.get('store'),
-                latitude=self._data.get('latitude'),
-                longitude=self._data.get('longitude')
-            )
-            try:
-                self._response.clean()
-                self._response.save()
-            except DjangoValidationError as e:
-                raise ValidationError(e.message_dict)
+        except IntegrityError:
+            raise ValidationError({
+                'store': _('Agent has already submitted questionnaire for this store.')
+            })
+
+        # try:
+        #     self._response = Response.objects.get(
+        #         agent=self._agent_user,
+        #         questionnaire=self._questionnaire,
+        #         store=self._data.get('store'),
+        #         is_completed=False
+        #     )
+        #     self._response.latitude = self._data.get('latitude')
+        #     self._response.longitude = self._data.get('longitude')
+        #     self._response.created = now()
+        #     self._response.save()
+        # except Response.DoesNotExist:
+        #     self._response = Response(
+        #         agent=self._agent_user,
+        #         questionnaire=self._questionnaire,
+        #         store=self._data.get('store'),
+        #         latitude=self._data.get('latitude'),
+        #         longitude=self._data.get('longitude')
+        #     )
+        #     try:
+        #         self._response.clean()
+        #         self._response.save()
+        #     except DjangoValidationError as e:
+        #         raise ValidationError(e.message_dict)
 
     def is_valid(self):
         if self._agent_user not in self._questionnaire.tags.all():
-            if self._data.get('store').city not in self._agent_user.operation_city.all():
+            if self._data.get('store').city not in self._questionnaire.city.all():
                 raise DjangoValidationError({
-                    'retailer': _('Agent is not in operation on this store.')
+                    'store': _('Store is not associated with questionnaire.')
                 })
 
 

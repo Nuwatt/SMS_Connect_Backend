@@ -109,3 +109,8 @@ class ListAvailableQuestionnaireForAgentSerializer(QuestionnaireSerializer):
             'initiated_data',
             'number_of_questions'
         )
+
+
+class ListCompletedQuestionnaireStoresForAgentSerializer(serializers.Serializer):
+    id = serializers.IntegerField(source='store_id')
+    name = serializers.CharField(source='store__name')

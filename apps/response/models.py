@@ -2,7 +2,6 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
 from apps.core.validators import validate_latitude, validate_longitude
@@ -13,6 +12,37 @@ from apps.response.utils import upload_answer_image_to
 from apps.user.models import AgentUser
 
 
+class ResponseCycle(BaseModel):
+    agent = models.ForeignKey(AgentUser, on_delete=models.CASCADE)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
+    is_completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return '{}-{}'.format(
+            self.agent,
+            self.id
+        )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['agent', 'questionnaire', 'is_completed'],
+                name='unique_response_cycle'
+            )
+        ]
+
+    def clean(self):
+        if self._state.adding:
+            # 1. if has uncompleted response
+            if ResponseCycle.objects.filter(
+                    agent=self.agent,
+                    questionnaire=self.questionnaire,
+                    is_completed=False
+            ):
+                raise DjangoValidationError('Agent has uncompleted record of same questionnaire')
+
+
 class Response(BaseModel):
     id = models.CharField(
         max_length=50,
@@ -20,8 +50,11 @@ class Response(BaseModel):
         primary_key=True,
         editable=False
     )
-    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
-    agent = models.ForeignKey(AgentUser, on_delete=models.CASCADE)
+    response_cycle = models.ForeignKey(
+        ResponseCycle,
+        null=True,
+        on_delete=models.CASCADE
+    )
     store = models.ForeignKey(
         Store,
         null=True,
@@ -43,6 +76,14 @@ class Response(BaseModel):
     def __str__(self):
         return self.id
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['response_cycle', 'store'],
+                name='unique_response'
+            )
+        ]
+
     def save(self, *args, **kwargs):
         if self._state.adding:
             self.id = generate_custom_id(initial='R', model=Response)
@@ -52,19 +93,17 @@ class Response(BaseModel):
         if self._state.adding:
             # 1. if has uncompleted response
             if Response.objects.filter(
-                    agent=self.agent,
-                    questionnaire=self.questionnaire,
+                    response_cycle=self.response_cycle,
                     store=self.store,
                     is_completed=False
             ):
                 raise DjangoValidationError('Agent has uncompleted record of same questionnaire')
 
-            # 2. retailer must be under agent operation
-            if self.agent not in self.questionnaire.tags.all():
-                if self.store.city not in self.agent.operation_city.all():
-                    raise DjangoValidationError({
-                        'retailer': _('Agent is not in operation on this retailer.')
-                    })
+            # 2. store must be under same questionnaire
+            if self.store.city not in self.response_cycle.questionnaire.city.all():
+                raise DjangoValidationError({
+                    'store': _('Store is not associated with provided questionnaire.')
+                })
 
     @property
     def coordinates(self):
