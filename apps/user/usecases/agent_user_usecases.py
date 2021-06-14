@@ -86,6 +86,7 @@ class UpdateAgentUserUseCase(usecases.UpdateUseCase):
         super().__init__(serializer, agent_user)
 
     def _factory(self):
+        user = self._instance.user
         # 1. pop portal user data
 
         if 'operation_city' in self._data:
@@ -94,8 +95,14 @@ class UpdateAgentUserUseCase(usecases.UpdateUseCase):
         if 'operation_country' in self._data:
             self._instance.operation_country.set(self._data.pop('operation_country'))
 
+        password = self._data.pop('password', None)
+
         # 2. update user
-        update(instance=self._instance.user, data=self._data)
+        update(instance=user, data=self._data)
+
+        if password:
+            user.set_password(password)
+            user.save()
 
     def is_valid(self):
         countries = self._data.get('operation_country', self._instance.operation_country.all())
