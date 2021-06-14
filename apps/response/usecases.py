@@ -149,7 +149,6 @@ class ListAgentResponseHistoryUseCase(usecases.BaseUseCase):
     def _factory(self):
         try:
             latest_response_cycle = self._agent_user.responsecycle_set.filter(
-                is_completed=True,
                 is_archived=False
             ).latest('completed_at')
 
@@ -167,7 +166,6 @@ class ListAgentResponseUseCase(ListAgentResponseHistoryUseCase):
     def _factory(self):
         try:
             latest_response_cycle = self._agent_user.responsecycle_set.filter(
-                is_completed=True,
                 is_archived=False
             ).latest('completed_at')
 
@@ -199,7 +197,6 @@ class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
             ).latest('completed_at')
 
             self._responses = latest_response_cycle.response_set.filter(
-                is_completed=True,
                 is_archived=False,
             ).select_related(
                 'store',
@@ -227,7 +224,6 @@ class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
         try:
             latest_response_cycle = self._agent_user.responsecycle_set.filter(
                 questionnaire=self._questionnaire,
-                is_completed=True,
                 is_archived=False
             ).latest('completed_at')
 
