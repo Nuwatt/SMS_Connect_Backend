@@ -147,24 +147,40 @@ class ListAgentResponseHistoryUseCase(usecases.BaseUseCase):
         return self._responses
 
     def _factory(self):
-        self._responses = self._agent_user.response_set.unarchived().select_related(
-            'questionnaire',
-            'questionnaire__questionnaire_type'
-        ).filter(
-            is_completed=True
-        )
+        try:
+            latest_response_cycle = self._agent_user.responsecycle_set.filter(
+                is_completed=True,
+                is_archived=False
+            ).latest('completed_at')
+
+            self._responses = latest_response_cycle.response_set.unarchived().select_related(
+                'questionnaire',
+                'questionnaire__questionnaire_type'
+            ).filter(
+                is_completed=True
+            )
+        except ResponseCycle.DoesNotExist:
+            self._responses = []
 
 
 class ListAgentResponseUseCase(ListAgentResponseHistoryUseCase):
     def _factory(self):
-        self._responses = self._agent_user.response_set.unarchived().select_related(
-            'questionnaire',
-            'questionnaire__questionnaire_type',
-            'store',
-            'store__retailer__channel',
-            'store__city',
-            'store__city__country'
-        )
+        try:
+            latest_response_cycle = self._agent_user.responsecycle_set.filter(
+                is_completed=True,
+                is_archived=False
+            ).latest('completed_at')
+
+            self._responses = latest_response_cycle.response_set.unarchived().select_related(
+                'questionnaire',
+                'questionnaire__questionnaire_type',
+                'store',
+                'store__retailer__channel',
+                'store__city',
+                'store__city__country'
+            )
+        except ResponseCycle.DoesNotExist:
+            self._responses = []
 
 
 class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
@@ -201,27 +217,45 @@ class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         try:
-            latest_response = Response.objects.prefetch_related(
-                'answer_set'
-            ).filter(
-                agent=self._agent_user,
+            latest_response_cycle = self._agent_user.responsecycle_set.filter(
                 questionnaire=self._questionnaire,
-                is_archived=False,
-                is_completed=True
+                is_completed=True,
+                is_archived=False
             ).latest('completed_at')
 
-            self._answers = latest_response.answer_set.select_related(
-                'question',
-                'question__question_type',
-                'numericanswer',
-                'textanswer',
-                'choiceanswer',
-            ).prefetch_related(
-                'imageanswer_set',
-                'optionanswer_set'
+            responses = latest_response_cycle.response_set.unarchived().select_related(
+                'questionnaire',
+                'questionnaire__questionnaire_type',
+                'store',
+                'store__retailer__channel',
+                'store__city',
+                'store__city__country'
             )
-        except Response.DoesNotExist:
+
+            try:
+                latest_response = latest_response_cycle.response_set.filter(
+                    is_completed=True,
+                    is_archived=False
+                ).prefetch_related(
+                    'answer_set'
+                ).latest('completed_at')
+
+                self._answers = latest_response.answer_set.select_related(
+                    'question',
+                    'question__question_type',
+                    'numericanswer',
+                    'textanswer',
+                    'choiceanswer',
+                ).prefetch_related(
+                    'imageanswer_set',
+                    'optionanswer_set'
+                )
+            except Response.DoesNotExist:
+                self._answers = []
+        except ResponseCycle.DoesNotExist:
             self._answers = []
+
+
         # self._answers = [
         #     {
         #         "question_id": "Q0003",
