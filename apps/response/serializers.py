@@ -101,7 +101,7 @@ class SummitQuestionnaireResponseSerializer(serializers.ModelSerializer):
             })
 
     def validate_question(self, value):
-        questionnaire = self.context['view'].get_object().questionnaire
+        questionnaire = self.context['view'].get_object().responce_cycle.questionnaire
         if value.questionnaire != questionnaire:
             raise ValidationError(_('Question is not of same questionnaire.'))
         return value
