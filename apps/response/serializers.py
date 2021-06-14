@@ -152,9 +152,9 @@ data = [
 
 
 class ListAgentResponseSerializer(serializers.Serializer):
-    questionnaire_id = serializers.CharField(source='questionnaire.id')
-    questionnaire_name = serializers.CharField(source='questionnaire.name')
-    questionnaire_type = serializers.CharField(source='questionnaire.questionnaire_type')
+    questionnaire_id = serializers.CharField(source='response_cycle.questionnaire.id')
+    questionnaire_name = serializers.CharField(source='response_cycle.questionnaire.name')
+    questionnaire_type = serializers.CharField(source='response_cycle.questionnaire.questionnaire_type')
     start_time = serializers.DateTimeField(source='created', format='%p %H:%M')
     finish_time = serializers.DateTimeField(source='completed_at', format='%p %H:%M')
     completed_date = serializers.DateTimeField(source='completed_at', format='%d/%m/%Y')
