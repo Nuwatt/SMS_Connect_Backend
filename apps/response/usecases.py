@@ -192,7 +192,6 @@ class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
     def _factory(self):
         try:
             latest_response_cycle = self._questionnaire.responsecycle_set.filter(
-                is_completed=True,
                 is_archived=False
             ).latest('completed_at')
 
