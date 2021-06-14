@@ -124,9 +124,9 @@ class BulkSummitQuestionnaireResponseSerializer(serializers.Serializer):
 
 class ListAgentResponseHistorySerializer(serializers.Serializer):
     id = serializers.CharField()
-    questionnaire_id = serializers.CharField(source='questionnaire.id')
-    questionnaire_name = serializers.CharField(source='questionnaire.name')
-    questionnaire_type = serializers.CharField(source='questionnaire.questionnaire_type')
+    questionnaire_id = serializers.CharField(source='response_cycle.questionnaire.id')
+    questionnaire_name = serializers.CharField(source='response_cycle.questionnaire.name')
+    questionnaire_type = serializers.CharField(source='response_cycle.questionnaire.questionnaire_type')
     start_date_time = serializers.DateTimeField(source='created', format='%d-%m-%Y - %H:%M %p')
     completed_at = serializers.DateTimeField(format='%d-%m-%Y - %H:%M %p')
 
