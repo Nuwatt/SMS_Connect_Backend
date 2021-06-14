@@ -192,18 +192,26 @@ class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
         return self._responses
 
     def _factory(self):
-        self._responses = Response.objects.filter(
-            is_completed=True,
-            is_archived=False,
-            questionnaire=self._questionnaire
-        ).select_related(
-            'store',
-            'store__retailer__channel',
-            'store__city',
-            'store__city__country'
-        ).prefetch_related(
-            'answer_set'
-        )
+        try:
+            latest_response_cycle = self._questionnaire.responsecycle_set.filter(
+                is_completed=True,
+                is_archived=False
+            ).latest('completed_at')
+
+            self._responses = latest_response_cycle.response_set.filter(
+                is_completed=True,
+                is_archived=False,
+            ).select_related(
+                'store',
+                'store__retailer__channel',
+                'store__city',
+                'store__city__country'
+            ).prefetch_related(
+                'answer_set'
+            )
+
+        except ResponseCycle.DoesNotExist:
+            self._responses = []
 
 
 class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
@@ -222,15 +230,6 @@ class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
                 is_completed=True,
                 is_archived=False
             ).latest('completed_at')
-
-            responses = latest_response_cycle.response_set.unarchived().select_related(
-                'questionnaire',
-                'questionnaire__questionnaire_type',
-                'store',
-                'store__retailer__channel',
-                'store__city',
-                'store__city__country'
-            )
 
             try:
                 latest_response = latest_response_cycle.response_set.filter(
