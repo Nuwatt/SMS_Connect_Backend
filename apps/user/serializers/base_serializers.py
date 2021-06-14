@@ -3,9 +3,9 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_serializer_method
-
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, AuthenticationFailed
+from rest_framework_simplejwt.state import token_backend
 
 from apps.core.serializers import IdNameSerializer
 from apps.core.validators import validate_image
@@ -191,3 +191,22 @@ class SupportSerializer(serializers.Serializer):
 
 class AvatarSerializer(serializers.Serializer):
     avatar = serializers.ImageField(validators=[validate_image])
+
+
+class TokenVerifySerializer(serializers.Serializer):
+    token = serializers.CharField()
+
+    def validate(self, attrs):
+        token_payload = token_backend.decode(attrs['token'])
+        try:
+            user = get_user_model().objects.get(
+                pk=token_payload['user_id']
+            )
+        except get_user_model().DoesNotExist:
+            raise AuthenticationFailed()
+
+        if not user.is_active or user.is_archived:
+            raise AuthenticationFailed(_('User is not active'))
+
+        super(TokenVerifySerializer, self).validate(attrs)
+        return {}

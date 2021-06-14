@@ -43,7 +43,7 @@ urlpatterns = [
     ),
     path(
         'login-verify',
-        token_verify,
+        base_views.TokenVerifyView.as_view(),
         name='login-verify'
     ),
 ]

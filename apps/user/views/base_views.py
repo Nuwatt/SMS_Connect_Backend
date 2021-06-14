@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenViewBase
 
 from apps.core import generics
 from apps.core.serializers import MessageResponseSerializer
@@ -69,3 +70,11 @@ class SupportView(generics.CreateAPIView):
             user=self.request.user,
             serializer=serializer
         ).execute()
+
+
+class TokenVerifyView(TokenViewBase):
+    """
+    Takes a token and indicates if it is valid.  This view provides no
+    information about a token's fitness for a particular use.
+    """
+    serializer_class = base_serializers.TokenVerifySerializer
