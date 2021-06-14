@@ -168,8 +168,8 @@ class ListAgentResponseSerializer(serializers.Serializer):
 
 
 class ListQuestionnaireResponseSerializer(serializers.Serializer):
-    user_id = serializers.CharField(source='agent.id')
-    username = serializers.CharField(source='agent.user.username')
+    user_id = serializers.CharField(source='response_cycle.agent.id')
+    username = serializers.CharField(source='response_cycle.agent.user.username')
     completed_date = serializers.DateTimeField(source='completed_at', format='%d/%m/%Y')
     number_of_answers = serializers.IntegerField()
     start_time = serializers.DateTimeField(source='created', format='%p %H:%M')
