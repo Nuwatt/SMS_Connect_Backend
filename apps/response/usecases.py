@@ -170,8 +170,8 @@ class ListAgentResponseUseCase(ListAgentResponseHistoryUseCase):
             ).latest('completed_at')
 
             self._responses = latest_response_cycle.response_set.unarchived().select_related(
-                'questionnaire',
-                'questionnaire__questionnaire_type',
+                'response_cycle__questionnaire',
+                'response_cycle__questionnaire__questionnaire_type',
                 'store',
                 'store__retailer__channel',
                 'store__city',
