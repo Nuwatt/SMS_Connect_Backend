@@ -147,19 +147,16 @@ class ListAgentResponseHistoryUseCase(usecases.BaseUseCase):
         return self._responses
 
     def _factory(self):
-        try:
-            latest_response_cycle = self._agent_user.responsecycle_set.filter(
-                is_archived=False
-            ).latest('completed_at')
-
-            self._responses = latest_response_cycle.response_set.unarchived().select_related(
-                'questionnaire',
-                'questionnaire__questionnaire_type'
-            ).filter(
-                is_completed=True
-            )
-        except ResponseCycle.DoesNotExist:
-            self._responses = []
+        self._responses = Response.objects.filter(
+            is_archived=False,
+            is_completed=True,
+            response_cycle__agent=self._agent_user
+        ).select_related(
+            'response_cycle__questionnaire',
+            'response_cycle__questionnaire__questionnaire_type'
+        ).filter(
+            is_completed=True
+        )
 
 
 class ListAgentResponseUseCase(ListAgentResponseHistoryUseCase):
