@@ -202,4 +202,4 @@ class BasicListAgentUserView(generics.ListAPIView):
     serializer_class = agent_user_serializers.BasicListAgentUserSerializer
 
     def get_queryset(self):
-        return agent_user_usecases.ListAgentUserUseCase().execute()
+        return agent_user_usecases.BasicListAgentUserUseCase().execute()

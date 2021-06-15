@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction, IntegrityError
+from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
@@ -31,6 +32,19 @@ class GetAgentUserUseCase(usecases.BaseUseCase):
 
 
 class ListAgentUserUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._agent_users
+
+    def _factory(self):
+        self._agent_users = AgentUser.objects.unarchived().select_related(
+            'user'
+        ).annotate(
+            total_completed_questionnaire=Count('responsecycle__response')
+        )
+
+
+class BasicListAgentUserUseCase(usecases.BaseUseCase):
     def execute(self):
         self._factory()
         return self._agent_users

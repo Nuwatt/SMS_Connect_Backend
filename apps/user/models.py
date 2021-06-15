@@ -132,7 +132,6 @@ class BaseUser(BaseModel):
 class AgentUser(BaseUser):
     operation_city = models.ManyToManyField(City)
     operation_country = models.ManyToManyField(Country)
-    total_completed_questionnaire = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
         if self._state.adding:

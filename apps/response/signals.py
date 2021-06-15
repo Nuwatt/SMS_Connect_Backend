@@ -7,15 +7,15 @@ from apps.market.models import Store
 from apps.response.models import Response, ResponseCycle
 
 
-@receiver(post_save, sender=ResponseCycle)
-def response_cycle_completed(sender, instance, **kwargs):
-    if instance.is_completed:
-        agent_user = instance.agent
-        response_count = agent_user.responsecycle_set.filter(
-            is_completed=True
-        ).aggregate(count=Count('questionnaire', distinct=True)).get('count')
-        agent_user.total_completed_questionnaire = response_count
-        agent_user.save()
+# @receiver(post_save, sender=ResponseCycle)
+# def response_cycle_completed(sender, instance, **kwargs):
+#     if instance.is_completed:
+#         agent_user = instance.agent
+#         response_count = agent_user.responsecycle_set.filter(
+#             is_completed=True
+#         ).aggregate(count=Count('questionnaire', distinct=True)).get('count')
+#         agent_user.total_completed_questionnaire = response_count
+#         agent_user.save()
 
 
 @receiver(post_save, sender=Response)
