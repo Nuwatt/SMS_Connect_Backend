@@ -127,6 +127,7 @@ class ListAgentResponseHistorySerializer(serializers.Serializer):
     questionnaire_id = serializers.CharField(source='response_cycle.questionnaire.id')
     questionnaire_name = serializers.CharField(source='response_cycle.questionnaire.name')
     questionnaire_type = serializers.CharField(source='response_cycle.questionnaire.questionnaire_type')
+    store = serializers.CharField()
     start_date_time = serializers.DateTimeField(source='created', format='%d-%m-%Y - %H:%M %p')
     completed_at = serializers.DateTimeField(format='%d-%m-%Y - %H:%M %p')
 

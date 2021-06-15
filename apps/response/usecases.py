@@ -153,7 +153,8 @@ class ListAgentResponseHistoryUseCase(usecases.BaseUseCase):
             response_cycle__agent=self._agent_user
         ).select_related(
             'response_cycle__questionnaire',
-            'response_cycle__questionnaire__questionnaire_type'
+            'response_cycle__questionnaire__questionnaire_type',
+            'store'
         ).filter(
             is_completed=True
         )
