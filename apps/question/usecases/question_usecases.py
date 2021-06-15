@@ -212,3 +212,13 @@ class ListQuestionForAgentUseCase(usecases.BaseUseCase):
             raise ValidationError({
                 'non_field_errors': _('Questionnaire is not assigned to agent.')
             })
+
+
+class DeleteQuestionUseCase(usecases.DeleteUseCase):
+    def __init__(self, question: Question):
+        super().__init__(question)
+
+
+class UpdateQuestionUseCase(usecases.UpdateUseCase):
+    def __init__(self, serializer, question: Question):
+        super().__init__(serializer, question)

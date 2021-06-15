@@ -132,3 +132,33 @@ class ListQuestionForAgentView(generics.ListAPIView, QuestionnaireMixin):
             agent_user=self.request.user.agentuser,
             questionnaire=self.get_object()
         ).execute()
+
+
+class DeleteQuestionView(generics.DestroyAPIView, QuestionMixin):
+    """
+    Use this end-point to delete specific question
+    """
+
+    def get_object(self):
+        return self.get_question()
+
+    def perform_destroy(self, instance):
+        return question_usecases.DeleteQuestionUseCase(
+            question=self.get_object()
+        ).execute()
+
+
+class UpdateQuestionView(generics.UpdateAPIView, QuestionMixin):
+    """
+    Use this end-point to update specific question
+    """
+    serializer_class = question_serializers.UpdateQuestionSerializer
+
+    def get_object(self):
+        return self.get_question()
+
+    def perform_update(self, serializer):
+        return question_usecases.UpdateQuestionUseCase(
+            serializer=serializer,
+            question=self.get_object()
+        ).execute()

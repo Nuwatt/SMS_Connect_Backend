@@ -111,3 +111,10 @@ class QuestionDetailSerializer(ListQuestionSerializer):
 
 class ImportQuestionSerializer(CSVFileInputSerializer):
     pass
+
+
+class UpdateQuestionSerializer(QuestionSerializer):
+    class Meta(QuestionSerializer.Meta):
+        fields = (
+            'statement',
+        )
