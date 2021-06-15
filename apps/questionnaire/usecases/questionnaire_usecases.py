@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.db.models import Q, Count
 
 from apps.core import usecases
+from apps.market.models import Store
 from apps.questionnaire.exceptions import QuestionnaireNotFound
 from apps.questionnaire.models import Questionnaire
 from apps.response.models import ResponseCycle
@@ -101,7 +102,7 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
         ).values('questionnaire', 'completed_at')
 
         if completed_questionnaire:
-            self._questionnaires = []
+            self._questionnaires = Questionnaire.objects.none()
         else:
             self._questionnaires = self._questionnaires = Questionnaire.objects.unarchived().select_related(
                 'questionnaire_type'
@@ -167,4 +168,4 @@ class ListCompletedQuestionnaireStoresForAgentUseCase(usecases.BaseUseCase):
                 is_completed=True
             ).values('store_id', 'store__name')
         except ResponseCycle.DoesNotExist:
-            self._stores = []
+            self._stores = Store.objects.none()
