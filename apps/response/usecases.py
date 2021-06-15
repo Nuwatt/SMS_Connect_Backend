@@ -44,6 +44,7 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
         super(StartQuestionnaireUseCase, self).execute()
         return self._response
 
+    @transaction.atomic()
     def _factory(self):
         # 1. get response cycle
         response_cycle, created = ResponseCycle.objects.get_or_create(
