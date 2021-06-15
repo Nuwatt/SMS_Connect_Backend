@@ -99,19 +99,16 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
         # 1. check incomplete response cycle
         completed_questionnaire = self._agent_user.responsecycle_set.filter(
             is_completed=True
-        ).values('questionnaire', 'completed_at')
+        ).values_list('questionnaire', flat=True)
 
-        if completed_questionnaire:
-            self._questionnaires = Questionnaire.objects.none()
-        else:
-            self._questionnaires = self._questionnaires = Questionnaire.objects.unarchived().select_related(
-                'questionnaire_type'
-            ).annotate(
-                number_of_questions=Count('question'),
-            ).filter(
-                Q(city__in=agent_operation_cities) |
-                Q(tags__in=[self._agent_user])
-            )
+        self._questionnaires = self._questionnaires = Questionnaire.objects.unarchived().select_related(
+            'questionnaire_type'
+        ).annotate(
+            number_of_questions=Count('question'),
+        ).filter(
+            Q(city__in=agent_operation_cities) |
+            Q(tags__in=[self._agent_user])
+        ).exclude(id__in=completed_questionnaire)
 
         # for item in self._questionnaires:
         #     print(item.id, item.eligible)
