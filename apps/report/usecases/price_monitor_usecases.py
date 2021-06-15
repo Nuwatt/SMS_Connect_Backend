@@ -262,7 +262,7 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
             value=Count(
                 'store__response',
                 filter=Q(
-                    store__response__questionnaire__questionnaire_type__name='Price Monitor',
+                    store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
                 )
             )
         ).values('name', 'value').filter(value__gt=0).unarchived()
