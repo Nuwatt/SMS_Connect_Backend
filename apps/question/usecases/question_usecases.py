@@ -127,14 +127,6 @@ class ImportQuestionUseCase(usecases.ImportCSVUseCase):
                     'non_field_errors': _('Invalid Question Type')
                 })
 
-            # # 2. brand
-            # try:
-            #     brand = Brand.objects.get(name=item.get('Brand'))
-            # except Brand.DoesNotExist:
-            #     raise ValidationError({
-            #         'non_field_errors': _('Invalid Brand')
-            #     })
-
             # 3. brand
             try:
                 sku = SKU.objects.get(name=item.get('SKU'))
@@ -151,7 +143,6 @@ class ImportQuestionUseCase(usecases.ImportCSVUseCase):
                 questionnaire=self._questionnaire,
                 statement=item.get('Question Text'),
                 defaults={
-                    # 'brand': brand,
                     'sku': sku,
                     'question_type': question_type
                 }

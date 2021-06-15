@@ -77,8 +77,8 @@ class ImportCSVUseCase(CreateUseCase):
                 'non_field_errors': _('File contains data not in unicode.')
             })
 
-    valid_columns = []
-    null_columns = []
+    valid_columns = None
+    null_columns = None
 
     def execute(self):
         self.is_valid()
@@ -99,7 +99,7 @@ class ImportCSVUseCase(CreateUseCase):
                 'non_field_errors': _('CSV doesn\'t have columns in order: [{}]'.format(columns_string))
             })
 
-        check_null_columns = self.valid_columns
+        check_null_columns = self.valid_columns.copy()
         for item in sorted(self.null_columns, reverse=True):
             check_null_columns.remove(item)
 
