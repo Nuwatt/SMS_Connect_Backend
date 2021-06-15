@@ -26,7 +26,7 @@ class CustomJWTAuthentication(JWTAuthentication):
         except ValueError:
             raise InvalidToken(_('Token contained no recognizable user identification'))
 
-        if not user.is_active:
+        if not user.is_active or user.is_archived:
             raise AuthenticationFailed(_('User is inactive'), code='user_inactive')
 
         return user
