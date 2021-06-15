@@ -61,7 +61,7 @@ class StartQuestionnaireUseCase(usecases.CreateUseCase):
                 is_completed=False,
                 defaults=self._data
             )
-            self._response.created = now()
+            self._response.started_at = now()
             self._response.save()
         except IntegrityError:
             raise ValidationError({

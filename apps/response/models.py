@@ -72,6 +72,7 @@ class Response(BaseModel):
     )
     is_completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(null=True)
+    started_at = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.id
