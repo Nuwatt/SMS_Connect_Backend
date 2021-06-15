@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction, IntegrityError
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
@@ -40,7 +40,10 @@ class ListAgentUserUseCase(usecases.BaseUseCase):
         self._agent_users = AgentUser.objects.unarchived().select_related(
             'user'
         ).annotate(
-            total_completed_questionnaire=Count('responsecycle__response')
+            total_completed_questionnaire=Count(
+                'responsecycle__response',
+                filter=Q(responsecycle__response__is_completed=True)
+            )
         )
 
 
