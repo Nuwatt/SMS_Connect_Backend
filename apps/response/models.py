@@ -115,10 +115,6 @@ class Response(BaseModel):
             return '{} min'.format(minutes)
         return None
 
-    @property
-    def number_of_answers(self):
-        return self.answer_set.count()
-
 
 class Answer(BaseModel):
     id = models.CharField(

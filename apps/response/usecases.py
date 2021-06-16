@@ -3,6 +3,7 @@ from django.db import transaction, IntegrityError
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
+from sql_util.aggregates import SubqueryCount
 
 from apps.core import usecases
 from apps.questionnaire.models import Questionnaire
@@ -190,55 +191,56 @@ class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
             is_archived=False,
             is_completed=True,
             response_cycle__questionnaire=self._questionnaire
+        ).annotate(
+            number_of_answers=SubqueryCount('answer')
         ).select_related(
             'store',
             'store__retailer__channel',
             'store__city',
             'store__city__country'
         ).prefetch_related(
-            'answer_set'
+            'response_cycle__agent'
         )
 
 
-class ListQuestionnaireAnswerUseCase(usecases.BaseUseCase):
-    def __init__(self, questionnaire: Questionnaire, agent_user: AgentUser):
-        self._agent_user = agent_user
-        self._questionnaire = questionnaire
+class ListResponseAnswerUseCase(usecases.BaseUseCase):
+    def __init__(self, response: Response):
+        self._response = response
 
     def execute(self):
         self._factory()
         return self._answers
 
     def _factory(self):
-        try:
-            latest_response_cycle = self._agent_user.responsecycle_set.filter(
-                questionnaire=self._questionnaire,
-                is_archived=False
-            ).latest('completed_at')
-
-            try:
-                latest_response = latest_response_cycle.response_set.filter(
-                    is_completed=True,
-                    is_archived=False
-                ).prefetch_related(
-                    'answer_set'
-                ).latest('completed_at')
-
-                self._answers = latest_response.answer_set.select_related(
-                    'question',
-                    'question__question_type',
-                    'numericanswer',
-                    'textanswer',
-                    'choiceanswer',
-                ).prefetch_related(
-                    'imageanswer_set',
-                    'optionanswer_set'
-                )
-            except Response.DoesNotExist:
-                self._answers = []
-        except ResponseCycle.DoesNotExist:
-            self._answers = []
-
+        self._answers = self._response.answer_set.select_related(
+            'question',
+            'question__question_type',
+            'numericanswer',
+            'textanswer',
+            'choiceanswer',
+        ).prefetch_related(
+            'imageanswer_set',
+            'optionanswer_set'
+        )
+        # try:
+        #     latest_response_cycle = self._agent_user.responsecycle_set.filter(
+        #         questionnaire=self._questionnaire,
+        #         is_archived=False
+        #     ).latest('completed_at')
+        #
+        #     try:
+        #         latest_response = latest_response_cycle.response_set.filter(
+        #             is_completed=True,
+        #             is_archived=False
+        #         ).prefetch_related(
+        #             'answer_set'
+        #         ).latest('completed_at')
+        #
+        #
+        #     except Response.DoesNotExist:
+        #         self._answers = []
+        # except ResponseCycle.DoesNotExist:
+        #     self._answers = []
 
         # self._answers = [
         #     {

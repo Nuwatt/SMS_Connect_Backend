@@ -29,8 +29,8 @@ urlpatterns = [
         name='list-questionnaire-response'
     ),
     path(
-        'answer/questionnaire/<str:questionnaire_id>/agent-user/<str:agent_user_id>/list',
-        views.ListQuestionnaireAnswerView.as_view(),
-        name='list-questionnaire-answer'
+        '<str:response_id>/answer/list',
+        views.ListResponseAnswerView.as_view(),
+        name='list-response-answer'
     ),
 ]
