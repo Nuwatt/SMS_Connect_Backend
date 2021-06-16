@@ -1,9 +1,11 @@
 from datetime import timedelta
 
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Subquery, OuterRef
+from sql_util.aggregates import SubqueryCount
 
 from apps.core import usecases
 from apps.market.models import Store
+from apps.question.models import Question
 from apps.questionnaire.exceptions import QuestionnaireNotFound
 from apps.questionnaire.models import Questionnaire
 from apps.response.models import ResponseCycle
@@ -101,17 +103,35 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
             is_completed=True
         ).values_list('questionnaire', flat=True)
 
-        self._questionnaires = self._questionnaires = Questionnaire.objects.unarchived().select_related(
-            'questionnaire_type'
-        ).annotate(
-            number_of_questions=Count('question'),
+        self._questionnaires = self._questionnaires = Questionnaire.objects.unarchived().exclude(
+            id__in=completed_questionnaire
         ).filter(
             Q(city__in=agent_operation_cities) |
             Q(tags__in=[self._agent_user])
-        ).exclude(id__in=completed_questionnaire).filter(number_of_questions__gt=0)
+        ).values('id').distinct().annotate(
+            number_of_questions=SubqueryCount(
+                'question',
+                filter=Q(is_archived=False)
+            ),
+        ).values(
+            'id',
+            'number_of_questions',
+            'name',
+            'questionnaire_type__name',
+            'created',
+        ).filter(
+            number_of_questions__gt=0
+        )
+        # ).values(
+        #     'id',
+        #     'name',
+        #     # 'questionnaire_type__name',
+        #     # 'created',
+        # )
 
         # for item in self._questionnaires:
-        #     print(item.id, item.eligible)
+        #     print(item.id, item.number_of_questions)
+        #     # print(item.question_set.count())
         # print('-'*10)
         # self._questionnaires = Questionnaire.objects.unarchived().select_related(
         #     'questionnaire_type'

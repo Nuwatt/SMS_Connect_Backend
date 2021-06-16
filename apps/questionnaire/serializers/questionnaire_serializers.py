@@ -99,7 +99,7 @@ class UpdateQuestionnaireSerializer(QuestionnaireSerializer):
 class ListAvailableQuestionnaireForAgentSerializer(QuestionnaireSerializer):
     number_of_questions = serializers.IntegerField()
     initiated_data = serializers.DateTimeField(source='created', format='%d-%m-%Y')
-    questionnaire_type = serializers.CharField()
+    questionnaire_type = serializers.CharField(source='questionnaire_type__name')
 
     class Meta(QuestionnaireSerializer.Meta):
         fields = (
