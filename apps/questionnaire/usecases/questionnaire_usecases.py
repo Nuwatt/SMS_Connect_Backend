@@ -1,11 +1,10 @@
 from datetime import timedelta
 
-from django.db.models import Q, Count, Subquery, OuterRef
+from django.db.models import Q, Count
 from sql_util.aggregates import SubqueryCount
 
 from apps.core import usecases
 from apps.market.models import Store
-from apps.question.models import Question
 from apps.questionnaire.exceptions import QuestionnaireNotFound
 from apps.questionnaire.models import Questionnaire
 from apps.response.models import ResponseCycle
