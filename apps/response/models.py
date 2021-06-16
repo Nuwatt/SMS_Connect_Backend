@@ -110,7 +110,7 @@ class Response(BaseModel):
     @property
     def completed_duration(self):
         if self.completed_at:
-            difference = self.completed_at - self.created
+            difference = self.completed_at - self.started_at
             minutes = int(divmod(difference.total_seconds(), 60)[0])
             return '{} min'.format(minutes)
         return None
