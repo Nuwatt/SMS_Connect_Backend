@@ -108,7 +108,7 @@ class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):
         ).filter(
             Q(city__in=agent_operation_cities) |
             Q(tags__in=[self._agent_user])
-        ).exclude(id__in=completed_questionnaire)
+        ).exclude(id__in=completed_questionnaire).filter(number_of_questions__gt=0)
 
         # for item in self._questionnaires:
         #     print(item.id, item.eligible)
