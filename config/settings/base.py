@@ -304,3 +304,7 @@ SWAGGER_SETTINGS = {
         'drf_yasg.inspectors.CoreAPICompatInspector'
     ],
 }
+
+# S3
+# -----------------------------------------------------------------------------
+USE_S3 = False

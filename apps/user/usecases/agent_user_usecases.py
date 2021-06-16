@@ -143,11 +143,14 @@ class AgentUserLoginUseCase(UserLoginUseCase):
 
     def _factory(self):
         super(AgentUserLoginUseCase, self)._factory()
-        self._result['bucket_detail'] = {
-            'name': settings.AWS_STORAGE_BUCKET_NAME,
-            'assess_key': settings.AWS_ACCESS_KEY_ID,
-            'secret_key': settings.AWS_SECRET_ACCESS_KEY
-        }
+        if settings.USE_S3:
+            self._result['bucket_detail'] = {
+                'name': settings.AWS_STORAGE_BUCKET_NAME,
+                'assess_key': settings.AWS_ACCESS_KEY_ID,
+                'secret_key': settings.AWS_SECRET_ACCESS_KEY
+            }
+        else:
+            self._result['bucket_detail'] = None
 
     def _validate(self, user):
         if not user.is_agent_user:
