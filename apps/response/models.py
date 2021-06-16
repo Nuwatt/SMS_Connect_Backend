@@ -24,14 +24,6 @@ class ResponseCycle(BaseModel):
             self.id
         )
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['agent', 'questionnaire', 'is_completed'],
-                name='unique_response_cycle'
-            )
-        ]
-
     def clean(self):
         if self._state.adding:
             # 1. if has uncompleted response
