@@ -77,8 +77,8 @@ class ImportCSVUseCase(CreateUseCase):
                 'non_field_errors': _('File contains data not in unicode.')
             })
 
-    valid_columns = None
-    null_columns = None
+    valid_columns = []
+    null_columns = []
 
     def execute(self):
         self.is_valid()
