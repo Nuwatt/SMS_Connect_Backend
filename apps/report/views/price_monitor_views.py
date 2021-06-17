@@ -170,3 +170,14 @@ class TotalVisitReportView(generics.ListAPIView):
 
     def get_queryset(self):
         return price_monitor_usecases.TotalVisitReportUseCase().execute()
+
+
+class BrandMinMaxReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of brand vs min max for price monitor
+    """
+    pagination_class = None
+    serializer_class = price_monitor_serializers.BrandMinMaxReportSerializer
+
+    def get_queryset(self):
+        return price_monitor_usecases.BrandMinMaxReportReportUseCase().execute()

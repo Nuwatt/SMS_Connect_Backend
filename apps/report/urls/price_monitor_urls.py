@@ -74,5 +74,11 @@ urlpatterns = [
         price_monitor_views.TotalVisitReportView.as_view(),
         name='total-visit-report'
     ),
+    # brand min-max
+    path(
+        'brand-min-max',
+        price_monitor_views.BrandMinMaxReportView.as_view(),
+        name='brand-min-max-report'
+    ),
 
 ]

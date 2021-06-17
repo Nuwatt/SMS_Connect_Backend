@@ -3,7 +3,7 @@ from django.db.models.functions import TruncMonth
 
 from apps.core import usecases
 from apps.localize.models import City
-from apps.product.models import SKU
+from apps.product.models import SKU, Brand
 from apps.response.models import NumericAnswer
 
 
@@ -210,7 +210,7 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Price Monitor'
         ).values('name').annotate(
-            country=F('question__answer__response__store__city__name'),
+            country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
             value=Count('question__answer__response'),
         ).values(
@@ -266,3 +266,27 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
                 )
             )
         ).values('name', 'value').filter(value__gt=0).unarchived()
+
+
+class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._results
+
+    def _factory(self):
+        numeric_answer = NumericAnswer.objects.filter(
+            answer__question__sku__brand=OuterRef('id'),
+        ).annotate(
+            frequency=Count('numeric')
+        ).order_by(
+            '-frequency'
+        ).values('numeric')[:1]
+
+        self._results = Brand.objects.filter(
+            sku__question__questionnaire__questionnaire_type__name='Price Monitor'
+        ).annotate(
+            max=Max('sku__question__answer__numericanswer__numeric'),
+            min=Min('sku__question__answer__numericanswer__numeric'),
+            mean=Avg('sku__question__answer__numericanswer__numeric'),
+            mode=Subquery(numeric_answer)
+        ).unarchived()

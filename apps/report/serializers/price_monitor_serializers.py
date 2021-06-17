@@ -6,7 +6,15 @@ class SKUMinMaxReportSerializer(serializers.Serializer):
     max = serializers.FloatField(default=0)
     min = serializers.FloatField(default=0)
     mode = serializers.FloatField(default=0)
-    mean = serializers.FloatField(default=0)
+    mean = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
+
+
+class BrandMinMaxReportSerializer(serializers.Serializer):
+    brand = serializers.CharField(source='name')
+    max = serializers.FloatField(default=0)
+    min = serializers.FloatField(default=0)
+    mode = serializers.FloatField(default=0)
+    mean = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
 
 
 class SKUMonthReportSerializer(serializers.Serializer):
