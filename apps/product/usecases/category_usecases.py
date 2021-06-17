@@ -1,3 +1,7 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
+
+from rest_framework.exceptions import ValidationError
+
 from apps.product.exceptions import CategoryNotFound
 from apps.product.models import Category
 from apps.core import usecases
@@ -20,7 +24,12 @@ class GetCategoryUseCase(usecases.BaseUseCase):
 
 class AddCategoryUseCase(usecases.CreateUseCase):
     def _factory(self):
-        Category.objects.create(**self._data)
+        category = Category(**self._data)
+        try:
+            category.clean()
+            category.save()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
 
 class UpdateCategoryUseCase(usecases.UpdateUseCase):

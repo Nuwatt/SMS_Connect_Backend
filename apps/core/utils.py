@@ -31,7 +31,7 @@ def generate_custom_id(initial: str, model):
 
 def last_id_for_bulk_create(initial: str, model):
     try:
-        last_record = model.objects.latest('created')
+        last_record = model.objects.last()
         return int(last_record.id[len(initial):])
     except model.DoesNotExist:
         return 0

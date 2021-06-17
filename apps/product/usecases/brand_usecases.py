@@ -1,3 +1,6 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework.exceptions import ValidationError
+
 from apps.product.exceptions import BrandNotFound
 from apps.product.models import Brand
 from apps.core import usecases
@@ -20,7 +23,14 @@ class GetBrandUseCase(usecases.BaseUseCase):
 
 class AddBrandUseCase(usecases.CreateUseCase):
     def _factory(self):
-        Brand.objects.create(**self._data)
+        brand = Brand(
+            **self._data
+        )
+        try:
+            brand.clean()
+            brand.save()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
 
 class UpdateBrandUseCase(usecases.UpdateUseCase):

@@ -35,10 +35,11 @@ class AddSKUUseCase(usecases.CreateUseCase):
             sku = SKU(
                 id='SKU{0:04}'.format(next_id),
                 brand=self._data.get('brand'),
+                category=self._data.get('brand').category,
                 name=name
             )
             try:
-                sku.full_clean()
+                sku.clean()
             except DjangoValidationError as e:
                 raise ValidationError(e.message_dict)
             skus.append(sku)
@@ -75,10 +76,10 @@ class ImportSKUUseCase(usecases.ImportCSVUseCase):
     def _factory(self):
         for item in self._item_list:
             category, created = Category.objects.get_or_create(name=item.get('Category Name'))
-            brand, created = Brand.objects.get_or_create(name=item.get('Brand Name'), category=category)
-            print(category, brand)
+            brand, created = Brand.objects.get_or_create(name=item.get('Brand Name'))
             sku, created = SKU.objects.get_or_create(
                 name=item.get('SKU Name'),
-                brand=brand
+                brand=brand,
+                category=category
             )
 
