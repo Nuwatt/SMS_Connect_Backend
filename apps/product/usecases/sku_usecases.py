@@ -2,10 +2,10 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from rest_framework.exceptions import ValidationError
 
-from apps.core.utils import generate_custom_id, last_id_for_bulk_create
+from apps.core import usecases
+from apps.core.utils import last_id_for_bulk_create
 from apps.product.exceptions import SKUNotFound
 from apps.product.models import SKU, Category, Brand
-from apps.core import usecases
 
 
 class GetSKUUseCase(usecases.BaseUseCase):
@@ -76,10 +76,9 @@ class ImportSKUUseCase(usecases.ImportCSVUseCase):
         for item in self._item_list:
             category, created = Category.objects.get_or_create(name=item.get('Category Name'))
             brand, created = Brand.objects.get_or_create(name=item.get('Brand Name'), category=category)
-            sku, created = SKU.objects.update_or_create(
+            print(category, brand)
+            sku, created = SKU.objects.get_or_create(
                 name=item.get('SKU Name'),
-                defaults={
-                    'brand': brand,
-                    # 'category': category,
-                }
+                brand=brand
             )
+

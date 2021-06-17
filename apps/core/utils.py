@@ -1,12 +1,13 @@
+import os
+
 from django.utils import timezone
 from django.utils.timezone import now
-from rest_framework.serializers import raise_errors_on_nested_writes
 from rest_framework.utils import model_meta
 
 
 def generate_custom_id(initial: str, model):
     try:
-        last_record = model.objects.latest('created')
+        last_record = model.objects.last()
 
         if len(last_record.id) > len(initial):
             next_id = int(last_record.id[len(initial):]) + 1
