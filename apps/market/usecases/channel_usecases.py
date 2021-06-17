@@ -1,3 +1,7 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
+
+from rest_framework.exceptions import ValidationError
+
 from apps.core import usecases
 from apps.market.exceptions import ChannelNotFound
 from apps.market.models import Store, Channel
@@ -20,7 +24,12 @@ class GetChannelUseCase(usecases.BaseUseCase):
 
 class AddChannelUseCase(usecases.CreateUseCase):
     def _factory(self):
-        Channel.objects.create(**self._data)
+        channel = Channel(**self._data)
+        try:
+            channel.clean()
+            channel.save()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
 
 class UpdateChannelUseCase(usecases.UpdateUseCase):
