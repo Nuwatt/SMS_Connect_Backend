@@ -76,7 +76,12 @@ class ImportSKUUseCase(usecases.ImportCSVUseCase):
     def _factory(self):
         for item in self._item_list:
             category, created = Category.objects.get_or_create(name=item.get('Category Name'))
-            brand, created = Brand.objects.get_or_create(name=item.get('Brand Name'))
+            brand, created = Brand.objects.get_or_create(
+                name=item.get('Brand Name'),
+                defaults={
+                    'category': category
+                }
+            )
             sku, created = SKU.objects.get_or_create(
                 name=item.get('SKU Name'),
                 brand=brand,
