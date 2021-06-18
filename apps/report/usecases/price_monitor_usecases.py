@@ -22,7 +22,8 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
         ).values('numeric')[:1]
 
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).annotate(
             max=Max('question__answer__numericanswer__numeric'),
             min=Min('question__answer__numericanswer__numeric'),
@@ -38,7 +39,8 @@ class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True,
         ).values('name').annotate(
             month=TruncMonth('question__answer__response__completed_at'),
         ).values('name', 'month').annotate(
@@ -57,7 +59,8 @@ class SKUMonthMinReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).values('name').annotate(
             month=TruncMonth('question__answer__response__completed_at'),
         ).values('name', 'month').annotate(
@@ -76,7 +79,8 @@ class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).values('name').annotate(
             month=TruncMonth('question__answer__response__completed_at'),
         ).values('name', 'month').annotate(
@@ -103,7 +107,8 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
         ).values('numeric')[:1]
 
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).annotate(
             month=TruncMonth('question__answer__response__completed_at'),
         ).values('month').distinct().annotate(
@@ -122,7 +127,8 @@ class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).values('name').annotate(
             country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
@@ -141,7 +147,8 @@ class SKUCountryMinReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).values('name').annotate(
             country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
@@ -160,7 +167,8 @@ class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).values('name').annotate(
             country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
@@ -187,7 +195,8 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
         ).values('numeric')[:1]
 
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).annotate(
             country=F('question__answer__response__store__city__country__name'),
         ).values(
@@ -208,7 +217,8 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).values('name').annotate(
             country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
@@ -227,7 +237,8 @@ class AnswerPerCityReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor'
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
         ).values('name').annotate(
             city=F('question__answer__response__store__city__name'),
         ).values('name', 'city').annotate(
@@ -283,7 +294,8 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
         ).values('numeric')[:1]
 
         self._results = Brand.objects.filter(
-            sku__question__questionnaire__questionnaire_type__name='Price Monitor'
+            sku__question__questionnaire__questionnaire_type__name='Price Monitor',
+            sku__question__answer__response__is_completed=True
         ).annotate(
             max=Max('sku__question__answer__numericanswer__numeric'),
             min=Min('sku__question__answer__numericanswer__numeric'),

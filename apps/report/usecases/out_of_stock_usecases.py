@@ -13,7 +13,8 @@ class SKUOverallReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             total_answer=Count('question__answer__choiceanswer__choice'),
             available=Count(
@@ -43,7 +44,8 @@ class SKUMonthAvailableReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             month=TruncMonth('question__answer__response__completed_at'),
         ).values('name', 'month').annotate(
@@ -66,7 +68,8 @@ class SKUMonthNotAvailableReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             month=TruncMonth('question__answer__response__completed_at'),
         ).values('name', 'month').annotate(
@@ -89,7 +92,8 @@ class SKUMonthLessReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             month=TruncMonth('question__answer__response__completed_at'),
         ).values('name', 'month').annotate(
@@ -112,7 +116,8 @@ class SKUCityAvailableReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             city=F('question__answer__response__store__city__name'),
         ).values('name', 'city').annotate(
@@ -135,7 +140,8 @@ class SKUCityNotAvailableReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             city=F('question__answer__response__store__city__name'),
         ).values('name', 'city').annotate(
@@ -158,7 +164,8 @@ class SKUCityLessReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             city=F('question__answer__response__store__city__name'),
         ).values('name', 'city').annotate(
@@ -181,7 +188,8 @@ class SKUStoreLessReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             store=F('question__answer__response__store__name'),
         ).values('name', 'store').annotate(
@@ -204,7 +212,8 @@ class SKURetailerLessReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Out Of Stock'
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True
         ).annotate(
             retailer=F('question__answer__response__store__retailer__name'),
         ).values('name', 'retailer').annotate(
