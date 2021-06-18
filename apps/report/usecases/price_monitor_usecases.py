@@ -14,7 +14,7 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         numeric_answer = NumericAnswer.objects.filter(
-            answer__question=OuterRef('question'),
+            answer__question__sku=OuterRef('id'),
         ).annotate(
             frequency=Count('numeric')
         ).order_by(
