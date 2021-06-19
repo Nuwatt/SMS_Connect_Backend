@@ -38,6 +38,11 @@ class SKUReportFilter(filters.FilterSet):
         label='city',
         lookup_expr='in'
     )
+    country = IdInFilter(
+        field_name='question__answer__response__store__city__country',
+        label='country',
+        lookup_expr='in'
+    )
     store = IdInFilter(
         field_name='question__answer__response__store',
         label='store',
@@ -94,6 +99,11 @@ class AnswerPerCityFilter(filters.FilterSet):
     city = IdInFilter(
         field_name='id',
         label='city',
+        lookup_expr='in'
+    )
+    country = IdInFilter(
+        field_name='country',
+        label='country',
         lookup_expr='in'
     )
     from_date = filters.DateFilter(
