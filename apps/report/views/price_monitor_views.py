@@ -2,7 +2,7 @@ from apps.core import generics
 from apps.report.filtersets import (
     AnswerPerSKUFilter,
     AnswerPerCityFilter,
-    SKUReportFilter, TotalVisitFilter
+    SKUReportFilter, TotalVisitFilter, AnswerPerCountryFilter
 )
 from apps.report.serializers import price_monitor_serializers
 from apps.report.usecases import price_monitor_usecases
@@ -127,7 +127,7 @@ class AnswerPerCountryReportView(generics.ListAPIView):
     """
     pagination_class = None
     serializer_class = price_monitor_serializers.AnswerPerCountryReportSerializer
-    filterset_class = SKUReportFilter
+    filterset_class = AnswerPerCountryFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerCountryReportUseCase().execute()
@@ -140,7 +140,7 @@ class AnswerPerCityReportView(generics.ListAPIView):
     """
     pagination_class = None
     serializer_class = price_monitor_serializers.AnswerPerCityReportSerializer
-    filterset_class = SKUReportFilter
+    filterset_class = AnswerPerCityFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerCityReportUseCase().execute()

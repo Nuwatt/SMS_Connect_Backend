@@ -220,7 +220,8 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
                 'city__store__response',
                 filter=Q(
                     city__store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-                )
+                ),
+                distinct=True
             )
         ).values('name', 'value').filter(value__gt=0).unarchived()
 
@@ -236,7 +237,8 @@ class AnswerPerCityReportUseCase(usecases.BaseUseCase):
                 'store__response',
                 filter=Q(
                     store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-                )
+                ),
+                distinct=True
             )
         ).values('name', 'value').filter(value__gt=0).unarchived()
     # def execute(self):
