@@ -50,7 +50,7 @@ class AnswerPerCountryReportSerializer(serializers.Serializer):
 
 
 class AnswerPerCityReportSerializer(serializers.Serializer):
-    country = serializers.CharField(source='name')
+    city = serializers.CharField(source='name')
     value = serializers.FloatField()
 
 
