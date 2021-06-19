@@ -49,7 +49,7 @@ class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().order_by('question__answer__response__completed_at')
 
 
 class SKUMonthMinReportUseCase(usecases.BaseUseCase):
@@ -69,7 +69,7 @@ class SKUMonthMinReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().order_by('question__answer__response__completed_at')
 
 
 class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
@@ -89,7 +89,7 @@ class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().order_by('question__answer__response__completed_at')
 
 
 class SKUMonthModeReportUseCase(usecases.BaseUseCase):
@@ -117,7 +117,7 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().order_by('question__answer__response__completed_at')
 
 
 class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
