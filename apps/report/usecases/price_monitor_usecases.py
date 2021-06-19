@@ -270,7 +270,7 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
             value=Count(
                 'question__answer__response',
             )
-        ).values('name', 'value').unarchived()
+        ).values('name', 'value').filter(value__gt=0).unarchived()
 
 
 class TotalVisitReportUseCase(usecases.BaseUseCase):
