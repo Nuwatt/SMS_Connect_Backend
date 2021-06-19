@@ -2,7 +2,7 @@ from django.db.models import Count, Max, Min, Avg, OuterRef, Subquery, F, Q
 from django.db.models.functions import TruncMonth
 
 from apps.core import usecases
-from apps.localize.models import City
+from apps.localize.models import City, Country
 from apps.product.models import SKU, Brand
 from apps.response.models import NumericAnswer
 
@@ -215,18 +215,14 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor',
-            question__answer__response__is_completed=True
-        ).values('name').annotate(
-            country=F('question__answer__response__store__city__country__name'),
-        ).values('name', 'country').annotate(
-            value=Count('question__answer__response'),
-        ).values(
-            'country',
-            'value',
-            'name',
-        ).unarchived()
+        self._results = Country.objects.annotate(
+            value=Count(
+                'city__store__response',
+                filter=Q(
+                    city__store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+                )
+            )
+        ).values('name', 'value').filter(value__gt=0).unarchived()
 
 
 class AnswerPerCityReportUseCase(usecases.BaseUseCase):
@@ -235,18 +231,31 @@ class AnswerPerCityReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = SKU.objects.filter(
-            question__questionnaire__questionnaire_type__name='Price Monitor',
-            question__answer__response__is_completed=True
-        ).values('name').annotate(
-            city=F('question__answer__response__store__city__name'),
-        ).values('name', 'city').annotate(
-            value=Count('question__answer__response'),
-        ).values(
-            'city',
-            'value',
-            'name',
-        ).unarchived()
+        self._results = City.objects.annotate(
+            value=Count(
+                'store__response',
+                filter=Q(
+                    store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+                )
+            )
+        ).values('name', 'value').filter(value__gt=0).unarchived()
+    # def execute(self):
+    #     self._factory()
+    #     return self._results
+    #
+    # def _factory(self):
+    #     self._results = SKU.objects.filter(
+    #         question__questionnaire__questionnaire_type__name='Price Monitor',
+    #         question__answer__response__is_completed=True
+    #     ).values('name').annotate(
+    #         city=F('question__answer__response__store__city__name'),
+    #     ).values('name', 'city').annotate(
+    #         value=Count('question__answer__response'),
+    #     ).values(
+    #         'city',
+    #         'value',
+    #         'name',
+    #     ).unarchived()
 
 
 class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
