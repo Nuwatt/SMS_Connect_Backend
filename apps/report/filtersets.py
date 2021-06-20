@@ -176,6 +176,11 @@ class AnswerPerSKUFilter(SKUMinMaxReportFilter):
 
 
 class BrandMinMaxReportFilter(filters.FilterSet):
+    brand = IdInFilter(
+        field_name='id',
+        label='brand',
+        lookup_expr='in'
+    )
     city = IdInFilter(
         field_name='sku__question__answer__response__store__city',
         label='city',
@@ -187,10 +192,9 @@ class BrandMinMaxReportFilter(filters.FilterSet):
         lookup_expr='in'
     )
     store = IdInFilter(
-        field_name='question__answer__response__store',
+        field_name='sku__question__answer__response__store',
         label='store',
         lookup_expr='in'
-
     )
     from_date = filters.DateFilter(
         field_name='sku__question__answer__response__completed_at__date',
