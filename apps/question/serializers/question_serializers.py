@@ -4,7 +4,7 @@ from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from apps.core.serializers import IdNameSerializer, CSVFileInputSerializer
+from apps.core.serializers import IdNameSerializer, CSVFileInputSerializer, IdNameCharSerializer
 from apps.question.models import Question
 
 
@@ -78,12 +78,14 @@ class ListQuestionSerializer(AddQuestionSerializer):
 class ListQuestionForAgentUserSerializer(QuestionSerializer):
     question_options = serializers.SerializerMethodField()
     question_type = serializers.CharField()
+    brand = IdNameCharSerializer(source='sku.brand')
 
     class Meta(QuestionSerializer.Meta):
         fields = (
             'id',
             'statement',
             'question_type',
+            'brand',
             'question_options',
         )
 

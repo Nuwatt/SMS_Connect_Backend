@@ -203,7 +203,8 @@ class ListQuestionForAgentUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         self._questions = self._questionnaire.question_set.unarchived().select_related(
-            'question_type'
+            'question_type',
+            'sku__brand'
         )
 
     def is_valid(self):
