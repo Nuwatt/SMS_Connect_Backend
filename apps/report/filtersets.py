@@ -97,15 +97,13 @@ class AnswerFilter(filters.FilterSet):
         label='sku',
         lookup_expr='in'
     )
-    from_date = filters.DateFilter(
+    date = filters.DateFromToRangeFilter(
         field_name='store__response__completed_at__date',
-        label='from date',
-        lookup_expr='gte'
+        label='date'
     )
-    till_date = filters.DateFilter(
+    exact_date = filters.DateFilter(
         field_name='store__response__completed_at__date',
-        label='till date',
-        lookup_expr='lte'
+        label='date'
     )
     store = IdInFilter(
         field_name='store',
@@ -131,15 +129,13 @@ class AnswerPerCityFilter(filters.FilterSet):
         label='country',
         lookup_expr='in'
     )
-    from_date = filters.DateFilter(
+    date = filters.DateFromToRangeFilter(
         field_name='store__response__completed_at__date',
-        label='from date',
-        lookup_expr='gte'
+        label='date'
     )
-    till_date = filters.DateFilter(
+    exact_date = filters.DateFilter(
         field_name='store__response__completed_at__date',
-        label='till date',
-        lookup_expr='lte'
+        label='date'
     )
     store = IdInFilter(
         field_name='store',
@@ -161,15 +157,13 @@ class AnswerPerCountryFilter(filters.FilterSet):
     #     label='sku',
     #     lookup_expr='in'
     # )
-    from_date = filters.DateFilter(
+    date = filters.DateFromToRangeFilter(
         field_name='city__store__response__completed_at__date',
-        label='from date',
-        lookup_expr='gte'
+        label='date'
     )
-    till_date = filters.DateFilter(
+    exact_date = filters.DateFilter(
         field_name='city__store__response__completed_at__date',
-        label='till date',
-        lookup_expr='lte'
+        label='date'
     )
     store = IdInFilter(
         field_name='city__store',
