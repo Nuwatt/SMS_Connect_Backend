@@ -192,11 +192,6 @@ class BrandMinMaxReportFilter(filters.FilterSet):
         lookup_expr='in'
 
     )
-    sku = IdInFilter(
-        field_name='sku',
-        label='sku',
-        lookup_expr='in'
-    )
     from_date = filters.DateFilter(
         field_name='sku__question__answer__response__completed_at__date',
         label='from date',
