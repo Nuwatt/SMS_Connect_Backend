@@ -29,7 +29,7 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             min=Min('question__answer__numericanswer__numeric'),
             mean=Avg('question__answer__numericanswer__numeric'),
             mode=Subquery(numeric_answer)
-        ).unarchived()
+        ).unarchived().filter(max__isnull=False)
 
 
 class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
@@ -49,7 +49,7 @@ class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUMonthMinReportUseCase(usecases.BaseUseCase):
@@ -69,7 +69,7 @@ class SKUMonthMinReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
@@ -89,7 +89,8 @@ class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(value__isnull=False)
+
 
 class SKUMonthModeReportUseCase(usecases.BaseUseCase):
     def execute(self):
@@ -116,7 +117,7 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
@@ -131,12 +132,14 @@ class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
         ).values('name').annotate(
             country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
+            country_id=F('question__answer__response__store__city__country'),
             value=Max('question__answer__numericanswer__numeric'),
         ).values(
             'country',
+            'country_id',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUCountryMinReportUseCase(usecases.BaseUseCase):
@@ -152,11 +155,13 @@ class SKUCountryMinReportUseCase(usecases.BaseUseCase):
             country=F('question__answer__response__store__city__country__name'),
         ).values('name', 'country').annotate(
             value=Min('question__answer__numericanswer__numeric'),
+            country_id=F('question__answer__response__store__city__country'),
         ).values(
             'country',
+            'country_id',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
@@ -170,13 +175,15 @@ class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
             question__answer__response__is_completed=True
         ).values('name').annotate(
             country=F('question__answer__response__store__city__country__name'),
-        ).values('name', 'country').annotate(
+        ).values('name', 'country', 'country_id').annotate(
             value=Avg('question__answer__numericanswer__numeric'),
+            country_id=F('question__answer__response__store__city__country'),
         ).values(
             'country',
+            'country_id',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUCountryModeReportUseCase(usecases.BaseUseCase):
@@ -202,11 +209,13 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
             'country',
         ).distinct().annotate(
             value=Subquery(numeric_answer),
+            country_id=F('question__answer__response__store__city__country'),
         ).values(
             'country',
+            'country_id',
             'name',
             'value'
-        ).unarchived()
+        ).unarchived().filter(value__isnull=False)
 
 
 class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
@@ -311,4 +320,4 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
             min=Min('sku__question__answer__numericanswer__numeric'),
             mean=Avg('sku__question__answer__numericanswer__numeric'),
             mode=Subquery(numeric_answer)
-        ).unarchived()
+        ).unarchived().filter(max__isnull=False)

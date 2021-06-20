@@ -3,32 +3,49 @@ from django_filters import rest_framework as filters
 from apps.core.filtersets import IdInFilter
 
 
-class SKUMinMaxFilter(filters.FilterSet):
+class SKUMinMaxReportFilter(filters.FilterSet):
     city = IdInFilter(
-        field_name='answer__response__store__city',
+        field_name='question__answer__response__store__city',
         label='city',
         lookup_expr='in'
     )
+    country = IdInFilter(
+        field_name='question__answer__response__store__city__country',
+        label='country',
+        lookup_expr='in'
+    )
     store = IdInFilter(
-        field_name='answer__response__store',
+        field_name='question__answer__response__store',
         label='store',
         lookup_expr='in'
 
     )
     sku = IdInFilter(
-        field_name='answer__question__sku',
+        field_name='id',
         label='sku',
         lookup_expr='in'
     )
     from_date = filters.DateFilter(
-        field_name='answer__response__completed_at__date',
+        field_name='question__answer__response__completed_at__date',
         label='from date',
         lookup_expr='gte'
     )
     till_date = filters.DateFilter(
-        field_name='answer__response__completed_at__date',
+        field_name='question__answer__response__completed_at__date',
         label='till date',
         lookup_expr='lte'
+    )
+
+
+class SKUMonthReportFilter(SKUMinMaxReportFilter):
+    pass
+
+
+class SKUCountryReportFilter(SKUMinMaxReportFilter):
+    country = IdInFilter(
+        field_name='country_id',
+        label='country',
+        lookup_expr='in'
     )
 
 
@@ -39,7 +56,7 @@ class SKUReportFilter(filters.FilterSet):
         lookup_expr='in'
     )
     country = IdInFilter(
-        field_name='question__answer__response__store__city__country',
+        field_name='country',
         label='country',
         lookup_expr='in'
     )
@@ -154,11 +171,41 @@ class AnswerPerCountryFilter(filters.FilterSet):
     )
 
 
-class AnswerPerSKUFilter(AnswerFilter):
+class AnswerPerSKUFilter(SKUMinMaxReportFilter):
+    pass
+
+
+class BrandMinMaxReportFilter(filters.FilterSet):
+    city = IdInFilter(
+        field_name='sku__question__answer__response__store__city',
+        label='city',
+        lookup_expr='in'
+    )
+    country = IdInFilter(
+        field_name='sku__question__answer__response__store__city__country',
+        label='country',
+        lookup_expr='in'
+    )
+    store = IdInFilter(
+        field_name='question__answer__response__store',
+        label='store',
+        lookup_expr='in'
+
+    )
     sku = IdInFilter(
-        field_name='id',
+        field_name='sku',
         label='sku',
         lookup_expr='in'
+    )
+    from_date = filters.DateFilter(
+        field_name='sku__question__answer__response__completed_at__date',
+        label='from date',
+        lookup_expr='gte'
+    )
+    till_date = filters.DateFilter(
+        field_name='sku__question__answer__response__completed_at__date',
+        label='till date',
+        lookup_expr='lte'
     )
 
 
