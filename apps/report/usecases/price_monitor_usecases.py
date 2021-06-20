@@ -175,7 +175,7 @@ class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
             question__answer__response__is_completed=True
         ).values('name').annotate(
             country=F('question__answer__response__store__city__country__name'),
-        ).values('name', 'country', 'country_id').annotate(
+        ).values('name', 'country').annotate(
             value=Avg('question__answer__numericanswer__numeric'),
             country_id=F('question__answer__response__store__city__country'),
         ).values(
