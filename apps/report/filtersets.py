@@ -108,11 +108,11 @@ class AnswerFilter(filters.FilterSet):
 
 
 class AnswerPerCityFilter(filters.FilterSet):
-    sku = IdInFilter(
-        field_name='store__response__answer__question__sku',
-        label='sku',
-        lookup_expr='in'
-    )
+    # sku = IdInFilter(
+    #     field_name='store__response__answer__question__sku',
+    #     label='sku',
+    #     lookup_expr='in'
+    # )
     city = IdInFilter(
         field_name='id',
         label='city',
@@ -148,11 +148,11 @@ class AnswerPerCountryFilter(filters.FilterSet):
         lookup_expr='in'
     )
 
-    sku = IdInFilter(
-        field_name='city__store__response__answer__question__sku',
-        label='sku',
-        lookup_expr='in'
-    )
+    # sku = IdInFilter(
+    #     field_name='city__store__response__answer__question__sku',
+    #     label='sku',
+    #     lookup_expr='in'
+    # )
     from_date = filters.DateFilter(
         field_name='city__store__response__completed_at__date',
         label='from date',
