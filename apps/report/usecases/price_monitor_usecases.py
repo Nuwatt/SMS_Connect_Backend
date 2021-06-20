@@ -305,19 +305,26 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         numeric_answer = NumericAnswer.objects.filter(
-            answer__question__sku__brand=OuterRef('id'),
+            answer__question__sku__brand=OuterRef('brand'),
         ).annotate(
             frequency=Count('numeric')
         ).order_by(
             '-frequency'
         ).values('numeric')[:1]
 
-        self._results = Brand.objects.filter(
-            sku__question__questionnaire__questionnaire_type__name='Price Monitor',
-            sku__question__answer__response__is_completed=True
-        ).annotate(
-            max=Max('sku__question__answer__numericanswer__numeric'),
-            min=Min('sku__question__answer__numericanswer__numeric'),
-            mean=Avg('sku__question__answer__numericanswer__numeric'),
+        self._results = SKU.objects.filter(
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
+        ).values('brand').distinct().annotate(
+            max=Max('question__answer__numericanswer__numeric'),
+            min=Min('question__answer__numericanswer__numeric'),
+            mean=Avg('question__answer__numericanswer__numeric'),
             mode=Subquery(numeric_answer)
-        ).unarchived().filter(max__isnull=False)
+        ).unarchived().filter(max__isnull=False).values(
+            'max',
+            'min',
+            'mean',
+            'mode',
+            'brand__name',
+            'brand',
+        )

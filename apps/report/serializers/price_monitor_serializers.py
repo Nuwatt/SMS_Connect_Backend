@@ -10,7 +10,7 @@ class SKUMinMaxReportSerializer(serializers.Serializer):
 
 
 class BrandMinMaxReportSerializer(serializers.Serializer):
-    brand = serializers.CharField(source='name')
+    brand = serializers.CharField(source='brand__name')
     max = serializers.FloatField(default=0)
     min = serializers.FloatField(default=0)
     mode = serializers.FloatField(default=0)

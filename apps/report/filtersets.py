@@ -25,16 +25,24 @@ class SKUMinMaxReportFilter(filters.FilterSet):
         label='sku',
         lookup_expr='in'
     )
-    from_date = filters.DateFilter(
+    date = filters.DateFromToRangeFilter(
         field_name='question__answer__response__completed_at__date',
-        label='from date',
-        lookup_expr='gte'
+        label='date'
     )
-    till_date = filters.DateFilter(
+    exact_date = filters.DateFilter(
         field_name='question__answer__response__completed_at__date',
-        label='till date',
-        lookup_expr='lte'
+        label='date'
     )
+    # from_date = filters.DateFilter(
+    #     field_name='question__answer__response__completed_at__date',
+    #     label='from date',
+    #     lookup_expr='gte'
+    # )
+    # till_date = filters.DateFilter(
+    #     field_name='question__answer__response__completed_at__date',
+    #     label='till date',
+    #     lookup_expr='lte'
+    # )
 
 
 class SKUMonthReportFilter(SKUMinMaxReportFilter):
@@ -175,36 +183,11 @@ class AnswerPerSKUFilter(SKUMinMaxReportFilter):
     pass
 
 
-class BrandMinMaxReportFilter(filters.FilterSet):
+class BrandMinMaxReportFilter(SKUMinMaxReportFilter):
     brand = IdInFilter(
-        field_name='id',
+        field_name='brand',
         label='brand',
         lookup_expr='in'
-    )
-    city = IdInFilter(
-        field_name='sku__question__answer__response__store__city',
-        label='city',
-        lookup_expr='in'
-    )
-    country = IdInFilter(
-        field_name='sku__question__answer__response__store__city__country',
-        label='country',
-        lookup_expr='in'
-    )
-    store = IdInFilter(
-        field_name='sku__question__answer__response__store',
-        label='store',
-        lookup_expr='in'
-    )
-    from_date = filters.DateFilter(
-        field_name='sku__question__answer__response__completed_at__date',
-        label='from date',
-        lookup_expr='gte'
-    )
-    till_date = filters.DateFilter(
-        field_name='sku__question__answer__response__completed_at__date',
-        label='till date',
-        lookup_expr='lte'
     )
 
 
