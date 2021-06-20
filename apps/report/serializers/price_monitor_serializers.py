@@ -25,12 +25,12 @@ class SKUMonthReportSerializer(serializers.Serializer):
 
 class CountryReportSerializer(serializers.Serializer):
     country = serializers.CharField()
-    value = serializers.FloatField()
+    value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
 
 
 class CityReportSerializer(serializers.Serializer):
     city = serializers.CharField()
-    value = serializers.FloatField()
+    value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
 
 
 class SKUCountryReportSerializer(serializers.Serializer):
