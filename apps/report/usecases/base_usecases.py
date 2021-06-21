@@ -13,7 +13,10 @@ class OverviewReportUseCase(usecases.BaseUseCase):
         self._result = {
             'field_work': AgentUser.objects.unarchived().count(),
             'questionnaire': Questionnaire.objects.unarchived().count(),
-            'answer': Response.objects.unarchived().count(),
+            'answer': Response.objects.filter(
+                is_archived=False,
+                is_completed=True
+            ).count(),
         }
 
 
