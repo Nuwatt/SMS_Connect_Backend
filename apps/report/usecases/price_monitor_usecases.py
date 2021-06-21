@@ -30,7 +30,7 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             min=Min('question__answer__numericanswer__numeric'),
             mean=Avg('question__answer__numericanswer__numeric'),
             mode=Subquery(numeric_answer)
-        ).unarchived().filter(max__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(max__isnull=False)
 
 
 class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
@@ -70,7 +70,7 @@ class SKUMonthMinReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived().filter(value__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
@@ -90,7 +90,7 @@ class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived().filter(value__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUMonthModeReportUseCase(usecases.BaseUseCase):
@@ -118,7 +118,7 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived().filter(value__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
@@ -140,7 +140,7 @@ class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
             'country_id',
             'value',
             'name',
-        ).unarchived().filter(value__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUCountryMinReportUseCase(usecases.BaseUseCase):
@@ -162,7 +162,7 @@ class SKUCountryMinReportUseCase(usecases.BaseUseCase):
             'country_id',
             'value',
             'name',
-        ).unarchived().filter(value__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
@@ -184,7 +184,7 @@ class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
             'country_id',
             'value',
             'name',
-        ).unarchived().filter(value__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUCountryModeReportUseCase(usecases.BaseUseCase):
@@ -216,7 +216,7 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
             'country_id',
             'name',
             'value'
-        ).unarchived().filter(value__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(value__isnull=False)
 
 
 class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
@@ -233,7 +233,7 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
                 ),
                 distinct=True
             )
-        ).values('name', 'value').filter(value__gt=0).unarchived()[:settings.REPORTING_MAX_LIMIT]
+        ).values('name', 'value').filter(value__gt=0).unarchived()
 
 
 class AnswerPerCityReportUseCase(usecases.BaseUseCase):
@@ -250,7 +250,7 @@ class AnswerPerCityReportUseCase(usecases.BaseUseCase):
                 ),
                 distinct=True
             )
-        ).values('name', 'value').filter(value__gt=0).unarchived()[:settings.REPORTING_MAX_LIMIT]
+        ).values('name', 'value').filter(value__gt=0).unarchived()
     # def execute(self):
     #     self._factory()
     #     return self._results
@@ -280,7 +280,7 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
             value=Count(
                 'question__answer__response',
             )
-        ).values('name', 'value').filter(value__gt=0).unarchived()[:settings.REPORTING_MAX_LIMIT]
+        ).values('name', 'value').filter(value__gt=0).unarchived()
 
 
 class TotalVisitReportUseCase(usecases.BaseUseCase):
@@ -296,7 +296,7 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
                     store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
                 )
             )
-        ).values('name', 'value').filter(value__gt=0).unarchived()[:settings.REPORTING_MAX_LIMIT]
+        ).values('name', 'value').filter(value__gt=0).unarchived()
 
 
 class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
@@ -328,4 +328,4 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
             'mode',
             'brand__name',
             'brand',
-        )[:settings.REPORTING_MAX_LIMIT]
+        )
