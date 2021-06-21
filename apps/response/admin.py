@@ -31,6 +31,7 @@ class ResponseAdmin(BaseModelAdmin):
 
     list_filter = BaseModelAdmin.list_filter + (
         'is_completed',
+        'response_cycle__questionnaire__questionnaire_type'
     )
 
 
