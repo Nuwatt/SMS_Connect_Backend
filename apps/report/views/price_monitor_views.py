@@ -1,4 +1,5 @@
 from apps.core import generics
+from apps.core.pagination import ReportPagination
 from apps.report import filtersets
 from apps.report.serializers import price_monitor_serializers
 from apps.report.usecases import price_monitor_usecases
@@ -11,7 +12,7 @@ class SKUMinMaxReportView(generics.ListAPIView):
     """
     serializer_class = price_monitor_serializers.SKUMinMaxReportSerializer
     filterset_class = filtersets.SKUMinMaxReportFilter
-    pagination_class = None
+    pagination_class = ReportPagination
 
     def get_queryset(self):
         return price_monitor_usecases.SKUMinMaxReportUseCase().execute()
@@ -24,7 +25,7 @@ class SKUMonthReportView(generics.ListAPIView):
 
     serializer_class = price_monitor_serializers.SKUMonthReportSerializer
     filterset_class = filtersets.SKUMonthReportFilter
-    pagination_class = None
+    pagination_class = ReportPagination
 
 
 # optimized
@@ -73,7 +74,7 @@ class SKUCountryReportView(generics.ListAPIView):
     """
     serializer_class = price_monitor_serializers.SKUCountryReportSerializer
     filterset_class = filtersets.SKUCountryReportFilter
-    pagination_class = None
+    pagination_class = ReportPagination
 
 
 # optimized
@@ -121,7 +122,7 @@ class AnswerPerCountryReportView(generics.ListAPIView):
     """
     Use this end-point to list report of answer per country for price monitor
     """
-    pagination_class = None
+    pagination_class = ReportPagination
     serializer_class = price_monitor_serializers.AnswerPerCountryReportSerializer
     filterset_class = filtersets.AnswerPerCountryFilter
 
@@ -134,7 +135,7 @@ class AnswerPerCityReportView(generics.ListAPIView):
     """
     Use this end-point to list report of answer per country for price monitor
     """
-    pagination_class = None
+    pagination_class = ReportPagination
     serializer_class = price_monitor_serializers.AnswerPerCityReportSerializer
     filterset_class = filtersets.AnswerPerCityFilter
 
@@ -147,7 +148,7 @@ class AnswerPerSKUReportView(generics.ListAPIView):
     """
     Use this end-point to list report of answer per sku for price monitor
     """
-    pagination_class = None
+    pagination_class = ReportPagination
     serializer_class = price_monitor_serializers.AnswerReportSerializer
     filterset_class = filtersets.AnswerPerSKUFilter
 
@@ -160,7 +161,7 @@ class TotalVisitReportView(generics.ListAPIView):
     """
     Use this end-point to list report of total visit for price monitor
     """
-    pagination_class = None
+    pagination_class = ReportPagination
     serializer_class = price_monitor_serializers.TotalVisitReportSerializer
     filterset_class = filtersets.TotalVisitFilter
 
@@ -172,7 +173,7 @@ class BrandMinMaxReportView(generics.ListAPIView):
     """
     Use this end-point to list report of brand vs min max for price monitor
     """
-    pagination_class = None
+    pagination_class = ReportPagination
     serializer_class = price_monitor_serializers.BrandMinMaxReportSerializer
     filterset_class = filtersets.BrandMinMaxReportFilter
 
