@@ -59,7 +59,9 @@ class SKUMonthAvailableReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class SKUMonthNotAvailableReportUseCase(usecases.BaseUseCase):
@@ -83,7 +85,9 @@ class SKUMonthNotAvailableReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class SKUMonthLessReportUseCase(usecases.BaseUseCase):
@@ -107,7 +111,9 @@ class SKUMonthLessReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class SKUCityAvailableReportUseCase(usecases.BaseUseCase):
@@ -131,7 +137,9 @@ class SKUCityAvailableReportUseCase(usecases.BaseUseCase):
             'city',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class SKUCityNotAvailableReportUseCase(usecases.BaseUseCase):
@@ -155,7 +163,9 @@ class SKUCityNotAvailableReportUseCase(usecases.BaseUseCase):
             'city',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class SKUCityLessReportUseCase(usecases.BaseUseCase):
@@ -179,7 +189,9 @@ class SKUCityLessReportUseCase(usecases.BaseUseCase):
             'city',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class SKUStoreNotAvailableReportUseCase(usecases.BaseUseCase):
@@ -203,7 +215,9 @@ class SKUStoreNotAvailableReportUseCase(usecases.BaseUseCase):
             'store',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class SKURetailerLessReportUseCase(usecases.BaseUseCase):
@@ -227,7 +241,9 @@ class SKURetailerLessReportUseCase(usecases.BaseUseCase):
             'retailer',
             'value',
             'name',
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class TotalVisitReportUseCase(usecases.BaseUseCase):
