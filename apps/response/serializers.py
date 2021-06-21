@@ -153,6 +153,7 @@ data = [
 
 
 class ListAgentResponseSerializer(serializers.Serializer):
+    response = serializers.CharField(source='id')
     questionnaire_id = serializers.CharField(source='response_cycle.questionnaire.id')
     questionnaire_name = serializers.CharField(source='response_cycle.questionnaire.name')
     questionnaire_type = serializers.CharField(source='response_cycle.questionnaire.questionnaire_type')
