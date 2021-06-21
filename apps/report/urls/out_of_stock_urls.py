@@ -53,4 +53,9 @@ urlpatterns = [
         out_of_stock_views.TotalVisitReportView.as_view(),
         name='total-visit-report'
     ),
+    path(
+        'week-less',
+        out_of_stock_views.SKUWeekLessReportView.as_view(),
+        name='sku-week-less-report'
+    ),
 ]

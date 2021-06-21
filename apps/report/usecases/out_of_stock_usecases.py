@@ -1,5 +1,6 @@
 from django.db.models import Count, Q, F
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth, TruncWeek, ExtractWeek
+from django.utils.timezone import now
 
 from apps.core import usecases
 from apps.localize.models import City
@@ -27,7 +28,7 @@ class SKUOverallReportUseCase(usecases.BaseUseCase):
             ) / F('total_answer') * 100,
             less=Count(
                 'question__answer__choiceanswer__choice',
-                filter=Q(question__answer__choiceanswer__choice__choice='Less than 6')
+                filter=Q(question__answer__choiceanswer__choice__choice='Less than six (<6)')
             ) / F('total_answer') * 100,
         ).values(
             'available',
@@ -100,7 +101,7 @@ class SKUMonthLessReportUseCase(usecases.BaseUseCase):
             total_answer=Count('question__answer__choiceanswer__choice'),
             value=Count(
                 'question__answer__choiceanswer__choice',
-                filter=Q(question__answer__choiceanswer__choice__choice='Less than 6')
+                filter=Q(question__answer__choiceanswer__choice__choice='Less than six (<6)')
             ) / F('total_answer') * 100,
         ).values(
             'month',
@@ -172,7 +173,7 @@ class SKUCityLessReportUseCase(usecases.BaseUseCase):
             total_answer=Count('question__answer__choiceanswer__choice'),
             value=Count(
                 'question__answer__choiceanswer__choice',
-                filter=Q(question__answer__choiceanswer__choice__choice='Less than 6')
+                filter=Q(question__answer__choiceanswer__choice__choice='Less than six (<6)')
             ) / F('total_answer') * 100,
         ).values(
             'city',
@@ -196,7 +197,7 @@ class SKUStoreLessReportUseCase(usecases.BaseUseCase):
             total_answer=Count('question__answer__choiceanswer__choice'),
             value=Count(
                 'question__answer__choiceanswer__choice',
-                filter=Q(question__answer__choiceanswer__choice__choice='Less than 6')
+                filter=Q(question__answer__choiceanswer__choice__choice='Less than six (<6)')
             ) / F('total_answer') * 100,
         ).values(
             'store',
@@ -220,7 +221,7 @@ class SKURetailerLessReportUseCase(usecases.BaseUseCase):
             total_answer=Count('question__answer__choiceanswer__choice'),
             value=Count(
                 'question__answer__choiceanswer__choice',
-                filter=Q(question__answer__choiceanswer__choice__choice='Less than 6')
+                filter=Q(question__answer__choiceanswer__choice__choice='Less than six (<6)')
             ) / F('total_answer') * 100,
         ).values(
             'retailer',
@@ -242,4 +243,26 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
                     store__response__response_cycle__questionnaire__questionnaire_type__name='Out Of Stock',
                 )
             ),
-        ).values('name', 'value',).filter(value__gt=0).unarchived()
+        ).values('name', 'value', ).filter(value__gt=0).unarchived()
+
+
+class SKUWeekLessReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._results
+
+    def _factory(self):
+        current_week = now().isocalendar()[1]
+        self._results = SKU.objects.filter(
+            question__questionnaire__questionnaire_type__name='Out Of Stock',
+            question__answer__response__is_completed=True,
+            question__answer__choiceanswer__choice__choice='Less than six (<6)'
+        ).annotate(
+            completed_week=ExtractWeek('question__answer__response__completed_at'),
+            week=current_week - F('completed_week')
+        ).values(
+            'name',
+            'week',
+            'question__answer__response__store__name',
+            'question__answer__response__store__retailer__name',
+        ).filter(week__lte=4)

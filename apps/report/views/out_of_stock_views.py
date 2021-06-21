@@ -113,3 +113,13 @@ class TotalVisitReportView(OutOfStockReportView):
 
     def get_queryset(self):
         return out_of_stock_usecases.TotalVisitReportUseCase().execute()
+
+
+class SKUWeekLessReportView(OutOfStockReportView):
+    """
+    Use this end-point to list report of last week vs less than 6 sku for out of stock
+    """
+    serializer_class = out_of_stock_serializers.SKUWeekLessReportSerializer
+
+    def get_queryset(self):
+        return out_of_stock_usecases.SKUWeekLessReportUseCase().execute()
