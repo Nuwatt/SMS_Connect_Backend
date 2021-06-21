@@ -25,6 +25,11 @@ class SKUMinMaxReportFilter(filters.FilterSet):
         label='sku',
         lookup_expr='in'
     )
+    brand = IdInFilter(
+        field_name='brand',
+        label='brand',
+        lookup_expr='in'
+    )
     date = filters.DateFromToRangeFilter(
         field_name='question__answer__response__completed_at__date',
         label='date'
@@ -79,6 +84,11 @@ class SKUReportFilter(filters.FilterSet):
         label='sku',
         lookup_expr='in'
     )
+    brand = IdInFilter(
+        field_name='brand',
+        label='brand',
+        lookup_expr='in'
+    )
     from_date = filters.DateFilter(
         field_name='question__answer__response__completed_at__date',
         label='from date',
@@ -95,6 +105,11 @@ class AnswerFilter(filters.FilterSet):
     sku = IdInFilter(
         field_name='store__response__answer__question__sku',
         label='sku',
+        lookup_expr='in'
+    )
+    brand = IdInFilter(
+        field_name='brand',
+        label='brand',
         lookup_expr='in'
     )
     date = filters.DateFromToRangeFilter(
@@ -152,11 +167,16 @@ class AnswerPerCountryFilter(filters.FilterSet):
         lookup_expr='in'
     )
 
-    # sku = IdInFilter(
-    #     field_name='city__store__response__answer__question__sku',
-    #     label='sku',
-    #     lookup_expr='in'
-    # )
+    sku = IdInFilter(
+        field_name='city__store__response__answer__question__sku',
+        label='sku',
+        lookup_expr='in'
+    )
+    brand = IdInFilter(
+        field_name='city__store__response__answer__question__sku__brand',
+        label='brand',
+        lookup_expr='in'
+    )
     date = filters.DateFromToRangeFilter(
         field_name='city__store__response__completed_at__date',
         label='date'
