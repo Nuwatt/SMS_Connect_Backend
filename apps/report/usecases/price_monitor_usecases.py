@@ -229,6 +229,7 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
                 'city__store__response',
                 filter=Q(
                     city__store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+                    city__store__response__is_completed=True
                 ),
                 distinct=True
             )
@@ -246,6 +247,7 @@ class AnswerPerCityReportUseCase(usecases.BaseUseCase):
                 'store__response',
                 filter=Q(
                     store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+                    store__response__is_completed=True
                 ),
                 distinct=True
             )
@@ -275,7 +277,10 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = SKU.objects.annotate(
+        self._results = SKU.objects.filter(
+            question__questionnaire__questionnaire_type__name='Price Monitor',
+            question__answer__response__is_completed=True
+        ).annotate(
             value=Count(
                 'question__answer__response',
             )
