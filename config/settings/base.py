@@ -308,3 +308,6 @@ SWAGGER_SETTINGS = {
 # S3
 # -----------------------------------------------------------------------------
 USE_S3 = False
+
+# Reporting data max limit
+REPORTING_MAX_LIMIT = 10
