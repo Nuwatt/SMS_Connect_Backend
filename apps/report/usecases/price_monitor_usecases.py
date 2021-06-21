@@ -1,10 +1,9 @@
-from django.conf import settings
 from django.db.models import Count, Max, Min, Avg, OuterRef, Subquery, F, Q
 from django.db.models.functions import TruncMonth
 
 from apps.core import usecases
 from apps.localize.models import City, Country
-from apps.product.models import SKU, Brand
+from apps.product.models import SKU
 from apps.response.models import NumericAnswer
 
 
@@ -50,7 +49,7 @@ class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
             'month',
             'value',
             'name',
-        ).unarchived().filter(value__isnull=False)[:settings.REPORTING_MAX_LIMIT]
+        ).unarchived().filter(value__isnull=False)
 
 
 class SKUMonthMinReportUseCase(usecases.BaseUseCase):
