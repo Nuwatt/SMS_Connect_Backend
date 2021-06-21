@@ -84,14 +84,14 @@ class SKUCityLessReportView(OutOfStockReportView):
         return out_of_stock_usecases.SKUCityLessReportUseCase().execute()
 
 
-class SKUStoreLessReportView(OutOfStockReportView):
+class SKUStoreNotAvailableReportView(OutOfStockReportView):
     """
     Use this end-point to list report of store vs available sku for out of stock
     """
     serializer_class = out_of_stock_serializers.SKUStoreReportSerializer
 
     def get_queryset(self):
-        return out_of_stock_usecases.SKUStoreLessReportUseCase().execute()
+        return out_of_stock_usecases.SKUStoreNotAvailableReportUseCase().execute()
 
 
 class SKURetailerLessReportView(OutOfStockReportView):
@@ -115,11 +115,11 @@ class TotalVisitReportView(OutOfStockReportView):
         return out_of_stock_usecases.TotalVisitReportUseCase().execute()
 
 
-class SKUWeekLessReportView(OutOfStockReportView):
+class SKUWeekNotAvailableReportView(OutOfStockReportView):
     """
-    Use this end-point to list report of last week vs less than 6 sku for out of stock
+    Use this end-point to list report of last week vs not available sku for out of stock
     """
-    serializer_class = out_of_stock_serializers.SKUWeekLessReportSerializer
+    serializer_class = out_of_stock_serializers.SKUWeekNotAvailableReportSerializer
 
     def get_queryset(self):
-        return out_of_stock_usecases.SKUWeekLessReportUseCase().execute()
+        return out_of_stock_usecases.SKUWeekNotAvailableReportUseCase().execute()

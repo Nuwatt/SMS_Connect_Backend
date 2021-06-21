@@ -39,9 +39,9 @@ urlpatterns = [
         name='sku-city-less-report'
     ),
     path(
-        'store-less',
-        out_of_stock_views.SKUStoreLessReportView.as_view(),
-        name='sku-store-less-report'
+        'store-not-available',
+        out_of_stock_views.SKUStoreNotAvailableReportView.as_view(),
+        name='sku-store-not-available-report'
     ),
     path(
         'retailer-less',
@@ -54,8 +54,8 @@ urlpatterns = [
         name='total-visit-report'
     ),
     path(
-        'week-less',
-        out_of_stock_views.SKUWeekLessReportView.as_view(),
-        name='sku-week-less-report'
+        'week-not-available',
+        out_of_stock_views.SKUWeekNotAvailableReportView.as_view(),
+        name='sku-week-not-available-report'
     ),
 ]

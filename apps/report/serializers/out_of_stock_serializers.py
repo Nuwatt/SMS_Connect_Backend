@@ -26,7 +26,7 @@ class SKURetailerReportSerializer(serializers.Serializer):
     value = serializers.FloatField()
 
 
-class SKUWeekLessReportSerializer(serializers.Serializer):
+class SKUWeekNotAvailableReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='name')
     week = serializers.IntegerField()
     retailer = serializers.CharField(source='question__answer__response__store__retailer__name')

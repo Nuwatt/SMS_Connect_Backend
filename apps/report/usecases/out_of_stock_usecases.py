@@ -182,7 +182,7 @@ class SKUCityLessReportUseCase(usecases.BaseUseCase):
         ).unarchived()
 
 
-class SKUStoreLessReportUseCase(usecases.BaseUseCase):
+class SKUStoreNotAvailableReportUseCase(usecases.BaseUseCase):
     def execute(self):
         self._factory()
         return self._results
@@ -197,7 +197,7 @@ class SKUStoreLessReportUseCase(usecases.BaseUseCase):
             total_answer=Count('question__answer__choiceanswer__choice'),
             value=Count(
                 'question__answer__choiceanswer__choice',
-                filter=Q(question__answer__choiceanswer__choice__choice='Less than six (<6)')
+                filter=Q(question__answer__choiceanswer__choice__choice='Not Available')
             ) / F('total_answer') * 100,
         ).values(
             'store',
@@ -246,7 +246,7 @@ class TotalVisitReportUseCase(usecases.BaseUseCase):
         ).values('name', 'value', ).filter(value__gt=0).unarchived()
 
 
-class SKUWeekLessReportUseCase(usecases.BaseUseCase):
+class SKUWeekNotAvailableReportUseCase(usecases.BaseUseCase):
     def execute(self):
         self._factory()
         return self._results
@@ -256,7 +256,7 @@ class SKUWeekLessReportUseCase(usecases.BaseUseCase):
         self._results = SKU.objects.filter(
             question__questionnaire__questionnaire_type__name='Out Of Stock',
             question__answer__response__is_completed=True,
-            question__answer__choiceanswer__choice__choice='Less than six (<6)'
+            question__answer__choiceanswer__choice__choice='Not Available'
         ).annotate(
             completed_week=ExtractWeek('question__answer__response__completed_at'),
             week=current_week - F('completed_week')
