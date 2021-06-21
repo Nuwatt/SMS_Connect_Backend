@@ -20,7 +20,7 @@ class BrandMinMaxReportSerializer(serializers.Serializer):
 class SKUMonthReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='name')
     month = serializers.DateTimeField(format='%b')
-    value = serializers.FloatField()
+    value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
 
 
 class CountryReportSerializer(serializers.Serializer):
