@@ -11,7 +11,7 @@ class SKUMinMaxReportView(generics.ListAPIView):
     Use this end-point to list report of all sku min max for price monitor
     """
     serializer_class = price_monitor_serializers.SKUMinMaxReportSerializer
-    filterset_class = filtersets.ResponseFilter
+    filterset_class = filtersets.SKUMinMaxReportFilter
     pagination_class = ReportPagination
 
     def get_queryset(self):

@@ -28,6 +28,7 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             'sku'
         ).annotate(
             sku_name=F('answer__question__sku__name'),
+            brand=F('answer__question__sku__brand'),
             max=Max('answer__numericanswer__numeric'),
             min=Min('answer__numericanswer__numeric'),
             mean=Avg('answer__numericanswer__numeric'),
@@ -38,6 +39,8 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             'mean',
             'mode',
             'sku_name',
+            'sku',
+            'brand',
         ).filter(max__isnull=False).unarchived()
 
         # numeric_answer = NumericAnswer.objects.filter(
@@ -517,9 +520,12 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
         ).annotate(
             sku_name=F('answer__question__sku__name'),
             value=Count('id'),
+            brand=F('answer__question__sku__brand'),
         ).values(
             'value',
             'sku_name',
+            'sku',
+            'brand'
         ).unarchived().filter(value__isnull=False)
         # self._results = SKU.objects.filter(
         #     question__questionnaire__questionnaire_type__name='Price Monitor',
