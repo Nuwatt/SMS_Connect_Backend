@@ -112,8 +112,19 @@ class OptionAnswerAdmin(BaseModelAdmin):
 class ChoiceAnswerAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'choice',
+        'sku'
     )
     readonly_fields = (
         'answer',
         'choice',
     )
+    list_filter = BaseModelAdmin.list_filter + (
+        'answer__response__is_completed',
+        'answer__response__response_cycle__questionnaire__questionnaire_type',
+        'answer__response__store__city__country',
+        'answer__question__sku',
+        'answer__question__sku__brand',
+    )
+
+    def sku(self, instance):
+        return instance.answer.question.sku

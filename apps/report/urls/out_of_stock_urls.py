@@ -44,11 +44,6 @@ urlpatterns = [
         name='sku-store-not-available-report'
     ),
     path(
-        'retailer-less',
-        out_of_stock_views.SKURetailerLessReportView.as_view(),
-        name='sku-retailer-less-report'
-    ),
-    path(
         'total-visit',
         out_of_stock_views.TotalVisitReportView.as_view(),
         name='total-visit-report'

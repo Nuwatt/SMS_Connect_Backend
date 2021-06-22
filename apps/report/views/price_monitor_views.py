@@ -1,7 +1,10 @@
-from apps.report import filtersets
+from apps.report.filtersets import price_monitor_filtersets
+from apps.report.filtersets.base_filtersets import (
+    SKUResponseFilter,
+    ResponseFilter
+)
 from apps.report.serializers import price_monitor_serializers
 from apps.report.usecases import price_monitor_usecases
-
 
 # optimized
 from apps.report.views.base_views import BaseReportView
@@ -12,7 +15,7 @@ class SKUMinMaxReportView(BaseReportView):
     Use this end-point to list report of all sku min max for price monitor
     """
     serializer_class = price_monitor_serializers.SKUMinMaxReportSerializer
-    filterset_class = filtersets.SKUMinMaxReportFilter
+    filterset_class = SKUResponseFilter
 
     def get_queryset(self):
         return price_monitor_usecases.SKUMinMaxReportUseCase().execute()
@@ -24,7 +27,7 @@ class SKUMonthReportView(BaseReportView):
     """
 
     serializer_class = price_monitor_serializers.SKUMonthReportSerializer
-    filterset_class = filtersets.SKUMonthReportFilter
+    filterset_class = SKUResponseFilter
 
 
 # optimized
@@ -72,7 +75,7 @@ class SKUCountryReportView(BaseReportView):
     Common SKU Country Report
     """
     serializer_class = price_monitor_serializers.SKUCountryReportSerializer
-    filterset_class = filtersets.SKUCountryReportFilter
+    filterset_class = SKUResponseFilter
 
 
 # optimized
@@ -121,7 +124,7 @@ class AnswerPerCountryReportView(BaseReportView):
     Use this end-point to list report of answer per country for price monitor
     """
     serializer_class = price_monitor_serializers.AnswerPerCountryReportSerializer
-    filterset_class = filtersets.AnswerPerCountryReportFilter
+    filterset_class = ResponseFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerCountryReportUseCase().execute()
@@ -133,7 +136,7 @@ class AnswerPerCityReportView(BaseReportView):
     Use this end-point to list report of answer per country for price monitor
     """
     serializer_class = price_monitor_serializers.AnswerPerCityReportSerializer
-    filterset_class = filtersets.AnswerPerCityReportFilter
+    filterset_class = ResponseFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerCityReportUseCase().execute()
@@ -145,22 +148,10 @@ class AnswerPerSKUReportView(BaseReportView):
     Use this end-point to list report of answer per sku for price monitor
     """
     serializer_class = price_monitor_serializers.AnswerPerSKUReportSerializer
-    filterset_class = filtersets.AnswerPerSKUReportFilter
+    filterset_class = SKUResponseFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerSKUReportUseCase().execute()
-
-
-# optimized
-class TotalVisitReportView(BaseReportView):
-    """
-    Use this end-point to list report of total visit for price monitor
-    """
-    serializer_class = price_monitor_serializers.TotalVisitReportSerializer
-    filterset_class = filtersets.TotalVisitFilter
-
-    def get_queryset(self):
-        return price_monitor_usecases.TotalVisitReportUseCase().execute()
 
 
 class BrandMinMaxReportView(BaseReportView):
@@ -168,7 +159,7 @@ class BrandMinMaxReportView(BaseReportView):
     Use this end-point to list report of brand vs min max for price monitor
     """
     serializer_class = price_monitor_serializers.BrandMinMaxReportSerializer
-    filterset_class = filtersets.BrandMinMaxReportFilter
+    filterset_class = price_monitor_filtersets.BrandMinMaxReportFilter
 
     def get_queryset(self):
         return price_monitor_usecases.BrandMinMaxReportReportUseCase().execute()

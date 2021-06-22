@@ -60,5 +60,5 @@ class AnswerPerCityReportSerializer(serializers.Serializer):
 
 
 class TotalVisitReportSerializer(serializers.Serializer):
-    city = serializers.CharField(source='name')
-    value = serializers.IntegerField()
+    city = serializers.CharField(source='city_name')
+    value = serializers.FloatField()
