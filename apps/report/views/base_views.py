@@ -1,4 +1,5 @@
 from apps.core import generics
+from apps.core.pagination import ReportPagination
 from apps.report.serializers import base_serializers
 from apps.report.usecases import base_usecases
 
@@ -11,3 +12,7 @@ class OverviewReportView(generics.RetrieveAPIView):
 
     def get_object(self):
         return base_usecases.OverviewReportUseCase().execute()
+
+
+class BaseReportView(generics.ListAPIView):
+    pagination_class = ReportPagination

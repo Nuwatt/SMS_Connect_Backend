@@ -1,16 +1,15 @@
-from apps.core import generics
 from apps.report.filtersets import SKUReportFilter, TotalVisitFilter
 
 from apps.report.serializers import out_of_stock_serializers
 from apps.report.serializers.price_monitor_serializers import SKUMonthReportSerializer, TotalVisitReportSerializer
 from apps.report.usecases import out_of_stock_usecases
+from apps.report.views.base_views import BaseReportView
 
 
-class OutOfStockReportView(generics.ListAPIView):
+class OutOfStockReportView(BaseReportView):
     """
     Common class
     """
-    pagination_class = None
     filterset_class = SKUReportFilter
 
 
