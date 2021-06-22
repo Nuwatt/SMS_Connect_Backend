@@ -11,7 +11,7 @@ class SKUMinMaxReportView(generics.ListAPIView):
     Use this end-point to list report of all sku min max for price monitor
     """
     serializer_class = price_monitor_serializers.SKUMinMaxReportSerializer
-    filterset_class = filtersets.SKUMinMaxReportFilter
+    filterset_class = filtersets.ResponseFilter
     pagination_class = ReportPagination
 
     def get_queryset(self):
@@ -124,7 +124,7 @@ class AnswerPerCountryReportView(generics.ListAPIView):
     """
     pagination_class = ReportPagination
     serializer_class = price_monitor_serializers.AnswerPerCountryReportSerializer
-    filterset_class = filtersets.AnswerPerCountryFilter
+    filterset_class = filtersets.AnswerPerCountryReportFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerCountryReportUseCase().execute()
@@ -137,7 +137,7 @@ class AnswerPerCityReportView(generics.ListAPIView):
     """
     pagination_class = ReportPagination
     serializer_class = price_monitor_serializers.AnswerPerCityReportSerializer
-    filterset_class = filtersets.AnswerPerCityFilter
+    filterset_class = filtersets.AnswerPerCityReportFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerCityReportUseCase().execute()
@@ -150,7 +150,7 @@ class AnswerPerSKUReportView(generics.ListAPIView):
     """
     pagination_class = ReportPagination
     serializer_class = price_monitor_serializers.AnswerReportSerializer
-    filterset_class = filtersets.AnswerPerSKUFilter
+    filterset_class = filtersets.AnswerPerSKUReportFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerSKUReportUseCase().execute()

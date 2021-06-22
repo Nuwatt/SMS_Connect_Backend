@@ -31,7 +31,10 @@ class ResponseAdmin(BaseModelAdmin):
 
     list_filter = BaseModelAdmin.list_filter + (
         'is_completed',
-        'response_cycle__questionnaire__questionnaire_type'
+        'response_cycle__questionnaire__questionnaire_type',
+        'store__city__country',
+        'answer__question__sku',
+        'answer__question__sku__brand',
     )
 
 
@@ -40,6 +43,13 @@ class AnswerAdmin(BaseModelAdmin):
     readonly_fields = BaseModelAdmin.readonly_fields + (
         'response',
         'question',
+    )
+    list_filter = BaseModelAdmin.list_filter + (
+        'response__is_completed',
+        'response__response_cycle__questionnaire__questionnaire_type',
+        'response__store__city__country',
+        'question__sku',
+        'question__sku__brand',
     )
 
 
@@ -71,6 +81,13 @@ class NumericAnswerAdmin(BaseModelAdmin):
     readonly_fields = (
         'answer',
         'numeric',
+    )
+    list_filter = BaseModelAdmin.list_filter + (
+        'answer__response__is_completed',
+        'answer__response__response_cycle__questionnaire__questionnaire_type',
+        'answer__response__store__city__country',
+        'answer__question__sku',
+        'answer__question__sku__brand',
     )
 
     def sku(self, instance):
