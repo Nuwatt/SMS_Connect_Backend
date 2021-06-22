@@ -45,7 +45,7 @@ class AnswerReportSerializer(serializers.Serializer):
 
 
 class AnswerPerSKUReportSerializer(serializers.Serializer):
-    sku = serializers.CharField(source='sku_name')
+    name = serializers.CharField(source='sku_name')
     value = serializers.IntegerField()
 
 
