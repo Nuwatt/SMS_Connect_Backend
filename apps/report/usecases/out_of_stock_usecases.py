@@ -22,7 +22,10 @@ class SKUOverallReportUseCase(usecases.BaseUseCase):
         ).values(
             'sku'
         ).annotate(
-            total_answer=Count('answer__choiceanswer__choice'),
+            total_answer=Count(
+                'answer__choiceanswer__choice',
+                filter=Q(answer__question__sku=F('sku'))
+            ),
             available=Count(
                 'answer__choiceanswer__choice',
                 filter=Q(answer__choiceanswer__choice__choice='Available')
