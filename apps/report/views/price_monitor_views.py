@@ -149,7 +149,7 @@ class AnswerPerSKUReportView(generics.ListAPIView):
     Use this end-point to list report of answer per sku for price monitor
     """
     pagination_class = ReportPagination
-    serializer_class = price_monitor_serializers.AnswerReportSerializer
+    serializer_class = price_monitor_serializers.AnswerPerSKUReportSerializer
     filterset_class = filtersets.AnswerPerSKUReportFilter
 
     def get_queryset(self):
