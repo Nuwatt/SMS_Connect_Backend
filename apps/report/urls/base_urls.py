@@ -12,6 +12,10 @@ urlpatterns = [
         include('apps.report.urls.out_of_stock_urls')
     ),
     path(
+        'distribution-check/',
+        include('apps.report.urls.distribution_check_urls')
+    ),
+    path(
         'overview',
         base_views.OverviewReportView.as_view(),
         name='overview-report'
