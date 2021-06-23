@@ -30,6 +30,7 @@ class AddStoreUseCase(usecases.CreateUseCase):
             store = Store(
                 retailer=self._data.get('retailer'),
                 city=self._data.get('city'),
+                channel=self._data.get('retailer').channel,
                 name=name
             )
             stores.append(store)
@@ -44,6 +45,7 @@ class AddStoreRetailerUseCase(usecases.CreateUseCase):
         )
         store = Store(
             retailer=retailer,
+            channel=self._data.get('channel'),
             city=self._data.get('city'),
             name=self._data.get('name')
         )

@@ -51,6 +51,12 @@ class Retailer(BaseModel):
 class Store(BaseModel):
     name = models.CharField(max_length=100)
     retailer = models.ForeignKey(Retailer, on_delete=models.CASCADE)
+    channel = models.ForeignKey(
+        Channel,
+        on_delete=models.CASCADE,
+        null=True
+    )
+
     city = models.ForeignKey(
         City,
         null=True,

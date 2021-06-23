@@ -102,5 +102,6 @@ class ImportRetailerUseCase(usecases.ImportCSVUseCase):
             store, created = Store.objects.get_or_create(
                 name=item.get('Retailer Branch Name'),
                 retailer=retailer,
+                channel=channel,
                 city=city
             )
