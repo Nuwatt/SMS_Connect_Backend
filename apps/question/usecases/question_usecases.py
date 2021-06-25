@@ -90,12 +90,15 @@ class BulkAddQuestionUseCase(usecases.CreateUseCase):
             if question_options_data:
                 question_options = []
                 for data in question_options_data:
-                    question_options.append(
-                        QuestionOption(
+                    question_option = QuestionOption(
                             question=question,
                             option=data
                         )
-                    )
+                    try:
+                        question_option.full_clean()
+                    except DjangoValidationError as e:
+                        raise ValidationError(e.message_dict)
+                    question_options.append(question_option)
                 QuestionOption.objects.bulk_create(question_options)
 
 

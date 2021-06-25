@@ -36,6 +36,13 @@ class AddQuestionSerializer(QuestionSerializer):
             })
         return attrs
 
+    def validate_question_options(self, data):
+        if data:
+            data_set = set(data)
+            if len(data) != len(data_set):
+                raise ValidationError(_('Option contains duplicate items.'))
+        return data
+
 
 class BulkAddQuestionSerializer(serializers.Serializer):
     data = AddQuestionSerializer(many=True)
