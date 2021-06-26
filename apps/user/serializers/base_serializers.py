@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
+from rest_framework_simplejwt.exceptions import TokenBackendError
 from rest_framework_simplejwt.state import token_backend
 
 from apps.core.serializers import IdNameSerializer
@@ -197,7 +198,11 @@ class TokenVerifySerializer(serializers.Serializer):
     token = serializers.CharField()
 
     def validate(self, attrs):
-        token_payload = token_backend.decode(attrs['token'])
+        try:
+            token_payload = token_backend.decode(attrs['token'])
+        except TokenBackendError as e:
+            raise AuthenticationFailed(e)
+
         try:
             user = get_user_model().objects.get(
                 pk=token_payload['user_id']
