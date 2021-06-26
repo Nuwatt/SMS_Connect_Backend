@@ -1,6 +1,5 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_headers
 
 from apps.core import generics
 from apps.localize.filtersets import CountryFilter

@@ -73,6 +73,9 @@ class PortalUserAdmin(BaseModelAdmin):
         'email',
         'updated'
     )
+    list_filter = BaseModelAdmin.list_filter + (
+        'role',
+    )
 
     def email(self, instance):
         return instance.user.email

@@ -1,5 +1,4 @@
 from django.utils.translation import gettext_lazy as _
-
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 
@@ -10,7 +9,7 @@ from apps.response import serializers, usecases
 from apps.response.filtersets import ResponseFilter
 from apps.response.mixins import ResponseMixin
 from apps.user.mixins import AgentUserMixin
-from apps.user.permissions import IsAgentUser, IsPortalUser
+from apps.user.permissions import IsAgentUser, IsAdminPortalUser
 
 
 class StartQuestionnaireView(generics.CreateAPIView, QuestionnaireMixin):
@@ -45,6 +44,7 @@ class SummitQuestionnaireResponseView(generics.CreateAPIView, ResponseMixin):
     Use this end-point to submit questionnaire's answers at once
     """
     serializer_class = serializers.BulkSummitQuestionnaireResponseSerializer
+    permission_classes = (IsAgentUser,)
 
     def get_object(self):
         return self.get_response()
@@ -85,7 +85,7 @@ class ListAgentResponseView(generics.ListAPIView, AgentUserMixin):
     Use this end-point to list all responses of a specific agent
     """
     serializer_class = serializers.ListAgentResponseSerializer
-    permission_classes = (IsPortalUser,)
+    permission_classes = (IsAdminPortalUser,)
 
     def get_object(self):
         return self.get_agent_user()
@@ -101,6 +101,7 @@ class ListQuestionnaireResponseView(generics.ListAPIView, QuestionnaireMixin):
     Use this end-point to list response of a specific questionnaire
     """
     serializer_class = serializers.ListQuestionnaireResponseSerializer
+    permission_classes = (IsAdminPortalUser,)
 
     def get_object(self):
         return self.get_questionnaire()
@@ -116,6 +117,7 @@ class ListResponseAnswerView(generics.ListAPIView, ResponseMixin):
     Use this end-point to list answer of a specific response
     """
     serializer_class = serializers.ListQuestionnaireAnswerSerializer
+    permission_classes = (IsAdminPortalUser,)
 
     def get_queryset(self):
         return usecases.ListResponseAnswerUseCase(

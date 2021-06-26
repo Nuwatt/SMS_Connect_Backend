@@ -35,6 +35,7 @@ class ListCityView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
+
 class UpdateCityView(generics.UpdateAPIView, CityMixin):
     """
     Use this end-point to update specific city

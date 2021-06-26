@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from apps.core.exceptions import NoContent
 from apps.core.mixins import LoggingErrorsMixin
+from apps.user.permissions import IsAdminPortalUser
 
 
 class GenericAPIView(generics.GenericAPIView):
@@ -13,6 +14,7 @@ class GenericAPIView(generics.GenericAPIView):
 
 class CreateAPIView(LoggingErrorsMixin, generics.CreateAPIView):
     logging_methods = ['POST']
+    permission_classes = (IsAdminPortalUser,)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -47,6 +49,7 @@ class ListAPIView(LoggingErrorsMixin, generics.ListAPIView):
 
 class UpdateAPIView(LoggingErrorsMixin, generics.UpdateAPIView):
     logging_methods = ['PUT', 'PATCH']
+    permission_classes = (IsAdminPortalUser,)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -68,6 +71,7 @@ class UpdateAPIView(LoggingErrorsMixin, generics.UpdateAPIView):
 
 class DestroyAPIView(LoggingErrorsMixin, generics.DestroyAPIView):
     logging_methods = ['DELETE']
+    permission_classes = (IsAdminPortalUser,)
 
 
 class RetrieveAPIView(LoggingErrorsMixin, generics.RetrieveAPIView):
