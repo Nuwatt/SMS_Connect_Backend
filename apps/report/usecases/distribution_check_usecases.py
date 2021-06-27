@@ -206,7 +206,6 @@ class BrandPerCityReportUseCase(usecases.BaseUseCase):
         ).values(
             'value',
             'city_name',
-            'city',
             'brand_name',
             'sku',
             'brand',
@@ -244,7 +243,6 @@ class BrandPerCountryReportUseCase(usecases.BaseUseCase):
         ).values(
             'value',
             'country_name',
-            'country',
             'brand_name',
             'sku',
             'brand',
