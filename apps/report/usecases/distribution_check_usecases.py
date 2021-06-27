@@ -135,7 +135,6 @@ class SKUPerCountryReportUseCase(usecases.BaseUseCase):
         ).values(
             'value',
             'country_name',
-            'city',
             'sku_name',
             'sku',
             'brand',
@@ -170,7 +169,6 @@ class SKUPerChannelReportUseCase(usecases.BaseUseCase):
         ).values(
             'value',
             'channel_name',
-            'city',
             'sku_name',
             'sku',
             'brand',
@@ -203,12 +201,11 @@ class BrandPerCityReportUseCase(usecases.BaseUseCase):
                 filter=Q(answer__choiceanswer__choice__choice='Yes')
             ) / F('total_answer') * 100,
             brand_name=F('answer__question__sku__brand__name'),
-            channel_name=F('store__channel__name'),
             city_name=F('store__city__name'),
             sku=F('answer__question__sku'),
         ).values(
             'value',
-            'channel_name',
+            'city_name',
             'city',
             'brand_name',
             'sku',
@@ -242,12 +239,11 @@ class BrandPerCountryReportUseCase(usecases.BaseUseCase):
                 filter=Q(answer__choiceanswer__choice__choice='Yes')
             ) / F('total_answer') * 100,
             brand_name=F('answer__question__sku__brand__name'),
-            channel_name=F('store__channel__name'),
             country_name=F('store__city__country__name'),
             sku=F('answer__question__sku'),
         ).values(
             'value',
-            'channel_name',
+            'country_name',
             'country',
             'brand_name',
             'sku',
