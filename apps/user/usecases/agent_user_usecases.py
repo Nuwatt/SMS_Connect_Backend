@@ -145,7 +145,7 @@ class AgentUserLoginUseCase(UserLoginUseCase):
         super(AgentUserLoginUseCase, self)._factory()
         if settings.USE_S3:
             self._result['bucket_detail'] = {
-                'name': '{}/media/image_question/'.format(settings.AWS_STORAGE_BUCKET_NAME),
+                'name': '{}/media/image_question'.format(settings.AWS_STORAGE_BUCKET_NAME),
                 'assess_key': settings.AWS_ACCESS_KEY_ID,
                 'secret_key': settings.AWS_SECRET_ACCESS_KEY
             }
