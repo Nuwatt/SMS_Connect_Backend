@@ -16,6 +16,10 @@ urlpatterns = [
         include('apps.report.urls.distribution_check_urls')
     ),
     path(
+        'consumer-questionnaire/',
+        include('apps.report.urls.consumer_questionnaire_urls')
+    ),
+    path(
         'overview',
         base_views.OverviewReportView.as_view(),
         name='overview-report'
