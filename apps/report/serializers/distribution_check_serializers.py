@@ -16,7 +16,25 @@ class VisitPerChannelReportSerializer(serializers.Serializer):
     value = serializers.FloatField()
 
 
-class SKUPerCityReportSerializer(serializers.Serializer):
+class SKUPerCityReportSerializer(VisitPerCityReportSerializer):
     sku = serializers.CharField(source='sku_name')
-    city = serializers.CharField(source='city_name')
-    value = serializers.FloatField()
+
+
+class SKUPerCountryReportSerializer(VisitPerCountryReportSerializer):
+    sku = serializers.CharField(source='sku_name')
+
+
+class SKUPerChannelReportSerializer(VisitPerChannelReportSerializer):
+    sku = serializers.CharField(source='sku_name')
+
+
+class BrandPerCityReportSerializer(VisitPerCityReportSerializer):
+    brand = serializers.CharField(source='brand_name')
+
+
+class BrandPerCountryReportSerializer(VisitPerCountryReportSerializer):
+    brand = serializers.CharField(source='brand_name')
+
+
+class BrandPerChannelReportSerializer(VisitPerChannelReportSerializer):
+    brand = serializers.CharField(source='brand_name')

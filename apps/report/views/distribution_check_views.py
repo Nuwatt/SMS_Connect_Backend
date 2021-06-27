@@ -51,3 +51,58 @@ class SKUPerCityReportView(generics.ListAPIView):
 
     def get_queryset(self):
         return distribution_check_usecases.SKUPerCityReportUseCase().execute()
+
+
+class SKUPerCountryReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of total sku per country for distribution check
+    """
+    serializer_class = distribution_check_serializers.SKUPerCountryReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.SKUPerCountryReportUseCase().execute()
+
+
+class SKUPerChannelReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of total sku per channel for distribution check
+    """
+    serializer_class = distribution_check_serializers.SKUPerChannelReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.SKUPerChannelReportUseCase().execute()
+
+
+class BrandPerCityReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of total brand per city for distribution check
+    """
+    serializer_class = distribution_check_serializers.BrandPerCityReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.BrandPerCityReportUseCase().execute()
+
+
+class BrandPerCountryReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of total brand per country for distribution check
+    """
+    serializer_class = distribution_check_serializers.BrandPerCountryReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.BrandPerCountryReportUseCase().execute()
+
+
+class BrandPerChannelReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of total brand per channel for distribution check
+    """
+    serializer_class = distribution_check_serializers.BrandPerChannelReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.BrandPerChannelReportUseCase().execute()
