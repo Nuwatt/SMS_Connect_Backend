@@ -3,7 +3,6 @@ from apps.report.filtersets.base_filtersets import ResponseFilter, SKUResponseFi
 from apps.report.serializers import distribution_check_serializers
 from apps.report.usecases import distribution_check_usecases
 
-
 from apps.report.views.base_views import BaseReportView
 
 
@@ -106,3 +105,25 @@ class BrandPerChannelReportView(generics.ListAPIView):
 
     def get_queryset(self):
         return distribution_check_usecases.BrandPerChannelReportUseCase().execute()
+
+
+class AvgPerSKUReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of avg per sku for distribution check
+    """
+    serializer_class = distribution_check_serializers.AvgPerSKUReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.AvgPerSKUReportUseCase().execute()
+
+
+class AvgPerBrandReportView(generics.ListAPIView):
+    """
+    Use this end-point to list report of avg per brand for distribution check
+    """
+    serializer_class = distribution_check_serializers.AvgPerBrandReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.AvgPerBrandReportUseCase().execute()
