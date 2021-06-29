@@ -433,10 +433,11 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
             response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
             is_completed=True
         ).annotate(
-            country_name=F('store__city__country__name')
+            country=F('store__city__country')
         ).values(
-            'country_name'
+            'country'
         ).annotate(
+            country_name=F('store__city__country__name'),
             value=Count(
                 'id',
                 distinct=True
