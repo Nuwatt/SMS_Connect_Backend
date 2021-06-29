@@ -1,22 +1,12 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
 
 
-class Region(BaseModel):
-    name = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Region'
-        verbose_name_plural = 'Regiones'
-
-
 class Country(BaseModel):
-    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -25,13 +15,12 @@ class Country(BaseModel):
         verbose_name = 'Country'
         verbose_name_plural = 'Countries'
 
-        # 1. avoid duplicate country in same region
-        constraints = [
-            models.UniqueConstraint(
-                fields=['region', 'name'],
-                name='unique_country'
-            )
-        ]
+    def clean(self):
+        # check for unique name for unarchived list
+        if Country.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('Country name already exists.')
+            })
 
 
 class City(BaseModel):
@@ -53,9 +42,19 @@ class City(BaseModel):
         ]
 
 
-class Area(BaseModel):
-    name = models.CharField(max_length=100)
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
+class Nationality(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Nationality'
+        verbose_name_plural = 'Nationalities'
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if Nationality.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('Nationality name already exists.')
+            })

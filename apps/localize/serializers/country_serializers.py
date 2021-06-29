@@ -15,7 +15,6 @@ class AddCountrySerializer(CountrySerializer):
     class Meta(CountrySerializer.Meta):
         fields = (
             'name',
-            'region'
         )
 
 

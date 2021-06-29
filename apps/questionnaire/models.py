@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
-from apps.localize.models import Country, City, Area
+from apps.localize.models import Country, City
 from apps.product.models import Category
 from apps.user.models import AgentUser
 

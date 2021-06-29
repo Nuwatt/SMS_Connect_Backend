@@ -13,16 +13,14 @@ class LocalizeModelAdmin(BaseModelAdmin):
     )
 
 
-@admin.register(models.Region)
-class RegionAdmin(LocalizeModelAdmin):
+@admin.register(models.Country)
+class CountryAdmin(LocalizeModelAdmin):
     pass
 
 
-@admin.register(models.Country)
-class CountryAdmin(LocalizeModelAdmin):
-    list_filter = (
-        'region',
-    )
+@admin.register(models.Nationality)
+class NationalityAdmin(LocalizeModelAdmin):
+    pass
 
 
 @admin.register(models.City)
@@ -34,9 +32,3 @@ class CityAdmin(LocalizeModelAdmin):
         'country',
     )
 
-
-@admin.register(models.Area)
-class AreaAdmin(LocalizeModelAdmin):
-    raw_id_fields = (
-        'city',
-    )
