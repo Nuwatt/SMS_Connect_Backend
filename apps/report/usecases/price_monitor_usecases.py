@@ -436,11 +436,13 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
             country=F('store__city__country')
         ).values(
             'country'
-        ).distinct().annotate(
+        ).annotate(
             country_name=F('store__city__country__name'),
             value=Count(
-                'id',            )
+                'id',
+            )
         ).values('country_name', 'value').filter(value__gt=0).unarchived()
+
 
         # self._results = Country.objects.annotate(
         #     value=Count(
