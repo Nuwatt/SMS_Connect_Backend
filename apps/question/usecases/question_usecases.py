@@ -132,7 +132,7 @@ class ImportQuestionUseCase(usecases.ImportCSVUseCase):
 
             # 3. brand
             try:
-                sku = SKU.objects.get(name=item.get('SKU'))
+                sku = SKU.objects.get(name=item.get('SKU'), is_archived=False)
             except SKU.DoesNotExist:
                 raise ValidationError({
                     'non_field_errors': _('Invalid SKU')
