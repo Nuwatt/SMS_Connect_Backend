@@ -29,12 +29,12 @@ class YesNoQuestionReportUseCase(usecases.BaseUseCase):
                 filter=Q(answer__choiceanswer__choice__choice='No')
             ) / F('total_answer') * 100,
             brand=F('answer__question__sku__brand'),
-            question=F('answer__question__statement'),
+            question_statement=F('answer__question__statement'),
             sku=F('answer__question__sku'),
         ).values(
             'yes',
             'no',
-            'question',
+            'question_statement',
             'sku',
             'brand',
         ).unarchived()
@@ -78,13 +78,13 @@ class RatingOneToThreeReportUseCase(usecases.BaseUseCase):
                 )
             ) / F('total_answer') * 100,
             brand=F('answer__question__sku__brand'),
-            question=F('answer__question__statement'),
+            question_statement=F('answer__question__statement'),
             sku=F('answer__question__sku'),
         ).values(
             'rating_one',
             'rating_two',
             'rating_three',
-            'question',
+            'question_statement',
             'sku',
             'brand',
         ).unarchived()
@@ -142,7 +142,7 @@ class RatingOneToFiveReportUseCase(usecases.BaseUseCase):
                 )
             ) / F('total_answer') * 100,
             brand=F('answer__question__sku__brand'),
-            question=F('answer__question__statement'),
+            question_statement=F('answer__question__statement'),
             sku=F('answer__question__sku'),
         ).values(
             'rating_one',
@@ -150,7 +150,7 @@ class RatingOneToFiveReportUseCase(usecases.BaseUseCase):
             'rating_three',
             'rating_four',
             'rating_five',
-            'question',
+            'question_statement',
             'sku',
             'brand',
         ).unarchived()
@@ -243,7 +243,7 @@ class RatingOneToTenReportUseCase(usecases.BaseUseCase):
                 )
             ) / F('total_answer') * 100,
             brand=F('answer__question__sku__brand'),
-            question=F('answer__question__statement'),
+            question_statement=F('answer__question__statement'),
             sku=F('answer__question__sku'),
         ).values(
             'rating_one',
@@ -256,7 +256,7 @@ class RatingOneToTenReportUseCase(usecases.BaseUseCase):
             'rating_eight',
             'rating_nine',
             'rating_ten',
-            'question',
+            'question_statement',
             'sku',
             'brand',
         ).unarchived()
@@ -279,7 +279,7 @@ class NumericQuestionReportUseCase(usecases.BaseUseCase):
         ).annotate(
             value=Avg('answer__numericanswer__numeric'),
             brand=F('answer__question__sku__brand'),
-            question=F('answer__question__statement'),
+            question_statement=F('answer__question__statement'),
             sku=F('answer__question__sku'),
         ).values(
             'rating_one',
@@ -292,7 +292,7 @@ class NumericQuestionReportUseCase(usecases.BaseUseCase):
             'rating_eight',
             'rating_nine',
             'rating_ten',
-            'question',
+            'question_statement',
             'sku',
             'brand',
         ).unarchived()

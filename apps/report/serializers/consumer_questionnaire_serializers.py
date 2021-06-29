@@ -2,13 +2,13 @@ from rest_framework import serializers
 
 
 class YesNoQuestionReportSerializer(serializers.Serializer):
-    question = serializers.CharField()
+    question_statement = serializers.CharField()
     yes = serializers.FloatField()
     no = serializers.FloatField()
 
 
 class RatingOneToThreeReportSerializer(serializers.Serializer):
-    question = serializers.CharField()
+    question_statement = serializers.CharField()
     rating_one = serializers.FloatField()
     rating_two = serializers.FloatField()
     rating_three = serializers.FloatField()
