@@ -25,14 +25,6 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Nationalities',
             },
         ),
-        migrations.RemoveField(
-            model_name='area',
-            name='city',
-        ),
-        migrations.RemoveField(
-            model_name='country',
-            name='region',
-        ),
         migrations.AlterField(
             model_name='country',
             name='name',
