@@ -9,7 +9,7 @@ from apps.core.mixins import ResponseMixin
 from apps.core.serializers import MessageResponseSerializer, CSVFileInputSerializer
 from apps.user import filtersets
 from apps.user.mixins import AgentUserMixin
-from apps.user.permissions import IsAgentUser
+from apps.user.permissions import IsAgentUser, IsAdminPortalUser
 from apps.user.serializers import agent_user_serializers
 from apps.user.usecases import agent_user_usecases
 
@@ -20,6 +20,7 @@ class ListAgentUserView(generics.ListAPIView):
     """
     serializer_class = agent_user_serializers.ListAgentUserSerializer
     filterset_class = filtersets.AgentUserFilter
+    permission_classes = (IsAdminPortalUser,)
 
     def get_queryset(self):
         return agent_user_usecases.ListAgentUserUseCase().execute()
@@ -30,6 +31,7 @@ class RegisterAgentUserView(generics.CreateAPIView):
     Use this end-point to register a new agent
     """
     serializer_class = agent_user_serializers.RegisterAgentUserSerializer
+    permission_classes = (IsAdminPortalUser,)
 
     def perform_create(self, serializer):
         return agent_user_usecases.RegisterAgentUserUseCase(
@@ -79,6 +81,7 @@ class AgentUserDetailView(generics.RetrieveAPIView, AgentUserMixin):
     Use this end-point to get detail of a specific agent user
     """
     serializer_class = agent_user_serializers.AgentUserDetailSerializer
+    permission_classes = (IsAdminPortalUser,)
 
     def get_object(self):
         return self.get_agent_user()
