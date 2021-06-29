@@ -44,7 +44,7 @@ class ListAPIView(LoggingErrorsMixin, generics.ListAPIView):
         raise NoContent(self.no_content_error_message)
 
     def custom_queryset(self, queryset):
-        return queryset
+        return queryset.order_by('-created')
 
 
 class UpdateAPIView(LoggingErrorsMixin, generics.UpdateAPIView):
