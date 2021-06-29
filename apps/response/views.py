@@ -8,6 +8,7 @@ from apps.questionnaire.mixins import QuestionnaireMixin
 from apps.response import serializers, usecases
 from apps.response.filtersets import ResponseFilter
 from apps.response.mixins import ResponseMixin
+from apps.response.pagination import ResponseAnswerPagination
 from apps.user.mixins import AgentUserMixin
 from apps.user.permissions import IsAgentUser, IsAdminPortalUser
 
@@ -118,8 +119,18 @@ class ListResponseAnswerView(generics.ListAPIView, ResponseMixin):
     """
     serializer_class = serializers.ListQuestionnaireAnswerSerializer
     permission_classes = (IsAdminPortalUser,)
+    pagination_class = ResponseAnswerPagination
+
+    def get_object(self):
+        return self.get_response()
 
     def get_queryset(self):
         return usecases.ListResponseAnswerUseCase(
-            response=self.get_response(),
+            response=self.get_object(),
         ).execute()
+
+    def get_paginated_response(self, data):
+        """
+        Return a paginated style `Response` object for the given output data.
+        """
+        return self.paginator.get_custom_paginated_response(data, self.get_object().response_cycle)
