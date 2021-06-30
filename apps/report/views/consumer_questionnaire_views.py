@@ -47,3 +47,14 @@ class RatingOneToTenReportView(BaseReportView):
 
     def get_queryset(self):
         return consumer_questionnaire_usecases.RatingOneToTenReportUseCase().execute()
+
+
+class NumericQuestionReportView(BaseReportView):
+    """
+    Use this end-point to list report of average numeric answer for consumer questionnaire
+    """
+    serializer_class = consumer_questionnaire_serializers.NumericQuestionReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return consumer_questionnaire_usecases.NumericQuestionReportUseCase().execute()

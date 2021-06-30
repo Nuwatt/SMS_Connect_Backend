@@ -27,4 +27,10 @@ urlpatterns = [
         consumer_questionnaire_views.RatingOneToTenReportView.as_view(),
         name='rating-one-to-ten'
     ),
+    # numeric
+    path(
+        'numeric-question',
+        consumer_questionnaire_views.NumericQuestionReportView.as_view(),
+        name='numeric-question'
+    ),
 ]
