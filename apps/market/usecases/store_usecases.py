@@ -30,10 +30,14 @@ class AddStoreUseCase(usecases.CreateUseCase):
             store = Store(
                 retailer=self._data.get('retailer'),
                 city=self._data.get('city'),
-                channel=self._data.get('retailer').channel,
+                channel=self._data.get('channel'),
                 name=name
             )
-            stores.append(store)
+            try:
+                store.full_clean()
+                stores.append(store)
+            except DjangoValidationError as e:
+                raise ValidationError(e.message_dict)
         Store.objects.bulk_create(stores)
 
 

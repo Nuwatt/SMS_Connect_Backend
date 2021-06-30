@@ -33,13 +33,6 @@ class City(BaseModel):
     class Meta:
         verbose_name = 'City'
         verbose_name_plural = 'Cities'
-        # 1. avoid duplicate city in same country
-        constraints = [
-            models.UniqueConstraint(
-                fields=['country', 'name'],
-                name='unique_city'
-            )
-        ]
 
 
 class Nationality(BaseModel):

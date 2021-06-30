@@ -30,7 +30,6 @@ class AddRetailerUseCase(usecases.CreateUseCase):
         for name in self._data.get('name'):
             retailer = Retailer(
                 name=name,
-                channel=self._data.get('channel')
             )
             try:
                 retailer.full_clean()
@@ -56,9 +55,7 @@ class ListRetailerUseCase(usecases.BaseUseCase):
         return self._retailers
 
     def _factory(self):
-        self._retailers = Retailer.objects.unarchived().select_related(
-            'channel'
-        )
+        self._retailers = Retailer.objects.unarchived()
 
 
 class BasicListRetailerUseCase(usecases.BaseUseCase):
@@ -94,10 +91,7 @@ class ImportRetailerUseCase(usecases.ImportCSVUseCase):
             city, created = City.objects.get_or_create(name=item.get('City'), country=country)
             channel, created = Channel.objects.get_or_create(name=item.get('Channel'))
             retailer, created = Retailer.objects.update_or_create(
-                name=item.get('Retailer Name'),
-                defaults={
-                    'channel': channel,
-                }
+                name=item.get('Retailer Name')
             )
             store, created = Store.objects.get_or_create(
                 name=item.get('Retailer Branch Name'),
