@@ -6,9 +6,8 @@ from rest_framework.utils import model_meta
 
 
 def generate_custom_id(initial: str, model):
-    try:
-        last_record = model.objects.last()
-
+    last_record = model.objects.last()
+    if last_record:
         if len(last_record.id) > len(initial):
             next_id = int(last_record.id[len(initial):]) + 1
         else:
@@ -21,7 +20,7 @@ def generate_custom_id(initial: str, model):
             initial,
             last_record_id
         )
-    except model.DoesNotExist:
+    else:
         custom_id = '{}0001'.format(
             initial,
         )
@@ -30,10 +29,10 @@ def generate_custom_id(initial: str, model):
 
 
 def last_id_for_bulk_create(initial: str, model):
-    try:
-        last_record = model.objects.last()
+    last_record = model.objects.last()
+    if last_record:
         return int(last_record.id[len(initial):])
-    except model.DoesNotExist:
+    else:
         return 0
 
 
