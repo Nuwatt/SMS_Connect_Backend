@@ -1,7 +1,18 @@
 from django.contrib.admin import ModelAdmin
 
 
-class BaseModelAdmin(ModelAdmin):
+class ArchiveMixin:
+    def archive(self, request, queryset):
+        queryset.archive()
+
+    def restore(self, request, queryset):
+        queryset.restore()
+
+    archive.short_description = 'Archive selected items'
+    restore.short_description = 'Restore selected items'
+
+
+class BaseModelAdmin(ModelAdmin, ArchiveMixin):
     list_display = (
         'id',
         'updated',
@@ -25,3 +36,7 @@ class BaseModelAdmin(ModelAdmin):
     )
     list_filter = ('is_archived',)
 
+    actions = [
+        'archive',
+        'restore',
+    ]
