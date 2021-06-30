@@ -18,7 +18,7 @@ class VisitPerCountryReportView(BaseReportView):
 
 
 # optimized
-class VisitPerCityReportView(generics.ListAPIView):
+class VisitPerCityReportView(BaseReportView):
     """
     Use this end-point to list report of visit per city for distribution check
     """
@@ -30,7 +30,7 @@ class VisitPerCityReportView(generics.ListAPIView):
 
 
 # optimized
-class VisitPerChannelReportView(generics.ListAPIView):
+class VisitPerChannelReportView(BaseReportView):
     """
     Use this end-point to list report of visit per channel for distribution check
     """
@@ -41,7 +41,7 @@ class VisitPerChannelReportView(generics.ListAPIView):
         return distribution_check_usecases.VisitPerChannelReportUseCase().execute()
 
 
-class SKUPerCityReportView(generics.ListAPIView):
+class SKUPerCityReportView(BaseReportView):
     """
     Use this end-point to list report of total sku per city for distribution check
     """
@@ -52,7 +52,7 @@ class SKUPerCityReportView(generics.ListAPIView):
         return distribution_check_usecases.SKUPerCityReportUseCase().execute()
 
 
-class SKUPerCountryReportView(generics.ListAPIView):
+class SKUPerCountryReportView(BaseReportView):
     """
     Use this end-point to list report of total sku per country for distribution check
     """
@@ -63,7 +63,7 @@ class SKUPerCountryReportView(generics.ListAPIView):
         return distribution_check_usecases.SKUPerCountryReportUseCase().execute()
 
 
-class SKUPerChannelReportView(generics.ListAPIView):
+class SKUPerChannelReportView(BaseReportView):
     """
     Use this end-point to list report of total sku per channel for distribution check
     """
@@ -74,7 +74,7 @@ class SKUPerChannelReportView(generics.ListAPIView):
         return distribution_check_usecases.SKUPerChannelReportUseCase().execute()
 
 
-class BrandPerCityReportView(generics.ListAPIView):
+class BrandPerCityReportView(BaseReportView):
     """
     Use this end-point to list report of total brand per city for distribution check
     """
@@ -85,7 +85,7 @@ class BrandPerCityReportView(generics.ListAPIView):
         return distribution_check_usecases.BrandPerCityReportUseCase().execute()
 
 
-class BrandPerCountryReportView(generics.ListAPIView):
+class BrandPerCountryReportView(BaseReportView):
     """
     Use this end-point to list report of total brand per country for distribution check
     """
@@ -96,7 +96,7 @@ class BrandPerCountryReportView(generics.ListAPIView):
         return distribution_check_usecases.BrandPerCountryReportUseCase().execute()
 
 
-class BrandPerChannelReportView(generics.ListAPIView):
+class BrandPerChannelReportView(BaseReportView):
     """
     Use this end-point to list report of total brand per channel for distribution check
     """
@@ -107,7 +107,7 @@ class BrandPerChannelReportView(generics.ListAPIView):
         return distribution_check_usecases.BrandPerChannelReportUseCase().execute()
 
 
-class AvgPerSKUReportView(generics.ListAPIView):
+class AvgPerSKUReportView(BaseReportView):
     """
     Use this end-point to list report of avg per sku for distribution check
     """
@@ -118,7 +118,7 @@ class AvgPerSKUReportView(generics.ListAPIView):
         return distribution_check_usecases.AvgPerSKUReportUseCase().execute()
 
 
-class AvgPerBrandReportView(generics.ListAPIView):
+class AvgPerBrandReportView(BaseReportView):
     """
     Use this end-point to list report of avg per brand for distribution check
     """
