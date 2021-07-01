@@ -69,14 +69,6 @@ class Response(BaseModel):
     def __str__(self):
         return self.id
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['response_cycle', 'store'],
-                name='unique_response'
-            )
-        ]
-
     def save(self, *args, **kwargs):
         if self._state.adding:
             self.id = generate_custom_id(initial='R', model=Response)
@@ -177,14 +169,6 @@ class OptionAnswer(BaseModel):
 
     def __str__(self):
         return str(self.pk)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['answer', 'option'],
-                name='unique_option_answer'
-            )
-        ]
 
     def clean(self):
         question = self.answer.question

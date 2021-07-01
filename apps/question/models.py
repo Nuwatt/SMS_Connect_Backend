@@ -37,14 +37,6 @@ class QuestionTypeChoice(BaseModel):
     def __str__(self):
         return self.choice
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['question_type', 'choice'],
-                name='unique_question_type_choice'
-            )
-        ]
-
     def clean(self):
         # 1. check if question_type has_default_choices
         if not self.question_type.has_default_choices:
@@ -80,14 +72,6 @@ class Question(BaseModel):
             self.id = generate_custom_id(initial='Q', model=Question)
         super(Question, self).save(*args, **kwargs)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['questionnaire', 'statement'],
-                name='unique_question'
-            )
-        ]
-
 
 class QuestionOption(BaseModel):
     """
@@ -102,14 +86,6 @@ class QuestionOption(BaseModel):
     option = models.CharField(
         max_length=244,
     )
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['question', 'option'],
-                name='unique_question_option'
-            )
-        ]
 
     def clean(self):
         # 1. check if question_type has_default_choices
