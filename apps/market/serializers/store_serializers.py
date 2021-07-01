@@ -63,6 +63,14 @@ class ListStoreSerializer(StoreSerializer):
         )
 
 
+class BasicListStoreSerializer(StoreSerializer):
+    class Meta(StoreSerializer.Meta):
+        fields = (
+            'id',
+            'name'
+        )
+
+
 class ListStoreForAgentUserSerializer(StoreSerializer):
     retailer = IdNameSerializer()
 
