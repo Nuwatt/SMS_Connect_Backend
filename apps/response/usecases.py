@@ -195,7 +195,7 @@ class ListQuestionnaireResponseUseCase(usecases.BaseUseCase):
             number_of_answers=SubqueryCount('answer')
         ).select_related(
             'store',
-            'store__retailer__channel',
+            'store__channel',
             'store__city',
             'store__city__country'
         ).prefetch_related(

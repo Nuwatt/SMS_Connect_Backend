@@ -181,7 +181,7 @@ class ListQuestionnaireResponseSerializer(serializers.Serializer):
     city = serializers.CharField(source='store.city')
     retailer = serializers.CharField(source='store.retailer')
     store = serializers.CharField()
-    channel = serializers.CharField(source='store.retailer.channel')
+    channel = serializers.CharField(source='store.channel')
 
 
 class ListQuestionnaireAnswerSerializer(serializers.Serializer):
