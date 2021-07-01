@@ -44,7 +44,7 @@ class ListAgentUserUseCase(usecases.BaseUseCase):
                 'responsecycle__response',
                 filter=Q(responsecycle__response__is_completed=True)
             )
-        )
+        ).order_by('-created')
 
 
 class BasicListAgentUserUseCase(usecases.BaseUseCase):

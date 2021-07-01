@@ -80,7 +80,7 @@ class ListStoreUseCase(usecases.BaseUseCase):
             'retailer',
             'city',
             'city__country'
-        )
+        ).order_by('-created')
 
 
 class ListStoreForAgentUseCase(usecases.BaseUseCase):

@@ -55,7 +55,7 @@ class ListRetailerUseCase(usecases.BaseUseCase):
         return self._retailers
 
     def _factory(self):
-        self._retailers = Retailer.objects.unarchived()
+        self._retailers = Retailer.objects.unarchived().order_by('-created')
 
 
 class BasicListRetailerUseCase(usecases.BaseUseCase):

@@ -66,7 +66,7 @@ class ListSKUUseCase(usecases.BaseUseCase):
         self._sku_list = SKU.objects.unarchived().select_related(
             'brand',
             'brand__category'
-        )
+        ).order_by('-created')
 
 
 class ImportSKUUseCase(usecases.ImportCSVUseCase):
