@@ -191,5 +191,5 @@ class ImageAnswer(BaseModel):
         return str(self.pk)
 
     def clean(self):
-        if self.answer.question.question_type.name != 'Pictures':
+        if self.answer.question.question_type.name != 'Image':
             raise DjangoValidationError(_('Only Image answer are allowed.'))

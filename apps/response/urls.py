@@ -33,4 +33,9 @@ urlpatterns = [
         views.ListResponseAnswerView.as_view(),
         name='list-response-answer'
     ),
+    path(
+        'answer/import',
+        views.ImportAnswerView.as_view(),
+        name='import-answer'
+    ),
 ]

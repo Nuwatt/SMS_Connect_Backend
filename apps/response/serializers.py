@@ -4,6 +4,7 @@ from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from apps.core.serializers import CSVFileInputSerializer
 from apps.question.models import QuestionTypeChoice, QuestionOption
 from apps.response.models import Response, Answer
 
@@ -204,3 +205,7 @@ class ListQuestionnaireAnswerSerializer(serializers.Serializer):
         elif question_type.has_options:
             return instance.optionanswer_set.values_list('option__option', flat=True)
         return None
+
+
+class ImportAnswerSerializer(CSVFileInputSerializer):
+    pass

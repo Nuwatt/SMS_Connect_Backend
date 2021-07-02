@@ -134,3 +134,16 @@ class ListResponseAnswerView(generics.ListAPIView, ResponseMixin):
         Return a paginated style `Response` object for the given output data.
         """
         return self.paginator.get_custom_paginated_response(data, self.get_object().response_cycle)
+
+
+class ImportAnswerView(generics.CreateWithMessageAPIView):
+    """
+    Use this end-point to import answer in the form of csv file
+    """
+    serializer_class = serializers.ImportAnswerSerializer
+    message = _('Answer imported successfully.')
+
+    def perform_create(self, serializer):
+        return usecases.ImportAnswerUseCase(
+            serializer=serializer
+        ).execute()

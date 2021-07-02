@@ -1,3 +1,7 @@
+from datetime import datetime
+from itertools import groupby
+from operator import itemgetter
+
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction, IntegrityError
 from django.utils.timezone import now
@@ -6,6 +10,7 @@ from rest_framework.exceptions import ValidationError
 from sql_util.aggregates import SubqueryCount
 
 from apps.core import usecases
+from apps.question.models import Question
 from apps.questionnaire.models import Questionnaire
 from apps.response.exceptions import ResponseNotFound
 from apps.response.models import (
@@ -283,3 +288,86 @@ class ListResponseAnswerUseCase(usecases.BaseUseCase):
         #         ]
         #     }
         # ]
+
+
+class ImportAnswerUseCase(usecases.ImportCSVUseCase):
+    def __init__(self, serializer):
+        super().__init__(serializer)
+
+    valid_columns = ['Questionnaire ID', 'Questionnaire Type', 'Question ID', 'Question Type', 'Agent ID', 'Store ID',
+                     'Latitude', 'Longitude', 'Response Cycle', 'Cycle Completed Date Time', 'Started At',
+                     'Completed At', 'Answer']
+    null_columns = ['Cycle Completed Date Time', 'Latitude', 'Longitude']
+
+    def _factory(self):
+        # sort answer by response cycle
+        answers = sorted(self._item_list, key=itemgetter('Response Cycle'))
+        answers_group = groupby(answers, key=itemgetter('Response Cycle'))
+
+        for key, cycle_answers in answers_group:
+            for answer in cycle_answers:
+                # 1. response cycle
+                response_cycle, created = ResponseCycle.objects.get_or_create(
+                    agent_id=answer.get('Agent ID'),
+                    questionnaire_id=answer.get('Questionnaire ID'),
+                    completed_at=datetime.fromtimestamp(int(answer.get('Cycle Completed Date Time'))),
+                    is_completed=True
+                )
+
+                # 2. response
+                response, created = Response.objects.get_or_create(
+                    store_id=answer.get('Store ID'),
+                    response_cycle=response_cycle,
+                    completed_at=datetime.fromtimestamp(int(answer.get('Completed At'))),
+                    started_at=datetime.fromtimestamp(int(answer.get('Started At'))),
+                    is_completed=True,
+                    defaults={
+                        'latitude': answer.get('Latitude'),
+                        'longitude': answer.get('Longitude'),
+                    }
+                )
+
+                # 3. answer
+                answered, created = Answer.objects.get_or_create(
+                    question_id=answer.get('Question ID'),
+                    response=response
+                )
+
+                question_type = answered.question.question_type
+                if question_type.name != answer.get('Question Type'):
+                    raise ValidationError({
+                        'non_field_errors': _('{} is not of question type: {}'.format(
+                            answer.get('Question ID'),
+                            answer.get('Question Type')
+                        ))
+                    })
+                # 4. answer with respect to question type
+                if question_type.name == 'Numeric':
+                    numeric_answer, created = NumericAnswer.objects.get_or_create(
+                        answer=answered,
+                        numeric=answer.get('Answer')
+                    )
+                elif question_type.name == 'Text':
+                    text_answer, created = TextAnswer.objects.get_or_create(
+                        answer=answered,
+                        text=answer.get('Answer')
+                    )
+                elif question_type.name == 'Image':
+                    image_answer, created = ImageAnswer.objects.get_or_create(
+                        answer=answered,
+                        image=answer.get('Answer')
+                    )
+                elif question_type.has_default_choices:
+                    choice_answer, created = ChoiceAnswer.objects.get_or_create(
+                        answer=answered,
+                        choice=answer.get('Answer')
+                    )
+
+    def execute(self):
+        self.is_valid()
+        try:
+            self._factory()
+        except IntegrityError:
+            raise ValidationError({
+                'non_field_errors': _('CSV Contains invalid ids.')
+            })
