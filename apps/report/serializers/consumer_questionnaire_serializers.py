@@ -12,6 +12,13 @@ class NumericQuestionReportSerializer(serializers.Serializer):
     value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
 
 
+class OptionsQuestionReportSerializer(serializers.Serializer):
+    question_statement = serializers.CharField()
+    question = serializers.CharField()
+    option = serializers.CharField(source='option_text')
+    value = serializers.FloatField()
+
+
 class RatingOneToThreeReportSerializer(serializers.Serializer):
     question_statement = serializers.CharField()
     rating_one = serializers.FloatField()

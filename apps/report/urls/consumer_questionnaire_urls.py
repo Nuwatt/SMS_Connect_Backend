@@ -33,4 +33,10 @@ urlpatterns = [
         consumer_questionnaire_views.NumericQuestionReportView.as_view(),
         name='numeric-question'
     ),
+    # options
+    path(
+        'options-question',
+        consumer_questionnaire_views.OptionsQuestionReportView.as_view(),
+        name='options-question'
+    ),
 ]

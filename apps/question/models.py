@@ -93,3 +93,9 @@ class QuestionOption(BaseModel):
             raise DjangoValidationError({
                 'question': _('Question has already default choices.')
             })
+
+    def __str__(self):
+        return '{}-{}'.format(
+            self.question,
+            self.option
+        )

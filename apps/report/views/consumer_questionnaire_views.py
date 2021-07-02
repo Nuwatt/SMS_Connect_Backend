@@ -1,4 +1,4 @@
-from apps.report.filtersets.base_filtersets import SKUResponseFilter
+from apps.report.filtersets.base_filtersets import SKUResponseFilter, ResponseFilter
 from apps.report.serializers import consumer_questionnaire_serializers
 from apps.report.usecases import consumer_questionnaire_usecases
 
@@ -58,3 +58,14 @@ class NumericQuestionReportView(BaseReportView):
 
     def get_queryset(self):
         return consumer_questionnaire_usecases.NumericQuestionReportUseCase().execute()
+
+
+class OptionsQuestionReportView(BaseReportView):
+    """
+    Use this end-point to list report of  options answer for consumer questionnaire
+    """
+    serializer_class = consumer_questionnaire_serializers.OptionsQuestionReportSerializer
+    filterset_class = SKUResponseFilter
+
+    def get_queryset(self):
+        return consumer_questionnaire_usecases.OptionsQuestionReportUseCase().execute()

@@ -1,4 +1,5 @@
 from django.db.models import Count, F, Q, Avg
+from sql_util.aggregates import SubqueryCount
 
 from apps.core import usecases
 from apps.response.models import Response
@@ -286,4 +287,35 @@ class NumericQuestionReportUseCase(usecases.BaseUseCase):
             'question_statement',
             'sku',
             'brand',
+        ).unarchived()
+
+
+class OptionsQuestionReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._results
+
+    def _factory(self):
+        self._results = Response.objects.filter(
+            response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+            answer__question__question_type__has_options=True,
+            is_completed=True
+        ).annotate(
+            option=F('answer__optionanswer__option'),
+        ).values(
+            'option',
+        ).distinct().annotate(
+            value=Count('answer__optionanswer__option'),
+            question=F('answer__question'),
+            option_text=F('answer__optionanswer__option__option'),
+            brand=F('answer__question__sku__brand'),
+            question_statement=F('answer__question__statement'),
+            sku=F('answer__question__sku'),
+        ).values(
+            'question_statement',
+            'question',
+            'option_text',
+            'value',
+            'sku',
+            'brand'
         ).unarchived()
