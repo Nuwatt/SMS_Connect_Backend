@@ -37,26 +37,18 @@ class PasswordResetConfirmView(generics.CreateAPIView):
         ).execute()
 
 
-class ChangePasswordView(generics.CreateAPIView):
+class ChangePasswordView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to change password
     """
     serializer_class = base_serializers.ChangePasswordSerializer
+    message = _('Password changed successfully.')
 
     def perform_create(self, serializer):
         return base_usecases.ChangePasswordUseCase(
             user=self.request.user,
             serializer=serializer
         ).execute()
-
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Password changed successfully.')
-        })
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class SupportView(generics.CreateAPIView):

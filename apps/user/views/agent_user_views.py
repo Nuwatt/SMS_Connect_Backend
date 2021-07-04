@@ -26,26 +26,18 @@ class ListAgentUserView(generics.ListAPIView):
         return agent_user_usecases.ListAgentUserUseCase().execute()
 
 
-class RegisterAgentUserView(generics.CreateAPIView):
+class RegisterAgentUserView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to register a new agent
     """
     serializer_class = agent_user_serializers.RegisterAgentUserSerializer
     permission_classes = (IsAdminPortalUser,)
+    message = _('Registered successfully.')
 
     def perform_create(self, serializer):
         return agent_user_usecases.RegisterAgentUserUseCase(
             serializer=serializer
         ).execute()
-
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Registered successfully.')
-        })
-
-    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class AgentUserProfileView(generics.RetrieveAPIView):
@@ -87,7 +79,7 @@ class AgentUserDetailView(generics.RetrieveAPIView, AgentUserMixin):
         return self.get_agent_user()
 
 
-class UpdateAgentUserView(generics.UpdateAPIView, AgentUserMixin):
+class UpdateAgentUserView(generics.UpdateWithMessageAPIView, AgentUserMixin):
     """
     Use this end-point to update specific agent user detail
     """
@@ -101,19 +93,6 @@ class UpdateAgentUserView(generics.UpdateAPIView, AgentUserMixin):
             agent_user=self.get_object(),
             serializer=serializer
         ).execute()
-
-    def response(self, serializer):
-        return Response({
-            'message': _('Updated successfully.')
-        })
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
 
 
 class DeleteAgentUserView(generics.DestroyAPIView, AgentUserMixin):
@@ -177,25 +156,17 @@ class UploadPortalUserAvatarView(generics.CreateAPIView, AgentUserMixin, Respons
         return self.create(request, *args, **kwargs)
 
 
-class ImportAgentUserView(generics.CreateAPIView):
+class ImportAgentUserView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to import agent user from a csv file
     """
     serializer_class = CSVFileInputSerializer
+    message = _('Agent User imported successfully.')
 
     def perform_create(self, serializer):
         return agent_user_usecases.ImportAgentUserUseCase(
             serializer=serializer
         ).execute()
-
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Agent User imported successfully.')
-        })
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class BasicListAgentUserView(generics.ListAPIView):

@@ -40,12 +40,13 @@ class StartQuestionnaireView(generics.CreateAPIView, QuestionnaireMixin):
         return self.create(request, *args, **kwargs)
 
 
-class SummitQuestionnaireResponseView(generics.CreateAPIView, ResponseMixin):
+class SummitQuestionnaireResponseView(generics.CreateWithMessageAPIView, ResponseMixin):
     """
     Use this end-point to submit questionnaire's answers at once
     """
     serializer_class = serializers.BulkSummitQuestionnaireResponseSerializer
     permission_classes = (IsAgentUser,)
+    message = _('Submitted successfully.')
 
     def get_object(self):
         return self.get_response()
@@ -55,16 +56,6 @@ class SummitQuestionnaireResponseView(generics.CreateAPIView, ResponseMixin):
             response=self.get_object(),
             serializer=serializer
         ).execute()
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Submitted successfully.')
-        })
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class ListAgentResponseHistoryView(generics.ListAPIView):

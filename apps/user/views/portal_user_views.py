@@ -27,25 +27,17 @@ class ListPortalUserView(generics.ListAPIView):
         return portal_user_usecases.ListPortalUserUseCase().execute()
 
 
-class RegisterPortalUserView(generics.CreateAPIView):
+class RegisterPortalUserView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to register a new Portal user
     """
     serializer_class = portal_user_serializers.RegisterPortalUserSerializer
+    message = _('Registered successfully.')
 
     def perform_create(self, serializer):
         return portal_user_usecases.RegisterPortalUserUseCase(
             serializer=serializer
         ).execute()
-
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Registered successfully.')
-        })
-
-    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class PortalUserDetailView(generics.RetrieveAPIView, PortalUserMixin):
@@ -58,7 +50,7 @@ class PortalUserDetailView(generics.RetrieveAPIView, PortalUserMixin):
         return self.get_portal_user()
 
 
-class UpdatePortalUserView(generics.UpdateAPIView, PortalUserMixin):
+class UpdatePortalUserView(generics.UpdateWithMessageAPIView, PortalUserMixin):
     """
     Use this end-point to update specific portal user detail
     """
@@ -73,19 +65,6 @@ class UpdatePortalUserView(generics.UpdateAPIView, PortalUserMixin):
             portal_user=self.get_object(),
             serializer=serializer
         ).execute()
-
-    def response(self, serializer):
-        return Response({
-            'message': _('Updated successfully.')
-        })
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
 
 
 class DeletePortalUserView(generics.DestroyAPIView, PortalUserMixin):
