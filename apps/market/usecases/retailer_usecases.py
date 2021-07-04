@@ -1,5 +1,8 @@
+import csv
+
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
+from django.http import HttpResponse
 from rest_framework.exceptions import ValidationError
 
 from apps.localize.models import Country, City
@@ -105,3 +108,37 @@ class ImportRetailerUseCase(usecases.ImportCSVUseCase):
                 channel=channel,
                 city=city
             )
+
+
+class ExportRetailerUseCase(usecases.BaseUseCase):
+    columns = ['Retailer Name', 'Retailer Branch Name', 'Channel', 'Country', 'City']
+
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        response = HttpResponse(content_type='text/csv')
+        filename = 'retailer.csv'
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+
+        # 1. write headers
+        writer = csv.writer(response)
+        writer.writerow(self.columns)
+
+        # 2. write store
+        stores = Store.objects.unarchived().values(
+            'name',
+            'retailer__name',
+            'channel__name',
+            'city__country__name',
+            'city__name'
+        )
+        for store in stores:
+            writer.writerow([
+                store.get('retailer__name'),
+                store.get('name'),
+                store.get('channel__name'),
+                store.get('city__country__name'),
+                store.get('city__name')
+            ])
+        return response

@@ -32,5 +32,10 @@ urlpatterns = [
         'import',
         retailer_views.ImportRetailerView.as_view(),
         name='import-retailer'
+    ),
+    path(
+        'export',
+        retailer_views.ExportRetailerView.as_view(),
+        name='export-retailer'
     )
 ]
