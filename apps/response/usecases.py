@@ -177,7 +177,7 @@ class ListAgentResponseUseCase(ListAgentResponseHistoryUseCase):
             'response_cycle__questionnaire',
             'response_cycle__questionnaire__questionnaire_type',
             'store',
-            'store__retailer__channel',
+            'store__channel',
             'store__city',
             'store__city__country'
         )
