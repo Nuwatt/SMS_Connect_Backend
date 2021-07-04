@@ -1,6 +1,6 @@
 from apps.core import usecases
 from apps.localize.exceptions import CountryNotFound
-from apps.localize.models import Country
+from apps.localize.models import Country, Nationality
 from apps.user.models import AgentUser
 
 
@@ -48,10 +48,10 @@ class ListCountryUseCase(usecases.BaseUseCase):
 class ListNationalityUseCase(usecases.BaseUseCase):
     def execute(self):
         self._factory()
-        return self._countries
+        return self._nationalities
 
     def _factory(self):
-        self._countries = Country.objects.unarchived()
+        self._nationalities = Nationality.objects.unarchived()
 
 
 class ListCountryForAgentUserUseCase(usecases.BaseUseCase):

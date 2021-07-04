@@ -57,4 +57,16 @@ urlpatterns = [
         distribution_check_views.BrandPerChannelReportView.as_view(),
         name='brand-per-channel-report'
     ),
+    # avg per sku
+    path(
+        'avg-per-sku',
+        distribution_check_views.AvgPerSKUReportView.as_view(),
+        name='avg-per-sku-report'
+    ),
+    # avg per brand
+    path(
+        'avg-per-brand',
+        distribution_check_views.AvgPerBrandReportView.as_view(),
+        name='avg-per-brand-report'
+    ),
 ]

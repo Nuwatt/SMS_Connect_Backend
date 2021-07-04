@@ -10,6 +10,7 @@ from apps.core.mixins import ResponseMixin
 from apps.core.serializers import MessageResponseSerializer
 from apps.user import filtersets
 from apps.user.mixins import PortalUserMixin
+from apps.user.permissions import IsAdminPortalUser, IsPortalUser
 from apps.user.serializers import portal_user_serializers
 from apps.user.usecases import portal_user_usecases
 
@@ -20,6 +21,7 @@ class ListPortalUserView(generics.ListAPIView):
     """
     serializer_class = portal_user_serializers.ListPortalUserSerializer
     filterset_class = filtersets.PortalUserFilter
+    permission_classes = (IsAdminPortalUser,)
 
     def get_queryset(self):
         return portal_user_usecases.ListPortalUserUseCase().execute()
@@ -61,6 +63,7 @@ class UpdatePortalUserView(generics.UpdateAPIView, PortalUserMixin):
     Use this end-point to update specific portal user detail
     """
     serializer_class = portal_user_serializers.UpdatePortalUserSerializer
+    permission_classes = (IsPortalUser,)
 
     def get_object(self):
         return self.get_portal_user()
@@ -127,6 +130,7 @@ class UploadPortalUserAvatarView(generics.CreateAPIView, PortalUserMixin, Respon
     """
     serializer_class = portal_user_serializers.UploadPortalUserAvatarSerializer
     response_serializer_class = portal_user_serializers.UploadPortalUserAvatarSerializer
+    permission_classes = (IsPortalUser,)
 
     def get_object(self):
         return self.get_portal_user()

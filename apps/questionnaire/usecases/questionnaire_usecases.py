@@ -83,7 +83,7 @@ class ListQuestionnaireUseCase(usecases.BaseUseCase):
             'category',
         ).annotate(
             number_of_questions=Count('question')
-        )
+        ).order_by('-created')
 
 
 class ListAvailableQuestionnaireForAgentUseCase(usecases.BaseUseCase):

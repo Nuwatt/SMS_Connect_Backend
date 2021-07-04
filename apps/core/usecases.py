@@ -3,6 +3,8 @@ from io import StringIO
 
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError as DjangoValidationError
+
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import raise_errors_on_nested_writes
 
@@ -63,7 +65,10 @@ class DeleteUseCase(BaseUseCase):
         return self._instance
 
     def _factory(self):
-        self._instance.archive()
+        try:
+            self._instance.archive()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
 
 class ImportCSVUseCase(CreateUseCase):

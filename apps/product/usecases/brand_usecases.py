@@ -51,5 +51,5 @@ class ListBrandUseCase(usecases.BaseUseCase):
     def _factory(self):
         self._brands = Brand.objects.unarchived().select_related(
             'category'
-        )
+        ).order_by('-created')
 

@@ -48,6 +48,17 @@ class ListStoreView(generics.ListAPIView):
         return store_serializers.ListStoreSerializer
 
 
+class BasicListStoreView(generics.ListAPIView):
+    """
+    Use this end-point to list all store
+    """
+    filterset_class = StoreFilter
+    serializer_class = store_serializers.BasicListStoreSerializer
+
+    def get_queryset(self):
+        return store_usecases.ListStoreUseCase().execute()
+
+
 class UpdateStoreView(generics.UpdateAPIView, StoreMixin):
     """
     Use this end-point to update specific store
