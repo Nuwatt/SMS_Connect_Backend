@@ -329,13 +329,11 @@ class AvgPerBrandReportUseCase(usecases.BaseUseCase):
             'brand'
         ).annotate(
             value=Avg('answer__numericanswer__numeric'),
-            sku=F('answer__question__sku'),
             brand_name=F('answer__question__sku__brand__name'),
         ).values(
-            'value',
-            'sku',
             'brand',
-            'brand_name',
+            'value',
+            'brand_name'
         ).unarchived().filter(
             value__gt=0
         )

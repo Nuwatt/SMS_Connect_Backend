@@ -1,5 +1,5 @@
 from apps.core import generics
-from apps.report.filtersets.base_filtersets import ResponseFilter, SKUResponseFilter
+from apps.report.filtersets.base_filtersets import ResponseFilter, SKUResponseFilter, BrandResponseFilter
 from apps.report.serializers import distribution_check_serializers
 from apps.report.usecases import distribution_check_usecases
 
@@ -123,7 +123,7 @@ class AvgPerBrandReportView(BaseReportView):
     Use this end-point to list report of avg per brand for distribution check
     """
     serializer_class = distribution_check_serializers.AvgPerBrandReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = BrandResponseFilter
 
     def get_queryset(self):
         return distribution_check_usecases.AvgPerBrandReportUseCase().execute()
