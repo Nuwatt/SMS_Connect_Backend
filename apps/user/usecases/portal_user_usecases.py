@@ -30,7 +30,7 @@ class ListPortalUserUseCase(usecases.BaseUseCase):
         return self._portal_users
 
     def _factory(self):
-        self._portal_users = PortalUser.objects.unarchived()
+        self._portal_users = PortalUser.objects.unarchived().order_by('-created')
 
 
 class RegisterPortalUserUseCase(usecases.CreateUseCase):

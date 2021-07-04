@@ -1,6 +1,4 @@
-from django.db.models import fields
 from django.utils.translation import gettext_lazy as _
-
 from rest_framework import serializers
 
 from apps.core.serializers import IdNameSerializer
@@ -34,6 +32,7 @@ class AddStoreSerializer(StoreSerializer):
         fields = (
             'name',
             'retailer',
+            'channel',
             'city',
         )
 
@@ -50,15 +49,25 @@ class AddStoreSerializer(StoreSerializer):
 class ListStoreSerializer(StoreSerializer):
     retailer = IdNameSerializer()
     city = IdNameSerializer()
+    channel = IdNameSerializer()
     country = IdNameSerializer(source='city.country')
 
     class Meta(StoreSerializer.Meta):
         fields = (
             'id',
             'retailer',
+            'channel',
             'name',
             'city',
             'country',
+        )
+
+
+class BasicListStoreSerializer(StoreSerializer):
+    class Meta(StoreSerializer.Meta):
+        fields = (
+            'id',
+            'name'
         )
 
 
@@ -78,5 +87,6 @@ class UpdateStoreSerializer(StoreSerializer):
         fields = (
             'name',
             'retailer',
+            'channel',
             'city'
         )

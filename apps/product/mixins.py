@@ -1,9 +1,6 @@
 from apps.product.usecases.brand_usecases import GetBrandUseCase
 from apps.product.usecases.category_usecases import GetCategoryUseCase
 from apps.product.usecases.sku_usecases import GetSKUUseCase
-from apps.localize.usecases.area_usecases import GetAreaUseCase
-from apps.localize.usecases.city_usecases import GetCityUseCase
-from apps.localize.usecases.country_usecases import GetCountryUseCase
 
 
 class BrandMixin:

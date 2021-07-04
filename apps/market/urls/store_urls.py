@@ -19,7 +19,11 @@ urlpatterns = [
         'list',
         store_views.ListStoreView.as_view(),
         name='list-store'
-
+    ),
+    path(
+        'basic-list',
+        store_views.BasicListStoreView.as_view(),
+        name='basic-list-store'
     ),
     path(
         '<str:store_id>/update',

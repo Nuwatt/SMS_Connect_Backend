@@ -1,15 +1,7 @@
 from django_filters import rest_framework as filters
 
 from apps.core.filtersets import NameSearchFilter, IdInFilter
-from apps.localize.models import Area, City, Country
-
-
-class AreaFilter(filters.FilterSet):
-    class Meta:
-        model = Area
-        fields = [
-            'city',
-        ]
+from apps.localize.models import City, Country
 
 
 class CityFilter(NameSearchFilter):
@@ -41,7 +33,6 @@ class CountryFilter(NameSearchFilter):
     class Meta:
         model = Country
         fields = [
-            'region',
             'questionnaire',
             'search'
         ]

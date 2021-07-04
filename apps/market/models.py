@@ -23,11 +23,6 @@ class Channel(BaseModel):
 
 class Retailer(BaseModel):
     name = models.CharField(max_length=100)
-    channel = models.ForeignKey(
-        Channel,
-        on_delete=models.CASCADE,
-        null=True
-    )
 
     def __str__(self):
         return self.name
@@ -38,14 +33,6 @@ class Retailer(BaseModel):
             raise DjangoValidationError({
                 'name': _('Retailer name already exists.')
             })
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['name', 'channel'],
-                name='unique_retailer'
-            )
-        ]
 
 
 class Store(BaseModel):
@@ -69,14 +56,6 @@ class Store(BaseModel):
             raise DjangoValidationError({
                 'name': _('Store name already exists.')
             })
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['name', 'retailer', 'city'],
-                name='unique_store'
-            )
-        ]
 
     def __str__(self):
         return self.name

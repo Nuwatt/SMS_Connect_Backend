@@ -1,10 +1,12 @@
 from django.utils.translation import gettext_lazy as _
+from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 from apps.core.exceptions import NoContent
 from apps.core.mixins import LoggingErrorsMixin
+from apps.core.serializers import MessageResponseSerializer
 from apps.user.permissions import IsAdminPortalUser
 
 
@@ -29,6 +31,21 @@ class CreateAPIView(LoggingErrorsMixin, generics.CreateAPIView):
     def response(self, result, serializer, status_code):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status_code, headers=headers)
+
+
+class CreateWithMessageAPIView(CreateAPIView):
+    message = _('Performed Successfully.')
+
+    def response(self, result, serializer, status_code):
+        return Response(
+            {
+                'message': self.message
+            }, status=status.HTTP_200_OK
+        )
+
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class ListAPIView(LoggingErrorsMixin, generics.ListAPIView):

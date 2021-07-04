@@ -8,13 +8,5 @@ urlpatterns = [
     path(
         'country/',
         include('apps.localize.urls.country_urls')
-    ),
-    path(
-        'area/',
-        include('apps.localize.urls.area_urls')
-    ),
-    path(
-        'region/',
-        include('apps.localize.urls.region_urls')
     )
 ]

@@ -16,18 +16,14 @@ class AddRetailerSerializer(RetailerSerializer):
     class Meta(RetailerSerializer.Meta):
         fields = (
             'name',
-            'channel',
         )
 
 
 class ListRetailerSerializer(RetailerSerializer):
-    channel = IdNameSerializer()
-
     class Meta(RetailerSerializer.Meta):
         fields = (
             'id',
             'name',
-            'channel',
         )
 
 
@@ -44,7 +40,6 @@ class UpdateRetailerSerializer(RetailerSerializer):
     class Meta(RetailerSerializer.Meta):
         fields = (
             'name',
-            'channel',
         )
 
 

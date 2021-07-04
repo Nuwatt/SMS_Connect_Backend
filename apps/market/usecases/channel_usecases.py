@@ -48,5 +48,5 @@ class ListChannelUseCase(usecases.BaseUseCase):
         return self._channels
 
     def _factory(self):
-        self._channels = Channel.objects.unarchived()
+        self._channels = Channel.objects.unarchived().order_by('-created')
 
