@@ -15,21 +15,31 @@ class StoreFilter(filters.FilterSet):
         lookup_expr='in',
         label='city'
     )
+    country = IdInFilter(
+        field_name='city__country',
+        lookup_expr='in',
+        label='country',
+        distinct=True
+    )
 
     class Meta:
         model = Store
         fields = [
             'retailer',
-            'city'
+            'city',
+            'country'
         ]
 
 
 class RetailerFilter(filters.FilterSet):
-    city = filters.CharFilter(
+    city = IdInFilter(
         field_name='store__city',
+        lookup_expr='in',
         label='city'
     )
-    channel = filters.CharFilter(
-        field_name='channel',
-        label='channel'
+    country = IdInFilter(
+        field_name='store__city__country',
+        lookup_expr='in',
+        label='country',
+        distinct=True
     )
