@@ -12,6 +12,9 @@ class BrandAdmin(BaseModelAdmin):
     search_fields = BaseModelAdmin.search_fields + (
         'name',
     )
+    list_filter = BaseModelAdmin.list_filter + (
+        'sku__country',
+    )
 
 
 @admin.register(models.Category)
@@ -22,6 +25,9 @@ class CategoryAdmin(BaseModelAdmin):
     search_fields = BaseModelAdmin.search_fields + (
         'name',
     )
+    list_filter = BaseModelAdmin.list_filter + (
+        'sku__country',
+    )
 
 
 @admin.register(models.SKU)
@@ -31,4 +37,7 @@ class SKUAdmin(BaseModelAdmin):
     )
     search_fields = BaseModelAdmin.search_fields + (
         'name',
+    )
+    list_filter = BaseModelAdmin.list_filter + (
+        'country',
     )
