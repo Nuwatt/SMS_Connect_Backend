@@ -93,14 +93,6 @@ class ImportRetailerView(generics.CreateWithMessageAPIView):
         ).execute()
 
 
-<<<<<<< HEAD
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-=======
->>>>>>> 6fe33ae3b40536fa692b6808507b0b6450c02993
 class ExportRetailerView(generics.GenericAPIView):
     """
     Use this end-point to export retailer to csv format
