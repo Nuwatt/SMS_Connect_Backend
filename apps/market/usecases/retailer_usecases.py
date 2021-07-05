@@ -93,7 +93,7 @@ class ImportRetailerUseCase(usecases.ImportCSVUseCase):
             country, created = Country.objects.get_or_create(name=item.get('Country'))
             city, created = City.objects.get_or_create(name=item.get('City'), country=country)
             channel, created = Channel.objects.get_or_create(name=item.get('Channel'))
-            retailer, created = Retailer.objects.update_or_create(
+            retailer, created = Retailer.objects.get_or_create(
                 name=item.get('Retailer Name')
             )
             store, created = Store.objects.get_or_create(

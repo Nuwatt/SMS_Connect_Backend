@@ -86,6 +86,25 @@ class UpdateAPIView(LoggingErrorsMixin, generics.UpdateAPIView):
         return Response(serializer.data)
 
 
+class UpdateWithMessageAPIView(UpdateAPIView):
+    message = _('Updated successfully.')
+
+    def response(self, serializer):
+        return Response(
+            {
+                'message': self.message
+            }, status=status.HTTP_200_OK
+        )
+
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+
 class DestroyAPIView(LoggingErrorsMixin, generics.DestroyAPIView):
     logging_methods = ['DELETE']
     permission_classes = (IsAdminPortalUser,)
@@ -93,4 +112,3 @@ class DestroyAPIView(LoggingErrorsMixin, generics.DestroyAPIView):
 
 class RetrieveAPIView(LoggingErrorsMixin, generics.RetrieveAPIView):
     logging_methods = ['GET']
-

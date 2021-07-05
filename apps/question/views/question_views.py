@@ -13,11 +13,12 @@ from apps.questionnaire.mixins import QuestionnaireMixin
 from apps.user.permissions import IsAgentUser
 
 
-class AddQuestionView(generics.CreateAPIView, QuestionnaireMixin):
+class AddQuestionView(generics.CreateWithMessageAPIView, QuestionnaireMixin):
     """
     Use this end-point to add new question
     """
     serializer_class = question_serializers.AddQuestionSerializer
+    message = _('Question added successfully.')
 
     def perform_create(self, serializer):
         return question_usecases.AddQuestionUseCase(
@@ -25,36 +26,19 @@ class AddQuestionView(generics.CreateAPIView, QuestionnaireMixin):
             serializer=serializer
         ).execute()
 
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Question added successfully.')
-        }, status=status_code)
 
-    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-class BulkAddQuestionView(generics.CreateAPIView, QuestionnaireMixin):
+class BulkAddQuestionView(generics.CreateWithMessageAPIView, QuestionnaireMixin):
     """
     Use this end-point to add new question in bulk
     """
     serializer_class = question_serializers.BulkAddQuestionSerializer
+    message = _('Question added successfully.')
 
     def perform_create(self, serializer):
         return question_usecases.BulkAddQuestionUseCase(
             questionnaire=self.get_questionnaire(),
             serializer=serializer
         ).execute()
-
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Question added successfully.')
-        }, status=status_code)
-
-    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class ListQuestionView(generics.ListAPIView):
@@ -78,11 +62,12 @@ class QuestionDetailView(generics.RetrieveAPIView, QuestionMixin):
         return self.get_question()
 
 
-class ImportQuestionView(generics.CreateAPIView, QuestionnaireMixin):
+class ImportQuestionView(generics.CreateWithMessageAPIView, QuestionnaireMixin):
     """
     Use this end-point to import questions in the form of csv file
     """
     serializer_class = question_serializers.ImportQuestionSerializer
+    message = _('Question imported successfully.')
 
     def get_object(self):
         return self.get_questionnaire()
@@ -92,15 +77,6 @@ class ImportQuestionView(generics.CreateAPIView, QuestionnaireMixin):
             serializer=serializer,
             questionnaire=self.get_object()
         ).execute()
-
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Question imported successfully.')
-        }, status=status_code)
-
-    @swagger_auto_schema(responses={201: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
 
 class ExportQuestionView(generics.GenericAPIView, QuestionnaireMixin):

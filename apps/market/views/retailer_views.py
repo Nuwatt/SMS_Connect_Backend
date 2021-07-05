@@ -80,27 +80,27 @@ class DeleteRetailerView(generics.DestroyAPIView, RetailerMixin):
         ).execute()
 
 
-class ImportRetailerView(generics.CreateAPIView):
+class ImportRetailerView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to import retailer from csv format
     """
     serializer_class = retailer_serializers.ImportRetailerSerializer
+    message = _('Imported and saved successfully.')
 
     def perform_create(self, serializer):
         return retailer_usecases.ImportRetailerUseCase(
             serializer=serializer
         ).execute()
 
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Imported and saved successfully.')
-        })
 
+<<<<<<< HEAD
     @swagger_auto_schema(responses={200: MessageResponseSerializer()})
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
 
+=======
+>>>>>>> 6fe33ae3b40536fa692b6808507b0b6450c02993
 class ExportRetailerView(generics.GenericAPIView):
     """
     Use this end-point to export retailer to csv format

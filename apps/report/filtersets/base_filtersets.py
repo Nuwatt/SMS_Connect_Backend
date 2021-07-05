@@ -57,3 +57,11 @@ class SKUResponseFilter(ResponseFilter):
         label='brand',
         lookup_expr='in'
     )
+
+
+class BrandResponseFilter(ResponseFilter):
+    brand = IdInFilter(
+        field_name='brand',
+        label='brand',
+        lookup_expr='in'
+    )

@@ -64,22 +64,14 @@ class DeleteSKUView(generics.DestroyAPIView, SKUMixin):
         ).execute()
 
 
-class ImportSKUView(generics.CreateAPIView):
+class ImportSKUView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to import sku from the csv file
     """
     serializer_class = sku_serializers.ImportSKUSerializer
+    message = _('Imported and saved successfully.')
 
     def perform_create(self, serializer):
         return sku_usecases.ImportSKUUseCase(
             serializer=serializer
         ).execute()
-
-    def response(self, result, serializer, status_code):
-        return Response({
-            'message': _('Imported and saved successfully.')
-        })
-
-    @swagger_auto_schema(responses={200: MessageResponseSerializer()})
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
