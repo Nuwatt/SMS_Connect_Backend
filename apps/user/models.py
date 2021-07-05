@@ -9,7 +9,7 @@ from apps.core import fields
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
 from apps.core.validators import validate_image
-from apps.localize.models import Country, City
+from apps.localize.models import Country, City, Nationality
 from apps.user.managers import UserManager
 from apps.user.utils import upload_avatar_to
 from apps.user.validators import validate_date_of_birth, validate_username
@@ -31,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     contact_number = fields.PhoneNumberField(null=True, blank=True)
     date_of_birth = models.DateField(null=True, validators=[validate_date_of_birth])
     nationality = models.ForeignKey(
-        Country,
+        Nationality,
         on_delete=models.SET_NULL,
         null=True,
         blank=True
