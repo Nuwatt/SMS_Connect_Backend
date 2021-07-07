@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
 from apps.core.utils import generate_custom_id
+from apps.localize.models import Country
 
 
 class Category(BaseModel):
@@ -87,6 +88,7 @@ class SKU(BaseModel):
         null=True,
         on_delete=models.CASCADE
     )
+    country = models.ManyToManyField(Country, blank=True)
 
     def __str__(self):
         return self.name

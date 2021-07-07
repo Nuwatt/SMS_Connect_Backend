@@ -6,7 +6,7 @@ from rest_framework import serializers
 from apps.core.serializer_fields import PhoneNumberField
 from apps.core.serializers import IdNameSerializer
 from apps.core.validators import validate_image
-from apps.localize.models import Country
+from apps.localize.models import Nationality
 from apps.user.models import PortalUser, Role
 from apps.user.serializers.base_serializers import (
     UserSerializer,
@@ -76,7 +76,7 @@ class UpdatePortalUserSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     fullname = serializers.CharField(write_only=True)
     nationality = serializers.PrimaryKeyRelatedField(
-        queryset=Country.objects.all(),
+        queryset=Nationality.objects.all(),
         write_only=True,
         error_messages={
             'does_not_exist': _('Invalid nationality - submitted nationality does not exist.'),

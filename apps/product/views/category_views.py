@@ -1,4 +1,5 @@
 from apps.core import generics
+from apps.product.filtersets import CategoryFilter
 from apps.product.mixins import CategoryMixin
 from apps.product.serializers import category_serializers
 from apps.product.usecases import category_usecases
@@ -21,6 +22,7 @@ class ListCategoryView(generics.ListAPIView):
     Use this end-point to list all category
     """
     serializer_class = category_serializers.ListCategorySerializer
+    filterset_class = CategoryFilter
 
     def get_queryset(self):
         return category_usecases.ListCategoryUseCase().execute()

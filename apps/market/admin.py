@@ -14,6 +14,10 @@ class RetailerAdmin(BaseModelAdmin):
         'name',
     ) + BaseModelAdmin.search_fields
 
+    list_filter = BaseModelAdmin.list_filter + (
+        'store__city__country',
+    )
+
 
 @admin.register(models.Store)
 class StoreAdmin(BaseModelAdmin):
@@ -28,6 +32,10 @@ class StoreAdmin(BaseModelAdmin):
     raw_id_fields = (
         'city',
         'retailer'
+    )
+
+    list_filter = BaseModelAdmin.list_filter + (
+        'city__country',
     )
 
 

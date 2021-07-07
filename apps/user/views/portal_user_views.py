@@ -2,12 +2,12 @@ from django.utils.translation import gettext_lazy as _
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from apps.core import generics
 from apps.core.mixins import ResponseMixin
-from apps.core.serializers import MessageResponseSerializer
 from apps.user import filtersets
 from apps.user.mixins import PortalUserMixin
 from apps.user.permissions import IsAdminPortalUser, IsPortalUser
@@ -110,6 +110,7 @@ class UploadPortalUserAvatarView(generics.CreateAPIView, PortalUserMixin, Respon
     serializer_class = portal_user_serializers.UploadPortalUserAvatarSerializer
     response_serializer_class = portal_user_serializers.UploadPortalUserAvatarSerializer
     permission_classes = (IsPortalUser,)
+    parser_classes = (MultiPartParser,)
 
     def get_object(self):
         return self.get_portal_user()

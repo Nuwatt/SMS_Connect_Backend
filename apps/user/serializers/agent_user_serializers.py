@@ -6,7 +6,7 @@ from rest_framework import serializers
 from apps.core.serializer_fields import PhoneNumberField
 from apps.core.serializers import IdNameSerializer
 from apps.core.validators import validate_image
-from apps.localize.models import City, Country
+from apps.localize.models import City, Country, Nationality
 from apps.user.models import AgentUser
 from apps.user.serializers.base_serializers import (
     UserSignupSerializer,
@@ -93,7 +93,7 @@ class UpdateAgentUserSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     fullname = serializers.CharField(write_only=True)
     nationality = serializers.PrimaryKeyRelatedField(
-        queryset=Country.objects.all(),
+        queryset=Nationality.objects.all(),
         write_only=True,
         required=False
     )

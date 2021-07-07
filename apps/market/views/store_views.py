@@ -3,6 +3,7 @@ from apps.market.filtersets import StoreFilter
 from apps.market.mixins import StoreMixin
 from apps.market.serializers import store_serializers
 from apps.market.usecases import store_usecases
+from apps.user.permissions import IsAgentUser
 
 
 class AddStoreView(generics.CreateAPIView):
@@ -22,6 +23,7 @@ class AddStoreRetailerView(generics.CreateAPIView):
     Use this end-point to add new store with retailer
     """
     serializer_class = store_serializers.AddStoreRetailerSerializer
+    permission_classes = (IsAgentUser,)
 
     def perform_create(self, serializer):
         return store_usecases.AddStoreRetailerUseCase(
