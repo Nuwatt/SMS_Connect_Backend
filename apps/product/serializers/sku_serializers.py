@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from apps.core.serializers import CSVFileInputSerializer, IdNameCharSerializer
+from apps.core.serializers import CSVFileInputSerializer, IdNameCharSerializer, IdNameSerializer
 from apps.product.models import SKU
 
 
@@ -21,7 +21,9 @@ class AddSKUSerializer(SKUSerializer):
     class Meta(SKUSerializer.Meta):
         fields = (
             'name',
-            'brand'
+            'brand',
+            'category',
+            'country'
         )
 
     def validate_name(self, data):
@@ -31,15 +33,17 @@ class AddSKUSerializer(SKUSerializer):
 
 
 class ListSKUSerializer(SKUSerializer):
-    category = IdNameCharSerializer(source='brand.category')
+    category = IdNameCharSerializer(source='category')
     brand = IdNameCharSerializer()
+    country = IdNameSerializer(many=True)
 
     class Meta(SKUSerializer.Meta):
         fields = (
             'id',
             'name',
             'category',
-            'brand'
+            'brand',
+            'country'
         )
 
 
@@ -47,7 +51,9 @@ class UpdateSKUSerializer(SKUSerializer):
     class Meta(SKUSerializer.Meta):
         fields = (
             'name',
-            'brand'
+            'brand',
+            'category',
+            'country'
         )
 
 

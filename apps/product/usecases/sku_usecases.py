@@ -26,25 +26,29 @@ class GetSKUUseCase(usecases.BaseUseCase):
 class AddSKUUseCase(usecases.CreateUseCase):
     def _factory(self):
         sku_names = self._data.get('name')
-        skus = []
+        # skus = []
 
-        last_id = last_id_for_bulk_create(initial='SKU', model=SKU)
+        # last_id = last_id_for_bulk_create(initial='SKU', model=SKU)
 
         for name in sku_names:
-            next_id = last_id + 1
+            # next_id = last_id + 1
             sku = SKU(
-                id='SKU{0:04}'.format(next_id),
+                # id='SKU{0:04}'.format(next_id),
                 brand=self._data.get('brand'),
-                category=self._data.get('brand').category,
+                category=self._data.get('category'),
                 name=name
             )
             try:
                 sku.clean()
             except DjangoValidationError as e:
                 raise ValidationError(e.message_dict)
-            skus.append(sku)
-            last_id = next_id
-        SKU.objects.bulk_create(skus)
+            # skus.append(sku)
+            # last_id = next_id
+            sku.save()
+
+            # save country
+            sku.country.set(self._data.get('country'))
+        # SKU.objects.bulk_create(skus)
 
 
 class UpdateSKUUseCase(usecases.UpdateUseCase):

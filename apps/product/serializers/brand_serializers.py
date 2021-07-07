@@ -14,7 +14,6 @@ class AddBrandSerializer(BrandSerializer):
     class Meta(BrandSerializer.Meta):
         fields = (
             'name',
-            'category',
         )
 
 

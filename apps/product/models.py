@@ -52,7 +52,6 @@ class Brand(BaseModel):
     )
 
     name = models.CharField(max_length=224)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
