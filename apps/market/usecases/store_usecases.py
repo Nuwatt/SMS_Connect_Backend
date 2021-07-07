@@ -44,7 +44,8 @@ class AddStoreUseCase(usecases.CreateUseCase):
 class AddStoreRetailerUseCase(usecases.CreateUseCase):
     def _factory(self):
         retailer, created = Retailer.objects.get_or_create(
-            name=self._data.get('retailer')
+            name=self._data.get('retailer'),
+            is_archived=False
         )
         store = Store(
             retailer=retailer,
