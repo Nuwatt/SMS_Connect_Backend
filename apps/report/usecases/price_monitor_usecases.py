@@ -16,11 +16,12 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
         ).values(
             'numeric',
+        ).order_by(
+            'created',
         ).annotate(
             frequency=Count('id')
         ).order_by(
             '-frequency',
-            'created'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
@@ -208,6 +209,8 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
             answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
         ).values(
             'numeric',
+        ).order_by(
+            'created',
         ).annotate(
             frequency=Count('id')
         ).order_by(
@@ -390,6 +393,8 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
             answer__response__store__city__country=OuterRef('store__city__country')
         ).values(
             'numeric',
+        ).order_by(
+            'created',
         ).annotate(
             frequency=Count('id')
         ).order_by(
@@ -594,8 +599,12 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
         numeric_answer = NumericAnswer.objects.filter(
             answer__question__sku__brand=OuterRef('answer__question__sku__brand'),
             answer__response__store__city__country=OuterRef('store__city__country')
+        ).values(
+            'numeric',
+        ).order_by(
+            'created',
         ).annotate(
-            frequency=Count('numeric')
+            frequency=Count('id')
         ).order_by(
             '-frequency'
         ).values('numeric')[:1]
