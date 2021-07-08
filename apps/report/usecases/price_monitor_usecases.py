@@ -16,12 +16,11 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
         ).values(
             'numeric',
-        ).order_by(
-            'created',
         ).annotate(
             frequency=Count('id')
         ).order_by(
             '-frequency',
+            'created'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
@@ -601,12 +600,11 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
             answer__response__store__city__country=OuterRef('store__city__country')
         ).values(
             'numeric',
-        ).order_by(
-            'created',
         ).annotate(
             frequency=Count('id')
         ).order_by(
-            '-frequency'
+            '-frequency',
+            'created'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(

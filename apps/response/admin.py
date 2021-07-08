@@ -78,7 +78,7 @@ class NumericAnswerAdmin(BaseModelAdmin):
         'numeric',
         'sku',
     )
-    readonly_fields = (
+    readonly_fields = BaseModelAdmin.readonly_fields + (
         'answer',
         'numeric',
     )
