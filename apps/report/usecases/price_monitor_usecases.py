@@ -20,7 +20,6 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             frequency=Count('id')
         ).order_by(
             '-frequency',
-            'created'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
@@ -214,7 +213,6 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
             frequency=Count('id')
         ).order_by(
             '-frequency',
-            'created'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
@@ -398,7 +396,6 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
             frequency=Count('id')
         ).order_by(
             '-frequency',
-            'created'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
@@ -604,7 +601,6 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
             frequency=Count('id')
         ).order_by(
             '-frequency',
-            'created'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
