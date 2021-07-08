@@ -33,7 +33,7 @@ class AddSKUSerializer(SKUSerializer):
 
 
 class ListSKUSerializer(SKUSerializer):
-    category = IdNameCharSerializer(source='category')
+    category = IdNameCharSerializer()
     brand = IdNameCharSerializer()
     country = IdNameSerializer(many=True)
 
