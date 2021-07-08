@@ -19,7 +19,8 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
         ).annotate(
             frequency=Count('id')
         ).order_by(
-            '-frequency'
+            '-frequency',
+            'answer__response__completed_at'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
@@ -210,7 +211,8 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
         ).annotate(
             frequency=Count('id')
         ).order_by(
-            '-frequency'
+            '-frequency',
+            'answer__response__completed_at'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
@@ -223,11 +225,11 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
         ).distinct().annotate(
             sku=F('answer__question__sku'),
         ).values(
-            'month',
+            'sku',
+            'month'
         ).annotate(
             value=Subquery(numeric_answer),
             sku_name=F('answer__question__sku__name'),
-            sku=F('answer__question__sku'),
             brand=F('answer__question__sku__brand'),
         ).values(
             'month',
@@ -391,20 +393,26 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
         ).annotate(
             frequency=Count('id')
         ).order_by(
-            '-frequency'
+            '-frequency',
+            'answer__response__completed_at'
         ).values('numeric')[:1]
 
         self._results = Response.objects.filter(
             response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
             is_completed=True
         ).annotate(
-            country_name=F('store__city__country__name')
+            country=F('store__city__country'),
         ).values(
-            'country_name'
+            'country'
         ).distinct().annotate(
+            sku=F('answer__question__sku'),
+        ).values(
+            'sku',
+            'country'
+        ).annotate(
+            country_name=F('store__city__country'),
             sku_name=F('answer__question__sku__name'),
             value=Subquery(numeric_answer),
-            sku=F('answer__question__sku'),
             brand=F('answer__question__sku__brand'),
         ).values(
             'country_name',
