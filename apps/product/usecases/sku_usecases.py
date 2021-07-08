@@ -67,9 +67,11 @@ class ListSKUUseCase(usecases.BaseUseCase):
         return self._sku_list
 
     def _factory(self):
-        self._sku_list = SKU.objects.unarchived().select_related(
+        self._sku_list = SKU.objects.unarchived().prefetch_related(
+            'country'
+        ).select_related(
             'brand',
-            'brand__category'
+            'category',
         ).order_by('-created')
 
 

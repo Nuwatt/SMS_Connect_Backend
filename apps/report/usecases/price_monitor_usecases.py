@@ -13,8 +13,11 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
     def _factory(self):
         numeric_answer = NumericAnswer.objects.filter(
             answer__question__sku=OuterRef('answer__question__sku'),
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+        ).values(
+            'numeric',
         ).annotate(
-            frequency=Count('numeric')
+            frequency=Count('id')
         ).order_by(
             '-frequency'
         ).values('numeric')[:1]
@@ -201,8 +204,11 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
     def _factory(self):
         numeric_answer = NumericAnswer.objects.filter(
             answer__question__sku=OuterRef('answer__question__sku'),
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+        ).values(
+            'numeric',
         ).annotate(
-            frequency=Count('numeric')
+            frequency=Count('id')
         ).order_by(
             '-frequency'
         ).values('numeric')[:1]
@@ -378,9 +384,12 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
     def _factory(self):
         numeric_answer = NumericAnswer.objects.filter(
             answer__question__sku=OuterRef('answer__question__sku'),
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
             answer__response__store__city__country=OuterRef('store__city__country')
+        ).values(
+            'numeric',
         ).annotate(
-            frequency=Count('numeric')
+            frequency=Count('id')
         ).order_by(
             '-frequency'
         ).values('numeric')[:1]
@@ -576,6 +585,7 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
     def _factory(self):
         numeric_answer = NumericAnswer.objects.filter(
             answer__question__sku__brand=OuterRef('answer__question__sku__brand'),
+            answer__response__store__city__country=OuterRef('store__city__country')
         ).annotate(
             frequency=Count('numeric')
         ).order_by(
