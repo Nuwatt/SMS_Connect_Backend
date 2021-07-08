@@ -18,8 +18,6 @@ class AddBrandSerializer(BrandSerializer):
 
 
 class ListBrandSerializer(AddBrandSerializer):
-    category = IdNameCharSerializer()
-
     class Meta(AddBrandSerializer.Meta):
         fields = (
             'id',
