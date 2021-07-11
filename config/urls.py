@@ -11,7 +11,8 @@ from drf_yasg.views import get_schema_view
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('images/favicons/favicon.ico')))
+    path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('images/favicons/favicon.ico'))),
+    path('appdownload/',RedirectView.as_view(url='https://sms-connect-dp.s3.ap-south-1.amazonaws.com/media/appdownload/SMSConnect0.9.apk'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
