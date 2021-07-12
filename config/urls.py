@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.core.files.storage import default_storage
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import RedirectView
@@ -21,7 +22,7 @@ urlpatterns = [
     path(
         'appdownload/',
         RedirectView.as_view(
-            url='https://sms-connect-dp.s3.ap-south-1.amazonaws.com/media/appdownload/SmsconnectUltra.apk'
+            url=default_storage.url('appdownload/SmsconnectUltra.apk')
         )
     )
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
