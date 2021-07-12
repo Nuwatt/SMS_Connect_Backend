@@ -3,21 +3,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.core.files.storage import default_storage
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import RedirectView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from django.views.decorators.csrf import csrf_exempt
 
 
 urlpatterns = [
-<<<<<<< HEAD
-    path(settings.ADMIN_URL, admin.site.urls),
-    path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('images/favicons/favicon.ico'))),
-    @csrf_exempt
-    path('appdownload/',RedirectView.as_view(url='https://sms-connect-dp.s3.ap-south-1.amazonaws.com/media/appdownload/SmsconnectUltra.apk'))
-=======
     path(
         settings.ADMIN_URL,
         admin.site.urls
@@ -29,10 +23,9 @@ urlpatterns = [
     path(
         'appdownload/',
         RedirectView.as_view(
-            url='https://sms-connect-dp.s3.ap-south-1.amazonaws.com/media/appdownload/SmsconnectUltra.apk'
+            url=default_storage.url('appdownload/SmsconnectUltra.apk')
         )
     )
->>>>>>> fdf61d2733084470c8d3db5d5900b02fe97bb4b0
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
