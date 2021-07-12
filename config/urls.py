@@ -12,10 +12,27 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 urlpatterns = [
+<<<<<<< HEAD
     path(settings.ADMIN_URL, admin.site.urls),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('images/favicons/favicon.ico'))),
     @csrf_exempt
     path('appdownload/',RedirectView.as_view(url='https://sms-connect-dp.s3.ap-south-1.amazonaws.com/media/appdownload/SmsconnectUltra.apk'))
+=======
+    path(
+        settings.ADMIN_URL,
+        admin.site.urls
+    ),
+    path(
+        'favicon.ico',
+        RedirectView.as_view(url=staticfiles_storage.url('images/favicons/favicon.ico'))
+    ),
+    path(
+        'appdownload/',
+        RedirectView.as_view(
+            url='https://sms-connect-dp.s3.ap-south-1.amazonaws.com/media/appdownload/SmsconnectUltra.apk'
+        )
+    )
+>>>>>>> fdf61d2733084470c8d3db5d5900b02fe97bb4b0
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

@@ -38,6 +38,12 @@ class ResponseFilter(filters.FilterSet):
         lookup_expr='in'
 
     )
+    channel = IdInFilter(
+        field_name='store__channel',
+        label='channel',
+        lookup_expr='in'
+
+    )
     retailer = IdInFilter(
         field_name='store__retailer',
         label='store',
