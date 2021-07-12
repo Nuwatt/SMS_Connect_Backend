@@ -8,6 +8,7 @@ from django.views import defaults as default_views
 from django.views.generic import RedirectView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 urlpatterns = [
