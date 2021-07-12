@@ -1,9 +1,11 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
-from apps.core.utils import last_id_for_bulk_create
+from apps.localize.models import Country
 from apps.product.exceptions import SKUNotFound
 from apps.product.models import SKU, Category, Brand
 
@@ -76,21 +78,39 @@ class ListSKUUseCase(usecases.BaseUseCase):
 
 
 class ImportSKUUseCase(usecases.ImportCSVUseCase):
-    valid_columns = ['SKU Name', 'Brand Name', 'Category Name']
+    valid_columns = ['SKU Name', 'Brand Name', 'Category Name', 'Country']
+    null_columns = ['Country']
 
     @transaction.atomic
     def _factory(self):
         for item in self._item_list:
-            category, created = Category.objects.get_or_create(name=item.get('Category Name'))
+            countries_data = None
+            category, created = Category.objects.get_or_create(
+                name=item.get('Category Name'),
+                is_archived=False
+            )
             brand, created = Brand.objects.get_or_create(
                 name=item.get('Brand Name'),
-                defaults={
-                    'category': category
-                }
+                is_archived=False
             )
+
             sku, created = SKU.objects.get_or_create(
                 name=item.get('SKU Name'),
                 brand=brand,
                 category=category
             )
+
+            if item.get('Country'):
+                countries_data = item.get('Country').split(',')
+
+            if countries_data:
+                countries = []
+                for name in countries_data:
+                    try:
+                        countries.append(Country.objects.get(name=name, is_archived=False))
+                    except Country.DoesNotExist:
+                        raise ValidationError({
+                            'country': _('Country:{} doesn\'t exists.'.format(name))
+                        })
+                sku.country.set(countries)
 
