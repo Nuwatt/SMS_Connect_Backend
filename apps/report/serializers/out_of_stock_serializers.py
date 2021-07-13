@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from apps.report.serializers.price_monitor_serializers import SKUMonthReportSerializer
+
 
 class SKUOverallReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
@@ -25,3 +27,11 @@ class SKUWeekNotAvailableReportSerializer(serializers.Serializer):
     week = serializers.IntegerField()
     retailer = serializers.CharField(source='store__retailer__name')
     store = serializers.CharField(source='store__name')
+
+
+class SKUMonthAvailableReportSerializer(SKUMonthReportSerializer):
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=4)
+
+
+class SKUMonthNotAvailableReportSerializer(SKUMonthReportSerializer):
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=4)
