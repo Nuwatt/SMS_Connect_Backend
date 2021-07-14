@@ -25,7 +25,7 @@ class SKUMonthAvailableReportView(BaseReportView):
     """
     Use this end-point to list report of month vs available sku for out of stock
     """
-    serializer_class = SKUMonthReportSerializer
+    serializer_class = out_of_stock_serializers.SKUMonthAvailableReportSerializer
     filterset_class = SKUResponseFilter
 
     def get_queryset(self):
@@ -36,7 +36,7 @@ class SKUMonthNotAvailableReportView(BaseReportView):
     """
     Use this end-point to list report of month vs not available sku for out of stock
     """
-    serializer_class = SKUMonthReportSerializer
+    serializer_class = out_of_stock_serializers.SKUMonthNotAvailableReportSerializer
     filterset_class = SKUResponseFilter
 
     def get_queryset(self):
