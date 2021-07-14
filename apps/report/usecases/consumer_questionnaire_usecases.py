@@ -303,7 +303,7 @@ class OptionsQuestionReportUseCase(usecases.BaseUseCase):
             is_archived=False
         ).values(
             'answer__question',
-        ).annotate(
+        ).distinct().annotate(
             total_count=SubqueryCount('answer__question__questionoption'),
             value=Count('option') / F('total_count') * 100,
             question=F('answer__question'),
