@@ -294,23 +294,14 @@ class AvgPerSKUReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Distribution Check',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Distribution Check',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
             sku=F('answer__question__sku')
         ).values(
             'sku'
-        ).annotate(
-            value=Avg('answer__numericanswer__numeric'),
-            sku_name=F('answer__question__sku__name'),
-            brand=F('answer__question__sku__brand'),
-        ).values(
-            'value',
-            'sku_name',
-            'brand',
-        ).unarchived().filter(
-            value__gt=0
         )
 
 
@@ -320,20 +311,12 @@ class AvgPerBrandReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Distribution Check',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Distribution Check',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
             brand=F('answer__question__sku__brand')
         ).values(
             'brand'
-        ).annotate(
-            value=Avg('answer__numericanswer__numeric'),
-            brand_name=F('answer__question__sku__brand__name'),
-        ).values(
-            'brand',
-            'value',
-            'brand_name'
-        ).unarchived().filter(
-            value__gt=0
         )
