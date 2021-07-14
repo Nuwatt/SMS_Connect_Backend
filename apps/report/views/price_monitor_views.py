@@ -1,8 +1,11 @@
+from django.db.models import Count, F
+
 from apps.report.filtersets import price_monitor_filtersets
 from apps.report.filtersets.base_filtersets import (
     SKUResponseFilter,
     ResponseFilter
 )
+from apps.report.filtersets.price_monitor_filtersets import AnswerPerSKUFilter
 from apps.report.serializers import price_monitor_serializers
 from apps.report.usecases import price_monitor_usecases
 
@@ -148,10 +151,23 @@ class AnswerPerSKUReportView(BaseReportView):
     Use this end-point to list report of answer per sku for price monitor
     """
     serializer_class = price_monitor_serializers.AnswerPerSKUReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = AnswerPerSKUFilter
 
     def get_queryset(self):
         return price_monitor_usecases.AnswerPerSKUReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        total_count = queryset.aggregate(Count('id')).get('id__count')
+        return queryset.annotate(
+            sku_name=F('answer__question__sku__name'),
+            sku_count=Count('id'),
+            value=Count('id') / total_count * 100
+        ).values(
+            'value',
+            'sku_name',
+            'sku_count',
+            'sku',
+        )
 
 
 class BrandMinMaxReportView(BaseReportView):

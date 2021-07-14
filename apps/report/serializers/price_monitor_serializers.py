@@ -46,7 +46,8 @@ class AnswerReportSerializer(serializers.Serializer):
 
 class AnswerPerSKUReportSerializer(serializers.Serializer):
     name = serializers.CharField(source='sku_name')
-    value = serializers.IntegerField()
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=5)
+    sku_count = serializers.DecimalField(default=0, decimal_places=1, max_digits=5)
 
 
 class AnswerPerCountryReportSerializer(serializers.Serializer):
