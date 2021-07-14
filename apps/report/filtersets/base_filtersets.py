@@ -120,3 +120,7 @@ class NumericAnswerReportFilter(filters.FilterSet):
         lookup_expr='in'
 
     )
+
+
+class OptionAnswerFilter(NumericAnswerReportFilter):
+    pass
