@@ -9,7 +9,7 @@ class YesNoQuestionReportSerializer(serializers.Serializer):
 
 class NumericQuestionReportSerializer(serializers.Serializer):
     question_statement = serializers.CharField()
-    value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
 
 
 class OptionsQuestionReportSerializer(serializers.Serializer):

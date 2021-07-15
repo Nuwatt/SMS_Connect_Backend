@@ -1,4 +1,6 @@
-from apps.report.filtersets.base_filtersets import SKUResponseFilter, ResponseFilter
+from django.db.models import F, Count
+
+from apps.report.filtersets.base_filtersets import SKUResponseFilter, ResponseFilter, OptionAnswerFilter
 from apps.report.serializers import consumer_questionnaire_serializers
 from apps.report.usecases import consumer_questionnaire_usecases
 
@@ -65,7 +67,7 @@ class OptionsQuestionReportView(BaseReportView):
     Use this end-point to list report of  options answer for consumer questionnaire
     """
     serializer_class = consumer_questionnaire_serializers.OptionsQuestionReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = OptionAnswerFilter
 
     def get_queryset(self):
         return consumer_questionnaire_usecases.OptionsQuestionReportUseCase().execute()

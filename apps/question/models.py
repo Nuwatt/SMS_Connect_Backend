@@ -95,7 +95,4 @@ class QuestionOption(BaseModel):
             })
 
     def __str__(self):
-        return '{}-{}'.format(
-            self.question,
-            self.option
-        )
+        return self.option

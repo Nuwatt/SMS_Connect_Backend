@@ -1,8 +1,12 @@
-from apps.core import generics
-from apps.report.filtersets.base_filtersets import ResponseFilter, SKUResponseFilter, BrandResponseFilter
+from django.db.models import Sum, F
+
+from apps.report.filtersets.base_filtersets import (
+    ResponseFilter,
+    SKUResponseFilter,
+    NumericAnswerReportFilter
+)
 from apps.report.serializers import distribution_check_serializers
 from apps.report.usecases import distribution_check_usecases
-
 from apps.report.views.base_views import BaseReportView
 
 
@@ -112,10 +116,22 @@ class AvgPerSKUReportView(BaseReportView):
     Use this end-point to list report of avg per sku for distribution check
     """
     serializer_class = distribution_check_serializers.AvgPerSKUReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = NumericAnswerReportFilter
 
     def get_queryset(self):
         return distribution_check_usecases.AvgPerSKUReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        total_sum = queryset.aggregate(Sum('numeric')).get('numeric__sum')
+        return queryset.annotate(
+            sum_of_value=Sum('numeric'),
+            value=F('sum_of_value') / total_sum * 100,
+            sku_name=F('answer__question__sku__name'),
+            brand=F('answer__question__sku__brand'),
+        ).values(
+            'value',
+            'sku_name',
+        )
 
 
 class AvgPerBrandReportView(BaseReportView):
@@ -123,7 +139,19 @@ class AvgPerBrandReportView(BaseReportView):
     Use this end-point to list report of avg per brand for distribution check
     """
     serializer_class = distribution_check_serializers.AvgPerBrandReportSerializer
-    filterset_class = BrandResponseFilter
+    filterset_class = NumericAnswerReportFilter
 
     def get_queryset(self):
         return distribution_check_usecases.AvgPerBrandReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        total_sum = queryset.aggregate(Sum('numeric')).get('numeric__sum')
+        return queryset.annotate(
+            sum_of_value=Sum('numeric'),
+            value=F('sum_of_value') / total_sum * 100,
+            brand_name=F('answer__question__sku__brand__name'),
+        ).values(
+            'brand',
+            'value',
+            'brand_name'
+        )
