@@ -97,16 +97,17 @@ class NumericAnswerAdmin(BaseModelAdmin):
 @admin.register(models.OptionAnswer)
 class OptionAnswerAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
-        'text',
+        'option',
         'sku',
+        'question',
     )
     readonly_fields = (
         'answer',
         'option',
     )
 
-    def text(self, instance):
-        return instance.option.option
+    # def text(self, instance):
+    #     return instance.option.option
 
     list_filter = BaseModelAdmin.list_filter + (
         'answer__response__is_completed',
@@ -118,6 +119,9 @@ class OptionAnswerAdmin(BaseModelAdmin):
 
     def sku(self, instance):
         return instance.answer.question.sku
+
+    def question(self, instance):
+        return instance.answer.question.statement
 
 
 @admin.register(models.ChoiceAnswer)

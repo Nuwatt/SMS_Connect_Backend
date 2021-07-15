@@ -108,7 +108,7 @@ class ListQuestionUseCase(usecases.BaseUseCase):
         return self._questions
 
     def _factory(self):
-        self._questions = Question.objects.unarchived().order_by('-created')
+        self._questions = Question.objects.unarchived().order_by('created')
 
 
 class ImportQuestionUseCase(usecases.ImportCSVUseCase):
@@ -208,7 +208,7 @@ class ListQuestionForAgentUseCase(usecases.BaseUseCase):
         self._questions = self._questionnaire.question_set.unarchived().select_related(
             'question_type',
             'sku__brand'
-        ).order_by('-created')
+        ).order_by('created')
 
     def is_valid(self):
         # 1. check if agent has access to questionnaire

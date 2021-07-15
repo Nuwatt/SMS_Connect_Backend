@@ -461,7 +461,6 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
             )
         ).values('country_name', 'value').filter(value__gt=0).unarchived()
 
-
         # self._results = Country.objects.annotate(
         #     value=Count(
         #         'city__store__response',
@@ -529,31 +528,15 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
             sku=F('answer__question__sku')
         ).values(
             'sku'
-        ).annotate(
-            sku_name=F('answer__question__sku__name'),
-            value=Count('id'),
-            brand=F('answer__question__sku__brand'),
-        ).values(
-            'value',
-            'sku_name',
-            'sku',
-            'brand'
-        ).unarchived().filter(value__isnull=False)
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).annotate(
-        #     value=Count(
-        #         'question__answer__response',
-        #     )
-        # ).values('name', 'value').filter(value__gt=0).unarchived()
+        )
 
 
 class TotalVisitReportUseCase(usecases.BaseUseCase):
