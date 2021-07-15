@@ -168,6 +168,7 @@ class AnswerPerSKUReportView(BaseReportView):
             'value',
             'sku_name',
             'sku_count',
+            'total_count',
             'sku',
         )
 
