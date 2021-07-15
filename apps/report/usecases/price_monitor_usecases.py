@@ -411,7 +411,7 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
             'sku',
             'country'
         ).annotate(
-            country_name=F('store__city__country'),
+            country_name=F('store__city__country__name'),
             sku_name=F('answer__question__sku__name'),
             value=Subquery(numeric_answer),
             brand=F('answer__question__sku__brand'),
