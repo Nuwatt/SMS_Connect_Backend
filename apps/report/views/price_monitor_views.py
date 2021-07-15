@@ -1,4 +1,5 @@
-from django.db.models import Count, F
+from django.db import models
+from django.db.models import Count, F, Value
 
 from apps.report.filtersets import price_monitor_filtersets
 from apps.report.filtersets.base_filtersets import (
@@ -161,7 +162,8 @@ class AnswerPerSKUReportView(BaseReportView):
         return queryset.annotate(
             sku_name=F('answer__question__sku__name'),
             sku_count=Count('id'),
-            value=Count('id') / total_count * 100
+            value=Count('id') / total_count * 100,
+            total_count=Value(total_count, output_field=models.IntegerField())
         ).values(
             'value',
             'sku_name',
