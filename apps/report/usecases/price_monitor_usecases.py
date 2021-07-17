@@ -254,7 +254,7 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
         numeric_answer = NumericAnswer.objects.filter(
             answer__question__sku=OuterRef('answer__question__sku'),
             answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            answer__response__store__city__country=OuterRef('store__city__country')
+            answer__response__store__city__country=OuterRef('answer__response__store__city__country')
         ).values(
             'numeric',
         ).order_by(
