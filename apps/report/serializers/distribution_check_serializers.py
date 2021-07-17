@@ -42,9 +42,14 @@ class BrandPerChannelReportSerializer(VisitPerChannelReportSerializer):
 
 class AvgPerSKUReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=4)
 
 
 class AvgPerBrandReportSerializer(serializers.Serializer):
     brand = serializers.CharField(source='brand_name')
-    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=4)
+
+
+class AvgPerChannelReportSerializer(serializers.Serializer):
+    channel = serializers.CharField(source='channel_name')
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=4)

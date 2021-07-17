@@ -320,3 +320,20 @@ class AvgPerBrandReportUseCase(usecases.BaseUseCase):
         ).values(
             'brand'
         )
+
+
+class AvgPerChannelReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._results
+
+    def _factory(self):
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Distribution Check',
+            answer__response__is_completed=True,
+            is_archived=False
+        ).annotate(
+            channel=F('answer__response__store__channel')
+        ).values(
+            'channel'
+        )

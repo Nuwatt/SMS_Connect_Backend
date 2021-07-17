@@ -155,3 +155,26 @@ class AvgPerBrandReportView(BaseReportView):
             'value',
             'brand_name'
         )
+
+
+class AvgPerChannelReportView(BaseReportView):
+    """
+    Use this end-point to list report of avg per channel for distribution check
+    """
+    serializer_class = distribution_check_serializers.AvgPerChannelReportSerializer
+    filterset_class = NumericAnswerReportFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.AvgPerChannelReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        total_sum = queryset.aggregate(Sum('numeric')).get('numeric__sum')
+        return queryset.annotate(
+            sum_of_value=Sum('numeric'),
+            value=F('sum_of_value') / total_sum * 100,
+            channel_name=F('answer__response__store__channel__name'),
+        ).values(
+            'channel',
+            'value',
+            'channel_name'
+        )
