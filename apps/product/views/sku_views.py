@@ -1,5 +1,7 @@
 from django.utils.translation import gettext_lazy as _
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.filters import OrderingFilter
 
 from rest_framework.response import Response
 
@@ -29,6 +31,8 @@ class ListSKUView(generics.ListAPIView):
     """
     serializer_class = sku_serializers.ListSKUSerializer
     filterset_class = SKUFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['name']
 
     def get_queryset(self):
         return sku_usecases.ListSKUUseCase().execute()

@@ -1,3 +1,6 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+
 from apps.core import generics
 from apps.market.filtersets import StoreFilter
 from apps.market.mixins import StoreMixin
@@ -55,6 +58,9 @@ class BasicListStoreView(generics.ListAPIView):
     Use this end-point to list all store
     """
     filterset_class = StoreFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['name']
+
     serializer_class = store_serializers.BasicListStoreSerializer
 
     def get_queryset(self):
