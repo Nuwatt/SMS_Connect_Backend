@@ -68,6 +68,7 @@ class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
             value=Max('numeric')
         ).values(
             'value',
+            'month',
             'sku_name',
         )
 
@@ -95,6 +96,7 @@ class SKUMonthMinReportUseCase(usecases.BaseUseCase):
             value=Min('numeric')
         ).values(
             'value',
+            'month',
             'sku_name',
         )
 
@@ -122,6 +124,7 @@ class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
             value=Avg('numeric')
         ).values(
             'value',
+            'month',
             'sku_name',
         )
 
@@ -162,6 +165,7 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
             value=Subquery(numeric_answer)
         ).values(
             'value',
+            'month',
             'sku_name',
         )
 
