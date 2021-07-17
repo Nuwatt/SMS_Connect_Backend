@@ -290,7 +290,7 @@ class AvgPerBrandReportUseCase(usecases.BaseUseCase):
         )
 
 
-class AvgPerChannelReportUseCase(usecases.BaseUseCase):
+class AvgSKUPerChannelReportUseCase(usecases.BaseUseCase):
     def execute(self):
         self._factory()
         return self._results
@@ -304,4 +304,29 @@ class AvgPerChannelReportUseCase(usecases.BaseUseCase):
             channel=F('answer__response__store__channel')
         ).values(
             'channel'
+        ).annotate(
+            sku=F('answer__question__sku')
+        ).values(
+            'sku'
+        )
+
+
+class AvgBrandPerChannelReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        self._factory()
+        return self._results
+
+    def _factory(self):
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Distribution Check',
+            answer__response__is_completed=True,
+            is_archived=False
+        ).annotate(
+            channel=F('answer__response__store__channel')
+        ).values(
+            'channel'
+        ).annotate(
+            brand=F('answer__question__sku__brand')
+        ).values(
+            'brand'
         )

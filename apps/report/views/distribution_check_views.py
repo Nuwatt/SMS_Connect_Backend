@@ -157,15 +157,15 @@ class AvgPerBrandReportView(BaseReportView):
         )
 
 
-class AvgPerChannelReportView(BaseReportView):
+class AvgSKUPerChannelReportView(BaseReportView):
     """
-    Use this end-point to list report of avg per channel for distribution check
+    Use this end-point to list report of avg sku per channel for distribution check
     """
-    serializer_class = distribution_check_serializers.AvgPerChannelReportSerializer
+    serializer_class = distribution_check_serializers.AvgSKUPerChannelReportSerializer
     filterset_class = NumericAnswerReportFilter
 
     def get_queryset(self):
-        return distribution_check_usecases.AvgPerChannelReportUseCase().execute()
+        return distribution_check_usecases.AvgSKUPerChannelReportUseCase().execute()
 
     def custom_queryset(self, queryset):
         total_sum = queryset.aggregate(Sum('numeric')).get('numeric__sum')
@@ -173,8 +173,33 @@ class AvgPerChannelReportView(BaseReportView):
             sum_of_value=Sum('numeric'),
             value=F('sum_of_value') / total_sum * 100,
             channel_name=F('answer__response__store__channel__name'),
+            sku_name=F('answer__question__sku__name'),
         ).values(
-            'channel',
             'value',
-            'channel_name'
+            'channel_name',
+            'sku_name'
+        )
+
+
+class AvgBrandPerChannelReportView(BaseReportView):
+    """
+    Use this end-point to list report of avg brand per channel for distribution check
+    """
+    serializer_class = distribution_check_serializers.AvgBrandPerChannelReportSerializer
+    filterset_class = NumericAnswerReportFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.AvgBrandPerChannelReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        total_sum = queryset.aggregate(Sum('numeric')).get('numeric__sum')
+        return queryset.annotate(
+            sum_of_value=Sum('numeric'),
+            value=F('sum_of_value') / total_sum * 100,
+            channel_name=F('answer__response__store__channel__name'),
+            brand_name=F('answer__question__sku__brand__name'),
+        ).values(
+            'value',
+            'channel_name',
+            'brand_name'
         )
