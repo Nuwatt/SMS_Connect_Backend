@@ -31,6 +31,8 @@ class ListRetailerView(generics.ListAPIView):
     """
     serializer_class = retailer_serializers.ListRetailerSerializer
     filterset_class = RetailerFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['name']
 
     def get_queryset(self):
         user = self.request.user
