@@ -25,8 +25,8 @@ class SKUStoreReportSerializer(serializers.Serializer):
 class SKUWeekNotAvailableReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
     week = serializers.IntegerField()
-    retailer = serializers.CharField(source='store__retailer__name')
-    store = serializers.CharField(source='store__name')
+    retailer = serializers.CharField(source='retailer_name')
+    store = serializers.CharField(source='store_name')
 
 
 class SKUMonthAvailableReportSerializer(SKUMonthReportSerializer):

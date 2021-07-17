@@ -22,19 +22,19 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             '-frequency',
         ).values('numeric')[:1]
 
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
             sku=F('answer__question__sku')
         ).values(
             'sku'
         ).annotate(
             sku_name=F('answer__question__sku__name'),
-            brand=F('answer__question__sku__brand'),
-            max=Max('answer__numericanswer__numeric'),
-            min=Min('answer__numericanswer__numeric'),
-            mean=Avg('answer__numericanswer__numeric'),
+            max=Max('numeric'),
+            min=Min('numeric'),
+            mean=Avg('numeric'),
             mode=Subquery(numeric_answer)
         ).values(
             'max',
@@ -42,27 +42,7 @@ class SKUMinMaxReportUseCase(usecases.BaseUseCase):
             'mean',
             'mode',
             'sku_name',
-            'sku',
-            'brand',
-        ).filter(max__isnull=False).unarchived()
-
-        # numeric_answer = NumericAnswer.objects.filter(
-        #     answer__question__sku=OuterRef('id'),
-        # ).annotate(
-        #     frequency=Count('numeric')
-        # ).order_by(
-        #     '-frequency'
-        # ).values('numeric')[:1]
-        #
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).annotate(
-        #     max=Max('question__answer__numericanswer__numeric'),
-        #     min=Min('question__answer__numericanswer__numeric'),
-        #     mean=Avg('question__answer__numericanswer__numeric'),
-        #     mode=Subquery(numeric_answer)
-        # ).unarchived().filter(max__isnull=False)
+        )
 
 
 class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
@@ -71,42 +51,25 @@ class SKUMonthMaxReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
             sku=F('answer__question__sku')
         ).values(
             'sku'
         ).annotate(
-            month=TruncMonth('completed_at'),
+            month=TruncMonth('answer__response__completed_at'),
         ).values(
             'month',
         ).annotate(
-            value=Max('answer__numericanswer__numeric'),
             sku_name=F('answer__question__sku__name'),
-            sku=F('answer__question__sku'),
-            brand=F('answer__question__sku__brand'),
+            value=Max('numeric')
         ).values(
-            'month',
             'value',
             'sku_name',
-            'sku',
-            'brand'
-        ).unarchived().filter(value__isnull=False)
-
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True,
-        # ).values('name').annotate(
-        #     month=TruncMonth('question__answer__response__completed_at'),
-        # ).values('name', 'month').annotate(
-        #     value=Max('question__answer__numericanswer__numeric'),
-        # ).values(
-        #     'month',
-        #     'value',
-        #     'name',
-        # ).unarchived().filter(value__isnull=False)
+        )
 
 
 class SKUMonthMinReportUseCase(usecases.BaseUseCase):
@@ -115,41 +78,25 @@ class SKUMonthMinReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
             sku=F('answer__question__sku')
         ).values(
             'sku'
         ).annotate(
-            month=TruncMonth('completed_at'),
+            month=TruncMonth('answer__response__completed_at'),
         ).values(
             'month',
         ).annotate(
-            value=Min('answer__numericanswer__numeric'),
             sku_name=F('answer__question__sku__name'),
-            sku=F('answer__question__sku'),
-            brand=F('answer__question__sku__brand'),
+            value=Min('numeric')
         ).values(
-            'month',
             'value',
             'sku_name',
-            'sku',
-            'brand'
-        ).unarchived().filter(value__isnull=False)
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).values('name').annotate(
-        #     month=TruncMonth('question__answer__response__completed_at'),
-        # ).values('name', 'month').annotate(
-        #     value=Min('question__answer__numericanswer__numeric'),
-        # ).values(
-        #     'month',
-        #     'value',
-        #     'name',
-        # ).unarchived().filter(value__isnull=False)
+        )
 
 
 class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
@@ -158,42 +105,25 @@ class SKUMonthMeanReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
             sku=F('answer__question__sku')
         ).values(
             'sku'
         ).annotate(
-            month=TruncMonth('completed_at'),
+            month=TruncMonth('answer__response__completed_at'),
         ).values(
             'month',
         ).annotate(
-            value=Avg('answer__numericanswer__numeric'),
             sku_name=F('answer__question__sku__name'),
-            sku=F('answer__question__sku'),
-            brand=F('answer__question__sku__brand'),
+            value=Avg('numeric')
         ).values(
-            'month',
             'value',
             'sku_name',
-            'sku',
-            'brand'
-        ).unarchived().filter(value__isnull=False)
-
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).values('name').annotate(
-        #     month=TruncMonth('question__answer__response__completed_at'),
-        # ).values('name', 'month').annotate(
-        #     value=Avg('question__answer__numericanswer__numeric'),
-        # ).values(
-        #     'month',
-        #     'value',
-        #     'name',
-        # ).unarchived().filter(value__isnull=False)
+        )
 
 
 class SKUMonthModeReportUseCase(usecases.BaseUseCase):
@@ -215,42 +145,25 @@ class SKUMonthModeReportUseCase(usecases.BaseUseCase):
             '-frequency',
         ).values('numeric')[:1]
 
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
-            month=TruncMonth('completed_at'),
+            sku=F('answer__question__sku')
         ).values(
-            'month'
-        ).distinct().annotate(
-            sku=F('answer__question__sku'),
-        ).values(
-            'sku',
-            'month'
+            'sku'
         ).annotate(
-            value=Subquery(numeric_answer),
-            sku_name=F('answer__question__sku__name'),
-            brand=F('answer__question__sku__brand'),
+            month=TruncMonth('answer__response__completed_at'),
         ).values(
             'month',
-            'sku_name',
+        ).annotate(
+            sku_name=F('answer__question__sku__name'),
+            value=Subquery(numeric_answer)
+        ).values(
             'value',
-            'sku',
-            'brand'
-        ).unarchived().filter(value__isnull=False)
-
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).annotate(
-        #     month=TruncMonth('question__answer__response__completed_at'),
-        # ).values('month').distinct().annotate(
-        #     value=Subquery(numeric_answer),
-        # ).values(
-        #     'month',
-        #     'value',
-        #     'name',
-        # ).unarchived().filter(value__isnull=False)
+            'sku_name',
+        )
 
 
 class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
@@ -259,39 +172,23 @@ class SKUCountryMaxReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
-            country_name=F('store__city__country__name')
+            country=F('answer__response__store__city__country')
         ).values(
-            'country_name'
+            'country'
         ).annotate(
             sku_name=F('answer__question__sku__name'),
-            sku=F('answer__question__sku'),
-            brand=F('answer__question__sku__brand'),
-            value=Max('answer__numericanswer__numeric'),
+            country_name=F('answer__response__store__city__country__name'),
+            value=Max('numeric')
         ).values(
-            'country_name',
             'value',
             'sku_name',
-            'sku',
-            'brand',
-        ).unarchived().filter(value__isnull=False)
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).values('name').annotate(
-        #     country=F('question__answer__response__store__city__country__name'),
-        # ).values('name', 'country').annotate(
-        #     country_id=F('question__answer__response__store__city__country'),
-        #     value=Max('question__answer__numericanswer__numeric'),
-        # ).values(
-        #     'country',
-        #     'country_id',
-        #     'value',
-        #     'name',
-        # ).unarchived().filter(value__isnull=False)
+            'country_name'
+        )
 
 
 class SKUCountryMinReportUseCase(usecases.BaseUseCase):
@@ -300,40 +197,23 @@ class SKUCountryMinReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
-            country_name=F('store__city__country__name')
+            country=F('answer__response__store__city__country')
         ).values(
-            'country_name'
+            'country'
         ).annotate(
             sku_name=F('answer__question__sku__name'),
-            value=Min('answer__numericanswer__numeric'),
-            sku=F('answer__question__sku'),
-            brand=F('answer__question__sku__brand'),
+            country_name=F('answer__response__store__city__country__name'),
+            value=Min('numeric')
         ).values(
-            'country_name',
             'value',
             'sku_name',
-            'sku',
-            'brand',
-        ).unarchived().filter(value__isnull=False)
-
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).values('name').annotate(
-        #     country=F('question__answer__response__store__city__country__name'),
-        # ).values('name', 'country').annotate(
-        #     value=Min('question__answer__numericanswer__numeric'),
-        #     country_id=F('question__answer__response__store__city__country'),
-        # ).values(
-        #     'country',
-        #     'country_id',
-        #     'value',
-        #     'name',
-        # ).unarchived().filter(value__isnull=False)
+            'country_name'
+        )
 
 
 class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
@@ -342,40 +222,23 @@ class SKUCountryMeanReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
-            country_name=F('store__city__country__name')
+            country=F('answer__response__store__city__country')
         ).values(
-            'country_name'
+            'country'
         ).annotate(
             sku_name=F('answer__question__sku__name'),
-            value=Avg('answer__numericanswer__numeric'),
-            sku=F('answer__question__sku'),
-            brand=F('answer__question__sku__brand'),
+            country_name=F('answer__response__store__city__country__name'),
+            value=Avg('numeric')
         ).values(
-            'country_name',
             'value',
             'sku_name',
-            'sku',
-            'brand',
-        ).unarchived().filter(value__isnull=False)
-
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).values('name').annotate(
-        #     country=F('question__answer__response__store__city__country__name'),
-        # ).values('name', 'country').annotate(
-        #     value=Avg('question__answer__numericanswer__numeric'),
-        #     country_id=F('question__answer__response__store__city__country'),
-        # ).values(
-        #     'country',
-        #     'country_id',
-        #     'value',
-        #     'name',
-        # ).unarchived().filter(value__isnull=False)
+            'country_name'
+        )
 
 
 class SKUCountryModeReportUseCase(usecases.BaseUseCase):
@@ -398,47 +261,23 @@ class SKUCountryModeReportUseCase(usecases.BaseUseCase):
             '-frequency',
         ).values('numeric')[:1]
 
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
-            country=F('store__city__country'),
+            country=F('answer__response__store__city__country')
         ).values(
             'country'
-        ).distinct().annotate(
-            sku=F('answer__question__sku'),
-        ).values(
-            'sku',
-            'country'
         ).annotate(
-            country_name=F('store__city__country__name'),
             sku_name=F('answer__question__sku__name'),
-            value=Subquery(numeric_answer),
-            brand=F('answer__question__sku__brand'),
+            country_name=F('answer__response__store__city__country__name'),
+            value=Subquery(numeric_answer)
         ).values(
-            'country_name',
             'value',
             'sku_name',
-            'sku',
-            'brand',
-        ).unarchived().filter(value__isnull=False)
-
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).annotate(
-        #     country=F('question__answer__response__store__city__country__name'),
-        # ).values(
-        #     'country',
-        # ).distinct().annotate(
-        #     value=Subquery(numeric_answer),
-        #     country_id=F('question__answer__response__store__city__country'),
-        # ).values(
-        #     'country',
-        #     'country_id',
-        #     'name',
-        #     'value'
-        # ).unarchived().filter(value__isnull=False)
+            'country_name'
+        )
 
 
 class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
@@ -461,17 +300,6 @@ class AnswerPerCountryReportUseCase(usecases.BaseUseCase):
             )
         ).values('country_name', 'value').filter(value__gt=0).unarchived()
 
-        # self._results = Country.objects.annotate(
-        #     value=Count(
-        #         'city__store__response',
-        #         filter=Q(
-        #             city__store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-        #             city__store__response__is_completed=True
-        #         ),
-        #         distinct=True
-        #     )
-        # ).values('name', 'value').filter(value__gt=0).unarchived()
-
 
 class AnswerPerCityReportUseCase(usecases.BaseUseCase):
     def execute(self):
@@ -493,34 +321,6 @@ class AnswerPerCityReportUseCase(usecases.BaseUseCase):
             )
         ).values('city_name', 'value').filter(value__gt=0).unarchived()
 
-        # self._results = City.objects.annotate(
-        #     value=Count(
-        #         'store__response',
-        #         filter=Q(
-        #             store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-        #             store__response__is_completed=True
-        #         ),
-        #         distinct=True
-        #     )
-        # ).values('name', 'value').filter(value__gt=0).unarchived()
-    # def execute(self):
-    #     self._factory()
-    #     return self._results
-    #
-    # def _factory(self):
-    #     self._results = SKU.objects.filter(
-    #         question__questionnaire__questionnaire_type__name='Price Monitor',
-    #         question__answer__response__is_completed=True
-    #     ).values('name').annotate(
-    #         city=F('question__answer__response__store__city__name'),
-    #     ).values('name', 'city').annotate(
-    #         value=Count('question__answer__response'),
-    #     ).values(
-    #         'city',
-    #         'value',
-    #         'name',
-    #     ).unarchived()
-
 
 class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
     def execute(self):
@@ -539,36 +339,6 @@ class AnswerPerSKUReportUseCase(usecases.BaseUseCase):
         )
 
 
-class TotalVisitReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        self._factory()
-        return self._results
-
-    def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
-        ).annotate(
-            sku_name=F('answer__question__sku__name')
-        ).values(
-            'sku_name'
-        ).annotate(
-            value=Count('id'),
-        ).values(
-            'value',
-            'sku_name',
-        ).unarchived().filter(value__isnull=False)
-
-        # self._results = City.objects.annotate(
-        #     value=Count(
-        #         'store__response',
-        #         filter=Q(
-        #             store__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-        #         )
-        #     )
-        # ).values('name', 'value').filter(value__gt=0).unarchived()
-
-
 class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
     def execute(self):
         self._factory()
@@ -576,8 +346,7 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
 
     def _factory(self):
         numeric_answer = NumericAnswer.objects.filter(
-            answer__question__sku__brand=OuterRef('answer__question__sku__brand'),
-            answer__response__store__city__country=OuterRef('store__city__country')
+            answer__question__sku__brand=OuterRef('answer__question__sku__brand')
         ).values(
             'numeric',
         ).annotate(
@@ -586,49 +355,24 @@ class BrandMinMaxReportReportUseCase(usecases.BaseUseCase):
             '-frequency',
         ).values('numeric')[:1]
 
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
-            is_completed=True
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Price Monitor',
+            answer__response__is_completed=True,
+            is_archived=False
         ).annotate(
             brand=F('answer__question__sku__brand')
         ).values(
             'brand'
         ).annotate(
             brand_name=F('answer__question__sku__brand__name'),
-            max=Max('answer__numericanswer__numeric'),
-            min=Min('answer__numericanswer__numeric'),
-            mean=Avg('answer__numericanswer__numeric'),
+            max=Max('numeric'),
+            min=Min('numeric'),
+            mean=Avg('numeric'),
             mode=Subquery(numeric_answer)
         ).values(
             'max',
             'min',
             'mean',
             'mode',
-            'brand_name',
-            'brand',
-        ).filter(max__isnull=False).unarchived()
-
-        # numeric_answer = NumericAnswer.objects.filter(
-        #     answer__question__sku__brand=OuterRef('brand'),
-        # ).annotate(
-        #     frequency=Count('numeric')
-        # ).order_by(
-        #     '-frequency'
-        # ).values('numeric')[:1]
-        #
-        # self._results = SKU.objects.filter(
-        #     question__questionnaire__questionnaire_type__name='Price Monitor',
-        #     question__answer__response__is_completed=True
-        # ).values('brand').distinct().annotate(
-        #     max=Max('question__answer__numericanswer__numeric'),
-        #     min=Min('question__answer__numericanswer__numeric'),
-        #     mean=Avg('question__answer__numericanswer__numeric'),
-        #     mode=Subquery(numeric_answer)
-        # ).unarchived().filter(max__isnull=False).values(
-        #     'max',
-        #     'min',
-        #     'mean',
-        #     'mode',
-        #     'brand__name',
-        #     'brand',
-        # )
+            'brand_name'
+        )
