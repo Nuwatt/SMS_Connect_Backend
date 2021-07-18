@@ -10,6 +10,11 @@ class BrandMinMaxReportFilter(ResponseFilter):
         label='brand',
         lookup_expr='in'
     )
+    category = IdInFilter(
+        field_name='category',
+        label='category',
+        lookup_expr='in'
+    )
 
 
 class AnswerPerSKUFilter(filters.FilterSet):
@@ -31,6 +36,11 @@ class AnswerPerSKUFilter(filters.FilterSet):
     brand = IdInFilter(
         field_name='answer__question__sku__brand',
         label='brand',
+        lookup_expr='in'
+    )
+    category = IdInFilter(
+        field_name='answer__question__sku__category',
+        label='category',
         lookup_expr='in'
     )
     date = filters.DateFromToRangeFilter(
