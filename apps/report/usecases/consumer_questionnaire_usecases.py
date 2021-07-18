@@ -260,7 +260,7 @@ class NumericQuestionReportUseCase(usecases.BaseUseCase):
         self._results = NumericAnswer.objects.filter(
             answer__response__response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
             answer__question__question_type__name='Numeric',
-            is_completed=True
+            answer__question__is_completed=True
         ).annotate(
             question=F('answer__question'),
         ).values(
