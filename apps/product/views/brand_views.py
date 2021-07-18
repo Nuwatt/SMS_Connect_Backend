@@ -1,3 +1,6 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+
 from apps.core import generics
 from apps.product.filtersets import BrandFilter
 from apps.product.mixins import BrandMixin
@@ -23,6 +26,8 @@ class ListBrandView(generics.ListAPIView):
     """
     serializer_class = brand_serializers.ListBrandSerializer
     filterset_class = BrandFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['name']
 
     def get_queryset(self):
         return brand_usecases.ListBrandUseCase().execute()

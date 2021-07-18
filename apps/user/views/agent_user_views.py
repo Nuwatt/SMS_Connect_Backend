@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -138,7 +138,7 @@ class UploadPortalUserAvatarView(generics.CreateAPIView, AgentUserMixin, Respons
     """
     serializer_class = agent_user_serializers.UploadAgentUserAvatarSerializer
     response_serializer_class = agent_user_serializers.UploadAgentUserAvatarSerializer
-    parser_classes = (MultiPartParser,)
+    parser_classes = (MultiPartParser, JSONParser)
 
     def get_object(self):
         return self.get_agent_user()
@@ -164,7 +164,7 @@ class ImportAgentUserView(generics.CreateWithMessageAPIView):
     """
     serializer_class = CSVFileInputSerializer
     message = _('Agent User imported successfully.')
-    parser_classes = (MultiPartParser,)
+    parser_classes = (MultiPartParser, JSONParser)
 
     def perform_create(self, serializer):
         return agent_user_usecases.ImportAgentUserUseCase(

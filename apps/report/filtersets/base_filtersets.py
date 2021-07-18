@@ -63,12 +63,22 @@ class SKUResponseFilter(ResponseFilter):
         label='brand',
         lookup_expr='in'
     )
+    category = IdInFilter(
+        field_name='category',
+        label='category',
+        lookup_expr='in'
+    )
 
 
 class BrandResponseFilter(ResponseFilter):
     brand = IdInFilter(
         field_name='brand',
         label='brand',
+        lookup_expr='in'
+    )
+    category = IdInFilter(
+        field_name='category',
+        label='category',
         lookup_expr='in'
     )
 
@@ -92,6 +102,11 @@ class NumericAnswerReportFilter(filters.FilterSet):
     brand = IdInFilter(
         field_name='answer__question__sku__brand',
         label='brand',
+        lookup_expr='in'
+    )
+    category = IdInFilter(
+        field_name='answer__question__sku__category',
+        label='category',
         lookup_expr='in'
     )
     date = filters.DateFromToRangeFilter(
@@ -123,4 +138,8 @@ class NumericAnswerReportFilter(filters.FilterSet):
 
 
 class OptionAnswerFilter(NumericAnswerReportFilter):
+    pass
+
+
+class ChoiceAnswerFilter(NumericAnswerReportFilter):
     pass

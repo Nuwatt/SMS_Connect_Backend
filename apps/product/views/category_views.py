@@ -1,3 +1,6 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+
 from apps.core import generics
 from apps.product.filtersets import CategoryFilter
 from apps.product.mixins import CategoryMixin
@@ -23,6 +26,8 @@ class ListCategoryView(generics.ListAPIView):
     """
     serializer_class = category_serializers.ListCategorySerializer
     filterset_class = CategoryFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['name']
 
     def get_queryset(self):
         return category_usecases.ListCategoryUseCase().execute()

@@ -3,7 +3,7 @@ from django.db.models import Sum, F
 from apps.report.filtersets.base_filtersets import (
     ResponseFilter,
     SKUResponseFilter,
-    NumericAnswerReportFilter
+    NumericAnswerReportFilter, ChoiceAnswerFilter
 )
 from apps.report.serializers import distribution_check_serializers
 from apps.report.usecases import distribution_check_usecases
@@ -50,7 +50,7 @@ class SKUPerCityReportView(BaseReportView):
     Use this end-point to list report of total sku per city for distribution check
     """
     serializer_class = distribution_check_serializers.SKUPerCityReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = ChoiceAnswerFilter
 
     def get_queryset(self):
         return distribution_check_usecases.SKUPerCityReportUseCase().execute()
@@ -61,7 +61,7 @@ class SKUPerCountryReportView(BaseReportView):
     Use this end-point to list report of total sku per country for distribution check
     """
     serializer_class = distribution_check_serializers.SKUPerCountryReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = ChoiceAnswerFilter
 
     def get_queryset(self):
         return distribution_check_usecases.SKUPerCountryReportUseCase().execute()
@@ -72,7 +72,7 @@ class SKUPerChannelReportView(BaseReportView):
     Use this end-point to list report of total sku per channel for distribution check
     """
     serializer_class = distribution_check_serializers.SKUPerChannelReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = ChoiceAnswerFilter
 
     def get_queryset(self):
         return distribution_check_usecases.SKUPerChannelReportUseCase().execute()
@@ -83,7 +83,7 @@ class BrandPerCityReportView(BaseReportView):
     Use this end-point to list report of total brand per city for distribution check
     """
     serializer_class = distribution_check_serializers.BrandPerCityReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = ChoiceAnswerFilter
 
     def get_queryset(self):
         return distribution_check_usecases.BrandPerCityReportUseCase().execute()
@@ -94,7 +94,7 @@ class BrandPerCountryReportView(BaseReportView):
     Use this end-point to list report of total brand per country for distribution check
     """
     serializer_class = distribution_check_serializers.BrandPerCountryReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = ChoiceAnswerFilter
 
     def get_queryset(self):
         return distribution_check_usecases.BrandPerCountryReportUseCase().execute()
@@ -105,7 +105,7 @@ class BrandPerChannelReportView(BaseReportView):
     Use this end-point to list report of total brand per channel for distribution check
     """
     serializer_class = distribution_check_serializers.BrandPerChannelReportSerializer
-    filterset_class = SKUResponseFilter
+    filterset_class = ChoiceAnswerFilter
 
     def get_queryset(self):
         return distribution_check_usecases.BrandPerChannelReportUseCase().execute()
@@ -153,5 +153,53 @@ class AvgPerBrandReportView(BaseReportView):
         ).values(
             'brand',
             'value',
+            'brand_name'
+        )
+
+
+class AvgSKUPerChannelReportView(BaseReportView):
+    """
+    Use this end-point to list report of avg sku per channel for distribution check
+    """
+    serializer_class = distribution_check_serializers.AvgSKUPerChannelReportSerializer
+    filterset_class = NumericAnswerReportFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.AvgSKUPerChannelReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        total_sum = queryset.aggregate(Sum('numeric')).get('numeric__sum')
+        return queryset.annotate(
+            sum_of_value=Sum('numeric'),
+            value=F('sum_of_value') / total_sum * 100,
+            channel_name=F('answer__response__store__channel__name'),
+            sku_name=F('answer__question__sku__name'),
+        ).values(
+            'value',
+            'channel_name',
+            'sku_name'
+        )
+
+
+class AvgBrandPerChannelReportView(BaseReportView):
+    """
+    Use this end-point to list report of avg brand per channel for distribution check
+    """
+    serializer_class = distribution_check_serializers.AvgBrandPerChannelReportSerializer
+    filterset_class = NumericAnswerReportFilter
+
+    def get_queryset(self):
+        return distribution_check_usecases.AvgBrandPerChannelReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        total_sum = queryset.aggregate(Sum('numeric')).get('numeric__sum')
+        return queryset.annotate(
+            sum_of_value=Sum('numeric'),
+            value=F('sum_of_value') / total_sum * 100,
+            channel_name=F('answer__response__store__channel__name'),
+            brand_name=F('answer__question__sku__brand__name'),
+        ).values(
+            'value',
+            'channel_name',
             'brand_name'
         )

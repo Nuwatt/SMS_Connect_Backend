@@ -2,7 +2,6 @@ from django.conf import settings
 from django.utils.timezone import now
 from rest_framework_tracking.base_mixins import BaseLoggingMixin
 from rest_framework_tracking.mixins import LoggingMixin
-from apps.core import fields
 
 
 class LoggingErrorsMixin(LoggingMixin):

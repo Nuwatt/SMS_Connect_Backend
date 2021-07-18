@@ -1,5 +1,7 @@
 from django.utils.translation import gettext_lazy as _
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.filters import OrderingFilter
 
 from rest_framework.response import Response
 
@@ -29,6 +31,8 @@ class ListRetailerView(generics.ListAPIView):
     """
     serializer_class = retailer_serializers.ListRetailerSerializer
     filterset_class = RetailerFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['name']
 
     def get_queryset(self):
         user = self.request.user
@@ -45,6 +49,8 @@ class BasicListRetailerView(generics.ListAPIView):
     """
     serializer_class = retailer_serializers.BasicListRetailerSerializer
     filterset_class = RetailerFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['name']
 
     def get_queryset(self):
         return retailer_usecases.BasicListRetailerUseCase().execute()

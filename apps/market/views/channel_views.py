@@ -1,3 +1,5 @@
+from rest_framework.filters import OrderingFilter
+
 from apps.core import generics
 from apps.market.mixins import ChannelMixin
 from apps.market.serializers import channel_serializers
@@ -21,6 +23,9 @@ class ListChannelView(generics.ListAPIView):
     Use this end-point to list all channel
     """
     serializer_class = channel_serializers.ListChannelSerializer
+
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['name']
 
     def get_queryset(self):
         return channel_usecases.ListChannelUseCase().execute()
