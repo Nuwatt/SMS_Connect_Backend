@@ -225,16 +225,16 @@ class SKUStoreNotAvailableReportUseCase(usecases.BaseUseCase):
             answer__response__is_completed=True,
             is_archived=False
         ).annotate(
-            store=F('answer__response__store')
+            retailer=F('answer__response__store__retailer')
         ).values(
-            'store'
+            'retailer'
         ).annotate(
             total_answer=Count('choice'),
             value=Count(
                 'choice',
                 filter=Q(choice__choice='Not Available')
             ) / F('total_answer') * 100,
-            store_name=F('answer__response__store__name'),
+            store_name=F('answer__response__store__retailer__name'),
             sku_name=F('answer__question__sku__name'),
         ).values(
             'value',
