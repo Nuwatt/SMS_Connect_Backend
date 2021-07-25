@@ -37,5 +37,8 @@ urlpatterns = [
     path(
         'report/',
         include('apps.report.urls.base_urls')
+    ), path(
+        'snap/',
+        include('apps.snap.urls.base_urls')
     )
 ]
