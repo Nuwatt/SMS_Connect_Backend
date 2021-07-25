@@ -1,4 +1,6 @@
 from django.utils.translation import gettext_lazy as _
+from rest_framework.parsers import MultiPartParser, JSONParser
+
 from apps.core import generics
 from apps.report.views.base_views import BaseReportView
 from apps.snap.filtersets import PriceMonitorSnapFilter
@@ -14,6 +16,7 @@ class ImportPriceMonitorSnapView(generics.CreateWithMessageAPIView):
     """
     serializer_class = price_monitor_serializers.ImportPriceMonitorSnapSerializer
     message = _('Price Monitor snap imported successfully.')
+    parser_classes = (MultiPartParser, JSONParser)
 
     def perform_create(self, serializer):
         return price_monitor_usecases.ImportPriceMonitorSnapUseCase(
