@@ -63,6 +63,11 @@ class SKUResponseFilter(ResponseFilter):
         label='brand',
         lookup_expr='in'
     )
+    category = IdInFilter(
+        field_name='category',
+        label='category',
+        lookup_expr='in'
+    )
 
 
 class BrandResponseFilter(ResponseFilter):
@@ -71,3 +76,70 @@ class BrandResponseFilter(ResponseFilter):
         label='brand',
         lookup_expr='in'
     )
+    category = IdInFilter(
+        field_name='category',
+        label='category',
+        lookup_expr='in'
+    )
+
+
+class NumericAnswerReportFilter(filters.FilterSet):
+    country = IdInFilter(
+        field_name='answer__response__store__city__country',
+        label='country',
+        lookup_expr='in'
+    )
+    city = IdInFilter(
+        field_name='answer__response__store__city',
+        label='city',
+        lookup_expr='in'
+    )
+    sku = IdInFilter(
+        field_name='answer__question__sku',
+        label='sku',
+        lookup_expr='in'
+    )
+    brand = IdInFilter(
+        field_name='answer__question__sku__brand',
+        label='brand',
+        lookup_expr='in'
+    )
+    category = IdInFilter(
+        field_name='answer__question__sku__category',
+        label='category',
+        lookup_expr='in'
+    )
+    date = filters.DateFromToRangeFilter(
+        field_name='answer__response__completed_at__date',
+        label='date'
+    )
+    exact_date = filters.DateFilter(
+        field_name='answer__response__completed_at__date',
+        label='date'
+    )
+    store = IdInFilter(
+        field_name='answer__response__store',
+        label='store',
+        lookup_expr='in'
+
+    )
+    channel = IdInFilter(
+        field_name='answer__response__store__channel',
+        label='channel',
+        lookup_expr='in'
+
+    )
+    retailer = IdInFilter(
+        field_name='answer__response__store__retailer',
+        label='store',
+        lookup_expr='in'
+
+    )
+
+
+class OptionAnswerFilter(NumericAnswerReportFilter):
+    pass
+
+
+class ChoiceAnswerFilter(NumericAnswerReportFilter):
+    pass

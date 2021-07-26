@@ -2,7 +2,7 @@ from django.db.models import Count, F, Q, Avg
 from sql_util.aggregates import SubqueryCount
 
 from apps.core import usecases
-from apps.response.models import Response
+from apps.response.models import Response, OptionAnswer, ChoiceAnswer, NumericAnswer
 
 
 class YesNoQuestionReportUseCase(usecases.BaseUseCase):
@@ -11,34 +11,31 @@ class YesNoQuestionReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+        self._results = ChoiceAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+            answer__response__is_completed=True,
             answer__question__question_type__name='Yes or No',
-            is_completed=True
+            is_archived=False
         ).annotate(
             question=F('answer__question'),
         ).values(
             'question'
         ).annotate(
-            total_answer=Count('answer'),
+            total_answer=Count('choice'),
             yes=Count(
-                'answer__choiceanswer__choice',
-                filter=Q(answer__choiceanswer__choice__choice='Yes')
+                'choice',
+                filter=Q(choice__choice='Yes')
             ) / F('total_answer') * 100,
             no=Count(
-                'answer__choiceanswer__choice',
-                filter=Q(answer__choiceanswer__choice__choice='No')
+                'choice',
+                filter=Q(choice__choice='No')
             ) / F('total_answer') * 100,
-            brand=F('answer__question__sku__brand'),
-            question_statement=F('answer__question__statement'),
-            sku=F('answer__question__sku'),
+            question_statement=F('answer__question__statement')
         ).values(
             'yes',
             'no',
-            'question_statement',
-            'sku',
-            'brand',
-        ).unarchived()
+            'question_statement'
+        )
 
 
 class RatingOneToThreeReportUseCase(usecases.BaseUseCase):
@@ -47,48 +44,45 @@ class RatingOneToThreeReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+        self._results = ChoiceAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+            answer__response__is_completed=True,
             answer__question__question_type__name='Rating 1 to 3',
-            is_completed=True
+            is_archived=False
         ).annotate(
             question=F('answer__question'),
         ).values(
             'question'
         ).annotate(
-            total_answer=Count('answer'),
+            total_answer=Count('choice'),
             rating_one=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='1',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 3'
+                    choice__choice='1',
+                    choice__question_type__name='Rating 1 to 3'
                 )
             ) / F('total_answer') * 100,
             rating_two=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='2',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 3'
+                    choice__choice='2',
+                    choice__question_type__name='Rating 1 to 3'
                 )
             ) / F('total_answer') * 100,
             rating_three=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='3',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 3'
+                    choice__choice='3',
+                    choice__question_type__name='Rating 1 to 3'
                 )
             ) / F('total_answer') * 100,
-            brand=F('answer__question__sku__brand'),
             question_statement=F('answer__question__statement'),
-            sku=F('answer__question__sku'),
         ).values(
             'rating_one',
             'rating_two',
             'rating_three',
             'question_statement',
-            'sku',
-            'brand',
-        ).unarchived()
+        )
 
 
 class RatingOneToFiveReportUseCase(usecases.BaseUseCase):
@@ -97,64 +91,61 @@ class RatingOneToFiveReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+        self._results = ChoiceAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+            answer__response__is_completed=True,
             answer__question__question_type__name='Rating 1 to 5',
-            is_completed=True
+            is_archived=False
         ).annotate(
             question=F('answer__question'),
         ).values(
             'question'
         ).annotate(
-            total_answer=Count('answer'),
+            total_answer=Count('choice'),
             rating_one=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='1',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 5'
+                    choice__choice='1',
+                    choice__question_type__name='Rating 1 to 5'
                 )
             ) / F('total_answer') * 100,
             rating_two=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='2',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 5'
+                    choice__choice='2',
+                    choice__question_type__name='Rating 1 to 5'
                 )
             ) / F('total_answer') * 100,
             rating_three=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='3',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 5'
+                    choice__choice='3',
+                    choice__question_type__name='Rating 1 to 5'
                 )
             ) / F('total_answer') * 100,
             rating_four=Count(
                 'answer__choiceanswer__choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='4',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 5'
+                    choice__choice='4',
+                    choice__question_type__name='Rating 1 to 5'
                 )
             ) / F('total_answer') * 100,
             rating_five=Count(
                 'answer__choiceanswer__choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='5',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 5'
+                    choice__choice='5',
+                    choice__question_type__name='Rating 1 to 5'
                 )
             ) / F('total_answer') * 100,
-            brand=F('answer__question__sku__brand'),
             question_statement=F('answer__question__statement'),
-            sku=F('answer__question__sku'),
         ).values(
             'rating_one',
             'rating_two',
             'rating_three',
             'rating_four',
             'rating_five',
-            'question_statement',
-            'sku',
-            'brand',
-        ).unarchived()
+            'question_statement'
+        )
 
 
 class RatingOneToTenReportUseCase(usecases.BaseUseCase):
@@ -163,89 +154,88 @@ class RatingOneToTenReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+        self._results = ChoiceAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+            answer__response__is_completed=True,
             answer__question__question_type__name='Rating 1 to 10',
-            is_completed=True
+            is_archived=False
         ).annotate(
             question=F('answer__question'),
         ).values(
             'question'
         ).annotate(
-            total_answer=Count('answer'),
+            total_answer=Count('choice'),
             rating_one=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='1',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='1',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_two=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='2',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='2',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_three=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='3',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='3',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_four=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='4',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='4',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_five=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='5',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='5',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_six=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='6',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='6',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_seven=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='7',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='7',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_eight=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='8',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='8',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_nine=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='9',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='9',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
             rating_ten=Count(
-                'answer__choiceanswer__choice',
+                'choice',
                 filter=Q(
-                    answer__choiceanswer__choice__choice='10',
-                    answer__choiceanswer__choice__question_type__name='Rating 1 to 10'
+                    choice__choice='10',
+                    choice__question_type__name='Rating 1 to 10'
                 )
             ) / F('total_answer') * 100,
-            brand=F('answer__question__sku__brand'),
             question_statement=F('answer__question__statement'),
-            sku=F('answer__question__sku'),
         ).values(
             'rating_one',
             'rating_two',
@@ -258,9 +248,7 @@ class RatingOneToTenReportUseCase(usecases.BaseUseCase):
             'rating_nine',
             'rating_ten',
             'question_statement',
-            'sku',
-            'brand',
-        ).unarchived()
+        )
 
 
 class NumericQuestionReportUseCase(usecases.BaseUseCase):
@@ -269,25 +257,21 @@ class NumericQuestionReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+        self._results = NumericAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
             answer__question__question_type__name='Numeric',
-            is_completed=True
+            answer__response__is_completed=True
         ).annotate(
             question=F('answer__question'),
         ).values(
             'question'
         ).annotate(
-            value=Avg('answer__numericanswer__numeric'),
-            brand=F('answer__question__sku__brand'),
+            value=Avg('numeric'),
             question_statement=F('answer__question__statement'),
-            sku=F('answer__question__sku'),
         ).values(
             'value',
             'question_statement',
-            'sku',
-            'brand',
-        ).unarchived()
+        )
 
 
 class OptionsQuestionReportUseCase(usecases.BaseUseCase):
@@ -296,26 +280,22 @@ class OptionsQuestionReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        self._results = Response.objects.filter(
-            response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
+        self._results = OptionAnswer.objects.filter(
+            answer__response__response_cycle__questionnaire__questionnaire_type__name='Consumer Question',
             answer__question__question_type__has_options=True,
-            is_completed=True
-        ).annotate(
-            option=F('answer__optionanswer__option'),
+            answer__response__is_completed=True,
+            is_archived=False
         ).values(
-            'option',
+            'answer__question',
         ).distinct().annotate(
-            value=Count('answer__optionanswer__option'),
+            total_count=SubqueryCount('answer__question__questionoption'),
+            value=Count('option') / F('total_count') * 100,
             question=F('answer__question'),
-            option_text=F('answer__optionanswer__option__option'),
-            brand=F('answer__question__sku__brand'),
+            option_text=F('option__option'),
             question_statement=F('answer__question__statement'),
-            sku=F('answer__question__sku'),
         ).values(
             'question_statement',
             'question',
             'option_text',
             'value',
-            'sku',
-            'brand'
-        ).unarchived()
+        )
