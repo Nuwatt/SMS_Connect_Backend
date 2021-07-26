@@ -20,6 +20,7 @@ class QuestionAdmin(BaseModelAdmin):
         'question_type',
         'is_archived',
         'questionnaire__questionnaire_type',
+        'questionnaire',
     )
 
 
