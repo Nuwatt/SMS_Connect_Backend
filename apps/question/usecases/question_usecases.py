@@ -91,9 +91,9 @@ class BulkAddQuestionUseCase(usecases.CreateUseCase):
                 question_options = []
                 for data in question_options_data:
                     question_option = QuestionOption(
-                            question=question,
-                            option=data
-                        )
+                        question=question,
+                        option=data
+                    )
                     try:
                         question_option.full_clean()
                     except DjangoValidationError as e:
@@ -120,22 +120,32 @@ class ImportQuestionUseCase(usecases.ImportCSVUseCase):
     null_columns = ['Options']
 
     def _factory(self):
+        question_type_data = {}
+
         # create question
         for item in self._item_list:
             # 1. get question_type
-            try:
-                question_type = QuestionType.objects.get(name=item.get('Question Type'))
-            except QuestionType.DoesNotExist:
-                raise ValidationError({
-                    'non_field_errors': _('Invalid Question Type')
-                })
+            if item.get('Question Type') not in question_type_data:
+                try:
+                    question_type = QuestionType.objects.get(
+                        name=item.get('Question Type'),
+                        is_archived=False
+                    )
+                except QuestionType.DoesNotExist:
+                    raise ValidationError({
+                        'non_field_errors': _('Invalid Question Type: {}'.format(item.get('Question Type')))
+                    })
+                question_type_data[item.get('Question Type')] = question_type
 
-            # 3. brand
+            # 3. sku
             try:
-                sku = SKU.objects.get(name=item.get('SKU'), is_archived=False)
+                sku = SKU.objects.get(
+                    name=item.get('SKU'),
+                    is_archived=False
+                )
             except SKU.DoesNotExist:
                 raise ValidationError({
-                    'non_field_errors': _('Invalid SKU')
+                    'non_field_errors': _('Invalid SKU: {}'.format(item.get('SKU')))
                 })
 
             # 4. options
@@ -147,7 +157,7 @@ class ImportQuestionUseCase(usecases.ImportCSVUseCase):
                 statement=item.get('Question Text'),
                 defaults={
                     'sku': sku,
-                    'question_type': question_type
+                    'question_type': question_type_data.get(item.get('Question Type'))
                 }
             )
 
