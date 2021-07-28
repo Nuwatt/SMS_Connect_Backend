@@ -97,7 +97,8 @@ class ImportSKUUseCase(usecases.ImportCSVUseCase):
             sku, created = SKU.objects.get_or_create(
                 name=item.get('SKU Name'),
                 brand=brand,
-                category=category
+                category=category,
+                is_archived=False
             )
 
             if item.get('Country'):
