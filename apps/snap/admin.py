@@ -10,8 +10,13 @@ class PriceMonitorSnapAdmin(BaseModelAdmin):
         'sku',
     )
     list_filter = BaseModelAdmin.list_filter + (
-        'category',
-        'brand',
+        'sku__category',
+        'sku__brand',
         'channel',
         'city__country',
     )
+    raw_id_fields = [
+        'city',
+        'channel',
+        'sku',
+    ]

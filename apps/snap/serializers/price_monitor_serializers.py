@@ -17,9 +17,10 @@ class PriceMonitorSnapSerializer(serializers.ModelSerializer):
 class ListPriceMonitorSnapSerializer(PriceMonitorSnapSerializer):
     country = IdNameSerializer(source='city.country')
     city = IdNameSerializer()
-    category = IdNameCharSerializer()
-    brand = IdNameCharSerializer()
+    category = IdNameCharSerializer(source='sku.category')
+    brand = IdNameCharSerializer(source='sku.brand')
     channel = IdNameCharSerializer()
+    sku = IdNameCharSerializer()
 
     class Meta(PriceMonitorSnapSerializer.Meta):
         fields = (
@@ -52,21 +53,17 @@ class UpdatePriceMonitorSnapSerializer(PriceMonitorSnapSerializer):
         )
 
 
-class OverviewPriceMonitorSnapReport(PriceMonitorSnapSerializer):
-    class Meta(PriceMonitorSnapSerializer.Meta):
-        fields = (
-            'sku',
-            'min',
-            'min',
-            'max',
-            'mean',
-            'mode'
-        )
+class OverviewPriceMonitorSnapReport(serializers.Serializer):
+    sku = serializers.CharField(source='sku_name')
+    min = serializers.FloatField(source='min_value')
+    max = serializers.FloatField(source='max_value')
+    mode = serializers.FloatField(source='mode_value')
+    mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
 
 
 class MonthPriceMonitorSnapReport(serializers.Serializer):
     month = serializers.DateField(format='%b')
-    sku = serializers.CharField()
+    sku = serializers.CharField(source='sku_name')
     value = serializers.FloatField()
 
 
@@ -76,3 +73,9 @@ class BrandoverviewPriceMonitorSnapReport(serializers.Serializer):
     max = serializers.FloatField(source='max_value')
     mode = serializers.FloatField(source='mode_value')
     mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
+
+
+class CountryPriceMonitorSnapReport(serializers.Serializer):
+    country = serializers.CharField(source='country_name')
+    sku = serializers.CharField(source='sku_name')
+    value = serializers.FloatField()

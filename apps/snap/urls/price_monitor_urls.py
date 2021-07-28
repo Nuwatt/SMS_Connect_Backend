@@ -32,6 +32,26 @@ report_urls = [
         'brand-overview',
         price_monitor_views.BrandOverviewPriceMonitorSnapReportView.as_view(),
         name='brand-overview-price-monitor-snap-report'
+    ),
+    path(
+        'country-min',
+        price_monitor_views.CountryMinPriceMonitorSnapReportView.as_view(),
+        name='country-min-price-monitor-snap-report'
+    ),
+    path(
+        'country-max',
+        price_monitor_views.CountryMaxPriceMonitorSnapReportView.as_view(),
+        name='country-max-price-monitor-snap-report'
+    ),
+    path(
+        'country-mean',
+        price_monitor_views.CountryMeanPriceMonitorSnapReportView.as_view(),
+        name='country-mean-price-monitor-snap-report'
+    ),
+    path(
+        'country-mode',
+        price_monitor_views.CountryModePriceMonitorSnapReportView.as_view(),
+        name='country-mode-price-monitor-snap-report'
     )
 ]
 

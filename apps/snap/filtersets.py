@@ -16,7 +16,7 @@ class PriceMonitorSnapFilter(filters.FilterSet):
         lookup_expr='in'
     )
     brand = IdInFilter(
-        field_name='brand',
+        field_name='sku__brand',
         label='brand',
         lookup_expr='in'
     )
@@ -36,7 +36,7 @@ class PriceMonitorSnapFilter(filters.FilterSet):
 
     )
     category = IdInFilter(
-        field_name='category',
+        field_name='sku__category',
         label='category',
         lookup_expr='in'
     )
