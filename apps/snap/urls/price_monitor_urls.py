@@ -52,6 +52,21 @@ report_urls = [
         'country-mode',
         price_monitor_views.CountryModePriceMonitorSnapReportView.as_view(),
         name='country-mode-price-monitor-snap-report'
+    ),
+    path(
+        'visit-per-city',
+        price_monitor_views.VisitPerCityPriceMonitorSnapReportView.as_view(),
+        name='visit-per-city-price-monitor-snap-report'
+    ),
+    path(
+        'visit-per-country',
+        price_monitor_views.VisitPerCountryPriceMonitorSnapReportView.as_view(),
+        name='visit-per-country-price-monitor-snap-report'
+    ),
+    path(
+        'sku-per-channel',
+        price_monitor_views.SKUPerChannelPriceMonitorSnapReportView.as_view(),
+        name='sku-per-channel-price-monitor-snap-report'
     )
 ]
 
