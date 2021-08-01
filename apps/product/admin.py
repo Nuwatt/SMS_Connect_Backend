@@ -40,4 +40,6 @@ class SKUAdmin(BaseModelAdmin):
     )
     list_filter = BaseModelAdmin.list_filter + (
         'country',
+        'brand',
+        'category',
     )
