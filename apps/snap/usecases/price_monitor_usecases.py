@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery
+from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
 from django.db.models.functions import TruncMonth
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -365,7 +365,7 @@ class VisitPerCityPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             'city'
         ).distinct().annotate(
             city_name=F('city__name'),
-            value=Count(id)
+            value=Sum('count')
         ).values(
             'city_name',
             'value'
@@ -381,7 +381,7 @@ class VisitPerCountryPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             'city__country'
         ).distinct().annotate(
             country_name=F('city__country__name'),
-            value=Count(id)
+            value=Sum('count')
         ).values(
             'country_name',
             'value'
@@ -398,7 +398,7 @@ class SKUPerChannelPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         ).distinct().annotate(
             sku_name=F('sku__name'),
             channel_name=F('channel__name'),
-            value=Count(id)
+            value=Sum('count')
         ).values(
             'channel_name',
             'sku_name',
