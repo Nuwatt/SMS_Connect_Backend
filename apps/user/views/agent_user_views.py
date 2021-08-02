@@ -139,6 +139,7 @@ class UploadPortalUserAvatarView(generics.CreateAPIView, AgentUserMixin, Respons
     serializer_class = agent_user_serializers.UploadAgentUserAvatarSerializer
     response_serializer_class = agent_user_serializers.UploadAgentUserAvatarSerializer
     parser_classes = (MultiPartParser, JSONParser)
+    permission_classes = [IsAdminPortalUser | IsAgentUser]
 
     def get_object(self):
         return self.get_agent_user()
