@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from apps.core.serializers import CSVFileInputSerializer, IdNameSerializer, IdNameCharSerializer
+from apps.report.serializers.price_monitor_serializers import AnswerPerCountryReportSerializer, \
+    AnswerPerCityReportSerializer
 from apps.snap.models import PriceMonitorSnap
 
 
@@ -61,13 +63,13 @@ class OverviewPriceMonitorSnapReport(serializers.Serializer):
     mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
 
 
-class MonthPriceMonitorSnapReport(serializers.Serializer):
+class MonthPriceMonitorSnapReportSerializer(serializers.Serializer):
     month = serializers.DateField(format='%b')
     sku = serializers.CharField(source='sku_name')
     value = serializers.FloatField()
 
 
-class BrandoverviewPriceMonitorSnapReport(serializers.Serializer):
+class BrandoverviewPriceMonitorSnapReportSerializer(serializers.Serializer):
     brand = serializers.CharField(source='brand_name')
     min = serializers.FloatField(source='min_value')
     max = serializers.FloatField(source='max_value')
@@ -75,7 +77,21 @@ class BrandoverviewPriceMonitorSnapReport(serializers.Serializer):
     mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
 
 
-class CountryPriceMonitorSnapReport(serializers.Serializer):
+class CountryPriceMonitorSnapReportSerializer(serializers.Serializer):
     country = serializers.CharField(source='country_name')
+    sku = serializers.CharField(source='sku_name')
+    value = serializers.FloatField()
+
+
+class VisitPerCityPriceMonitorSnapReportSerializer(AnswerPerCityReportSerializer):
+    pass
+
+
+class VisitPerCountryPriceMonitorSnapReportSerializer(AnswerPerCountryReportSerializer):
+    pass
+
+
+class SKUPerChannelPriceMonitorSnapReportSerializer(serializers.Serializer):
+    channel = serializers.CharField(source='channel_name')
     sku = serializers.CharField(source='sku_name')
     value = serializers.FloatField()

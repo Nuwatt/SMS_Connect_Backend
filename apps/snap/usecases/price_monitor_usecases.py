@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery
+from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
 from django.db.models.functions import TruncMonth
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -351,6 +351,56 @@ class CountryModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             value=Subquery(snap_mode)
         ).values(
             'country_name',
+            'sku_name',
+            'value'
+        ).unarchived()
+
+
+class VisitPerCityPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return PriceMonitorSnap.objects.values(
+            'city'
+        ).distinct().annotate(
+            city_name=F('city__name'),
+            value=Sum('count')
+        ).values(
+            'city_name',
+            'value'
+        ).unarchived()
+
+
+class VisitPerCountryPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return PriceMonitorSnap.objects.values(
+            'city__country'
+        ).distinct().annotate(
+            country_name=F('city__country__name'),
+            value=Sum('count')
+        ).values(
+            'country_name',
+            'value'
+        ).unarchived()
+
+
+class SKUPerChannelPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return PriceMonitorSnap.objects.values(
+            'channel'
+        ).distinct().annotate(
+            sku_name=F('sku__name'),
+            channel_name=F('channel__name'),
+            value=Sum('count')
+        ).values(
+            'channel_name',
             'sku_name',
             'value'
         ).unarchived()
