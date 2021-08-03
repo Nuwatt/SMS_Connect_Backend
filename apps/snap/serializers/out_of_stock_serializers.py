@@ -67,43 +67,25 @@ class UpdateOutOfStockSnapSerializer(OutOfStockSnapSerializer):
         )
 
 
-class OverviewPriceMonitorSnapReport(serializers.Serializer):
+class OverviewOutOfStockSnapReport(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    min = serializers.FloatField(source='min_value')
-    max = serializers.FloatField(source='max_value')
-    mode = serializers.FloatField(source='mode_value')
-    mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
+    available = serializers.FloatField()
+    not_available = serializers.FloatField()
+    less = serializers.FloatField()
 
 
-class MonthPriceMonitorSnapReportSerializer(serializers.Serializer):
+class OutOfStockSnapReportSerializer(serializers.Serializer):
     month = serializers.DateField(format='%b')
     sku = serializers.CharField(source='sku_name')
     value = serializers.FloatField()
 
 
-class BrandoverviewPriceMonitorSnapReportSerializer(serializers.Serializer):
-    brand = serializers.CharField(source='brand_name')
-    min = serializers.FloatField(source='min_value')
-    max = serializers.FloatField(source='max_value')
-    mode = serializers.FloatField(source='mode_value')
-    mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
-
-
-class CountryPriceMonitorSnapReportSerializer(serializers.Serializer):
-    country = serializers.CharField(source='country_name')
+class ByCityOutOfStockSnapReportSerializer(serializers.Serializer):
+    city = serializers.DateField(source='city_name')
     sku = serializers.CharField(source='sku_name')
     value = serializers.FloatField()
 
 
-class VisitPerCityPriceMonitorSnapReportSerializer(AnswerPerCityReportSerializer):
-    pass
-
-
-class VisitPerCountryPriceMonitorSnapReportSerializer(AnswerPerCountryReportSerializer):
-    pass
-
-
-class SKUPerChannelPriceMonitorSnapReportSerializer(serializers.Serializer):
-    channel = serializers.CharField(source='channel_name')
-    sku = serializers.CharField(source='sku_name')
+class VisitByCityOutOfStockSnapReportSerializer(serializers.Serializer):
+    city = serializers.DateField(source='city_name')
     value = serializers.FloatField()

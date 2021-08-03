@@ -167,269 +167,133 @@ class UpdatePriceMonitorSnapUseCase(usecases.UpdateUseCase):
     def __init__(self, serializer, out_of_stock_snap: OutOfStockSnap):
         super().__init__(serializer, out_of_stock_snap)
 
-#
-# class OverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         snap_mode = PriceMonitorSnap.objects.filter(
-#             sku=OuterRef('sku'),
-#         ).values(
-#             'mode',
-#         ).order_by(
-#             'created',
-#         ).annotate(
-#             frequency=Count('id')
-#         ).order_by(
-#             '-frequency',
-#         ).values('mode')[:1]
-#
-#         return PriceMonitorSnap.objects.values(
-#             'sku'
-#         ).distinct().annotate(
-#             sku_name=F('sku__name'),
-#             min_value=Min('min'),
-#             max_value=Max('max'),
-#             mean_value=Avg('mean'),
-#             mode_value=Subquery(snap_mode)
-#         ).values(
-#             'sku_name',
-#             'min_value',
-#             'max_value',
-#             'mean_value',
-#             'mode_value'
-#         ).unarchived()
-#
-#
-# class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.annotate(
-#             month=TruncMonth('date'),
-#             value=F('max'),
-#             sku_name=F('sku__name')
-#         ).values(
-#             'month',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class MonthMinPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.annotate(
-#             month=TruncMonth('date'),
-#             value=F('min'),
-#             sku_name=F('sku__name')
-#         ).values(
-#             'month',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class MonthMeanPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.annotate(
-#             month=TruncMonth('date'),
-#             value=F('mean'),
-#             sku_name=F('sku__name')
-#         ).values(
-#             'month',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class MonthModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.annotate(
-#             month=TruncMonth('date'),
-#             value=F('mode'),
-#             sku_name=F('sku__name')
-#         ).values(
-#             'month',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class BrandOverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         snap_mode = PriceMonitorSnap.objects.filter(
-#             sku__brand=OuterRef('sku__brand'),
-#         ).values(
-#             'mode',
-#         ).order_by(
-#             'created',
-#         ).annotate(
-#             frequency=Count('id')
-#         ).order_by(
-#             '-frequency',
-#         ).values('mode')[:1]
-#
-#         return PriceMonitorSnap.objects.values(
-#             'sku__brand'
-#         ).distinct().annotate(
-#             brand_name=F('sku__brand__name'),
-#             min_value=Min('min'),
-#             max_value=Max('max'),
-#             mean_value=Avg('mean'),
-#             mode_value=Subquery(snap_mode)
-#         ).unarchived()
-#
-#
-# class CountryMinPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.annotate(
-#             country=F('city__country')
-#         ).values(
-#             'country',
-#         ).annotate(
-#             country_name=F('city__country__name'),
-#             sku_name=F('sku__name'),
-#             value=Min('min')
-#         ).values(
-#             'country_name',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class CountryMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.annotate(
-#             country=F('city__country')
-#         ).values(
-#             'country',
-#         ).annotate(
-#             country_name=F('city__country__name'),
-#             sku_name=F('sku__name'),
-#             value=Max('min')
-#         ).values(
-#             'country_name',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class CountryMeanPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.annotate(
-#             country=F('city__country')
-#         ).values(
-#             'country',
-#         ).annotate(
-#             country_name=F('city__country__name'),
-#             sku_name=F('sku__name'),
-#             value=Avg('min')
-#         ).values(
-#             'country_name',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class CountryModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         snap_mode = PriceMonitorSnap.objects.filter(
-#             sku=OuterRef('sku'),
-#         ).values(
-#             'mode',
-#         ).order_by(
-#             'created',
-#         ).annotate(
-#             frequency=Count('id')
-#         ).order_by(
-#             '-frequency',
-#         ).values('mode')[:1]
-#
-#         return PriceMonitorSnap.objects.values(
-#             'sku'
-#         ).distinct().annotate(
-#             country_name=F('city__country__name'),
-#             sku_name=F('sku__name'),
-#             value=Subquery(snap_mode)
-#         ).values(
-#             'country_name',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class VisitPerCityPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.values(
-#             'city'
-#         ).distinct().annotate(
-#             city_name=F('city__name'),
-#             value=Sum('count')
-#         ).values(
-#             'city_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class VisitPerCountryPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.values(
-#             'city__country'
-#         ).distinct().annotate(
-#             country_name=F('city__country__name'),
-#             value=Sum('count')
-#         ).values(
-#             'country_name',
-#             'value'
-#         ).unarchived()
-#
-#
-# class SKUPerChannelPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-#     def execute(self):
-#         return self._factory()
-#
-#     def _factory(self):
-#         return PriceMonitorSnap.objects.values(
-#             'channel'
-#         ).distinct().annotate(
-#             sku_name=F('sku__name'),
-#             channel_name=F('channel__name'),
-#             value=Sum('count')
-#         ).values(
-#             'channel_name',
-#             'sku_name',
-#             'value'
-#         ).unarchived()
 
+class OverviewOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return OutOfStockSnap.objects.values(
+            'sku'
+        ).distinct().annotate(
+            sku_name=F('sku__name'),
+            available=F('available_in_month'),
+            not_available=F('not_available_in_month'),
+            less=F('less_available_in_month'),
+        ).values(
+            'sku_name',
+            'available',
+            'not_available',
+            'less'
+        ).unarchived()
+
+
+class AvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return OutOfStockSnap.objects.annotate(
+            month=TruncMonth('date'),
+            value=F('available_in_month'),
+            sku_name=F('sku__name')
+        ).values(
+            'month',
+            'sku_name',
+            'value'
+        ).unarchived()
+
+
+class NotAvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return OutOfStockSnap.objects.annotate(
+            month=TruncMonth('date'),
+            value=F('not_available_in_month'),
+            sku_name=F('sku__name')
+        ).values(
+            'month',
+            'sku_name',
+            'value'
+        ).unarchived()
+
+
+class LessOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return OutOfStockSnap.objects.annotate(
+            month=TruncMonth('date'),
+            value=F('less_available_in_month'),
+            sku_name=F('sku__name')
+        ).values(
+            'month',
+            'sku_name',
+            'value'
+        ).unarchived()
+
+
+# city
+class AvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return OutOfStockSnap.objects.annotate(
+            city_name=F('city__name'),
+            value=F('available_in_month'),
+            sku_name=F('sku__name')
+        ).values(
+            'city_name',
+            'sku_name',
+            'value'
+        ).unarchived()
+
+
+class NotAvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return OutOfStockSnap.objects.annotate(
+            city_name=F('city__name'),
+            value=F('not_available_in_month'),
+            sku_name=F('sku__name')
+        ).values(
+            'city_name',
+            'sku_name',
+            'value'
+        ).unarchived()
+
+
+class LessByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return OutOfStockSnap.objects.annotate(
+            city_name=F('city__name'),
+            value=F('less_available_in_month'),
+            sku_name=F('sku__name')
+        ).values(
+            'city_name',
+            'sku_name',
+            'value'
+        ).unarchived()
+
+
+class VisitByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return OutOfStockSnap.objects.annotate(
+            city_name=F('city__name'),
+            value=F('count'),
+        ).values(
+            'city_name',
+            'value'
+        ).unarchived()
