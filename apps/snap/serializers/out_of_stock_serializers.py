@@ -3,55 +3,67 @@ from rest_framework import serializers
 from apps.core.serializers import CSVFileInputSerializer, IdNameSerializer, IdNameCharSerializer
 from apps.report.serializers.price_monitor_serializers import AnswerPerCountryReportSerializer, \
     AnswerPerCityReportSerializer
-from apps.snap.models import PriceMonitorSnap
+from apps.snap.models import PriceMonitorSnap, OutOfStockSnap
 
 
-class ImportPriceMonitorSnapSerializer(CSVFileInputSerializer):
+class ImportOutOfStockSnapSerializer(CSVFileInputSerializer):
     pass
 
 
-class PriceMonitorSnapSerializer(serializers.ModelSerializer):
+class OutOfStockSnapSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PriceMonitorSnap
+        model = OutOfStockSnap
         fields = '__all__'
 
 
-class ListPriceMonitorSnapSerializer(PriceMonitorSnapSerializer):
+class ListOutOfStockSnapSerializer(OutOfStockSnapSerializer):
     country = IdNameSerializer(source='city.country')
     city = IdNameSerializer()
     category = IdNameCharSerializer(source='sku.category')
     brand = IdNameCharSerializer(source='sku.brand')
-    channel = IdNameSerializer()
+    channel = IdNameSerializer(source='store.channel')
+    store = IdNameSerializer()
+    retailer = IdNameSerializer(source='store.retailer')
     sku = IdNameCharSerializer()
 
-    class Meta(PriceMonitorSnapSerializer.Meta):
+    class Meta(OutOfStockSnapSerializer.Meta):
         fields = (
             'id',
             'date',
             'country',
             'city',
             'channel',
+            'retailer',
+            'store',
             'category',
             'brand',
             'sku',
             'count',
-            'min',
-            'min',
-            'max',
-            'mean',
-            'mode'
+            'not_available_in_month',
+            'less_available_in_month',
+            'available_in_month',
+            'not_available_by_store',
+            'less_available_by_store',
+            'available_by_store',
+            'not_available_by_city',
+            'less_available_by_city',
+            'available_by_city',
         )
 
 
-class UpdatePriceMonitorSnapSerializer(PriceMonitorSnapSerializer):
-    class Meta(PriceMonitorSnapSerializer.Meta):
+class UpdateOutOfStockSnapSerializer(OutOfStockSnapSerializer):
+    class Meta(OutOfStockSnapSerializer.Meta):
         fields = (
             'count',
-            'min',
-            'min',
-            'max',
-            'mean',
-            'mode'
+            'not_available_in_month',
+            'less_available_in_month',
+            'available_in_month',
+            'not_available_by_store',
+            'less_available_by_store',
+            'available_by_store',
+            'not_available_by_city',
+            'less_available_by_city',
+            'available_by_city',
         )
 
 

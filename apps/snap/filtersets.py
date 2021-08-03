@@ -40,3 +40,7 @@ class PriceMonitorSnapFilter(filters.FilterSet):
         label='category',
         lookup_expr='in'
     )
+
+
+class OutOfStockSnapFilter(PriceMonitorSnapFilter):
+    pass
