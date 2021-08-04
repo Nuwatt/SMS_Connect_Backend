@@ -23,7 +23,6 @@ class PriceMonitorSnapFilter(filters.FilterSet):
     date = filters.DateFromToRangeFilter(
         field_name='date',
         label='date',
-        widget=RangeWidget(attrs={'type': 'date'})
     )
     exact_date = filters.DateFilter(
         field_name='date',
