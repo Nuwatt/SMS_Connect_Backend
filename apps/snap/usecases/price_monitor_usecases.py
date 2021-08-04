@@ -171,7 +171,9 @@ class OverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             'max_value',
             'mean_value',
             'mode_value'
-        ).unarchived()
+        ).unarchived().filter(
+            max_value__gt=0
+        )
 
 
 class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
