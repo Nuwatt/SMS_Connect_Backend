@@ -171,9 +171,7 @@ class OverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             'max_value',
             'mean_value',
             'mode_value'
-        ).unarchived().filter(
-            max_value__gt=0
-        )
+        ).unarchived()
 
 
 class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
@@ -265,7 +263,9 @@ class BrandOverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             max_value=Max('max'),
             mean_value=Avg('mean'),
             mode_value=Subquery(snap_mode)
-        ).unarchived()
+        ).unarchived().filter(
+            max_value__gt=0
+        )
 
 
 class CountryMinPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
