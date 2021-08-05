@@ -37,3 +37,20 @@ class OutOfStockSnapAdmin(BaseModelAdmin):
         'sku',
         'store',
     ]
+
+
+@admin.register(models.ConsumerSnap)
+class ConsumerSnapAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'sku',
+    )
+    list_filter = BaseModelAdmin.list_filter + (
+        'sku__category',
+        'sku__brand',
+        'city__country',
+    )
+    raw_id_fields = [
+        'city',
+        'sku',
+        'channel'
+    ]

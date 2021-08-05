@@ -1,5 +1,4 @@
 from django_filters import rest_framework as filters
-from django_filters.widgets import RangeWidget
 
 from apps.core.filtersets import IdInFilter
 
@@ -42,4 +41,12 @@ class PriceMonitorSnapFilter(filters.FilterSet):
 
 
 class OutOfStockSnapFilter(PriceMonitorSnapFilter):
+    pass
+
+
+class ConsumerSnapFilter(PriceMonitorSnapFilter):
+    pass
+
+
+class DistributionCheckSnapFilter(PriceMonitorSnapFilter):
     pass

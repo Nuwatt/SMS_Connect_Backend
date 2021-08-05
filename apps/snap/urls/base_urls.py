@@ -8,5 +8,9 @@ urlpatterns = [
     path(
         'out-of-stock/',
         include('apps.snap.urls.out_of_stock_urls')
+    ),
+    path(
+        'consumer/',
+        include('apps.snap.urls.consumer_urls')
     )
 ]

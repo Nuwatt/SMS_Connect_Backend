@@ -4,6 +4,7 @@ from apps.core.models import BaseModel
 from apps.localize.models import City
 from apps.market.models import Channel, Store
 from apps.product.models import SKU, Category, Brand
+from apps.question.models import QuestionType
 
 
 class PriceMonitorSnap(BaseModel):
@@ -43,5 +44,45 @@ class OutOfStockSnap(BaseModel):
 
     def __str__(self):
         return '{}-Out-of-Monitor'.format(
+            self.date.strftime('%Y-%m-%d')
+        )
+
+
+class ConsumerSnap(BaseModel):
+    date = models.DateField()
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
+    sku = models.ForeignKey(SKU, on_delete=models.CASCADE)
+    count = models.IntegerField()
+    question_statement = models.CharField(max_length=250)
+    question_type = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
+    total_yes = models.FloatField(null=True, blank=True)
+    total_no = models.FloatField(null=True, blank=True)
+    # rating 1 to 3
+    rating_one_on_three = models.FloatField(null=True, blank=True)
+    rating_two_on_three = models.FloatField(null=True, blank=True)
+    rating_three_on_three = models.FloatField(null=True, blank=True)
+    # rating 1 to 5
+    rating_one_on_five = models.FloatField(null=True, blank=True)
+    rating_two_on_five = models.FloatField(null=True, blank=True)
+    rating_three_on_five = models.FloatField(null=True, blank=True)
+    rating_four_on_five = models.FloatField(null=True, blank=True)
+    rating_five_on_five = models.FloatField(null=True, blank=True)
+    # rating 1 to 10
+    rating_one_on_ten = models.FloatField(null=True, blank=True)
+    rating_two_on_ten = models.FloatField(null=True, blank=True)
+    rating_three_on_ten = models.FloatField(null=True, blank=True)
+    rating_four_on_ten = models.FloatField(null=True, blank=True)
+    rating_five_on_ten = models.FloatField(null=True, blank=True)
+    rating_six_on_ten = models.FloatField(null=True, blank=True)
+    rating_seven_on_ten = models.FloatField(null=True, blank=True)
+    rating_eight_on_ten = models.FloatField(null=True, blank=True)
+    rating_nine_on_ten = models.FloatField(null=True, blank=True)
+    rating_ten_on_ten = models.FloatField(null=True, blank=True)
+    # average numeric
+    average_numeric = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return '{}-Consumer-Snap'.format(
             self.date.strftime('%Y-%m-%d')
         )
