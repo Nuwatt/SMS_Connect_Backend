@@ -89,3 +89,10 @@ class ByCityOutOfStockSnapReportSerializer(serializers.Serializer):
 class VisitByCityOutOfStockSnapReportSerializer(serializers.Serializer):
     city = serializers.DateField(source='city_name')
     value = serializers.FloatField()
+
+
+class NotAvailableByWeekOutOfStockSnapReportSerializer(serializers.Serializer):
+    sku = serializers.CharField(source='sku_name')
+    week = serializers.IntegerField()
+    retailer = serializers.CharField(source='retailer_name')
+    store = serializers.CharField(source='store_name')

@@ -2,7 +2,8 @@ from datetime import datetime
 
 from django.db import IntegrityError
 from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
-from django.db.models.functions import TruncMonth
+from django.db.models.functions import TruncMonth, ExtractWeek
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
@@ -310,4 +311,28 @@ class VisitByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         ).values(
             'city_name',
             'value'
+        ).unarchived()
+
+
+class NotAvailableByWeekOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        current_week = now().isocalendar()[1]
+        return OutOfStockSnap.objects.filter(
+            not_available_by_store__gt=0
+        ).values(
+            'sku'
+        ).distinct().annotate(
+            completed_week=ExtractWeek('date'),
+            week=current_week - F('completed_week'),
+            sku_name=F('sku__name'),
+            store_name=F('store__name'),
+            retailer_name=F('store__retailer__name'),
+        ).values(
+            'week',
+            'sku_name',
+            'store_name',
+            'retailer_name'
         ).unarchived()

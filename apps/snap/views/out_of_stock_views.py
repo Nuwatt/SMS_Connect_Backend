@@ -109,6 +109,7 @@ class LessOutOfStockSnapReportView(BaseReportView):
     def get_queryset(self):
         return out_of_stock_usecases.LessOutOfStockSnapReportUseCase().execute()
 
+
 # city
 class AvailableByCityOutOfStockSnapReportView(BaseReportView):
     """
@@ -153,3 +154,13 @@ class VisitByCityOutOfStockSnapReportView(BaseReportView):
     def get_queryset(self):
         return out_of_stock_usecases.VisitByCityOutOfStockSnapReportUseCase().execute()
 
+
+class NotAvailableByWeekOutOfStockSnapReportView(BaseReportView):
+    """
+    Use this end-point to list not available by week report of out of stock snap
+    """
+    serializer_class = out_of_stock_serializers.NotAvailableByWeekOutOfStockSnapReportSerializer
+    filterset_class = OutOfStockSnapFilter
+
+    def get_queryset(self):
+        return out_of_stock_usecases.NotAvailableByWeekOutOfStockSnapReportUseCase().execute()
