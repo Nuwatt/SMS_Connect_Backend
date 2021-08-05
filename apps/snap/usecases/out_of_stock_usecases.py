@@ -201,7 +201,9 @@ class AvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             'month',
             'sku_name',
             'value'
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class NotAvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
@@ -217,7 +219,9 @@ class NotAvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             'month',
             'sku_name',
             'value'
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class LessOutOfStockSnapReportUseCase(usecases.BaseUseCase):
@@ -233,7 +237,9 @@ class LessOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             'month',
             'sku_name',
             'value'
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 # city
@@ -250,7 +256,9 @@ class AvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             'city_name',
             'sku_name',
             'value'
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class NotAvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
@@ -266,7 +274,9 @@ class NotAvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             'city_name',
             'sku_name',
             'value'
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class LessByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
@@ -282,7 +292,9 @@ class LessByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             'city_name',
             'sku_name',
             'value'
-        ).unarchived()
+        ).unarchived().filter(
+            value__gt=0
+        )
 
 
 class VisitByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
