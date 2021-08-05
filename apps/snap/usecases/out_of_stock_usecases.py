@@ -290,9 +290,11 @@ class VisitByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return OutOfStockSnap.objects.annotate(
+        return OutOfStockSnap.objects.values(
+            'city'
+        ).distinct().annotate(
             city_name=F('city__name'),
-            value=F('count'),
+            value=Sum('count'),
         ).values(
             'city_name',
             'value'
