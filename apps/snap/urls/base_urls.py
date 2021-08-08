@@ -12,5 +12,9 @@ urlpatterns = [
     path(
         'consumer/',
         include('apps.snap.urls.consumer_urls')
+    ),
+    path(
+        'distribution/',
+        include('apps.snap.urls.distribution_urls')
     )
 ]

@@ -48,5 +48,5 @@ class ConsumerSnapFilter(PriceMonitorSnapFilter):
     pass
 
 
-class DistributionCheckSnapFilter(PriceMonitorSnapFilter):
+class DistributionSnapFilter(PriceMonitorSnapFilter):
     pass

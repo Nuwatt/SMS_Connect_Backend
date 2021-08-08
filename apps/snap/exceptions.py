@@ -14,3 +14,7 @@ class OutOfStockSnapNotFound(NotFound):
 class ConsumerSnapNotFound(NotFound):
     default_detail = _('Consumer snap not found.')
 
+
+class DistributionSnapNotFound(NotFound):
+    default_detail = _('Distribution snap not found.')
+
