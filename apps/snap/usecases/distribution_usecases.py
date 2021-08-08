@@ -337,6 +337,6 @@ class ShareBrandByChannelDistributionSnapReportUseCase(usecases.BaseUseCase):
             sku_name=F('sku__brand__name'),
         ).values(
             'channel_name',
-            'brand_name',
+            'sku_name',
             'value'
         ).unarchived()
