@@ -52,6 +52,11 @@ urlpatterns = [
         name='delete-consumer-snap'
     ),
     path(
+        'bulk-delete',
+        consumer_views.BulkDeleteOutOfStockSnapView.as_view(),
+        name='bulk-delete-consumer-snap'
+    ),
+    path(
         'report/',
         include(report_urls)
     )

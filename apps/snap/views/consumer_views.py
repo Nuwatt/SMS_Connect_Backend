@@ -119,3 +119,15 @@ class NumericAverageConsumerSnapReportView(BaseReportView):
 
     def get_queryset(self):
         return consumer_usecases.NumericAverageConsumerSnapUseCase().execute()
+
+
+class BulkDeleteOutOfStockSnapView(generics.CreateWithMessageAPIView):
+    """
+    Use this end-point to delete consumer snap in bulk
+    """
+    serializer_class = consumer_serializers.BulkDeleteConsumerSnapSerializer
+
+    def perform_create(self, serializer):
+        return consumer_usecases.BulkDeleteConsumerSnapUseCase(
+            serializer=serializer
+        ).execute()

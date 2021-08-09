@@ -510,3 +510,11 @@ class NumericAverageConsumerSnapUseCase(usecases.BaseUseCase):
             'question_statement',
             'value'
         )
+
+
+class BulkDeleteConsumerSnapUseCase(usecases.CreateUseCase):
+    def _factory(self):
+        ConsumerSnap.objects.filter(
+            is_archived=False,
+            id__in=self._data.get('snap_ids')
+        ).archive()

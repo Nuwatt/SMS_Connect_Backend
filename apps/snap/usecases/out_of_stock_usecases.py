@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
+from django.db.models import F, Sum
 from django.db.models.functions import TruncMonth, ExtractWeek
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -336,3 +336,11 @@ class NotAvailableByWeekOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             'store_name',
             'retailer_name'
         ).unarchived()
+
+
+class BulkDeleteOutOfStockSnapUseCase(usecases.CreateUseCase):
+    def _factory(self):
+        OutOfStockSnap.objects.filter(
+            is_archived=False,
+            id__in=self._data.get('snap_ids')
+        ).archive()

@@ -164,3 +164,15 @@ class NotAvailableByWeekOutOfStockSnapReportView(BaseReportView):
 
     def get_queryset(self):
         return out_of_stock_usecases.NotAvailableByWeekOutOfStockSnapReportUseCase().execute()
+
+
+class BulkDeleteOutOfStockSnapView(generics.CreateWithMessageAPIView):
+    """
+    Use this end-point to delete out of stock snap in bulk
+    """
+    serializer_class = out_of_stock_serializers.BulkDeleteOutOfStockSnapSerializer
+
+    def perform_create(self, serializer):
+        return out_of_stock_usecases.BulkDeleteOutOfStockSnapUseCase(
+            serializer=serializer
+        ).execute()

@@ -406,3 +406,12 @@ class SKUPerChannelPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             'sku_name',
             'value'
         ).unarchived()
+
+
+class BulkDeletePriceMonitorSnapUseCase(usecases.CreateUseCase):
+    def _factory(self):
+        PriceMonitorSnap.objects.filter(
+            is_archived=False,
+            id__in=self._data.get('snap_ids')
+        ).archive()
+

@@ -94,3 +94,7 @@ class RatingOneToTenConsumerSnapReportSerializer(serializers.Serializer):
 
 class NumericAverageConsumerSnapReportSerializer(NumericQuestionReportSerializer):
     pass
+
+
+class BulkDeleteConsumerSnapSerializer(serializers.Serializer):
+    snap_ids = serializers.ListSerializer(child=serializers.IntegerField())

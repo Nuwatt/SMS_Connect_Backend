@@ -117,3 +117,7 @@ class ShareBrandByCountryDistributionSnapReportSerializer(serializers.Serializer
     country = serializers.CharField(source='country_name')
     brand = serializers.CharField(source='brand_name')
     value = serializers.FloatField()
+
+
+class BulkDeleteDistributionSnapSerializer(serializers.Serializer):
+    snap_ids = serializers.ListSerializer(child=serializers.IntegerField())

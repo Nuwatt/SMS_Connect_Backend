@@ -1,8 +1,7 @@
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
-from django.db.models.functions import TruncMonth
+from django.db.models import F, Sum
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
@@ -11,7 +10,7 @@ from apps.localize.models import Country, City
 from apps.market.models import Channel, Retailer, Store
 from apps.product.models import Category, Brand, SKU
 from apps.snap.exceptions import DistributionSnapNotFound
-from apps.snap.models import DistributionSnap, DistributionSnap
+from apps.snap.models import DistributionSnap
 
 
 class GetDistributionSnapUseCase(usecases.BaseUseCase):
@@ -340,3 +339,11 @@ class ShareBrandByChannelDistributionSnapReportUseCase(usecases.BaseUseCase):
             'sku_name',
             'value'
         ).unarchived()
+
+
+class BulkDeleteDistributionSnapUseCase(usecases.CreateUseCase):
+    def _factory(self):
+        DistributionSnap.objects.filter(
+            is_archived=False,
+            id__in=self._data.get('snap_ids')
+        ).archive()

@@ -207,3 +207,15 @@ class SKUPerChannelPriceMonitorSnapReportView(BaseReportView):
 
     def get_queryset(self):
         return price_monitor_usecases.SKUPerChannelPriceMonitorSnapReportUseCase().execute()
+
+
+class BulkDeletePriceMonitorSnapView(generics.CreateWithMessageAPIView):
+    """
+    Use this end-point to delete price monitor snap in bulk
+    """
+    serializer_class = price_monitor_serializers.BulkDeletePriceMonitorSnapSerializer
+
+    def perform_create(self, serializer):
+        return price_monitor_usecases.BulkDeletePriceMonitorSnapUseCase(
+            serializer=serializer
+        ).execute()

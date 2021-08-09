@@ -96,3 +96,7 @@ class NotAvailableByWeekOutOfStockSnapReportSerializer(serializers.Serializer):
     week = serializers.IntegerField()
     retailer = serializers.CharField(source='retailer_name')
     store = serializers.CharField(source='store_name')
+
+
+class BulkDeleteOutOfStockSnapSerializer(serializers.Serializer):
+    snap_ids = serializers.ListSerializer(child=serializers.IntegerField())

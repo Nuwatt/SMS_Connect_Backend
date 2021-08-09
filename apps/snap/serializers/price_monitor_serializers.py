@@ -95,3 +95,7 @@ class SKUPerChannelPriceMonitorSnapReportSerializer(serializers.Serializer):
     channel = serializers.CharField(source='channel_name')
     sku = serializers.CharField(source='sku_name')
     value = serializers.FloatField()
+
+
+class BulkDeletePriceMonitorSnapSerializer(serializers.Serializer):
+    snap_ids = serializers.ListSerializer(child=serializers.IntegerField())

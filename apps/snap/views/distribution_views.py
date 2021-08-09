@@ -174,3 +174,15 @@ class ShareBrandByChannelDistributionSnapReportView(BaseReportView):
 
     def get_queryset(self):
         return distribution_usecases.ShareBrandByChannelDistributionSnapReportUseCase().execute()
+
+
+class BulkDeleteDistributionSnapView(generics.CreateWithMessageAPIView):
+    """
+    Use this end-point to delete distribution snap in bulk
+    """
+    serializer_class = distribution_serializers.BulkDeleteDistributionSnapSerializer
+
+    def perform_create(self, serializer):
+        return distribution_usecases.BulkDeleteDistributionSnapUseCase(
+            serializer=serializer
+        ).execute()
