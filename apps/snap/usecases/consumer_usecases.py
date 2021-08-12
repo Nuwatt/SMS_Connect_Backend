@@ -98,6 +98,7 @@ class ImportConsumerSnapUseCase(usecases.ImportCSVUseCase):
                     category=category_data[item.get('Category')],
                     is_archived=False
                 )
+                sku.country.add(country_data[item.get('Country')])
                 sku_data[item.get('SKU')] = sku
 
             if item.get('Question Type') not in sku_data:

@@ -108,6 +108,7 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
                     category=category_data[item.get('Category')],
                     is_archived=False
                 )
+                sku.country.add(country_data[item.get('Country')])
                 sku_data[item.get('SKU')] = sku
 
             snap, _created = DistributionSnap.objects.update_or_create(

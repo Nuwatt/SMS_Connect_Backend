@@ -89,6 +89,7 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
                     is_archived=False
                 )
                 sku_data[item.get('SKU')] = sku
+                sku.country.add(country_data[item.get('Country')])
 
             snap, _created = PriceMonitorSnap.objects.update_or_create(
                 city=city_data[item.get('City')],
