@@ -333,10 +333,10 @@ class ShareBrandByChannelDistributionSnapReportUseCase(usecases.BaseUseCase):
         ).distinct().annotate(
             value=Sum('share_brand_by_channel'),
             channel_name=F('store__channel__name'),
-            sku_name=F('sku__brand__name'),
+            brand_name=F('sku__brand__name'),
         ).values(
             'channel_name',
-            'sku_name',
+            'brand_name',
             'value'
         ).unarchived()
 
