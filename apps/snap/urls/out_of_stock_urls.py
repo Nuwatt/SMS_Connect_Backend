@@ -63,12 +63,12 @@ urlpatterns = [
         name='list-out-of-stock-snap'
     ),
     path(
-        '<str:price_monitor_snap_id>/update',
+        '<str:out_of_stock_snap_id>/update',
         out_of_stock_views.UpdateOutOfStockSnapView.as_view(),
         name='update-out-of-stock-snap'
     ),
     path(
-        '<str:price_monitor_snap_id>/delete',
+        '<str:out_of_stock_snap_id>/delete',
         out_of_stock_views.DeleteOutOfStockSnapView.as_view(),
         name='delete-out-of-stock-snap'
     ),

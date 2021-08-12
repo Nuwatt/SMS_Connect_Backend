@@ -42,12 +42,12 @@ urlpatterns = [
         name='list-consumer-snap'
     ),
     path(
-        '<str:price_monitor_snap_id>/update',
+        '<str:consumer_snap_id>/update',
         consumer_views.UpdateConsumerSnapView.as_view(),
         name='update-consumer-snap'
     ),
     path(
-        '<str:price_monitor_snap_id>/delete',
+        '<str:consumer_snap_id>/delete',
         consumer_views.DeleteConsumerSnapView.as_view(),
         name='delete-consumer-snap'
     ),

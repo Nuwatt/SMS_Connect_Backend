@@ -67,12 +67,12 @@ urlpatterns = [
         name='list-distribution-snap'
     ),
     path(
-        '<str:price_monitor_snap_id>/update',
+        '<str:distribution_snap_id>/update',
         distribution_views.UpdateDistributionSnapView.as_view(),
         name='update-distribution-snap'
     ),
     path(
-        '<str:price_monitor_snap_id>/delete',
+        '<str:distribution_snap_id>/delete',
         distribution_views.DeleteDistributionSnapView.as_view(),
         name='delete-distribution-snap'
     ),
