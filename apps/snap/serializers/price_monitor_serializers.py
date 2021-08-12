@@ -21,7 +21,7 @@ class ListPriceMonitorSnapSerializer(PriceMonitorSnapSerializer):
     city = IdNameSerializer()
     category = IdNameCharSerializer(source='sku.category')
     brand = IdNameCharSerializer(source='sku.brand')
-    channel = IdNameCharSerializer()
+    channel = IdNameSerializer()
     sku = IdNameCharSerializer()
 
     class Meta(PriceMonitorSnapSerializer.Meta):
@@ -60,7 +60,7 @@ class OverviewPriceMonitorSnapReport(serializers.Serializer):
     min = serializers.FloatField(source='min_value')
     max = serializers.FloatField(source='max_value')
     mode = serializers.FloatField(source='mode_value')
-    mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
+    mean = serializers.DecimalField(max_digits=10, decimal_places=2, source='mean_value')
 
 
 class MonthPriceMonitorSnapReportSerializer(serializers.Serializer):
@@ -74,13 +74,13 @@ class BrandoverviewPriceMonitorSnapReportSerializer(serializers.Serializer):
     min = serializers.FloatField(source='min_value')
     max = serializers.FloatField(source='max_value')
     mode = serializers.FloatField(source='mode_value')
-    mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
+    mean = serializers.DecimalField(max_digits=10, decimal_places=2, source='mean_value')
 
 
 class CountryPriceMonitorSnapReportSerializer(serializers.Serializer):
     country = serializers.CharField(source='country_name')
     sku = serializers.CharField(source='sku_name')
-    value = serializers.FloatField()
+    value = serializers.DecimalField(max_digits=10, decimal_places=2)
 
 
 class VisitPerCityPriceMonitorSnapReportSerializer(AnswerPerCityReportSerializer):
@@ -95,3 +95,7 @@ class SKUPerChannelPriceMonitorSnapReportSerializer(serializers.Serializer):
     channel = serializers.CharField(source='channel_name')
     sku = serializers.CharField(source='sku_name')
     value = serializers.FloatField()
+
+
+class BulkDeletePriceMonitorSnapSerializer(serializers.Serializer):
+    snap_ids = serializers.ListSerializer(child=serializers.IntegerField())

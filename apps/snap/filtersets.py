@@ -1,5 +1,4 @@
 from django_filters import rest_framework as filters
-from django_filters.widgets import RangeWidget
 
 from apps.core.filtersets import IdInFilter
 
@@ -23,7 +22,6 @@ class PriceMonitorSnapFilter(filters.FilterSet):
     date = filters.DateFromToRangeFilter(
         field_name='date',
         label='date',
-        widget=RangeWidget(attrs={'type': 'date'})
     )
     exact_date = filters.DateFilter(
         field_name='date',
@@ -40,3 +38,15 @@ class PriceMonitorSnapFilter(filters.FilterSet):
         label='category',
         lookup_expr='in'
     )
+
+
+class OutOfStockSnapFilter(PriceMonitorSnapFilter):
+    pass
+
+
+class ConsumerSnapFilter(PriceMonitorSnapFilter):
+    pass
+
+
+class DistributionSnapFilter(PriceMonitorSnapFilter):
+    pass
