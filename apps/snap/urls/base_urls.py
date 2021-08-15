@@ -4,5 +4,17 @@ urlpatterns = [
     path(
         'price-monitor/',
         include('apps.snap.urls.price_monitor_urls')
+    ),
+    path(
+        'out-of-stock/',
+        include('apps.snap.urls.out_of_stock_urls')
+    ),
+    path(
+        'consumer/',
+        include('apps.snap.urls.consumer_urls')
+    ),
+    path(
+        'distribution/',
+        include('apps.snap.urls.distribution_urls')
     )
 ]

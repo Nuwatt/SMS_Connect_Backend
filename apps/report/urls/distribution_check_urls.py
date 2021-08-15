@@ -15,7 +15,7 @@ urlpatterns = [
         distribution_check_views.VisitPerCityReportView.as_view(),
         name='visit-per-city-report'
     ),
-    # visit per city
+    # visit per channel
     path(
         'visit-per-channel',
         distribution_check_views.VisitPerChannelReportView.as_view(),
