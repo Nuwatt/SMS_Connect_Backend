@@ -6,7 +6,7 @@ class SKUMinMaxReportSerializer(serializers.Serializer):
     max = serializers.FloatField(default=0)
     min = serializers.FloatField(default=0)
     mode = serializers.FloatField(default=0)
-    mean = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
+    mean = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
 
 
 class BrandMinMaxReportSerializer(serializers.Serializer):
@@ -14,29 +14,29 @@ class BrandMinMaxReportSerializer(serializers.Serializer):
     max = serializers.FloatField(default=0)
     min = serializers.FloatField(default=0)
     mode = serializers.FloatField(default=0)
-    mean = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
+    mean = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
 
 
 class SKUMonthReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
     month = serializers.DateTimeField(format='%b')
-    value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
 
 
 class CountryReportSerializer(serializers.Serializer):
     country = serializers.CharField()
-    value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
 
 
 class CityReportSerializer(serializers.Serializer):
     city = serializers.CharField()
-    value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
 
 
 class SKUCountryReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
     country = serializers.CharField(source='country_name')
-    value = serializers.DecimalField(default=0, decimal_places=2, max_digits=10)
+    value = serializers.DecimalField(default=0, decimal_places=1, max_digits=10)
 
 
 class AnswerReportSerializer(serializers.Serializer):

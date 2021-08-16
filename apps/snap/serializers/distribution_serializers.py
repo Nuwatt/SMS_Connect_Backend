@@ -5,9 +5,14 @@ from apps.core.serializers import (
     IdNameSerializer,
     IdNameCharSerializer
 )
-from apps.report.serializers.distribution_check_serializers import VisitPerCountryReportSerializer, \
-    VisitPerCityReportSerializer, VisitPerChannelReportSerializer, SKUPerCityReportSerializer, \
-    SKUPerCountryReportSerializer, SKUPerChannelReportSerializer
+from apps.report.serializers.distribution_check_serializers import (
+    VisitPerCountryReportSerializer,
+    VisitPerCityReportSerializer,
+    VisitPerChannelReportSerializer,
+    SKUPerCityReportSerializer,
+    SKUPerCountryReportSerializer,
+    SKUPerChannelReportSerializer
+)
 from apps.report.serializers.price_monitor_serializers import (
     AnswerPerCountryReportSerializer,
     AnswerPerCityReportSerializer

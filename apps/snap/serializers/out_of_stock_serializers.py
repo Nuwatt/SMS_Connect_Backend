@@ -1,8 +1,14 @@
 from rest_framework import serializers
 
-from apps.core.serializers import CSVFileInputSerializer, IdNameSerializer, IdNameCharSerializer
-from apps.report.serializers.price_monitor_serializers import AnswerPerCountryReportSerializer, \
+from apps.core.serializers import (
+    CSVFileInputSerializer,
+    IdNameSerializer,
+    IdNameCharSerializer
+)
+from apps.report.serializers.price_monitor_serializers import (
+    AnswerPerCountryReportSerializer,
     AnswerPerCityReportSerializer
+)
 from apps.snap.models import PriceMonitorSnap, OutOfStockSnap
 
 
