@@ -63,23 +63,23 @@ class UpdatePriceMonitorSnapSerializer(PriceMonitorSnapSerializer):
 
 class OverviewPriceMonitorSnapReport(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    min = serializers.FloatField(source='min_value')
-    max = serializers.FloatField(source='max_value')
-    mode = serializers.FloatField(source='mode_value')
+    min = serializers.DecimalField(max_digits=10, decimal_places=1, source='min_value')
+    max = serializers.DecimalField(max_digits=10, decimal_places=1, source='max_value')
+    mode = serializers.DecimalField(max_digits=10, decimal_places=1, source='mode_value')
     mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
 
 
 class MonthPriceMonitorSnapReportSerializer(serializers.Serializer):
     month = serializers.DateField(format='%b')
     sku = serializers.CharField(source='sku_name')
-    value = serializers.FloatField()
+    value = serializers.DecimalField(max_digits=10, decimal_places=1)
 
 
 class BrandoverviewPriceMonitorSnapReportSerializer(serializers.Serializer):
     brand = serializers.CharField(source='brand_name')
-    min = serializers.FloatField(source='min_value')
-    max = serializers.FloatField(source='max_value')
-    mode = serializers.FloatField(source='mode_value')
+    min = serializers.DecimalField(max_digits=10, decimal_places=1, source='min_value')
+    max = serializers.DecimalField(max_digits=10, decimal_places=1, source='max_value')
+    mode = serializers.DecimalField(max_digits=10, decimal_places=1, source='mode_value')
     mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
 
 
@@ -100,7 +100,7 @@ class VisitPerCountryPriceMonitorSnapReportSerializer(AnswerPerCountryReportSeri
 class SKUPerChannelPriceMonitorSnapReportSerializer(serializers.Serializer):
     channel = serializers.CharField(source='channel_name')
     sku = serializers.CharField(source='sku_name')
-    value = serializers.FloatField()
+    value = serializers.DecimalField(max_digits=10, decimal_places=1)
 
 
 class BulkDeletePriceMonitorSnapSerializer(serializers.Serializer):
