@@ -7,11 +7,8 @@ from apps.core.serializers import (
 )
 from apps.report.serializers.consumer_questionnaire_serializers import (
     YesNoQuestionReportSerializer,
-    RatingOneToThreeReportSerializer,
-    RatingOneToFiveReportSerializer,
-    RatingOneToTenReportSerializer, NumericQuestionReportSerializer
+    NumericQuestionReportSerializer
 )
-
 from apps.snap.models import ConsumerSnap
 
 
