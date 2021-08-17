@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
@@ -24,12 +25,26 @@ class ImportPriceMonitorSnapView(generics.CreateWithMessageAPIView):
         ).execute()
 
 
+class ExportPriceMonitorSnapView(generics.GenericAPIView):
+    """
+    Use this end-point to export price monitor to csv file
+    """
+
+    def get(self, *args, **kwargs):
+        return price_monitor_usecases.ExportPriceMonitorSnapUseCase().execute()
+
+
 class ListPriceMonitorSnapView(generics.ListAPIView):
     """
     Use this end-point to list all price monitor snap data
     """
     serializer_class = price_monitor_serializers.ListPriceMonitorSnapSerializer
     permission_classes = (IsPortalUser,)
+    filter_backends = [SearchFilter]
+    search_fields = [
+        'city__country__name', 'city__name', 'channel__name',
+        'sku__category__name', 'sku__brand__name', 'sku__name'
+    ]
 
     def get_queryset(self):
         return price_monitor_usecases.ListPriceMonitorSnapUseCase().execute()
