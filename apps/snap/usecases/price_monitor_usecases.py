@@ -1,8 +1,10 @@
+import csv
 from datetime import datetime
 
 from django.db import IntegrityError
 from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
 from django.db.models.functions import TruncMonth
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
@@ -114,6 +116,36 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
             raise ValidationError({
                 'non_field_errors': _('CSV Contains invalid ids.')
             })
+
+
+class ExportPriceMonitorSnapUseCase(usecases.BaseUseCase):
+    columns = [
+        'Date', 'Country', 'City', 'Channel', 'Category', 'Brand',
+        'SKU', 'Count', 'Mode', 'Mean', 'Max', 'Min'
+    ]
+
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        response = HttpResponse(content_type='text/csv')
+        filename = 'price_monitor_snap.csv'
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+
+        # 1. write headers
+        writer = csv.writer(response)
+        writer.writerow(self.columns)
+
+        # 2. write questions
+        snaps = PriceMonitorSnap.objects.unarchived().values(
+            'date', 'city__country__name', 'city__name', 'channel__name', 'sku__category__name',
+            'sku__brand__name', 'sku__name', 'count', 'mode', 'mean', 'max', 'min'
+        )
+        for snap in snaps:
+            writer.writerow([
+                *snap.values()
+            ])
+        return response
 
 
 class ListPriceMonitorSnapUseCase(usecases.BaseUseCase):
@@ -415,4 +447,3 @@ class BulkDeletePriceMonitorSnapUseCase(usecases.CreateUseCase):
             is_archived=False,
             id__in=self._data.get('snap_ids')
         ).archive()
-

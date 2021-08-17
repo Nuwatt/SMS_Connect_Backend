@@ -77,6 +77,11 @@ urlpatterns = [
         name='import-price-monitor-snap'
     ),
     path(
+        'export',
+        price_monitor_views.ExportPriceMonitorSnapView.as_view(),
+        name='export-price-monitor-snap'
+    ),
+    path(
         'list',
         price_monitor_views.ListPriceMonitorSnapView.as_view(),
         name='list-price-monitor-snap'
