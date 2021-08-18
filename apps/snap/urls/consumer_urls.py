@@ -37,6 +37,11 @@ urlpatterns = [
         name='import-consumer-snap'
     ),
     path(
+        'export',
+        consumer_views.ExportConsumerSnapView.as_view(),
+        name='export-consumer-snap'
+    ),
+    path(
         'list',
         consumer_views.ListConsumerSnapView.as_view(),
         name='list-consumer-snap'

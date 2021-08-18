@@ -1,8 +1,10 @@
+import csv
 from datetime import datetime
 
 from django.db import IntegrityError
 from django.db.models import F, Sum
 from django.db.models.functions import TruncMonth, ExtractWeek
+from django.http import HttpResponse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -345,3 +347,41 @@ class BulkDeleteOutOfStockSnapUseCase(usecases.CreateUseCase):
             is_archived=False,
             id__in=self._data.get('snap_ids')
         ).archive()
+
+
+class ExportOutOfStockSnapUseCase(usecases.BaseUseCase):
+    columns = [
+        'Date', 'Country', 'City', 'Channel', 'Retailer', 'Store',
+        'Category', 'Brand', 'SKU', 'Count', 'Not Available In Month',
+        'Less Available In Month', 'Available In Month', 'Not Available By Store',
+        'Less Available By Store', 'Available By Store', 'Not Available By City',
+        'Less Available By City', 'Available By City'
+    ]
+
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        response = HttpResponse(content_type='text/csv')
+        filename = 'out_of_stock_snap.csv'
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+
+        # 1. write headers
+        writer = csv.writer(response)
+        writer.writerow(self.columns)
+
+        # 2. write questions
+        snaps = OutOfStockSnap.objects.unarchived().values(
+            'date', 'city__country__name', 'city__name', 'store__channel__name',
+            'store__retailer__name', 'store__name', 'sku__category__name',
+            'sku__brand__name', 'sku__name', 'count', 'not_available_in_month',
+            'less_available_in_month', 'available_in_month',
+            'not_available_by_store', 'less_available_by_store',
+            'available_by_store', 'not_available_by_city',
+            'less_available_by_city', 'available_by_city',
+        )
+        for snap in snaps:
+            writer.writerow([
+                *snap.values()
+            ])
+        return response

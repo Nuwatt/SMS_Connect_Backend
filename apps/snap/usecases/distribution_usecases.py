@@ -1,7 +1,9 @@
+import csv
 from datetime import datetime
 
 from django.db import IntegrityError
 from django.db.models import F, Sum
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
@@ -34,7 +36,7 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
 
     valid_columns = [
         'Date', 'Country', 'City', 'Channel', 'Retailer', 'Store', 'Category', 'Brand', 'SKU', 'Count',
-        'SKU By City', 'SKU By Country', 'SKU By Channel', 'Brand By Channel', 'Brand By City', 'Brand By Country',
+        'SKU By City', 'SKU By Country', 'SKU By Channel', 'Brand By City', 'Brand By Country',
         'Share Brand By Country', 'Share Brand By Channel', 'Share SKU By Channel', 'Share SKU By Country'
     ]
 
@@ -348,3 +350,38 @@ class BulkDeleteDistributionSnapUseCase(usecases.CreateUseCase):
             is_archived=False,
             id__in=self._data.get('snap_ids')
         ).archive()
+
+
+class ExportDistributionSnapUseCase(usecases.BaseUseCase):
+    columns = [
+        'Date', 'Country', 'City', 'Channel', 'Retailer', 'Store', 'Category', 'Brand', 'SKU', 'Count',
+        'SKU By City', 'SKU By Country', 'SKU By Channel', 'Brand By City', 'Brand By Country',
+        'Share Brand By Country', 'Share Brand By Channel', 'Share SKU By Channel', 'Share SKU By Country'
+    ]
+
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        response = HttpResponse(content_type='text/csv')
+        filename = 'distribution_snap_snap.csv'
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+
+        # 1. write headers
+        writer = csv.writer(response)
+        writer.writerow(self.columns)
+
+        # 2. write questions
+        snaps = DistributionSnap.objects.unarchived().values(
+            'date', 'city__country__name', 'city__name', 'store__channel__name',
+            'store__retailer__name', 'store__name', 'sku__category__name',
+            'sku__brand__name', 'sku__name', 'count',
+            'sku_by_city', 'sku_by_country', 'sku_by_channel', 'brand_by_city',
+            'brand_by_country', 'share_brand_by_country', 'share_brand_by_channel',
+            'share_sku_by_channel', 'share_sku_by_country'
+        )
+        for snap in snaps:
+            writer.writerow([
+                *snap.values()
+            ])
+        return response

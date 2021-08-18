@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
@@ -30,6 +31,12 @@ class ListDistributionSnapView(generics.ListAPIView):
     """
     serializer_class = distribution_serializers.ListDistributionSnapSerializer
     permission_classes = (IsPortalUser,)
+    filter_backends = [SearchFilter]
+    search_fields = [
+        'city__country__name', 'city__name', 'store__channel__name',
+        'store__retailer__name', 'store__name',
+        'sku__category__name', 'sku__brand__name', 'sku__name'
+    ]
 
     def get_queryset(self):
         return distribution_usecases.ListDistributionSnapUseCase().execute()
@@ -186,3 +193,12 @@ class BulkDeleteDistributionSnapView(generics.CreateWithMessageAPIView):
         return distribution_usecases.BulkDeleteDistributionSnapUseCase(
             serializer=serializer
         ).execute()
+
+
+class ExportDistributionSnapView(generics.GenericAPIView):
+    """
+    Use this end-point to export distribution snap to csv file
+    """
+
+    def get(self, *args, **kwargs):
+        return distribution_usecases.ExportDistributionSnapUseCase().execute()
