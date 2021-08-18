@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
@@ -30,6 +31,11 @@ class ListConsumerSnapView(generics.ListAPIView):
     """
     serializer_class = consumer_serializers.ListConsumerSnapSerializer
     permission_classes = (IsPortalUser,)
+    filter_backends = [SearchFilter]
+    search_fields = [
+        'city__country__name', 'city__name', 'channel__name',
+        'sku__category__name', 'sku__brand__name', 'sku__name'
+    ]
 
     def get_queryset(self):
         return consumer_usecases.ListConsumerSnapUseCase().execute()
@@ -131,3 +137,12 @@ class BulkDeleteOutOfStockSnapView(generics.CreateWithMessageAPIView):
         return consumer_usecases.BulkDeleteConsumerSnapUseCase(
             serializer=serializer
         ).execute()
+
+
+class ExportConsumerSnapView(generics.GenericAPIView):
+    """
+    Use this end-point to export consumer snap to csv file
+    """
+
+    def get(self, *args, **kwargs):
+        return consumer_usecases.ExportConsumerSnapUseCase().execute()

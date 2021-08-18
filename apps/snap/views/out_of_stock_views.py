@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
@@ -30,6 +31,12 @@ class ListOutOfStockSnapView(generics.ListAPIView):
     """
     serializer_class = out_of_stock_serializers.ListOutOfStockSnapSerializer
     permission_classes = (IsPortalUser,)
+    filter_backends = [SearchFilter]
+    search_fields = [
+        'city__country__name', 'city__name', 'store__channel__name',
+        'store__retailer__name', 'store__name',
+        'sku__category__name', 'sku__brand__name', 'sku__name'
+    ]
 
     def get_queryset(self):
         return out_of_stock_usecases.ListOutOfStockSnapUseCase().execute()
@@ -176,3 +183,12 @@ class BulkDeleteOutOfStockSnapView(generics.CreateWithMessageAPIView):
         return out_of_stock_usecases.BulkDeleteOutOfStockSnapUseCase(
             serializer=serializer
         ).execute()
+
+
+class ExportOutOfStockSnapView(generics.GenericAPIView):
+    """
+    Use this end-point to export out of stock to csv file
+    """
+
+    def get(self, *args, **kwargs):
+        return out_of_stock_usecases.ExportOutOfStockSnapUseCase().execute()

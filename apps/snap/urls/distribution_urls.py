@@ -62,6 +62,11 @@ urlpatterns = [
         name='import-distribution-snap'
     ),
     path(
+        'export',
+        distribution_views.ExportDistributionSnapView.as_view(),
+        name='export-distribution-snap'
+    ),
+    path(
         'list',
         distribution_views.ListDistributionSnapView.as_view(),
         name='list-distribution-snap'

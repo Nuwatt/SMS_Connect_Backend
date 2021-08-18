@@ -58,6 +58,11 @@ urlpatterns = [
         name='import-out-of-stock-snap'
     ),
     path(
+        'export',
+        out_of_stock_views.ExportOutOfStockSnapView.as_view(),
+        name='export-out-of-stock-snap'
+    ),
+    path(
         'list',
         out_of_stock_views.ListOutOfStockSnapView.as_view(),
         name='list-out-of-stock-snap'
