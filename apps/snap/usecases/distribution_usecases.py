@@ -9,10 +9,8 @@ from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
 from apps.localize.models import Country, City
-from apps.market.models import Channel, Retailer, Store
-from apps.product.models import Category, Brand, SKU
 from apps.snap.exceptions import DistributionSnapNotFound
-from apps.snap.models import DistributionSnap
+from apps.snap.models import DistributionSnap, SnapChannel, SnapRetailer, SnapStore, SnapCategory, SnapBrand, SnapSKU
 
 
 class GetDistributionSnapUseCase(usecases.BaseUseCase):
@@ -67,21 +65,21 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
                 city_data[item.get('City')] = city
 
             if item.get('Channel') not in channel_data:
-                channel, _created = Channel.objects.get_or_create(
+                channel, _created = SnapChannel.objects.get_or_create(
                     name=item.get('Channel'),
                     is_archived=False
                 )
                 channel_data[item.get('Channel')] = channel
 
             if item.get('Retailer') not in retailer_data:
-                retailer, _created = Retailer.objects.get_or_create(
+                retailer, _created = SnapRetailer.objects.get_or_create(
                     name=item.get('Retailer'),
                     is_archived=False
                 )
                 retailer_data[item.get('Retailer')] = retailer
 
             if item.get('Store') not in store_data:
-                store, _created = Store.objects.get_or_create(
+                store, _created = SnapStore.objects.get_or_create(
                     name=item.get('Store'),
                     channel=channel_data[item.get('Channel')],
                     retailer=retailer_data[item.get('Retailer')],
@@ -90,21 +88,21 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
                 store_data[item.get('Store')] = store
 
             if item.get('Category') not in category_data:
-                category, _created = Category.objects.get_or_create(
+                category, _created = SnapCategory.objects.get_or_create(
                     name=item.get('Category'),
                     is_archived=False
                 )
                 category_data[item.get('Category')] = category
 
             if item.get('Brand') not in brand_data:
-                brand, _created = Brand.objects.get_or_create(
+                brand, _created = SnapBrand.objects.get_or_create(
                     name=item.get('Brand'),
                     is_archived=False
                 )
                 brand_data[item.get('Brand')] = brand
 
             if item.get('SKU') not in sku_data:
-                sku, _created = SKU.objects.get_or_create(
+                sku, _created = SnapSKU.objects.get_or_create(
                     name=item.get('SKU'),
                     brand=brand_data[item.get('Brand')],
                     category=category_data[item.get('Category')],
@@ -117,7 +115,7 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
                 city=city_data[item.get('City')],
                 store=store_data[item.get('Store')],
                 sku=sku_data[item.get('SKU')],
-                date=datetime.strptime(item.get('Date'), "%m/%d/%Y").date(),
+                date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
                 defaults={
                     'count': item.get('Count'),
                     'sku_by_city': item.get('SKU By City'),
