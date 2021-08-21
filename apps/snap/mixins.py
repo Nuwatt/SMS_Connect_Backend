@@ -41,14 +41,14 @@ class DistributionSnapMixin:
 class SnapBrandMixin:
     def get_snap_brand(self, *args, **kwargs):
         return GetSnapBrandUseCase(
-            snap_brand_id=self.kwargs.get('brand_snap_id')
+            snap_brand_id=self.kwargs.get('snap_brand_id')
         ).execute()
 
 
 class SnapSKUMixin:
     def get_snap_sku(self, *args, **kwargs):
         return GetSnapSKUUseCase(
-            snap_sku_id=self.kwargs.get('sku_snap_id')
+            snap_sku_id=self.kwargs.get('snap_sku_id')
         ).execute()
 
 

@@ -1,13 +1,9 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.db import transaction
-from django.utils.translation import gettext_lazy as _
-
 from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
-from apps.localize.models import Country
 from apps.product.exceptions import SKUNotFound
-from apps.product.models import SKU, Category, Brand
+from apps.product.models import SKU
 from apps.snap.models import SnapSKU
 
 
