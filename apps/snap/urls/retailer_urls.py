@@ -19,12 +19,12 @@ urlpatterns = [
         name='basic-list-snap-retailer'
     ),
     path(
-        '<str:retailer_id>/update',
+        '<str:snap_retailer_id>/update',
         retailer_views.UpdateSnapRetailerView.as_view(),
         name='update-snap-retailer'
     ),
     path(
-        '<str:retailer_id>/delete',
+        '<str:snap_retailer_id>/delete',
         retailer_views.DeleteSnapRetailerView.as_view(),
         name='delete-snap-retailer'
     )

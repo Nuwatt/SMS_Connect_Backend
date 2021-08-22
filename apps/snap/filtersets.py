@@ -144,7 +144,7 @@ class SnapRetailerFilter(filters.FilterSet):
         label='city'
     )
     country = IdInFilter(
-        field_name='store__city__country',
+        field_name='snapstore__city__country',
         lookup_expr='in',
         label='country',
         distinct=True

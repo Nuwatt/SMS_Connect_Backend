@@ -20,13 +20,13 @@ urlpatterns = [
         name='basic-list-snap-store'
     ),
     path(
-        '<str:store_id>/update',
+        '<str:snap_store_id>/update',
         store_views.UpdateSnapStoreView.as_view(),
         name='update-snap-store'
 
     ),
     path(
-        '<str:store_id>/delete',
+        '<str:snap_store_id>/delete',
         store_views.DeleteSnapStoreView.as_view(),
         name='delete-snap-store'
 

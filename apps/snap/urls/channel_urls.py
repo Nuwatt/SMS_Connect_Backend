@@ -14,12 +14,12 @@ urlpatterns = [
         name='list-snap-channel'
     ),
     path(
-        '<str:channel_id>/update',
+        '<str:snap_channel_id>/update',
         channel_views.UpdateSnapChannelView.as_view(),
         name='update-snap-channel'
     ),
     path(
-        '<str:channel_id>/delete',
+        '<str:snap_channel_id>/delete',
         channel_views.DeleteSnapChannelView.as_view(),
         name='delete-snap-channel'
     )
