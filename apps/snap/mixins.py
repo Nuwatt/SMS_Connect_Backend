@@ -55,7 +55,7 @@ class SnapSKUMixin:
 class SnapCategoryMixin:
     def get_snap_category(self, *args, **kwargs):
         return GetSnapCategoryUseCase(
-            snap_category_id=self.kwargs.get('category_snap_id')
+            snap_category_id=self.kwargs.get('snap_category_id')
         ).execute()
 
 
