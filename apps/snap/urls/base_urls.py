@@ -16,5 +16,30 @@ urlpatterns = [
     path(
         'distribution/',
         include('apps.snap.urls.distribution_urls')
-    )
+    ),
+    # ----operations----
+    path(
+        'snap-category/',
+        include('apps.snap.urls.category_urls')
+    ),
+    path(
+        'snap-brand/',
+        include('apps.snap.urls.brand_urls')
+    ),
+    path(
+        'snap-sku/',
+        include('apps.snap.urls.sku_urls')
+    ),
+    path(
+        'snap-channel/',
+        include('apps.snap.urls.channel_urls')
+    ),
+    path(
+        'snap-retailer/',
+        include('apps.snap.urls.retailer_urls')
+    ),
+    path(
+        'snap-store/',
+        include('apps.snap.urls.store_urls')
+    ),
 ]
