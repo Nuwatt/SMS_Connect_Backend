@@ -82,7 +82,7 @@ class SnapSKUFilter(filters.FilterSet):
 
 class SnapBrandFilter(filters.FilterSet):
     country = IdInFilter(
-        field_name='sku__country',
+        field_name='snapsku__country',
         lookup_expr='in',
         label='country',
         distinct=True
@@ -97,7 +97,7 @@ class SnapBrandFilter(filters.FilterSet):
 
 class SnapCategoryFilter(filters.FilterSet):
     country = IdInFilter(
-        field_name='sku__country',
+        field_name='snapsku__country',
         lookup_expr='in',
         label='country',
         distinct=True
