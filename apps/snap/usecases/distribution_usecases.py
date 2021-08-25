@@ -10,7 +10,7 @@ from rest_framework.exceptions import ValidationError
 from apps.core import usecases
 from apps.localize.models import Country, City
 from apps.snap.exceptions import DistributionSnapNotFound
-from apps.snap.models import DistributionSnap, SnapChannel, SnapRetailer, SnapStore, SnapCategory, SnapBrand, SnapSKU
+from apps.snap.models import DistributionSnap, SnapChannel, SnapCategory, SnapBrand, SnapSKU
 
 
 class GetDistributionSnapUseCase(usecases.BaseUseCase):
@@ -36,6 +36,7 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
         'Date', 'Country', 'City', 'Channel', 'Category', 'Brand', 'SKU', 'Count',
         'SKU By City', 'SKU By Channel'
     ]
+    null_columns = ['Channel']
 
     def _factory(self):
         country_data = {}
