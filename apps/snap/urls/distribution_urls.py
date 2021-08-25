@@ -24,35 +24,10 @@ report_urls = [
         name='sku-by-city-distribution-snap-report'
     ),
     path(
-        'sku-by-country',
-        distribution_views.SKUByCountryDistributionSnapReportView.as_view(),
-        name='sku-by-country-distribution-snap-report'
-    ),
-    path(
         'sku-by-channel',
         distribution_views.SKUByChannelDistributionSnapReportView.as_view(),
         name='sku-by-channel-distribution-snap-report'
-    ),
-    path(
-        'share-sku-by-country',
-        distribution_views.ShareSKUByCountryDistributionSnapReportView.as_view(),
-        name='share-sku-by-country-distribution-snap-report'
-    ),
-    path(
-        'share-sku-by-channel',
-        distribution_views.ShareSKUByChannelDistributionSnapReportView.as_view(),
-        name='share-sku-by-channel-distribution-snap-report'
-    ),
-    path(
-        'share-brand-by-country',
-        distribution_views.ShareBrandByCountryDistributionSnapReportView.as_view(),
-        name='share-brand-by-country-distribution-snap-report'
-    ),
-    path(
-        'share-brand-by-channel',
-        distribution_views.ShareBrandByChannelDistributionSnapReportView.as_view(),
-        name='share-brand-by-channel-distribution-snap-report'
-    ),
+    )
 ]
 
 urlpatterns = [

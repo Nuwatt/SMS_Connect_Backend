@@ -35,9 +35,7 @@ class ListDistributionSnapSerializer(DistributionSnapSerializer):
     city = IdNameSerializer()
     category = IdNameCharSerializer(source='sku.category')
     brand = IdNameCharSerializer(source='sku.brand')
-    channel = IdNameSerializer(source='store.channel')
-    store = IdNameSerializer()
-    retailer = IdNameSerializer(source='store.retailer')
+    channel = IdNameSerializer()
     sku = IdNameCharSerializer()
 
     class Meta(DistributionSnapSerializer.Meta):
@@ -47,21 +45,12 @@ class ListDistributionSnapSerializer(DistributionSnapSerializer):
             'country',
             'city',
             'channel',
-            'retailer',
-            'store',
             'category',
             'brand',
             'sku',
             'count',
             'sku_by_city',
-            'sku_by_country',
-            'sku_by_channel',
-            'brand_by_city',
-            'brand_by_country',
-            'share_brand_by_country',
-            'share_brand_by_channel',
-            'share_sku_by_channel',
-            'share_sku_by_country'
+            'sku_by_channel'
         )
 
 
@@ -96,32 +85,8 @@ class SKUByCityDistributionSnapReportSerializer(SKUPerCityReportSerializer):
     pass
 
 
-class SKUByCountryDistributionSnapReportSerializer(SKUPerCountryReportSerializer):
-    pass
-
-
 class SKUByChannelDistributionSnapReportSerializer(SKUPerChannelReportSerializer):
     pass
-
-
-class ShareSKUByCountryDistributionSnapReportSerializer(SKUByCountryDistributionSnapReportSerializer):
-    pass
-
-
-class ShareSKUByChannelDistributionSnapReportSerializer(SKUByChannelDistributionSnapReportSerializer):
-    pass
-
-
-class ShareBrandByChannelDistributionSnapReportSerializer(serializers.Serializer):
-    channel = serializers.CharField(source='channel_name')
-    brand = serializers.CharField(source='brand_name')
-    value = serializers.FloatField()
-
-
-class ShareBrandByCountryDistributionSnapReportSerializer(serializers.Serializer):
-    country = serializers.CharField(source='country_name')
-    brand = serializers.CharField(source='brand_name')
-    value = serializers.FloatField()
 
 
 class BulkDeleteDistributionSnapSerializer(serializers.Serializer):

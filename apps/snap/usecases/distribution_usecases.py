@@ -33,17 +33,14 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
         super().__init__(serializer)
 
     valid_columns = [
-        'Date', 'Country', 'City', 'Channel', 'Retailer', 'Store', 'Category', 'Brand', 'SKU', 'Count',
-        'SKU By City', 'SKU By Country', 'SKU By Channel', 'Brand By City', 'Brand By Country',
-        'Share Brand By Country', 'Share Brand By Channel', 'Share SKU By Channel', 'Share SKU By Country'
+        'Date', 'Country', 'City', 'Channel', 'Category', 'Brand', 'SKU', 'Count',
+        'SKU By City', 'SKU By Channel'
     ]
 
     def _factory(self):
         country_data = {}
         city_data = {}
         channel_data = {}
-        retailer_data = {}
-        store_data = {}
         category_data = {}
         brand_data = {}
         sku_data = {}
@@ -71,22 +68,6 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
                 )
                 channel_data[item.get('Channel')] = channel
 
-            if item.get('Retailer') not in retailer_data:
-                retailer, _created = SnapRetailer.objects.get_or_create(
-                    name=item.get('Retailer'),
-                    is_archived=False
-                )
-                retailer_data[item.get('Retailer')] = retailer
-
-            if item.get('Store') not in store_data:
-                store, _created = SnapStore.objects.get_or_create(
-                    name=item.get('Store'),
-                    channel=channel_data[item.get('Channel')],
-                    retailer=retailer_data[item.get('Retailer')],
-                    is_archived=False
-                )
-                store_data[item.get('Store')] = store
-
             if item.get('Category') not in category_data:
                 category, _created = SnapCategory.objects.get_or_create(
                     name=item.get('Category'),
@@ -113,20 +94,13 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
 
             snap, _created = DistributionSnap.objects.update_or_create(
                 city=city_data[item.get('City')],
-                store=store_data[item.get('Store')],
+                channel=channel_data[item.get('Channel')],
                 sku=sku_data[item.get('SKU')],
                 date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
                 defaults={
                     'count': item.get('Count'),
                     'sku_by_city': item.get('SKU By City'),
-                    'sku_by_country': item.get('SKU By Country'),
-                    'sku_by_channel': item.get('SKU By Channel'),
-                    'brand_by_city': item.get('Brand By City'),
-                    'brand_by_country': item.get('Brand By Country'),
-                    'share_brand_by_country': item.get('Share Brand By Country'),
-                    'share_brand_by_channel': item.get('Share Brand By Channel'),
-                    'share_sku_by_channel': item.get('Share SKU By Channel'),
-                    'share_sku_by_country': item.get('Share SKU By Country'),
+                    'sku_by_channel': item.get('SKU By Channel')
                 }
             )
 
@@ -152,9 +126,7 @@ class ListDistributionSnapUseCase(usecases.BaseUseCase):
             'sku__category',
             'sku__brand',
             'sku',
-            'store__channel',
-            'store__retailer',
-            'store',
+            'channel',
         ).unarchived()
 
 
@@ -234,24 +206,6 @@ class SKUByCityDistributionSnapReportUseCase(usecases.BaseUseCase):
         ).unarchived()
 
 
-class SKUByCountryDistributionSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
-    def _factory(self):
-        return DistributionSnap.objects.values(
-            'city__country'
-        ).distinct().annotate(
-            value=Sum('sku_by_country'),
-            country_name=F('city__country__name'),
-            sku_name=F('sku__name'),
-        ).values(
-            'country_name',
-            'sku_name',
-            'value'
-        ).unarchived()
-
-
 class SKUByChannelDistributionSnapReportUseCase(usecases.BaseUseCase):
     def execute(self):
         return self._factory()
@@ -266,78 +220,6 @@ class SKUByChannelDistributionSnapReportUseCase(usecases.BaseUseCase):
         ).values(
             'channel_name',
             'sku_name',
-            'value'
-        ).unarchived()
-
-
-class ShareSKUByCountryDistributionSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
-    def _factory(self):
-        return DistributionSnap.objects.values(
-            'city__country'
-        ).distinct().annotate(
-            value=Sum('share_sku_by_country'),
-            country_name=F('store__channel__name'),
-            sku_name=F('sku__name'),
-        ).values(
-            'country_name',
-            'sku_name',
-            'value'
-        ).unarchived()
-
-
-class ShareSKUByChannelDistributionSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
-    def _factory(self):
-        return DistributionSnap.objects.values(
-            'store__channel'
-        ).distinct().annotate(
-            value=Sum('share_sku_by_channel'),
-            channel_name=F('store__channel__name'),
-            sku_name=F('sku__name'),
-        ).values(
-            'channel_name',
-            'sku_name',
-            'value'
-        ).unarchived()
-
-
-class ShareBrandByCountryDistributionSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
-    def _factory(self):
-        return DistributionSnap.objects.values(
-            'city__country'
-        ).distinct().annotate(
-            value=Sum('share_brand_by_country'),
-            country_name=F('store__channel__name'),
-            brand_name=F('sku__brand__name'),
-        ).values(
-            'country_name',
-            'brand_name',
-            'value'
-        ).unarchived()
-
-
-class ShareBrandByChannelDistributionSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
-    def _factory(self):
-        return DistributionSnap.objects.values(
-            'store__channel'
-        ).distinct().annotate(
-            value=Sum('share_brand_by_channel'),
-            channel_name=F('store__channel__name'),
-            brand_name=F('sku__brand__name'),
-        ).values(
-            'channel_name',
-            'brand_name',
             'value'
         ).unarchived()
 
