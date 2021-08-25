@@ -254,12 +254,10 @@ class ExportDistributionSnapUseCase(usecases.BaseUseCase):
 
         # 2. write questions
         snaps = DistributionSnap.objects.unarchived().values(
-            'date', 'city__country__name', 'city__name', 'store__channel__name',
-            'store__retailer__name', 'store__name', 'sku__category__name',
+            'date', 'city__country__name', 'city__name',
+            'channel__name', 'sku__category__name',
             'sku__brand__name', 'sku__name', 'count',
-            'sku_by_city', 'sku_by_country', 'sku_by_channel', 'brand_by_city',
-            'brand_by_country', 'share_brand_by_country', 'share_brand_by_channel',
-            'share_sku_by_channel', 'share_sku_by_country'
+            'sku_by_city', 'sku_by_channel'
         )
         for snap in snaps:
             writer.writerow([

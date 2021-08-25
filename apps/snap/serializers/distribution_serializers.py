@@ -58,14 +58,8 @@ class UpdateDistributionSnapSerializer(DistributionSnapSerializer):
     class Meta(DistributionSnapSerializer.Meta):
         fields = (
             'count',
-            'sku_by_country',
+            'sku_by_city',
             'sku_by_channel',
-            'brand_by_city',
-            'brand_by_country',
-            'share_brand_by_country',
-            'share_brand_by_channel',
-            'share_sku_by_channel',
-            'share_sku_by_country'
         )
 
 
