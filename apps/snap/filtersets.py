@@ -39,6 +39,11 @@ class PriceMonitorSnapFilter(filters.FilterSet):
         label='category',
         lookup_expr='in'
     )
+    sku = IdInFilter(
+        field_name='sku',
+        label='sku',
+        lookup_expr='in'
+    )
 
 
 class OutOfStockSnapFilter(PriceMonitorSnapFilter):
@@ -51,7 +56,6 @@ class ConsumerSnapFilter(PriceMonitorSnapFilter):
 
 class DistributionSnapFilter(PriceMonitorSnapFilter):
     pass
-
 
 
 class SnapSKUFilter(filters.FilterSet):
