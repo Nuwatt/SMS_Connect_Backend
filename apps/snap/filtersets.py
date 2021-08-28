@@ -87,11 +87,18 @@ class SnapBrandFilter(filters.FilterSet):
         label='country',
         distinct=True
     )
+    category = IdInFilter(
+        field_name='snapsku__category',
+        lookup_expr='in',
+        label='category',
+        distinct=True
+    )
 
     class Meta:
         model = SnapBrand
         fields = [
             'country',
+            'category',
         ]
 
 
