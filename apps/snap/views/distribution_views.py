@@ -117,17 +117,6 @@ class SKUByCityDistributionSnapReportView(BaseReportView):
         return distribution_usecases.SKUByCityDistributionSnapReportUseCase().execute()
 
 
-class SKUByCountryDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list sku by country report of distribution snap
-    """
-    serializer_class = distribution_serializers.SKUByCountryDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.SKUByCountryDistributionSnapReportUseCase().execute()
-
-
 class SKUByChannelDistributionSnapReportView(BaseReportView):
     """
     Use this end-point to list sku by channel report of distribution snap
@@ -137,50 +126,6 @@ class SKUByChannelDistributionSnapReportView(BaseReportView):
 
     def get_queryset(self):
         return distribution_usecases.SKUByChannelDistributionSnapReportUseCase().execute()
-
-
-class ShareSKUByCountryDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list share sku by country report of distribution snap
-    """
-    serializer_class = distribution_serializers.ShareSKUByCountryDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.ShareSKUByCountryDistributionSnapReportUseCase().execute()
-
-
-class ShareSKUByChannelDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list share sku by channel report of distribution snap
-    """
-    serializer_class = distribution_serializers.ShareSKUByChannelDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.ShareSKUByChannelDistributionSnapReportUseCase().execute()
-
-
-class ShareBrandByCountryDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list share brand by country report of distribution snap
-    """
-    serializer_class = distribution_serializers.ShareBrandByCountryDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.ShareBrandByCountryDistributionSnapReportUseCase().execute()
-
-
-class ShareBrandByChannelDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list share brand by channel report of distribution snap
-    """
-    serializer_class = distribution_serializers.ShareBrandByChannelDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.ShareBrandByChannelDistributionSnapReportUseCase().execute()
 
 
 class BulkDeleteDistributionSnapView(generics.CreateWithMessageAPIView):

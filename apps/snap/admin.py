@@ -52,7 +52,6 @@ class DistributionSnapAdmin(BaseModelAdmin):
     raw_id_fields = [
         'city',
         'sku',
-        'store',
     ]
 
 

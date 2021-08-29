@@ -39,6 +39,11 @@ class PriceMonitorSnapFilter(filters.FilterSet):
         label='category',
         lookup_expr='in'
     )
+    sku = IdInFilter(
+        field_name='sku',
+        label='sku',
+        lookup_expr='in'
+    )
 
 
 class OutOfStockSnapFilter(PriceMonitorSnapFilter):
@@ -51,7 +56,6 @@ class ConsumerSnapFilter(PriceMonitorSnapFilter):
 
 class DistributionSnapFilter(PriceMonitorSnapFilter):
     pass
-
 
 
 class SnapSKUFilter(filters.FilterSet):
@@ -82,9 +86,15 @@ class SnapSKUFilter(filters.FilterSet):
 
 class SnapBrandFilter(filters.FilterSet):
     country = IdInFilter(
-        field_name='sku__country',
+        field_name='snapsku__country',
         lookup_expr='in',
         label='country',
+        distinct=True
+    )
+    category = IdInFilter(
+        field_name='snapsku__category',
+        lookup_expr='in',
+        label='category',
         distinct=True
     )
 
@@ -92,12 +102,13 @@ class SnapBrandFilter(filters.FilterSet):
         model = SnapBrand
         fields = [
             'country',
+            'category',
         ]
 
 
 class SnapCategoryFilter(filters.FilterSet):
     country = IdInFilter(
-        field_name='sku__country',
+        field_name='snapsku__country',
         lookup_expr='in',
         label='country',
         distinct=True
