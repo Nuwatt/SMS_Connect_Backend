@@ -48,18 +48,14 @@ class ListDistributionSnapSerializer(DistributionSnapSerializer):
             'category',
             'brand',
             'sku',
-            'count',
-            'sku_by_city',
-            'sku_by_channel'
+            'total_distribution',
         )
 
 
 class UpdateDistributionSnapSerializer(DistributionSnapSerializer):
     class Meta(DistributionSnapSerializer.Meta):
         fields = (
-            'count',
-            'sku_by_city',
-            'sku_by_channel',
+            'total_distribution',
         )
 
 
@@ -79,8 +75,9 @@ class SKUByCityDistributionSnapReportSerializer(SKUPerCityReportSerializer):
     pass
 
 
-class SKUByChannelDistributionSnapReportSerializer(SKUPerChannelReportSerializer):
-    pass
+class TotalDistributionSnapReportSerializer(serializers.Serializer):
+    sku = serializers.CharField(source='sku_name')
+    value = serializers.FloatField(source='total_distribution')
 
 
 class BulkDeleteDistributionSnapSerializer(serializers.Serializer):
