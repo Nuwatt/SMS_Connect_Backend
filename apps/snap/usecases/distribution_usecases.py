@@ -33,10 +33,9 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
         super().__init__(serializer)
 
     valid_columns = [
-        'Date', 'Country', 'City', 'Channel', 'Category', 'Brand', 'SKU', 'Count',
-        'SKU By City', 'SKU By Channel'
+        'Date', 'Country', 'City', 'Channel', 'Category', 'Brand', 'SKU',
+        'Total Distribution',
     ]
-    null_columns = ['Channel']
 
     def _factory(self):
         country_data = {}
@@ -99,9 +98,7 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
                 sku=sku_data[item.get('SKU')],
                 date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
                 defaults={
-                    'count': item.get('Count'),
-                    'sku_by_city': item.get('SKU By City'),
-                    'sku_by_channel': item.get('SKU By Channel')
+                    'total_distribution': item.get('Total Distribution'),
                 }
             )
 
@@ -207,21 +204,16 @@ class SKUByCityDistributionSnapReportUseCase(usecases.BaseUseCase):
         ).unarchived()
 
 
-class SKUByChannelDistributionSnapReportUseCase(usecases.BaseUseCase):
+class TotalDistributionSnapReportUseCase(usecases.BaseUseCase):
     def execute(self):
         return self._factory()
 
     def _factory(self):
-        return DistributionSnap.objects.values(
-            'store__channel'
-        ).distinct().annotate(
-            value=Sum('sku_by_channel'),
-            channel_name=F('store__channel__name'),
+        return DistributionSnap.objects.annotate(
             sku_name=F('sku__name'),
         ).values(
-            'channel_name',
+            'total_distribution',
             'sku_name',
-            'value'
         ).unarchived()
 
 
@@ -235,9 +227,8 @@ class BulkDeleteDistributionSnapUseCase(usecases.CreateUseCase):
 
 class ExportDistributionSnapUseCase(usecases.BaseUseCase):
     columns = [
-        'Date', 'Country', 'City', 'Channel', 'Retailer', 'Store', 'Category', 'Brand', 'SKU', 'Count',
-        'SKU By City', 'SKU By Country', 'SKU By Channel', 'Brand By City', 'Brand By Country',
-        'Share Brand By Country', 'Share Brand By Channel', 'Share SKU By Channel', 'Share SKU By Country'
+        'Date', 'Country', 'City', 'Channel', 'Category', 'Brand', 'SKU',
+        'Total Distribution',
     ]
 
     def execute(self):
@@ -256,8 +247,8 @@ class ExportDistributionSnapUseCase(usecases.BaseUseCase):
         snaps = DistributionSnap.objects.unarchived().values(
             'date', 'city__country__name', 'city__name',
             'channel__name', 'sku__category__name',
-            'sku__brand__name', 'sku__name', 'count',
-            'sku_by_city', 'sku_by_channel'
+            'sku__brand__name', 'sku__name',
+            'total_distribution'
         )
         for snap in snaps:
             writer.writerow([

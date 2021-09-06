@@ -73,59 +73,59 @@ class DeleteDistributionSnapView(generics.DestroyAPIView, DistributionSnapMixin)
         ).execute()
 
 
-class VisitByCountryDistributionSnapReportView(BaseReportView):
+# class VisitByCountryDistributionSnapReportView(BaseReportView):
+#     """
+#     Use this end-point to list visit by country report of distribution snap
+#     """
+#     serializer_class = distribution_serializers.VisitByCountryDistributionSnapReport
+#     filterset_class = DistributionSnapFilter
+#
+#     def get_queryset(self):
+#         return distribution_usecases.VisitByCountryDistributionSnapReportUseCase().execute()
+#
+#
+# class VisitByCityDistributionSnapReportView(BaseReportView):
+#     """
+#     Use this end-point to list visit by city report of distribution snap
+#     """
+#     serializer_class = distribution_serializers.VisitByCityDistributionSnapReportSerializer
+#     filterset_class = DistributionSnapFilter
+#
+#     def get_queryset(self):
+#         return distribution_usecases.VisitByCityDistributionSnapReportUseCase().execute()
+#
+#
+# class VisitByChannelDistributionSnapReportView(BaseReportView):
+#     """
+#     Use this end-point to list visit by channel report of distribution snap
+#     """
+#     serializer_class = distribution_serializers.VisitByChannelDistributionSnapReportSerializer
+#     filterset_class = DistributionSnapFilter
+#
+#     def get_queryset(self):
+#         return distribution_usecases.VisitByChannelDistributionSnapReportUseCase().execute()
+#
+#
+# class SKUByCityDistributionSnapReportView(BaseReportView):
+#     """
+#     Use this end-point to list sku by city report of distribution snap
+#     """
+#     serializer_class = distribution_serializers.SKUByCityDistributionSnapReportSerializer
+#     filterset_class = DistributionSnapFilter
+#
+#     def get_queryset(self):
+#         return distribution_usecases.SKUByCityDistributionSnapReportUseCase().execute()
+
+
+class TotalDistributionSnapReportView(BaseReportView):
     """
-    Use this end-point to list visit by country report of distribution snap
+    Use this end-point to list total distribution of distribution snap
     """
-    serializer_class = distribution_serializers.VisitByCountryDistributionSnapReport
+    serializer_class = distribution_serializers.TotalDistributionSnapReportSerializer
     filterset_class = DistributionSnapFilter
 
     def get_queryset(self):
-        return distribution_usecases.VisitByCountryDistributionSnapReportUseCase().execute()
-
-
-class VisitByCityDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list visit by city report of distribution snap
-    """
-    serializer_class = distribution_serializers.VisitByCityDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.VisitByCityDistributionSnapReportUseCase().execute()
-
-
-class VisitByChannelDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list visit by channel report of distribution snap
-    """
-    serializer_class = distribution_serializers.VisitByChannelDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.VisitByChannelDistributionSnapReportUseCase().execute()
-
-
-class SKUByCityDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list sku by city report of distribution snap
-    """
-    serializer_class = distribution_serializers.SKUByCityDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.SKUByCityDistributionSnapReportUseCase().execute()
-
-
-class SKUByChannelDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list sku by channel report of distribution snap
-    """
-    serializer_class = distribution_serializers.SKUByChannelDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.SKUByChannelDistributionSnapReportUseCase().execute()
+        return distribution_usecases.TotalDistributionSnapReportUseCase().execute()
 
 
 class BulkDeleteDistributionSnapView(generics.CreateWithMessageAPIView):

@@ -248,9 +248,7 @@ class DistributionSnap(BaseModel):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
     sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
-    count = models.IntegerField()
-    sku_by_city = models.FloatField(blank=True, null=True)
-    sku_by_channel = models.FloatField(blank=True, null=True)
+    total_distribution = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return '{}-Distribution-Snap'.format(

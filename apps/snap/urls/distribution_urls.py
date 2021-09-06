@@ -3,30 +3,30 @@ from django.urls import path, include
 from apps.snap.views import distribution_views
 
 report_urls = [
+    # path(
+    #     'visit-by-country',
+    #     distribution_views.VisitByCountryDistributionSnapReportView.as_view(),
+    #     name='visit-by-country-distribution-snap-report'
+    # ),
+    # path(
+    #     'visit-by-city',
+    #     distribution_views.VisitByCityDistributionSnapReportView.as_view(),
+    #     name='visit-by-city-distribution-snap-report'
+    # ),
+    # path(
+    #     'visit-by-channel',
+    #     distribution_views.VisitByChannelDistributionSnapReportView.as_view(),
+    #     name='visit-by-channel-distribution-snap-report'
+    # ),
+    # path(
+    #     'sku-by-city',
+    #     distribution_views.SKUByCityDistributionSnapReportView.as_view(),
+    #     name='sku-by-city-distribution-snap-report'
+    # ),
     path(
-        'visit-by-country',
-        distribution_views.VisitByCountryDistributionSnapReportView.as_view(),
-        name='visit-by-country-distribution-snap-report'
-    ),
-    path(
-        'visit-by-city',
-        distribution_views.VisitByCityDistributionSnapReportView.as_view(),
-        name='visit-by-city-distribution-snap-report'
-    ),
-    path(
-        'visit-by-channel',
-        distribution_views.VisitByChannelDistributionSnapReportView.as_view(),
-        name='visit-by-channel-distribution-snap-report'
-    ),
-    path(
-        'sku-by-city',
-        distribution_views.SKUByCityDistributionSnapReportView.as_view(),
-        name='sku-by-city-distribution-snap-report'
-    ),
-    path(
-        'sku-by-channel',
-        distribution_views.SKUByChannelDistributionSnapReportView.as_view(),
-        name='sku-by-channel-distribution-snap-report'
+        'total-distribution',
+        distribution_views.TotalDistributionSnapReportView.as_view(),
+        name='total-distribution-snap-report'
     )
 ]
 
