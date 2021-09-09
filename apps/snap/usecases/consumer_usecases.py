@@ -548,7 +548,7 @@ class ExportConsumerSnapUseCase(usecases.BaseUseCase):
         # 2. write questions
         snaps = ConsumerSnap.objects.unarchived().values(
             'date', 'city__country__name', 'city__name', 'channel__name', 'sku__category__name',
-            'sku__brand__name', 'sku__name', 'count', 'question_statement', 'question_type', 'total_yes',
+            'sku__brand__name', 'sku__name', 'count', 'question_statement', 'question_type__name', 'total_yes',
             'total_no', 'rating_one_on_three', 'rating_two_on_three', 'rating_three_on_three',
             'rating_one_on_five', 'rating_two_on_five', 'rating_three_on_five', 'rating_four_on_five',
             'rating_five_on_five', 'rating_one_on_ten', 'rating_two_on_ten', 'rating_three_on_ten',
