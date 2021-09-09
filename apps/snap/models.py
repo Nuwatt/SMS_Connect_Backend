@@ -249,6 +249,8 @@ class DistributionSnap(BaseModel):
     channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
     sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
     total_distribution = models.FloatField(blank=True, null=True)
+    shelf_share = models.FloatField(blank=True, null=True)
+    number_of_outlet = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return '{}-Distribution-Snap'.format(

@@ -49,6 +49,8 @@ class ListDistributionSnapSerializer(DistributionSnapSerializer):
             'brand',
             'sku',
             'total_distribution',
+            'shelf_share',
+            'number_of_outlet'
         )
 
 
@@ -78,6 +80,16 @@ class SKUByCityDistributionSnapReportSerializer(SKUPerCityReportSerializer):
 class TotalDistributionSnapReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
     value = serializers.FloatField(source='total_distribution')
+
+
+class ShelfShareDistributionSnapReportSerializer(serializers.Serializer):
+    sku = serializers.CharField(source='sku_name')
+    value = serializers.FloatField(source='shelf_share')
+
+
+class NumberOfOutletDistributionSnapReportSerializer(serializers.Serializer):
+    sku = serializers.CharField(source='sku_name')
+    value = serializers.FloatField(source='number_of_outlet')
 
 
 class BulkDeleteDistributionSnapSerializer(serializers.Serializer):
