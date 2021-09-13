@@ -27,6 +27,16 @@ report_urls = [
         'total-distribution',
         distribution_views.TotalDistributionSnapReportView.as_view(),
         name='total-distribution-snap-report'
+    ),
+    path(
+        'shelf-share',
+        distribution_views.ShelfShareDistributionSnapReportView.as_view(),
+        name='shelf-share-distribution-snap-report'
+    ),
+    path(
+        'number-of-outlet',
+        distribution_views.NumberOfOutletDistributionSnapReportView.as_view(),
+        name='number-of-outlet-distribution-snap-report'
     )
 ]
 

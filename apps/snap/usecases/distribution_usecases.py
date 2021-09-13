@@ -34,7 +34,7 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
 
     valid_columns = [
         'Date', 'Country', 'City', 'Channel', 'Category', 'Brand', 'SKU',
-        'Total Distribution',
+        'Total Distribution', 'Shelf Share', 'Number Of Outlet'
     ]
 
     def _factory(self):
@@ -48,14 +48,14 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
         for item in self._item_list:
             if item.get('Country') not in country_data:
                 country, _created = Country.objects.get_or_create(
-                    name=item.get('Country'),
+                    name=item.get('Country').strip(),
                     is_archived=False
                 )
                 country_data[item.get('Country')] = country
 
             if item.get('City') not in country_data:
                 city, _created = City.objects.get_or_create(
-                    name=item.get('City'),
+                    name=item.get('City').strip(),
                     country=country_data[item.get('Country')],
                     is_archived=False
                 )
@@ -63,28 +63,28 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
 
             if item.get('Channel') not in channel_data:
                 channel, _created = SnapChannel.objects.get_or_create(
-                    name=item.get('Channel'),
+                    name=item.get('Channel').strip(),
                     is_archived=False
                 )
                 channel_data[item.get('Channel')] = channel
 
             if item.get('Category') not in category_data:
                 category, _created = SnapCategory.objects.get_or_create(
-                    name=item.get('Category'),
+                    name=item.get('Category').strip(),
                     is_archived=False
                 )
                 category_data[item.get('Category')] = category
 
             if item.get('Brand') not in brand_data:
                 brand, _created = SnapBrand.objects.get_or_create(
-                    name=item.get('Brand'),
+                    name=item.get('Brand').strip(),
                     is_archived=False
                 )
                 brand_data[item.get('Brand')] = brand
 
             if item.get('SKU') not in sku_data:
                 sku, _created = SnapSKU.objects.get_or_create(
-                    name=item.get('SKU'),
+                    name=item.get('SKU').strip(),
                     brand=brand_data[item.get('Brand')],
                     category=category_data[item.get('Category')],
                     is_archived=False
@@ -99,6 +99,8 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
                 date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
                 defaults={
                     'total_distribution': item.get('Total Distribution'),
+                    'shelf_share': item.get('Shelf Share'),
+                    'number_of_outlet': item.get('Number Of Outlet'),
                 }
             )
 
@@ -217,6 +219,32 @@ class TotalDistributionSnapReportUseCase(usecases.BaseUseCase):
         ).unarchived()
 
 
+class ShelfShareDistributionSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return DistributionSnap.objects.annotate(
+            sku_name=F('sku__name'),
+        ).values(
+            'shelf_share',
+            'sku_name',
+        ).unarchived()
+
+
+class NumberOfOutletDistributionSnapReportUseCase(usecases.BaseUseCase):
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        return DistributionSnap.objects.annotate(
+            sku_name=F('sku__name'),
+        ).values(
+            'number_of_outlet',
+            'sku_name',
+        ).unarchived()
+
+
 class BulkDeleteDistributionSnapUseCase(usecases.CreateUseCase):
     def _factory(self):
         DistributionSnap.objects.filter(
@@ -228,7 +256,7 @@ class BulkDeleteDistributionSnapUseCase(usecases.CreateUseCase):
 class ExportDistributionSnapUseCase(usecases.BaseUseCase):
     columns = [
         'Date', 'Country', 'City', 'Channel', 'Category', 'Brand', 'SKU',
-        'Total Distribution',
+        'Total Distribution', 'Shelf Share', 'Number Of Outlet'
     ]
 
     def execute(self):
@@ -248,7 +276,7 @@ class ExportDistributionSnapUseCase(usecases.BaseUseCase):
             'date', 'city__country__name', 'city__name',
             'channel__name', 'sku__category__name',
             'sku__brand__name', 'sku__name',
-            'total_distribution'
+            'total_distribution', 'shelf_share', 'number_of_outlet'
         )
         for snap in snaps:
             writer.writerow([

@@ -128,6 +128,28 @@ class TotalDistributionSnapReportView(BaseReportView):
         return distribution_usecases.TotalDistributionSnapReportUseCase().execute()
 
 
+class ShelfShareDistributionSnapReportView(BaseReportView):
+    """
+    Use this end-point to list shelf share distribution of distribution snap
+    """
+    serializer_class = distribution_serializers.ShelfShareDistributionSnapReportSerializer
+    filterset_class = DistributionSnapFilter
+
+    def get_queryset(self):
+        return distribution_usecases.ShelfShareDistributionSnapReportUseCase().execute()
+
+
+class NumberOfOutletDistributionSnapReportView(BaseReportView):
+    """
+    Use this end-point to list number of outlet distribution of distribution snap
+    """
+    serializer_class = distribution_serializers.NumberOfOutletDistributionSnapReportSerializer
+    filterset_class = DistributionSnapFilter
+
+    def get_queryset(self):
+        return distribution_usecases.NumberOfOutletDistributionSnapReportUseCase().execute()
+
+
 class BulkDeleteDistributionSnapView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to delete distribution snap in bulk
