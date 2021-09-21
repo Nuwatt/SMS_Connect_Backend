@@ -47,7 +47,12 @@ class PriceMonitorSnapFilter(filters.FilterSet):
 
 
 class OutOfStockSnapFilter(PriceMonitorSnapFilter):
-    pass
+    channel = IdInFilter(
+        field_name='store__channel',
+        label='channel',
+        lookup_expr='in'
+
+    )
 
 
 class ConsumerSnapFilter(PriceMonitorSnapFilter):
