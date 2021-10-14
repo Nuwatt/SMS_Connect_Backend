@@ -1,18 +1,18 @@
+import csv
 from datetime import datetime
 
 from django.db import IntegrityError
 from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
 from django.db.models.functions import TruncMonth
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
 from apps.localize.models import Country, City
-from apps.market.models import Channel
-from apps.product.models import Category, Brand, SKU
 from apps.question.models import QuestionType
 from apps.snap.exceptions import ConsumerSnapNotFound
-from apps.snap.models import PriceMonitorSnap, ConsumerSnap
+from apps.snap.models import PriceMonitorSnap, ConsumerSnap, SnapChannel, SnapCategory, SnapBrand, SnapSKU
 
 
 class GetConsumerSnapUseCase(usecases.BaseUseCase):
@@ -71,28 +71,28 @@ class ImportConsumerSnapUseCase(usecases.ImportCSVUseCase):
                 city_data[item.get('City')] = city
 
             if item.get('Channel') not in channel_data:
-                channel, _created = Channel.objects.get_or_create(
+                channel, _created = SnapChannel.objects.get_or_create(
                     name=item.get('Channel'),
                     is_archived=False
                 )
                 channel_data[item.get('Channel')] = channel
 
             if item.get('Category') not in category_data:
-                category, _created = Category.objects.get_or_create(
+                category, _created = SnapCategory.objects.get_or_create(
                     name=item.get('Category'),
                     is_archived=False
                 )
                 category_data[item.get('Category')] = category
 
             if item.get('Brand') not in brand_data:
-                brand, _created = Brand.objects.get_or_create(
+                brand, _created = SnapBrand.objects.get_or_create(
                     name=item.get('Brand'),
                     is_archived=False
                 )
                 brand_data[item.get('Brand')] = brand
 
             if item.get('SKU') not in sku_data:
-                sku, _created = SKU.objects.get_or_create(
+                sku, _created = SnapSKU.objects.get_or_create(
                     name=item.get('SKU'),
                     brand=brand_data[item.get('Brand')],
                     category=category_data[item.get('Category')],
@@ -111,7 +111,7 @@ class ImportConsumerSnapUseCase(usecases.ImportCSVUseCase):
                 city=city_data[item.get('City')],
                 channel=channel_data[item.get('Channel')],
                 sku=sku_data[item.get('SKU')],
-                date=datetime.strptime(item.get('Date'), "%m/%d/%Y").date(),
+                date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
                 defaults={
                     'count': item.get('Count'),
                     'question_statement': item.get('Question Statement'),
@@ -519,3 +519,44 @@ class BulkDeleteConsumerSnapUseCase(usecases.CreateUseCase):
             is_archived=False,
             id__in=self._data.get('snap_ids')
         ).archive()
+
+
+class ExportConsumerSnapUseCase(usecases.BaseUseCase):
+    columns = [
+        'Date', 'Country', 'City', 'Channel', 'Category',
+        'Brand', 'SKU', 'Count', 'Question Statement', 'Question Type', 'Total Yes',
+        'Total No', 'Rating One On Three', 'Rating Two On Three', 'Rating Three On Three',
+        'Rating One On Five', 'Rating Two On Five', 'Rating Three On Five', 'Rating Four On Five',
+        'Rating Five On Five', 'Rating One On Ten', 'Rating Two On Ten', 'Rating Three On Ten',
+        'Rating Four On Ten', 'Rating Five On Ten', 'Rating Six On Ten',
+        'Rating Seven On Ten', 'Rating Eight On Ten', 'Rating Nine On Ten', 'Rating Ten On Ten',
+        'Average Numeric'
+    ]
+
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        response = HttpResponse(content_type='text/csv')
+        filename = 'consumer_snap.csv'
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+
+        # 1. write headers
+        writer = csv.writer(response)
+        writer.writerow(self.columns)
+
+        # 2. write questions
+        snaps = ConsumerSnap.objects.unarchived().values(
+            'date', 'city__country__name', 'city__name', 'channel__name', 'sku__category__name',
+            'sku__brand__name', 'sku__name', 'count', 'question_statement', 'question_type__name', 'total_yes',
+            'total_no', 'rating_one_on_three', 'rating_two_on_three', 'rating_three_on_three',
+            'rating_one_on_five', 'rating_two_on_five', 'rating_three_on_five', 'rating_four_on_five',
+            'rating_five_on_five', 'rating_one_on_ten', 'rating_two_on_ten', 'rating_three_on_ten',
+            'rating_four_on_ten', 'rating_five_on_ten', 'rating_six_on_ten', 'rating_seven_on_ten',
+            'rating_eight_on_ten', 'rating_nine_on_ten', 'rating_ten_on_ten', 'average_numeric'
+        )
+        for snap in snaps:
+            writer.writerow([
+                *snap.values()
+            ])
+        return response

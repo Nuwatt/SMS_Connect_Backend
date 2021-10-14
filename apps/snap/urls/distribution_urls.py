@@ -3,56 +3,41 @@ from django.urls import path, include
 from apps.snap.views import distribution_views
 
 report_urls = [
+    # path(
+    #     'visit-by-country',
+    #     distribution_views.VisitByCountryDistributionSnapReportView.as_view(),
+    #     name='visit-by-country-distribution-snap-report'
+    # ),
+    # path(
+    #     'visit-by-city',
+    #     distribution_views.VisitByCityDistributionSnapReportView.as_view(),
+    #     name='visit-by-city-distribution-snap-report'
+    # ),
+    # path(
+    #     'visit-by-channel',
+    #     distribution_views.VisitByChannelDistributionSnapReportView.as_view(),
+    #     name='visit-by-channel-distribution-snap-report'
+    # ),
+    # path(
+    #     'sku-by-city',
+    #     distribution_views.SKUByCityDistributionSnapReportView.as_view(),
+    #     name='sku-by-city-distribution-snap-report'
+    # ),
     path(
-        'visit-by-country',
-        distribution_views.VisitByCountryDistributionSnapReportView.as_view(),
-        name='visit-by-country-distribution-snap-report'
+        'total-distribution',
+        distribution_views.TotalDistributionSnapReportView.as_view(),
+        name='total-distribution-snap-report'
     ),
     path(
-        'visit-by-city',
-        distribution_views.VisitByCityDistributionSnapReportView.as_view(),
-        name='visit-by-city-distribution-snap-report'
+        'shelf-share',
+        distribution_views.ShelfShareDistributionSnapReportView.as_view(),
+        name='shelf-share-distribution-snap-report'
     ),
     path(
-        'visit-by-channel',
-        distribution_views.VisitByChannelDistributionSnapReportView.as_view(),
-        name='visit-by-channel-distribution-snap-report'
-    ),
-    path(
-        'sku-by-city',
-        distribution_views.SKUByCityDistributionSnapReportView.as_view(),
-        name='sku-by-city-distribution-snap-report'
-    ),
-    path(
-        'sku-by-country',
-        distribution_views.SKUByCountryDistributionSnapReportView.as_view(),
-        name='sku-by-country-distribution-snap-report'
-    ),
-    path(
-        'sku-by-channel',
-        distribution_views.SKUByChannelDistributionSnapReportView.as_view(),
-        name='sku-by-channel-distribution-snap-report'
-    ),
-    path(
-        'share-sku-by-country',
-        distribution_views.ShareSKUByCountryDistributionSnapReportView.as_view(),
-        name='share-sku-by-country-distribution-snap-report'
-    ),
-    path(
-        'share-sku-by-channel',
-        distribution_views.ShareSKUByChannelDistributionSnapReportView.as_view(),
-        name='share-sku-by-channel-distribution-snap-report'
-    ),
-    path(
-        'share-brand-by-country',
-        distribution_views.ShareBrandByCountryDistributionSnapReportView.as_view(),
-        name='share-brand-by-country-distribution-snap-report'
-    ),
-    path(
-        'share-brand-by-channel',
-        distribution_views.ShareBrandByChannelDistributionSnapReportView.as_view(),
-        name='share-brand-by-channel-distribution-snap-report'
-    ),
+        'number-of-outlet',
+        distribution_views.NumberOfOutletDistributionSnapReportView.as_view(),
+        name='number-of-outlet-distribution-snap-report'
+    )
 ]
 
 urlpatterns = [
@@ -60,6 +45,11 @@ urlpatterns = [
         'import',
         distribution_views.ImportDistributionSnapView.as_view(),
         name='import-distribution-snap'
+    ),
+    path(
+        'export',
+        distribution_views.ExportDistributionSnapView.as_view(),
+        name='export-distribution-snap'
     ),
     path(
         'list',

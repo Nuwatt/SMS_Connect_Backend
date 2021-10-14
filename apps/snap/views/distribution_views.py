@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
@@ -30,6 +31,12 @@ class ListDistributionSnapView(generics.ListAPIView):
     """
     serializer_class = distribution_serializers.ListDistributionSnapSerializer
     permission_classes = (IsPortalUser,)
+    filter_backends = [SearchFilter]
+    search_fields = [
+        'city__country__name', 'city__name', 'store__channel__name',
+        'store__retailer__name', 'store__name',
+        'sku__category__name', 'sku__brand__name', 'sku__name'
+    ]
 
     def get_queryset(self):
         return distribution_usecases.ListDistributionSnapUseCase().execute()
@@ -66,114 +73,81 @@ class DeleteDistributionSnapView(generics.DestroyAPIView, DistributionSnapMixin)
         ).execute()
 
 
-class VisitByCountryDistributionSnapReportView(BaseReportView):
+# class VisitByCountryDistributionSnapReportView(BaseReportView):
+#     """
+#     Use this end-point to list visit by country report of distribution snap
+#     """
+#     serializer_class = distribution_serializers.VisitByCountryDistributionSnapReport
+#     filterset_class = DistributionSnapFilter
+#
+#     def get_queryset(self):
+#         return distribution_usecases.VisitByCountryDistributionSnapReportUseCase().execute()
+#
+#
+# class VisitByCityDistributionSnapReportView(BaseReportView):
+#     """
+#     Use this end-point to list visit by city report of distribution snap
+#     """
+#     serializer_class = distribution_serializers.VisitByCityDistributionSnapReportSerializer
+#     filterset_class = DistributionSnapFilter
+#
+#     def get_queryset(self):
+#         return distribution_usecases.VisitByCityDistributionSnapReportUseCase().execute()
+#
+#
+# class VisitByChannelDistributionSnapReportView(BaseReportView):
+#     """
+#     Use this end-point to list visit by channel report of distribution snap
+#     """
+#     serializer_class = distribution_serializers.VisitByChannelDistributionSnapReportSerializer
+#     filterset_class = DistributionSnapFilter
+#
+#     def get_queryset(self):
+#         return distribution_usecases.VisitByChannelDistributionSnapReportUseCase().execute()
+#
+#
+# class SKUByCityDistributionSnapReportView(BaseReportView):
+#     """
+#     Use this end-point to list sku by city report of distribution snap
+#     """
+#     serializer_class = distribution_serializers.SKUByCityDistributionSnapReportSerializer
+#     filterset_class = DistributionSnapFilter
+#
+#     def get_queryset(self):
+#         return distribution_usecases.SKUByCityDistributionSnapReportUseCase().execute()
+
+
+class TotalDistributionSnapReportView(BaseReportView):
     """
-    Use this end-point to list visit by country report of distribution snap
+    Use this end-point to list total distribution of distribution snap
     """
-    serializer_class = distribution_serializers.VisitByCountryDistributionSnapReport
+    serializer_class = distribution_serializers.TotalDistributionSnapReportSerializer
     filterset_class = DistributionSnapFilter
 
     def get_queryset(self):
-        return distribution_usecases.VisitByCountryDistributionSnapReportUseCase().execute()
+        return distribution_usecases.TotalDistributionSnapReportUseCase().execute()
 
 
-class VisitByCityDistributionSnapReportView(BaseReportView):
+class ShelfShareDistributionSnapReportView(BaseReportView):
     """
-    Use this end-point to list visit by city report of distribution snap
+    Use this end-point to list shelf share distribution of distribution snap
     """
-    serializer_class = distribution_serializers.VisitByCityDistributionSnapReportSerializer
+    serializer_class = distribution_serializers.ShelfShareDistributionSnapReportSerializer
     filterset_class = DistributionSnapFilter
 
     def get_queryset(self):
-        return distribution_usecases.VisitByCityDistributionSnapReportUseCase().execute()
+        return distribution_usecases.ShelfShareDistributionSnapReportUseCase().execute()
 
 
-class VisitByChannelDistributionSnapReportView(BaseReportView):
+class NumberOfOutletDistributionSnapReportView(BaseReportView):
     """
-    Use this end-point to list visit by channel report of distribution snap
+    Use this end-point to list number of outlet distribution of distribution snap
     """
-    serializer_class = distribution_serializers.VisitByChannelDistributionSnapReportSerializer
+    serializer_class = distribution_serializers.NumberOfOutletDistributionSnapReportSerializer
     filterset_class = DistributionSnapFilter
 
     def get_queryset(self):
-        return distribution_usecases.VisitByChannelDistributionSnapReportUseCase().execute()
-
-
-class SKUByCityDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list sku by city report of distribution snap
-    """
-    serializer_class = distribution_serializers.SKUByCityDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.SKUByCityDistributionSnapReportUseCase().execute()
-
-
-class SKUByCountryDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list sku by country report of distribution snap
-    """
-    serializer_class = distribution_serializers.SKUByCountryDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.SKUByCountryDistributionSnapReportUseCase().execute()
-
-
-class SKUByChannelDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list sku by channel report of distribution snap
-    """
-    serializer_class = distribution_serializers.SKUByChannelDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.SKUByChannelDistributionSnapReportUseCase().execute()
-
-
-class ShareSKUByCountryDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list share sku by country report of distribution snap
-    """
-    serializer_class = distribution_serializers.ShareSKUByCountryDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.ShareSKUByCountryDistributionSnapReportUseCase().execute()
-
-
-class ShareSKUByChannelDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list share sku by channel report of distribution snap
-    """
-    serializer_class = distribution_serializers.ShareSKUByChannelDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.ShareSKUByChannelDistributionSnapReportUseCase().execute()
-
-
-class ShareBrandByCountryDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list share brand by country report of distribution snap
-    """
-    serializer_class = distribution_serializers.ShareBrandByCountryDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.ShareBrandByCountryDistributionSnapReportUseCase().execute()
-
-
-class ShareBrandByChannelDistributionSnapReportView(BaseReportView):
-    """
-    Use this end-point to list share brand by channel report of distribution snap
-    """
-    serializer_class = distribution_serializers.ShareBrandByChannelDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
-
-    def get_queryset(self):
-        return distribution_usecases.ShareBrandByChannelDistributionSnapReportUseCase().execute()
+        return distribution_usecases.NumberOfOutletDistributionSnapReportUseCase().execute()
 
 
 class BulkDeleteDistributionSnapView(generics.CreateWithMessageAPIView):
@@ -186,3 +160,12 @@ class BulkDeleteDistributionSnapView(generics.CreateWithMessageAPIView):
         return distribution_usecases.BulkDeleteDistributionSnapUseCase(
             serializer=serializer
         ).execute()
+
+
+class ExportDistributionSnapView(generics.GenericAPIView):
+    """
+    Use this end-point to export distribution snap to csv file
+    """
+
+    def get(self, *args, **kwargs):
+        return distribution_usecases.ExportDistributionSnapUseCase().execute()

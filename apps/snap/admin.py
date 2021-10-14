@@ -52,7 +52,6 @@ class DistributionSnapAdmin(BaseModelAdmin):
     raw_id_fields = [
         'city',
         'sku',
-        'store',
     ]
 
 
@@ -71,3 +70,33 @@ class ConsumerSnapAdmin(BaseModelAdmin):
         'sku',
         'channel'
     ]
+
+
+@admin.register(models.SnapChannel)
+class SnapChannelAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(models.SnapRetailer)
+class SnapRetailerAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(models.SnapStore)
+class SnapStoreAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(models.SnapCategory)
+class SnapCategoryAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(models.SnapBrand)
+class SnapBrandAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(models.SnapSKU)
+class SnapSKUAdmin(BaseModelAdmin):
+    pass

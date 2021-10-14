@@ -1,17 +1,172 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
-from apps.localize.models import City
-from apps.market.models import Channel, Store
-from apps.product.models import SKU, Category, Brand
+from apps.core.utils import generate_custom_id
+from apps.localize.models import City, Country
 from apps.question.models import QuestionType
+
+
+# -----Snap Product-------
+class SnapCategory(BaseModel):
+    """
+    Category Model
+    """
+    id = models.CharField(
+        max_length=50,
+        unique=True,
+        primary_key=True,
+        editable=False
+    )
+
+    name = models.CharField(max_length=224)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Snap Category'
+        verbose_name_plural = 'Snap Categories'
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if SnapCategory.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('Category name already exists.')
+            })
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.id = generate_custom_id(initial='CA', model=SnapCategory)
+        super(SnapCategory, self).save(*args, **kwargs)
+
+
+class SnapBrand(BaseModel):
+    """
+    Category Model
+    """
+    id = models.CharField(
+        max_length=50,
+        unique=True,
+        primary_key=True,
+        editable=False
+    )
+
+    name = models.CharField(max_length=224)
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if SnapBrand.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('Brand name already exists.')
+            })
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.id = generate_custom_id(initial='BR', model=SnapBrand)
+        super(SnapBrand, self).save(*args, **kwargs)
+
+
+class SnapSKU(BaseModel):
+    """
+    SKU Model
+    """
+    id = models.CharField(
+        max_length=50,
+        unique=True,
+        primary_key=True,
+        editable=False
+    )
+
+    name = models.CharField(max_length=224)
+    brand = models.ForeignKey(SnapBrand, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        SnapCategory,
+        null=True,
+        on_delete=models.CASCADE
+    )
+    country = models.ManyToManyField(Country, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            self.id = generate_custom_id(initial='SKU', model=SnapSKU)
+        super(SnapSKU, self).save(*args, **kwargs)
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if SnapSKU.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('SKU name already exists.')
+            })
+
+
+# -----Snap Market-------------
+class SnapChannel(BaseModel):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if SnapChannel.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('Channel name already exists.')
+            })
+
+
+class SnapRetailer(BaseModel):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if SnapRetailer.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('Retailer name already exists.')
+            })
+
+
+class SnapStore(BaseModel):
+    name = models.CharField(max_length=100)
+    retailer = models.ForeignKey(SnapRetailer, on_delete=models.CASCADE)
+    channel = models.ForeignKey(
+        SnapChannel,
+        on_delete=models.CASCADE,
+        null=True
+    )
+
+    city = models.ForeignKey(
+        City,
+        null=True,
+        on_delete=models.CASCADE
+    )
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if SnapStore.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('Store name already exists.')
+            })
+
+    def __str__(self):
+        return self.name
 
 
 class PriceMonitorSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
-    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
-    sku = models.ForeignKey(SKU, on_delete=models.CASCADE)
+    channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
+    sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
     count = models.IntegerField()
     mode = models.FloatField()
     mean = models.FloatField()
@@ -27,8 +182,8 @@ class PriceMonitorSnap(BaseModel):
 class OutOfStockSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    sku = models.ForeignKey(SKU, on_delete=models.CASCADE)
+    store = models.ForeignKey(SnapStore, null=True, on_delete=models.CASCADE)
+    sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
     count = models.IntegerField()
     not_available_in_month = models.FloatField()
     less_available_in_month = models.FloatField()
@@ -51,8 +206,8 @@ class OutOfStockSnap(BaseModel):
 class ConsumerSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
-    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
-    sku = models.ForeignKey(SKU, on_delete=models.CASCADE)
+    channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
+    sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
     count = models.IntegerField()
     question_statement = models.CharField(max_length=250)
     question_type = models.ForeignKey(QuestionType, on_delete=models.CASCADE)
@@ -91,18 +246,11 @@ class ConsumerSnap(BaseModel):
 class DistributionSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    sku = models.ForeignKey(SKU, on_delete=models.CASCADE)
-    count = models.IntegerField()
-    sku_by_city = models.FloatField(blank=True, null=True)
-    sku_by_country = models.FloatField(blank=True, null=True)
-    sku_by_channel = models.FloatField(blank=True, null=True)
-    brand_by_city = models.FloatField(blank=True, null=True)
-    brand_by_country = models.FloatField(blank=True, null=True)
-    share_brand_by_country = models.FloatField(blank=True, null=True)
-    share_brand_by_channel = models.FloatField(blank=True, null=True)
-    share_sku_by_channel = models.FloatField(blank=True, null=True)
-    share_sku_by_country = models.FloatField(blank=True, null=True)
+    channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
+    sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
+    total_distribution = models.FloatField(blank=True, null=True)
+    shelf_share = models.FloatField(blank=True, null=True)
+    number_of_outlet = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return '{}-Distribution-Snap'.format(

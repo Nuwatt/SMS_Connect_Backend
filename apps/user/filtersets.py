@@ -5,6 +5,9 @@ from apps.user.models import AgentUser, PortalUser
 
 
 class AgentUserFilter(filters.FilterSet):
+    status = filters.ChoiceFilter(
+        choices=()
+    )
     search = filters.CharFilter(
         method='search_user',
         label='search'

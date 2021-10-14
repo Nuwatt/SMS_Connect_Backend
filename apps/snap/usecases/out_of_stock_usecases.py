@@ -1,18 +1,18 @@
+import csv
 from datetime import datetime
 
 from django.db import IntegrityError
 from django.db.models import F, Sum
 from django.db.models.functions import TruncMonth, ExtractWeek
+from django.http import HttpResponse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
 from apps.localize.models import Country, City
-from apps.market.models import Channel, Retailer, Store
-from apps.product.models import Category, Brand, SKU
 from apps.snap.exceptions import OutOfStockSnapNotFound
-from apps.snap.models import OutOfStockSnap
+from apps.snap.models import OutOfStockSnap, SnapChannel, SnapRetailer, SnapStore, SnapCategory, SnapBrand, SnapSKU
 
 
 class GetOutOfStockSnapUseCase(usecases.BaseUseCase):
@@ -67,21 +67,21 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
                 city_data[item.get('City')] = city
 
             if item.get('Channel') not in channel_data:
-                channel, _created = Channel.objects.get_or_create(
+                channel, _created = SnapChannel.objects.get_or_create(
                     name=item.get('Channel'),
                     is_archived=False
                 )
                 channel_data[item.get('Channel')] = channel
 
             if item.get('Retailer') not in retailer_data:
-                retailer, _created = Retailer.objects.get_or_create(
+                retailer, _created = SnapRetailer.objects.get_or_create(
                     name=item.get('Retailer'),
                     is_archived=False
                 )
                 retailer_data[item.get('Retailer')] = retailer
 
             if item.get('Store') not in store_data:
-                store, _created = Store.objects.get_or_create(
+                store, _created = SnapStore.objects.get_or_create(
                     name=item.get('Store'),
                     channel=channel_data[item.get('Channel')],
                     retailer=retailer_data[item.get('Retailer')],
@@ -90,21 +90,21 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
                 store_data[item.get('Store')] = store
 
             if item.get('Category') not in category_data:
-                category, _created = Category.objects.get_or_create(
+                category, _created = SnapCategory.objects.get_or_create(
                     name=item.get('Category'),
                     is_archived=False
                 )
                 category_data[item.get('Category')] = category
 
             if item.get('Brand') not in brand_data:
-                brand, _created = Brand.objects.get_or_create(
+                brand, _created = SnapBrand.objects.get_or_create(
                     name=item.get('Brand'),
                     is_archived=False
                 )
                 brand_data[item.get('Brand')] = brand
 
             if item.get('SKU') not in sku_data:
-                sku, _created = SKU.objects.get_or_create(
+                sku, _created = SnapSKU.objects.get_or_create(
                     name=item.get('SKU'),
                     brand=brand_data[item.get('Brand')],
                     category=category_data[item.get('Category')],
@@ -117,7 +117,7 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
                 city=city_data[item.get('City')],
                 store=store_data[item.get('Store')],
                 sku=sku_data[item.get('SKU')],
-                date=datetime.strptime(item.get('Date'), "%m/%d/%Y").date(),
+                date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
                 defaults={
                     'count': item.get('Count'),
                     'not_available_in_month': item.get('Not Available In Month'),
@@ -345,3 +345,41 @@ class BulkDeleteOutOfStockSnapUseCase(usecases.CreateUseCase):
             is_archived=False,
             id__in=self._data.get('snap_ids')
         ).archive()
+
+
+class ExportOutOfStockSnapUseCase(usecases.BaseUseCase):
+    columns = [
+        'Date', 'Country', 'City', 'Channel', 'Retailer', 'Store',
+        'Category', 'Brand', 'SKU', 'Count', 'Not Available In Month',
+        'Less Available In Month', 'Available In Month', 'Not Available By Store',
+        'Less Available By Store', 'Available By Store', 'Not Available By City',
+        'Less Available By City', 'Available By City'
+    ]
+
+    def execute(self):
+        return self._factory()
+
+    def _factory(self):
+        response = HttpResponse(content_type='text/csv')
+        filename = 'out_of_stock_snap.csv'
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+
+        # 1. write headers
+        writer = csv.writer(response)
+        writer.writerow(self.columns)
+
+        # 2. write questions
+        snaps = OutOfStockSnap.objects.unarchived().values(
+            'date', 'city__country__name', 'city__name', 'store__channel__name',
+            'store__retailer__name', 'store__name', 'sku__category__name',
+            'sku__brand__name', 'sku__name', 'count', 'not_available_in_month',
+            'less_available_in_month', 'available_in_month',
+            'not_available_by_store', 'less_available_by_store',
+            'available_by_store', 'not_available_by_city',
+            'less_available_by_city', 'available_by_city',
+        )
+        for snap in snaps:
+            writer.writerow([
+                *snap.values()
+            ])
+        return response
