@@ -157,6 +157,7 @@ class ListOutOfStockSnapUseCase(usecases.BaseUseCase):
             'store__channel__name',
             'store__retailer__name',
             'store__name',
+            'count',
             'not_available_in_month',
             'less_available_in_month',
             'available_in_month',
