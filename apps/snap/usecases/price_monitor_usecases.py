@@ -160,6 +160,8 @@ class ListPriceMonitorSnapUseCase(usecases.BaseUseCase):
             'sku__brand__name',
             'sku__name',
             'count',
+            'date',
+            'id',
             'min',
             'min',
             'max',
