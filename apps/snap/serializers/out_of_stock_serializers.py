@@ -23,14 +23,14 @@ class OutOfStockSnapSerializer(serializers.ModelSerializer):
 
 
 class ListOutOfStockSnapSerializer(OutOfStockSnapSerializer):
-    country = IdNameSerializer(source='city.country')
-    city = IdNameSerializer()
-    category = IdNameCharSerializer(source='sku.category')
-    brand = IdNameCharSerializer(source='sku.brand')
-    channel = IdNameSerializer(source='store.channel')
-    store = IdNameSerializer()
-    retailer = IdNameSerializer(source='store.retailer')
-    sku = IdNameCharSerializer()
+    country = serializers.CharField(source='city__country__name')
+    city = serializers.CharField(source='city__name')
+    category = serializers.CharField(source='sku__category__name')
+    brand = serializers.CharField(source='sku__brand__name')
+    channel = serializers.CharField(source='store__channel__name')
+    store = serializers.CharField(source='store__name')
+    retailer = serializers.CharField(source='store__retailer__name')
+    sku = serializers.CharField(source='sku__name')
 
     class Meta(OutOfStockSnapSerializer.Meta):
         fields = (

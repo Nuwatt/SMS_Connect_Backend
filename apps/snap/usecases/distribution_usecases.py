@@ -120,13 +120,19 @@ class ListDistributionSnapUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return DistributionSnap.objects.select_related(
-            'city',
-            'city__country',
-            'sku__category',
-            'sku__brand',
-            'sku',
-            'channel',
+        return DistributionSnap.objects.values(
+            'city__name',
+            'city__country__name',
+            'sku__category__name',
+            'sku__brand__name',
+            'sku__name',
+            'channel__name',
+            'id',
+            'created',
+            'date',
+            'total_distribution',
+            'shelf_share',
+            'number_of_outlet'
         ).unarchived()
 
 
