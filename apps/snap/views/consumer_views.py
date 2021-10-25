@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
@@ -31,7 +32,8 @@ class ListConsumerSnapView(generics.ListAPIView):
     """
     serializer_class = consumer_serializers.ListConsumerSnapSerializer
     permission_classes = (IsPortalUser,)
-    filter_backends = [SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = ConsumerSnapFilter
     search_fields = [
         'city__country__name', 'city__name', 'channel__name',
         'sku__category__name', 'sku__brand__name', 'sku__name'

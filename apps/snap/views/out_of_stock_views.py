@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
@@ -31,7 +32,8 @@ class ListOutOfStockSnapView(generics.ListAPIView):
     """
     serializer_class = out_of_stock_serializers.ListOutOfStockSnapSerializer
     permission_classes = (IsPortalUser,)
-    filter_backends = [SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = OutOfStockSnapFilter
     search_fields = [
         'city__country__name', 'city__name', 'store__channel__name',
         'store__retailer__name', 'store__name',
