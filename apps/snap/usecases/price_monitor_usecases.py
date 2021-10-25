@@ -164,7 +164,8 @@ class ListPriceMonitorSnapUseCase(usecases.BaseUseCase):
             'min',
             'max',
             'mean',
-            'mode'
+            'mode',
+            'created'
         ).unarchived()
 
 
