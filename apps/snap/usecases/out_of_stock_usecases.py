@@ -148,15 +148,27 @@ class ListOutOfStockSnapUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return OutOfStockSnap.objects.select_related(
-            'city',
-            'city__country',
-            'sku__category',
-            'sku__brand',
-            'sku',
-            'store__channel',
-            'store__retailer',
-            'store',
+        return OutOfStockSnap.objects.values(
+            'city__name',
+            'city__country__name',
+            'sku__category__name',
+            'sku__brand__name',
+            'sku__name',
+            'store__channel__name',
+            'store__retailer__name',
+            'store__name',
+            'not_available_in_month',
+            'less_available_in_month',
+            'available_in_month',
+            'not_available_by_store',
+            'less_available_by_store',
+            'available_by_store',
+            'not_available_by_city',
+            'less_available_by_city',
+            'available_by_city',
+            'id',
+            'date',
+            'created',
         ).unarchived()
 
 

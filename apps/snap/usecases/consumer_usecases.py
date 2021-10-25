@@ -156,14 +156,16 @@ class ListConsumerSnapUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return ConsumerSnap.objects.select_related(
-            'city',
-            'channel',
-            'city__country',
-            'sku__category',
-            'sku__brand',
-            'sku',
-            'question_type'
+        return ConsumerSnap.objects.values(
+            'id', 'created', 'city__name', 'channel__name', 'city__country__name',
+            'city__country__name', 'sku__category__name', 'sku__brand__name',
+            'sku__name', 'question_type__name', 'date',
+            'count', 'question_statement', 'total_yes',
+            'total_no', 'rating_one_on_three', 'rating_two_on_three', 'rating_three_on_three',
+            'rating_one_on_five', 'rating_two_on_five', 'rating_three_on_five', 'rating_four_on_five',
+            'rating_five_on_five', 'rating_one_on_ten', 'rating_two_on_ten', 'rating_three_on_ten',
+            'rating_four_on_ten', 'rating_five_on_ten', 'rating_six_on_ten', 'rating_seven_on_ten',
+            'rating_eight_on_ten', 'rating_nine_on_ten', 'rating_ten_on_ten', 'average_numeric'
         ).unarchived()
 
 
