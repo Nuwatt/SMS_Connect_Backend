@@ -45,7 +45,8 @@ class ListPriceMonitorSnapView(generics.ListAPIView):
     filterset_class = PriceMonitorSnapFilter
     search_fields = [
         'city__country__name', 'city__name', 'channel__name',
-        'sku__category__name', 'sku__brand__name', 'sku__name'
+        'sku__category__name', 'sku__brand__name', 'sku__name',
+        'count', 'min', 'min', 'max', 'mean', 'mode'
     ]
 
     def get_queryset(self):
