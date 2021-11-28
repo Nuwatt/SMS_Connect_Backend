@@ -1,11 +1,8 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter
-
 from apps.core import generics
 from apps.snap.filtersets import SnapBrandFilter
 from apps.snap.mixins import SnapBrandMixin
-from apps.snap.usecases import brand_usecases
 from apps.snap.serializers import brand_serializers
+from apps.snap.usecases import brand_usecases
 
 
 class AddSnapBrandView(generics.CreateAPIView):
@@ -26,8 +23,6 @@ class ListSnapBrandView(generics.ListAPIView):
     """
     serializer_class = brand_serializers.ListSnapBrandSerializer
     filterset_class = SnapBrandFilter
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
-    ordering_fields = ['name']
 
     def get_queryset(self):
         return brand_usecases.ListSnapBrandUseCase().execute()

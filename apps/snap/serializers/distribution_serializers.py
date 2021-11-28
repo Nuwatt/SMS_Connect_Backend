@@ -31,12 +31,12 @@ class DistributionSnapSerializer(serializers.ModelSerializer):
 
 
 class ListDistributionSnapSerializer(DistributionSnapSerializer):
-    country = IdNameSerializer(source='city.country')
-    city = IdNameSerializer()
-    category = IdNameCharSerializer(source='sku.category')
-    brand = IdNameCharSerializer(source='sku.brand')
-    channel = IdNameSerializer()
-    sku = IdNameCharSerializer()
+    country = serializers.CharField(source='city__country__name')
+    city = serializers.CharField(source='city__name')
+    category = serializers.CharField(source='sku__category__name')
+    brand = serializers.CharField(source='sku__brand__name')
+    channel = serializers.CharField(source='channel__name')
+    sku = serializers.CharField(source='sku__name')
 
     class Meta(DistributionSnapSerializer.Meta):
         fields = (

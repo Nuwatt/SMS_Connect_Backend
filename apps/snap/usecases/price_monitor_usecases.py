@@ -151,13 +151,23 @@ class ListPriceMonitorSnapUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.select_related(
-            'city',
-            'channel',
-            'city__country',
-            'sku__category',
-            'sku__brand',
-            'sku'
+        return PriceMonitorSnap.objects.values(
+            'city__name',
+            'channel__name',
+            'city__country__name',
+            'sku__category__name',
+            'sku__brand__name',
+            'sku__brand__name',
+            'sku__name',
+            'count',
+            'date',
+            'id',
+            'min',
+            'min',
+            'max',
+            'mean',
+            'mode',
+            'created'
         ).unarchived()
 
 

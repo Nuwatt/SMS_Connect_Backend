@@ -1,4 +1,5 @@
 from django.utils.translation import gettext_lazy as _
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
@@ -40,10 +41,12 @@ class ListPriceMonitorSnapView(generics.ListAPIView):
     """
     serializer_class = price_monitor_serializers.ListPriceMonitorSnapSerializer
     permission_classes = (IsPortalUser,)
-    filter_backends = [SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = PriceMonitorSnapFilter
     search_fields = [
         'city__country__name', 'city__name', 'channel__name',
-        'sku__category__name', 'sku__brand__name', 'sku__name'
+        'sku__category__name', 'sku__brand__name', 'sku__name',
+        'count', 'min', 'min', 'max', 'mean', 'mode'
     ]
 
     def get_queryset(self):

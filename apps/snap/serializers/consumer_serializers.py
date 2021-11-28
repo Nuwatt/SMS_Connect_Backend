@@ -23,13 +23,13 @@ class ConsumerSnapSerializer(serializers.ModelSerializer):
 
 
 class ListConsumerSnapSerializer(ConsumerSnapSerializer):
-    country = IdNameSerializer(source='city.country')
-    city = IdNameSerializer()
-    category = IdNameCharSerializer(source='sku.category')
-    brand = IdNameCharSerializer(source='sku.brand')
-    channel = IdNameSerializer()
-    sku = IdNameCharSerializer()
-    question_type = IdNameSerializer()
+    country = serializers.CharField(source='city__country__name')
+    city = serializers.CharField(source='city__name')
+    category = serializers.CharField(source='sku__category__name')
+    brand = serializers.CharField(source='sku__brand__name')
+    channel = serializers.CharField(source='channel__name')
+    sku = serializers.CharField(source='sku__name')
+    question_type = serializers.CharField(source='question_type__name')
 
     class Meta(ConsumerSnapSerializer.Meta):
         fields = (
