@@ -339,7 +339,7 @@ class NotAvailableByWeekOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         ).values(
             'sku'
         ).distinct().annotate(
-            week=('date'),
+            week=F('date'),
             sku_name=F('sku__name'),
             store_name=F('store__name'),
             retailer_name=F('store__retailer__name'),
