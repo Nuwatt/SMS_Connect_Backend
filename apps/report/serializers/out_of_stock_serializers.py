@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from rest_framework import serializers
 
 from apps.report.serializers.price_monitor_serializers import SKUMonthReportSerializer
@@ -24,9 +26,14 @@ class SKUStoreReportSerializer(serializers.Serializer):
 
 class SKUWeekNotAvailableReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    week = serializers.IntegerField()
+    week = serializers.SerializerMethodField()
     retailer = serializers.CharField(source='retailer_name')
     store = serializers.CharField(source='store_name')
+
+    def get_week(self, instance):
+        start_date = instance.get('completed_week')
+        end_date = start_date + timedelta(days=6)
+        return f'{start_date.strftime("%Y-%m-%d")} to {end_date.strftime("%Y-%m-%d")}'
 
 
 class SKUMonthAvailableReportSerializer(SKUMonthReportSerializer):
