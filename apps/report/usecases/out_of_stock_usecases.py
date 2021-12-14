@@ -1,5 +1,5 @@
 from django.db.models import Count, Q, F
-from django.db.models.functions import TruncMonth, ExtractWeek
+from django.db.models.functions import TruncMonth, ExtractWeek, TruncWeek
 from django.utils.timezone import now
 
 from apps.core import usecases
@@ -271,7 +271,7 @@ class SKUWeekNotAvailableReportUseCase(usecases.BaseUseCase):
         return self._results
 
     def _factory(self):
-        current_week = now().isocalendar()[1]
+        # current_week = now().isocalendar()[1]
         self._results = ChoiceAnswer.objects.filter(
             answer__response__response_cycle__questionnaire__questionnaire_type__name='Out Of Stock',
             answer__response__is_completed=True,
@@ -282,15 +282,16 @@ class SKUWeekNotAvailableReportUseCase(usecases.BaseUseCase):
         ).values(
             'sku'
         ).annotate(
-            completed_week=ExtractWeek('answer__response__completed_at'),
-            week=current_week - F('completed_week'),
+            completed_week=TruncWeek('answer__response__completed_at'),
+            # week=current_week - F('completed_week'),
             sku_name=F('answer__question__sku__name'),
             store_name=F('answer__response__store__name'),
             retailer_name=F('answer__response__store__retailer__name'),
         ).values(
-            'week',
+            'completed_week',
             'sku_name',
             'store_name',
             'retailer_name'
         )
+        # print(self._results)
 
