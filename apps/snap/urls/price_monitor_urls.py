@@ -15,7 +15,7 @@ report_urls = [
     ),
     path(
         'month-min',
-        price_monitor_views.MonthMaxPriceMonitorSnapReportView.as_view(),
+        price_monitor_views.MonthMinPriceMonitorSnapReportView.as_view(),
         name='month-min-price-monitor-snap-report'
     ),
     path(
