@@ -25,7 +25,7 @@ class NationalityAdmin(LocalizeModelAdmin):
 
 @admin.register(models.City)
 class CityAdmin(LocalizeModelAdmin):
-    list_filter = (
+    list_filter = LocalizeModelAdmin.list_filter + (
         'country',
     )
     raw_id_fields = (

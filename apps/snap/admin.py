@@ -8,12 +8,14 @@ from apps.snap import models
 class PriceMonitorSnapAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'sku',
+        'date',
     )
     list_filter = BaseModelAdmin.list_filter + (
         'sku__category',
         'sku__brand',
         'channel',
         'city__country',
+        'city',
     )
     raw_id_fields = [
         'city',
