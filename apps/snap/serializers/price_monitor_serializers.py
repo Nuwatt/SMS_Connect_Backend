@@ -62,11 +62,11 @@ class UpdatePriceMonitorSnapSerializer(PriceMonitorSnapSerializer):
 
 
 class OverviewPriceMonitorSnapReport(serializers.Serializer):
-    sku = serializers.CharField(source='sku__name')
-    min = serializers.DecimalField(max_digits=10, decimal_places=1)
-    max = serializers.DecimalField(max_digits=10, decimal_places=1)
-    mode = serializers.DecimalField(max_digits=10, decimal_places=1)
-    mean = serializers.DecimalField(max_digits=10, decimal_places=1)
+    sku = serializers.CharField(source='sku_name')
+    min = serializers.DecimalField(max_digits=10, decimal_places=1, source='min_value')
+    max = serializers.DecimalField(max_digits=10, decimal_places=1, source='max_value')
+    mode = serializers.DecimalField(max_digits=10, decimal_places=1, source='mode_value')
+    mean = serializers.DecimalField(max_digits=10, decimal_places=1, source='mean_value')
 
 
 class MonthPriceMonitorSnapReportSerializer(serializers.Serializer):
@@ -90,7 +90,7 @@ class CountryPriceMonitorSnapReportSerializer(serializers.Serializer):
 
 
 class VisitPerCityPriceMonitorSnapReportSerializer(AnswerPerCityReportSerializer):
-    pass
+    sku = serializers.CharField(source='sku_name')
 
 
 class VisitPerCountryPriceMonitorSnapReportSerializer(AnswerPerCountryReportSerializer):
