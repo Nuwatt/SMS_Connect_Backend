@@ -4,6 +4,15 @@ from apps.core.admin import BaseModelAdmin
 from apps.snap import models
 
 
+class SnapModelAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'name',
+    )
+    search_fields = BaseModelAdmin.search_fields + (
+        'name',
+    )
+
+
 @admin.register(models.PriceMonitorSnap)
 class PriceMonitorSnapAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
@@ -75,30 +84,30 @@ class ConsumerSnapAdmin(BaseModelAdmin):
 
 
 @admin.register(models.SnapChannel)
-class SnapChannelAdmin(BaseModelAdmin):
+class SnapChannelAdmin(SnapModelAdmin):
     pass
 
 
 @admin.register(models.SnapRetailer)
-class SnapRetailerAdmin(BaseModelAdmin):
+class SnapRetailerAdmin(SnapModelAdmin):
     pass
 
 
 @admin.register(models.SnapStore)
-class SnapStoreAdmin(BaseModelAdmin):
+class SnapStoreAdmin(SnapModelAdmin):
     pass
 
 
 @admin.register(models.SnapCategory)
-class SnapCategoryAdmin(BaseModelAdmin):
+class SnapCategoryAdmin(SnapModelAdmin):
     pass
 
 
 @admin.register(models.SnapBrand)
-class SnapBrandAdmin(BaseModelAdmin):
+class SnapBrandAdmin(SnapModelAdmin):
     pass
 
 
 @admin.register(models.SnapSKU)
-class SnapSKUAdmin(BaseModelAdmin):
+class SnapSKUAdmin(SnapModelAdmin):
     pass
