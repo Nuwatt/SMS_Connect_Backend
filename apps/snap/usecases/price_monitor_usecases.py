@@ -186,32 +186,24 @@ class OverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        snap_mode = PriceMonitorSnap.objects.filter(
-            sku=OuterRef('sku'),
-        ).values(
-            'mode',
-        ).order_by(
-            'created',
-        ).annotate(
-            frequency=Count('id')
-        ).order_by(
-            '-frequency',
-        ).values('mode')[:1]
+        # snap_mode = PriceMonitorSnap.objects.filter(
+        #     sku=OuterRef('sku'),
+        # ).values(
+        #     'mode',
+        # ).order_by(
+        #     'created',
+        # ).annotate(
+        #     frequency=Count('id')
+        # ).order_by(
+        #     '-frequency',
+        # ).values('mode')[:1]
 
         return PriceMonitorSnap.objects.values(
-            'sku'
-        ).distinct().annotate(
-            sku_name=F('sku__name'),
-            min_value=Min('min'),
-            max_value=Max('max'),
-            mean_value=Avg('mean'),
-            mode_value=Subquery(snap_mode)
-        ).values(
-            'sku_name',
-            'min_value',
-            'max_value',
-            'mean_value',
-            'mode_value'
+            'sku__name',
+            'min',
+            'max',
+            'mean',
+            'mode',
         ).unarchived()
 
 
