@@ -19,7 +19,8 @@ class BaseUseCase:
     """
 
     def execute(self):
-        raise NotImplementedError("Subclasses should implement this!")
+        self.is_valid()
+        return self._factory()
 
     def _factory(self):
         raise NotImplementedError("Subclasses should implement this!")

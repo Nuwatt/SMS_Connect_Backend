@@ -2,7 +2,7 @@ import csv
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
+from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum, Q
 from django.db.models.functions import TruncMonth
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
@@ -315,31 +315,20 @@ class MonthModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
 
 
 class BrandOverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
     def _factory(self):
-        snap_mode = PriceMonitorSnap.objects.filter(
-            sku__brand=OuterRef('sku__brand'),
-        ).values(
-            'mode',
-        ).order_by(
-            'created',
-        ).annotate(
-            frequency=Count('id')
-        ).order_by(
-            '-frequency',
-        ).values('mode')[:1]
+        # snap_mode = PriceMonitorSnap.objects.filter(
+        #     sku__brand=OuterRef('sku__brand'),
+        # ).values(
+        #     'mode',
+        # ).order_by(
+        #     'date',
+        # ).annotate(
+        #     frequency=Count('mode')
+        # ).order_by(
+        #     '-frequency'
+        # ).values('mode')[:1]
 
-        return PriceMonitorSnap.objects.values(
-            'sku__brand'
-        ).distinct().annotate(
-            brand_name=F('sku__brand__name'),
-            min_value=Min('min'),
-            max_value=Max('max'),
-            mean_value=Avg('mean'),
-            mode_value=Subquery(snap_mode)
-        ).unarchived()
+        return PriceMonitorSnap.objects.unarchived()
 
 
 class CountryMinPriceMonitorSnapReportUseCase(usecases.BaseUseCase):

@@ -1,3 +1,4 @@
+from django.db.models import Count, Min, Max, Avg
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
@@ -148,6 +149,28 @@ class BrandOverviewPriceMonitorSnapReportView(BaseReportView):
 
     def get_queryset(self):
         return price_monitor_usecases.BrandOverviewPriceMonitorSnapReportUseCase().execute()
+
+    def custom_queryset(self, queryset):
+        results = []
+        unique_brands = queryset.values('sku__brand_id', 'sku__brand__name').distinct()
+        stats = queryset.aggregate(
+            Min('min'),
+            Max('max'),
+            Avg('mean')
+        )
+
+        for brand in unique_brands:
+            results.append({
+                'brand_name': brand.get('sku__brand__name'),
+                'mode_value': queryset.annotate(
+                    Count('mode')
+                ).order_by('-mode__count').values('mode')[0].get('mode'),
+                'min_value': stats.get('min__min'),
+                'max_value': stats.get('max__max'),
+                'mean_value': stats.get('mean__avg'),
+            })
+
+        return results
 
 
 class CountryMinPriceMonitorSnapReportView(BaseReportView):
