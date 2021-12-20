@@ -90,7 +90,7 @@ class CountryPriceMonitorSnapReportSerializer(serializers.Serializer):
 
 
 class VisitPerCityPriceMonitorSnapReportSerializer(AnswerPerCityReportSerializer):
-    pass
+    sku = serializers.CharField(source='sku_name')
 
 
 class VisitPerCountryPriceMonitorSnapReportSerializer(AnswerPerCountryReportSerializer):

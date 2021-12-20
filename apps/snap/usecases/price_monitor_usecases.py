@@ -2,7 +2,7 @@ import csv
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum
+from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum, Q
 from django.db.models.functions import TruncMonth
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
@@ -220,13 +220,24 @@ class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        # return PriceMonitorSnap.objects.annotate(
+        #     month=TruncMonth('date'),
+        #     value=F('max'),
+        #     sku_name=F('sku__name')
+        # ).values(
+        #     'month',
+        #     'sku_name',
+        #     'value'
+        # ).unarchived()
+        return PriceMonitorSnap.objects.values(
+            'sku'
+        ).distinct().annotate(
             month=TruncMonth('date'),
-            value=F('max'),
-            sku_name=F('sku__name')
+            sku_name=F('sku__name'),
+            value=Max('max'),
         ).values(
-            'month',
             'sku_name',
+            'month',
             'value'
         ).unarchived()
 
@@ -236,13 +247,25 @@ class MonthMinPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        # return PriceMonitorSnap.objects.annotate(
+        #     month=TruncMonth('date'),
+        #     value=F('min'),
+        #     sku_name=F('sku__name')
+        # ).values(
+        #     'month',
+        #     'sku_name',
+        #     'value'
+        # ).unarchived()
+
+        return PriceMonitorSnap.objects.values(
+            'sku'
+        ).distinct().annotate(
             month=TruncMonth('date'),
-            value=F('min'),
-            sku_name=F('sku__name')
+            sku_name=F('sku__name'),
+            value=Min('min'),
         ).values(
-            'month',
             'sku_name',
+            'month',
             'value'
         ).unarchived()
 
@@ -252,13 +275,25 @@ class MonthMeanPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        # return PriceMonitorSnap.objects.annotate(
+        #     month=TruncMonth('date'),
+        #     value=F('mean'),
+        #     sku_name=F('sku__name')
+        # ).values(
+        #     'month',
+        #     'sku_name',
+        #     'value'
+        # ).unarchived()
+
+        return PriceMonitorSnap.objects.values(
+            'sku'
+        ).distinct().annotate(
             month=TruncMonth('date'),
-            value=F('mean'),
-            sku_name=F('sku__name')
+            sku_name=F('sku__name'),
+            value=Avg('mean'),
         ).values(
-            'month',
             'sku_name',
+            'month',
             'value'
         ).unarchived()
 
@@ -280,33 +315,20 @@ class MonthModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
 
 
 class BrandOverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
     def _factory(self):
-        snap_mode = PriceMonitorSnap.objects.filter(
-            sku__brand=OuterRef('sku__brand'),
-        ).values(
-            'mode',
-        ).order_by(
-            'created',
-        ).annotate(
-            frequency=Count('id')
-        ).order_by(
-            '-frequency',
-        ).values('mode')[:1]
+        # snap_mode = PriceMonitorSnap.objects.filter(
+        #     sku__brand=OuterRef('sku__brand'),
+        # ).values(
+        #     'mode',
+        # ).order_by(
+        #     'date',
+        # ).annotate(
+        #     frequency=Count('mode')
+        # ).order_by(
+        #     '-frequency'
+        # ).values('mode')[:1]
 
-        return PriceMonitorSnap.objects.values(
-            'sku__brand'
-        ).distinct().annotate(
-            brand_name=F('sku__brand__name'),
-            min_value=Min('min'),
-            max_value=Max('max'),
-            mean_value=Avg('mean'),
-            mode_value=Subquery(snap_mode)
-        ).unarchived().filter(
-            max_value__gt=0
-        )
+        return PriceMonitorSnap.objects.unarchived()
 
 
 class CountryMinPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
@@ -341,7 +363,7 @@ class CountryMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         ).annotate(
             country_name=F('city__country__name'),
             sku_name=F('sku__name'),
-            value=Max('min')
+            value=Max('max')
         ).values(
             'country_name',
             'sku_name',
@@ -361,7 +383,7 @@ class CountryMeanPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         ).annotate(
             country_name=F('city__country__name'),
             sku_name=F('sku__name'),
-            value=Avg('min')
+            value=Avg('mean')
         ).values(
             'country_name',
             'sku_name',
@@ -408,9 +430,11 @@ class VisitPerCityPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             'city'
         ).distinct().annotate(
             city_name=F('city__name'),
+            sku_name=F('sku__name'),
             value=Sum('count')
         ).values(
             'city_name',
+            'sku_name',
             'value'
         ).unarchived()
 
