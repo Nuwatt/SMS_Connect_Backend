@@ -51,7 +51,16 @@ class OutOfStockSnapFilter(PriceMonitorSnapFilter):
         field_name='store__channel',
         label='channel',
         lookup_expr='in'
-
+    )
+    retailer = IdInFilter(
+        field_name='store__retailer',
+        label='retailer',
+        lookup_expr='in'
+    )
+    store = IdInFilter(
+        field_name='store',
+        label='store',
+        lookup_expr='in'
     )
 
 

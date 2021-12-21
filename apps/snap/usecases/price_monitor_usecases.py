@@ -47,14 +47,14 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
         for item in self._item_list:
             if item.get('Country') not in country_data:
                 country, _country_created = Country.objects.get_or_create(
-                    name=item.get('Country'),
+                    name=item.get('Country').strip(),
                     is_archived=False
                 )
                 country_data[item.get('Country')] = country
 
             if item.get('City') not in country_data:
                 city, _city__created = City.objects.get_or_create(
-                    name=item.get('City'),
+                    name=item.get('City').strip(),
                     country=country_data[item.get('Country')],
                     is_archived=False
                 )
@@ -62,28 +62,28 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
 
             if item.get('Channel') not in channel_data:
                 channel, _channel_created = SnapChannel.objects.get_or_create(
-                    name=item.get('Channel'),
+                    name=item.get('Channel').strip(),
                     is_archived=False
                 )
                 channel_data[item.get('Channel')] = channel
 
             if item.get('Category') not in category_data:
                 category, _category_created = SnapCategory.objects.get_or_create(
-                    name=item.get('Category'),
+                    name=item.get('Category').strip(),
                     is_archived=False
                 )
                 category_data[item.get('Category')] = category
 
             if item.get('Brand') not in brand_data:
                 brand, _brand_created = SnapBrand.objects.get_or_create(
-                    name=item.get('Brand'),
+                    name=item.get('Brand').strip(),
                     is_archived=False
                 )
                 brand_data[item.get('Brand')] = brand
 
             if item.get('SKU') not in sku_data:
                 sku, _sku_created = SnapSKU.objects.get_or_create(
-                    name=item.get('SKU'),
+                    name=item.get('SKU').strip(),
                     brand=brand_data[item.get('Brand')],
                     category=category_data[item.get('Category')],
                     is_archived=False
