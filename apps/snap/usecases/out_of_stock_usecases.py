@@ -53,14 +53,14 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
         for item in self._item_list:
             if item.get('Country') not in country_data:
                 country, _created = Country.objects.get_or_create(
-                    name=item.get('Country'),
+                    name=item.get('Country').strip(),
                     is_archived=False
                 )
                 country_data[item.get('Country')] = country
 
             if item.get('City') not in country_data:
                 city, _created = City.objects.get_or_create(
-                    name=item.get('City'),
+                    name=item.get('City').strip(),
                     country=country_data[item.get('Country')],
                     is_archived=False
                 )
@@ -68,21 +68,21 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
 
             if item.get('Channel') not in channel_data:
                 channel, _created = SnapChannel.objects.get_or_create(
-                    name=item.get('Channel'),
+                    name=item.get('Channel').strip(),
                     is_archived=False
                 )
                 channel_data[item.get('Channel')] = channel
 
             if item.get('Retailer') not in retailer_data:
                 retailer, _created = SnapRetailer.objects.get_or_create(
-                    name=item.get('Retailer'),
+                    name=item.get('Retailer').strip(),
                     is_archived=False
                 )
                 retailer_data[item.get('Retailer')] = retailer
 
             if item.get('Store') not in store_data:
                 store, _created = SnapStore.objects.get_or_create(
-                    name=item.get('Store'),
+                    name=item.get('Store').strip(),
                     channel=channel_data[item.get('Channel')],
                     retailer=retailer_data[item.get('Retailer')],
                     is_archived=False
@@ -91,21 +91,21 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
 
             if item.get('Category') not in category_data:
                 category, _created = SnapCategory.objects.get_or_create(
-                    name=item.get('Category'),
+                    name=item.get('Category').strip(),
                     is_archived=False
                 )
                 category_data[item.get('Category')] = category
 
             if item.get('Brand') not in brand_data:
                 brand, _created = SnapBrand.objects.get_or_create(
-                    name=item.get('Brand'),
+                    name=item.get('Brand').strip(),
                     is_archived=False
                 )
                 brand_data[item.get('Brand')] = brand
 
             if item.get('SKU') not in sku_data:
                 sku, _created = SnapSKU.objects.get_or_create(
-                    name=item.get('SKU'),
+                    name=item.get('SKU').strip(),
                     brand=brand_data[item.get('Brand')],
                     category=category_data[item.get('Category')],
                     is_archived=False
