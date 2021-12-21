@@ -52,8 +52,8 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
                 )
                 country_data[item.get('Country')] = country
 
-            if item.get('City') not in country_data:
-                city, _city__created = City.objects.get_or_create(
+            if item.get('City') not in city_data:
+                city, _city_created = City.objects.get_or_create(
                     name=item.get('City').strip(),
                     country=country_data[item.get('Country')],
                     is_archived=False
