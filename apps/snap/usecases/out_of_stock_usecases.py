@@ -2,7 +2,7 @@ import csv
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Avg
 from django.db.models.functions import TruncMonth, ExtractWeek
 from django.http import HttpResponse
 from django.utils.timezone import now
@@ -192,9 +192,9 @@ class OverviewOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             'sku'
         ).distinct().annotate(
             sku_name=F('sku__name'),
-            available=F('available_in_month'),
-            not_available=F('not_available_in_month'),
-            less=F('less_available_in_month'),
+            available=Avg('available_in_month'),
+            not_available=Avg('not_available_in_month'),
+            less=Avg('less_available_in_month'),
         ).values(
             'sku_name',
             'available',
