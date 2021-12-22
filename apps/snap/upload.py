@@ -14,8 +14,8 @@ from apps.snap.models import (
 )
 
 
-def import_snap_pm():
-    file = open('/home/xzibit/Documents/sms/Jeddah_2018.csv', 'r')
+def import_snap_pm(path):
+    file = open(path, 'r')
     csv_reader = csv.DictReader(file)
     item_list = list(csv_reader)
 
@@ -89,8 +89,8 @@ def import_snap_pm():
         print(snap.pk)
 
 
-def import_snap_oos():
-    file = open('/home/xzibit/Documents/sms/OOS1-2018.csv', 'r')
+def import_snap_oos(path):
+    file = open(path, 'r')
     csv_reader = csv.DictReader(file)
     item_list = list(csv_reader)
 
