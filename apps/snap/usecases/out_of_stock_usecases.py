@@ -210,15 +210,13 @@ class AvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
     def _factory(self):
         return OutOfStockSnap.objects.annotate(
             month=TruncMonth('date'),
-            value=F('available_in_month'),
+            value=Avg('available_in_month'),
             sku_name=F('sku__name')
         ).values(
             'month',
             'sku_name',
             'value'
-        ).unarchived().filter(
-            value__gt=0
-        )
+        ).unarchived()
 
 
 class NotAvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
@@ -228,15 +226,13 @@ class NotAvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
     def _factory(self):
         return OutOfStockSnap.objects.annotate(
             month=TruncMonth('date'),
-            value=F('not_available_in_month'),
+            value=Avg('not_available_in_month'),
             sku_name=F('sku__name')
         ).values(
             'month',
             'sku_name',
             'value'
-        ).unarchived().filter(
-            value__gt=0
-        )
+        ).unarchived()
 
 
 class LessOutOfStockSnapReportUseCase(usecases.BaseUseCase):
@@ -246,16 +242,13 @@ class LessOutOfStockSnapReportUseCase(usecases.BaseUseCase):
     def _factory(self):
         return OutOfStockSnap.objects.annotate(
             month=TruncMonth('date'),
-            value=F('less_available_in_month'),
+            value=Avg('less_available_in_month'),
             sku_name=F('sku__name')
         ).values(
             'month',
             'sku_name',
             'value'
-        ).unarchived().filter(
-            value__gt=0
-        )
-
+        ).unarchived()
 
 # city
 class AvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
