@@ -75,15 +75,15 @@ class UpdateOutOfStockSnapSerializer(OutOfStockSnapSerializer):
 
 class OverviewOutOfStockSnapReport(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    available = serializers.DecimalField(max_digits=3, decimal_places=1)
-    not_available = serializers.DecimalField(max_digits=3, decimal_places=1)
-    less = serializers.DecimalField(max_digits=3, decimal_places=1)
+    available = serializers.DecimalField(max_digits=4, decimal_places=1)
+    not_available = serializers.DecimalField(max_digits=4, decimal_places=1)
+    less = serializers.DecimalField(max_digits=4, decimal_places=1)
 
 
 class OutOfStockSnapReportSerializer(serializers.Serializer):
     month = serializers.DateField(format='%b')
     sku = serializers.CharField(source='sku_name')
-    value = serializers.DecimalField(max_digits=3, decimal_places=1)
+    value = serializers.DecimalField(max_digits=4, decimal_places=1)
 
 
 class ByCityOutOfStockSnapReportSerializer(serializers.Serializer):
