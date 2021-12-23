@@ -266,17 +266,17 @@ class AvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return OutOfStockSnap.objects.annotate(
+        return OutOfStockSnap.objects.values(
+            'city'
+        ).distinct().annotate(
             city_name=F('city__name'),
-            value=F('available_in_month'),
+            value=Avg('available_in_month'),
             sku_name=F('sku__name')
         ).values(
             'city_name',
             'sku_name',
             'value'
-        ).unarchived().filter(
-            value__gt=0
-        )
+        ).unarchived()
 
 
 class NotAvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
@@ -284,17 +284,17 @@ class NotAvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return OutOfStockSnap.objects.annotate(
+        return OutOfStockSnap.objects.values(
+            'city'
+        ).distinct().annotate(
             city_name=F('city__name'),
-            value=F('not_available_in_month'),
+            value=Avg('not_available_in_month'),
             sku_name=F('sku__name')
         ).values(
             'city_name',
             'sku_name',
             'value'
-        ).unarchived().filter(
-            value__gt=0
-        )
+        ).unarchived()
 
 
 class LessByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
@@ -302,17 +302,17 @@ class LessByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return OutOfStockSnap.objects.annotate(
+        return OutOfStockSnap.objects.values(
+            'city'
+        ).distinct().annotate(
             city_name=F('city__name'),
-            value=F('less_available_in_month'),
+            value=Avg('less_available_in_month'),
             sku_name=F('sku__name')
         ).values(
             'city_name',
             'sku_name',
             'value'
-        ).unarchived().filter(
-            value__gt=0
-        )
+        ).unarchived()
 
 
 class VisitByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):

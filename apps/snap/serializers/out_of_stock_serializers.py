@@ -89,7 +89,7 @@ class OutOfStockSnapReportSerializer(serializers.Serializer):
 class ByCityOutOfStockSnapReportSerializer(serializers.Serializer):
     city = serializers.DateField(source='city_name')
     sku = serializers.CharField(source='sku_name')
-    value = serializers.FloatField()
+    value = serializers.DecimalField(max_digits=4, decimal_places=1)
 
 
 class VisitByCityOutOfStockSnapReportSerializer(serializers.Serializer):
