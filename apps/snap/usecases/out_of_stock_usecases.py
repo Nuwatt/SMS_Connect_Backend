@@ -2,10 +2,9 @@ import csv
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Sum, Avg
-from django.db.models.functions import TruncMonth, ExtractWeek
+from django.db.models import Avg
 from django.db.models import F, Sum
-from django.db.models.functions import TruncMonth, ExtractWeekDay
+from django.db.models.functions import TruncMonth
 from django.http import HttpResponse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
