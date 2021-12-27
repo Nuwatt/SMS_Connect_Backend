@@ -23,9 +23,9 @@ class ListChannelView(generics.ListAPIView):
     Use this end-point to list all channel
     """
     serializer_class = channel_serializers.ListChannelSerializer
-
     filter_backends = [OrderingFilter]
-    ordering_fields = ['name']
+    ordering = '-created'
+    ordering_fields = ['name', 'created']
 
     def get_queryset(self):
         return channel_usecases.ListChannelUseCase().execute()
