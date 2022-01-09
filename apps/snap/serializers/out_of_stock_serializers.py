@@ -81,7 +81,7 @@ class OverviewOutOfStockSnapReport(serializers.Serializer):
 
 
 class OutOfStockSnapReportSerializer(serializers.Serializer):
-    month = serializers.DateField(format='%b\'%-Y')
+    month = serializers.DateField(format='%b\'%-y')
     sku = serializers.CharField(source='sku_name')
     value = serializers.DecimalField(max_digits=3, decimal_places=0)
 
