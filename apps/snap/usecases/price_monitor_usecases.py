@@ -303,10 +303,34 @@ class MonthModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        # return PriceMonitorSnap.objects.annotate(
+        #     month=TruncMonth('date'),
+        #     value=F('mode'),
+        #     sku_name=F('sku__name')
+        # ).values(
+        #     'month',
+        #     'sku_name',
+        #     'value'
+        # ).unarchived()
+
+        snap_mode = PriceMonitorSnap.objects.filter(
+            sku=OuterRef('sku'),
+        ).values(
+            'mode',
+        ).order_by(
+            'created',
+        ).annotate(
+            frequency=Count('id')
+        ).order_by(
+            '-frequency',
+        ).values('mode')[:1]
+
+        return PriceMonitorSnap.objects.values(
+            'sku'
+        ).distinct().annotate(
             month=TruncMonth('date'),
-            value=F('mode'),
-            sku_name=F('sku__name')
+            sku_name=F('sku__name'),
+            value=Subquery(snap_mode)
         ).values(
             'month',
             'sku_name',
