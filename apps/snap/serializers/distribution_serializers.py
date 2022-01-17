@@ -1,21 +1,13 @@
 from rest_framework import serializers
 
 from apps.core.serializers import (
-    CSVFileInputSerializer,
-    IdNameSerializer,
-    IdNameCharSerializer
+    CSVFileInputSerializer
 )
 from apps.report.serializers.distribution_check_serializers import (
     VisitPerCountryReportSerializer,
     VisitPerCityReportSerializer,
     VisitPerChannelReportSerializer,
-    SKUPerCityReportSerializer,
-    SKUPerCountryReportSerializer,
-    SKUPerChannelReportSerializer
-)
-from apps.report.serializers.price_monitor_serializers import (
-    AnswerPerCountryReportSerializer,
-    AnswerPerCityReportSerializer
+    SKUPerCityReportSerializer
 )
 from apps.snap.models import DistributionSnap
 
@@ -79,17 +71,18 @@ class SKUByCityDistributionSnapReportSerializer(SKUPerCityReportSerializer):
 
 class TotalDistributionSnapReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    value = serializers.FloatField(source='total_distribution')
+    value = serializers.DecimalField(max_digits=10, decimal_places=1)
 
 
 class ShelfShareDistributionSnapReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    value = serializers.FloatField(source='shelf_share')
+    city = serializers.CharField(source='city_name')
+    value = serializers.DecimalField(max_digits=10, decimal_places=1)
 
 
 class NumberOfOutletDistributionSnapReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    value = serializers.FloatField(source='number_of_outlet')
+    value = serializers.DecimalField(max_digits=10, decimal_places=1)
 
 
 class BulkDeleteDistributionSnapSerializer(serializers.Serializer):
