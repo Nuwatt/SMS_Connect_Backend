@@ -2,7 +2,7 @@ import csv
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Avg
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -217,10 +217,13 @@ class TotalDistributionSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return DistributionSnap.objects.annotate(
+        return DistributionSnap.objects.values(
+            'sku'
+        ).distinct().annotate(
             sku_name=F('sku__name'),
+            value=Avg('total_distribution')
         ).values(
-            'total_distribution',
+            'value',
             'sku_name',
         ).unarchived()
 
@@ -230,10 +233,15 @@ class ShelfShareDistributionSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return DistributionSnap.objects.annotate(
+        return DistributionSnap.objects.values(
+            'sku'
+        ).distinct().annotate(
             sku_name=F('sku__name'),
+            city_name=F('city__name'),
+            value=Avg('shelf_share')
         ).values(
-            'shelf_share',
+            'value',
+            'city_name',
             'sku_name',
         ).unarchived()
 
@@ -243,10 +251,13 @@ class NumberOfOutletDistributionSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return DistributionSnap.objects.annotate(
+        return DistributionSnap.objects.values(
+            'sku'
+        ).distinct().annotate(
             sku_name=F('sku__name'),
+            value=Avg('number_of_outlet')
         ).values(
-            'number_of_outlet',
+            'value',
             'sku_name',
         ).unarchived()
 
