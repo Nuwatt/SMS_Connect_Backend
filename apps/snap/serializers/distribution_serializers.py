@@ -82,7 +82,7 @@ class ShelfShareDistributionSnapReportSerializer(serializers.Serializer):
 
 class NumberOfOutletDistributionSnapReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    value = serializers.DecimalField(max_digits=10, decimal_places=1)
+    value = serializers.DecimalField(max_digits=10, decimal_places=0)
 
 
 class BulkDeleteDistributionSnapSerializer(serializers.Serializer):
