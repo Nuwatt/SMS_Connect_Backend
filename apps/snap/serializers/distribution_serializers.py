@@ -71,13 +71,13 @@ class SKUByCityDistributionSnapReportSerializer(SKUPerCityReportSerializer):
 
 class TotalDistributionSnapReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
-    value = serializers.DecimalField(max_digits=10, decimal_places=1)
+    value = serializers.DecimalField(max_digits=10, decimal_places=0)
 
 
 class ShelfShareDistributionSnapReportSerializer(serializers.Serializer):
     sku = serializers.CharField(source='sku_name')
     city = serializers.CharField(source='city_name')
-    value = serializers.DecimalField(max_digits=10, decimal_places=1)
+    value = serializers.DecimalField(max_digits=10, decimal_places=0)
 
 
 class NumberOfOutletDistributionSnapReportSerializer(serializers.Serializer):
