@@ -37,11 +37,18 @@ class BrandFilter(filters.FilterSet):
         label='country',
         distinct=True
     )
+    category = IdInFilter(
+        field_name='sku__category',
+        lookup_expr='in',
+        label='category',
+        distinct=True
+    )
 
     class Meta:
         model = Brand
         fields = [
             'country',
+            'category'
         ]
 
 
