@@ -115,7 +115,9 @@ class MonthMinPriceMonitorSnapReportView(BaseReportView):
     filterset_class = PriceMonitorSnapFilter
 
     def get_queryset(self):
-        print(price_monitor_usecases.MonthMinPriceMonitorSnapReportUseCase().execute())
+        print(self.request)
+        data = price_monitor_usecases.MonthMinPriceMonitorSnapReportUseCase().execute()
+
 
 
 class MonthModePriceMonitorSnapReportView(BaseReportView):
