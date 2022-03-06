@@ -115,9 +115,7 @@ class MonthMinPriceMonitorSnapReportView(BaseReportView):
     filterset_class = PriceMonitorSnapFilter
 
     def get_queryset(self):
-        print(self.request.GET.dict()['sku'],"---------------------------")
-        data = price_monitor_usecases.MonthMinPriceMonitorSnapReportUseCase().execute()
-
+        return price_monitor_usecases.MonthMinPriceMonitorSnapReportUseCase().execute()
 
 
 class MonthModePriceMonitorSnapReportView(BaseReportView):
