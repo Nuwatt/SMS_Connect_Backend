@@ -240,7 +240,7 @@ class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             sku_name=Case(
                 When(
                     value_sku_name=None,
-                    then='None',
+                    then=0,
                 ),
                 default = F('value_sku_name')
             ),
