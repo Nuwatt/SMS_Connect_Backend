@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+from optparse import Values
 
 from django.db import IntegrityError
 from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum, Q
@@ -234,7 +235,9 @@ class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         ).distinct().annotate(
             month=TruncMonth('date'),
             sku_name=F('sku__name'),
-            value=self.null_validate(Max('max')),            
+            values=Max('max'),
+            value = self.null_validate('values')
+            
         ).values(
             'sku_name',
             'month',
@@ -387,7 +390,7 @@ class CountryMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         ).annotate(
             country_name=F('city__country__name'),
             sku_name=F('sku__name'),
-            value=self.null_validate(Max('max'))
+            value=Max('max')
         ).values(
             'country_name',
             'sku_name',
