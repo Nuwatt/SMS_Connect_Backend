@@ -30,7 +30,7 @@ class BaseUseCase:
 
     def null_validate(self,value):
         if value == None:
-            value = '0'
+            value = 0
         return(value)
 
 
