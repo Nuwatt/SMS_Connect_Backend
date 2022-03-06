@@ -239,7 +239,7 @@ class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         ).values(
             'sku_name',
             'month',
-            value = self.null_validate('value')
+            value = self.null_validate(F('value'))
         ).unarchived()
 
 
