@@ -1,9 +1,11 @@
 import csv
 from datetime import datetime
+from email.policy import default
 from optparse import Values
+from unittest import case
 
 from django.db import IntegrityError
-from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum, Q
+from django.db.models import F, Min, Max, Avg, OuterRef, Count, Subquery, Sum, Case, When, Q
 from django.db.models.functions import TruncMonth
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
@@ -235,11 +237,18 @@ class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         ).distinct().annotate(
             month=TruncMonth('date'),
             sku_name=F('sku__name'),
-            value=Max('max'),
+            value_max=Max('max'),
+            value=Case(
+                When(
+                    value_max=None,
+                    then=0,
+                ),
+                default = F('value_max')
+            )
         ).values(
             'sku_name',
             'month',
-            value = self.null_validate(F('value'))
+            'value'
         ).unarchived()
 
 

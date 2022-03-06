@@ -28,12 +28,6 @@ class BaseUseCase:
     def is_valid(self):
         return True
 
-    def null_validate(self,value):
-        print(value,"-----------------------------------------------")
-        if value == None:
-            value = 0
-        return(value)
-
 
 class CreateUseCase(BaseUseCase):
     def __init__(self, serializer):
