@@ -235,8 +235,8 @@ class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         ).distinct().annotate(
             month=TruncMonth('date'),
             sku_name=F('sku__name'),
-            valuess=Max('max'),
-            value = self.null_validate('valuess')
+            valuess=F(Max('max')),
+            value = self.null_validate(F('valuess'))
         ).values(
             'sku_name',
             'month',
