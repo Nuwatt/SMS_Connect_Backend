@@ -29,6 +29,7 @@ class BaseUseCase:
         return True
 
     def null_validate(self,value):
+        print(value,"-----------------------------------------------")
         if value == None:
             value = 0
         return(value)
