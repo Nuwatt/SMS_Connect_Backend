@@ -236,7 +236,7 @@ class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             month=TruncMonth('date'),
             sku_name=F('sku__name'),
             valuess=F(Max('max')),
-            value = self.null_validate(F('valuess'))
+            value = self.null_validate('valuess')
         ).values(
             'sku_name',
             'month',
