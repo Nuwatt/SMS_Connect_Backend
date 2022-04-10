@@ -1,6 +1,8 @@
 from apps.snap.usecases.brand_usecases import GetSnapBrandUseCase
 from apps.snap.usecases.category_usecases import GetSnapCategoryUseCase
 from apps.snap.usecases.channel_usecases import GetSnapChannelUseCase
+from apps.snap.usecases.city_usecases import GetSnapCityUseCase
+from apps.snap.usecases.country_usecases import GetSnapCountryUseCase
 from apps.snap.usecases.price_monitor_usecases import GetPriceMonitorSnapUseCase
 from apps.snap.usecases.out_of_stock_usecases import GetOutOfStockSnapUseCase
 from apps.snap.usecases.distribution_usecases import GetDistributionSnapUseCase
@@ -77,4 +79,18 @@ class SnapChannelMixin:
     def get_snap_channel(self, *args, **kwargs):
         return GetSnapChannelUseCase(
             snap_channel_id=self.kwargs.get('snap_channel_id')
+        ).execute()
+
+
+class SnapCountryMixin:
+    def get_snap_country(self, *args, **kwargs):
+        return GetSnapCountryUseCase(
+            snap_country_id=self.kwargs.get('snap_country_id')
+        ).execute()
+
+
+class SnapCityMixin:
+    def get_snap_city(self, *args, **kwargs):
+        return GetSnapCityUseCase(
+            snap_city_id=self.kwargs.get('snap_city_id')
         ).execute()

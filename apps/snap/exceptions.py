@@ -18,3 +18,10 @@ class ConsumerSnapNotFound(NotFound):
 class DistributionSnapNotFound(NotFound):
     default_detail = _('Distribution snap not found.')
 
+
+class SnapCityNotFound(NotFound):
+    default_detail = _('City not found.')
+
+
+class SnapCountryNotFound(NotFound):
+    default_detail = _('Country not found.')

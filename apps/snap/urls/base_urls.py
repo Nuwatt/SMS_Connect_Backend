@@ -42,4 +42,12 @@ urlpatterns = [
         'snap-store/',
         include('apps.snap.urls.store_urls')
     ),
+    path(
+        'snap-country/',
+        include('apps.snap.urls.country_urls')
+    ),
+    path(
+        'snap-city/',
+        include('apps.snap.urls.city_urls')
+    ),
 ]

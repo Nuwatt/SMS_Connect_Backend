@@ -8,6 +8,36 @@ from apps.localize.models import City, Country
 from apps.question.models import QuestionType
 
 
+# ------Snap Localize ---------
+class SnapCountry(BaseModel):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if SnapCountry.objects.filter(name__iexact=self.name, is_archived=False).exists():
+            raise DjangoValidationError({
+                'name': _('Country name already exists.')
+            })
+
+
+class SnapCity(BaseModel):
+    country = models.ForeignKey(SnapCountry, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        # check for unique name for unarchived list
+        if SnapCity.objects.filter(name__iexact=self.name, is_archived=False, country=self.country).exists():
+            raise DjangoValidationError({
+                'name': _('Country name already exists.')
+            })
+
+
 # -----Snap Product-------
 class SnapCategory(BaseModel):
     """
@@ -150,6 +180,11 @@ class SnapStore(BaseModel):
         null=True,
         on_delete=models.CASCADE
     )
+    snap_city = models.ForeignKey(
+        SnapCity,
+        null=True,
+        on_delete=models.CASCADE
+    )
 
     def clean(self):
         # check for unique name for unarchived list
@@ -165,6 +200,11 @@ class SnapStore(BaseModel):
 class PriceMonitorSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+    snap_city = models.ForeignKey(
+        SnapCity,
+        null=True,
+        on_delete=models.CASCADE
+    )
     channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
     sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
     count = models.IntegerField()
@@ -182,6 +222,11 @@ class PriceMonitorSnap(BaseModel):
 class OutOfStockSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+    snap_city = models.ForeignKey(
+        SnapCity,
+        null=True,
+        on_delete=models.CASCADE
+    )
     store = models.ForeignKey(SnapStore, null=True, on_delete=models.CASCADE)
     sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
     count = models.IntegerField()
@@ -192,7 +237,7 @@ class OutOfStockSnap(BaseModel):
     not_available_by_store = models.FloatField()
     less_available_by_store = models.FloatField()
     available_by_store = models.FloatField()
-    # city
+    # snap_city
     not_available_by_city = models.FloatField()
     less_available_by_city = models.FloatField()
     available_by_city = models.FloatField()
@@ -206,6 +251,11 @@ class OutOfStockSnap(BaseModel):
 class ConsumerSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+    snap_city = models.ForeignKey(
+        SnapCity,
+        null=True,
+        on_delete=models.CASCADE
+    )
     channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
     sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
     count = models.IntegerField()
@@ -246,6 +296,11 @@ class ConsumerSnap(BaseModel):
 class DistributionSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+    snap_city = models.ForeignKey(
+        SnapCity,
+        null=True,
+        on_delete=models.CASCADE
+    )
     channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
     sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
     total_distribution = models.FloatField(blank=True, null=True)

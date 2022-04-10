@@ -13,6 +13,21 @@ class SnapModelAdmin(BaseModelAdmin):
     )
 
 
+@admin.register(models.SnapCountry)
+class SnapCountryAdmin(SnapModelAdmin):
+    pass
+
+
+@admin.register(models.SnapCity)
+class SnapCityAdmin(SnapModelAdmin):
+    list_filter = SnapModelAdmin.list_filter + (
+        'country',
+    )
+    raw_id_fields = (
+        'country',
+    )
+
+
 @admin.register(models.PriceMonitorSnap)
 class PriceMonitorSnapAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
@@ -24,10 +39,10 @@ class PriceMonitorSnapAdmin(BaseModelAdmin):
         'sku__brand',
         'channel',
         'city__country',
-        'city',
+        'snap_city',
     )
     raw_id_fields = [
-        'city',
+        'snap_city',
         'channel',
         'sku',
     ]
@@ -44,7 +59,7 @@ class OutOfStockSnapAdmin(BaseModelAdmin):
         'city__country',
     )
     raw_id_fields = [
-        'city',
+        'snap_city',
         'sku',
         'store',
     ]
@@ -61,7 +76,7 @@ class DistributionSnapAdmin(BaseModelAdmin):
         'city__country',
     )
     raw_id_fields = [
-        'city',
+        'snap_city',
         'sku',
     ]
 
@@ -77,7 +92,7 @@ class ConsumerSnapAdmin(BaseModelAdmin):
         'city__country',
     )
     raw_id_fields = [
-        'city',
+        'snap_city',
         'sku',
         'channel'
     ]

@@ -1,7 +1,19 @@
 from django_filters import rest_framework as filters
 
-from apps.core.filtersets import IdInFilter
+from apps.core.filtersets import IdInFilter, NameSearchFilter
 from apps.snap.models import SnapSKU, SnapBrand, SnapCategory, SnapStore
+
+
+class SnapCityFilter(NameSearchFilter):
+    country = IdInFilter(
+        field_name="country",
+        lookup_expr='in',
+        label='country'
+    )
+
+
+class SnapCountryFilter(NameSearchFilter):
+    pass
 
 
 class PriceMonitorSnapFilter(filters.FilterSet):
@@ -11,8 +23,8 @@ class PriceMonitorSnapFilter(filters.FilterSet):
         lookup_expr='in'
     )
     city = IdInFilter(
-        field_name='city',
-        label='city',
+        field_name='snap_city',
+        label='snap_city',
         lookup_expr='in'
     )
     brand = IdInFilter(
@@ -142,9 +154,9 @@ class SnapStoreFilter(filters.FilterSet):
         label='retailer'
     )
     city = IdInFilter(
-        field_name='city',
+        field_name='snap_city',
         lookup_expr='in',
-        label='city'
+        label='snap_city'
     )
     country = IdInFilter(
         field_name='city__country',
@@ -157,7 +169,7 @@ class SnapStoreFilter(filters.FilterSet):
         model = SnapStore
         fields = [
             'retailer',
-            'city',
+            'snap_city',
             'country'
         ]
 
@@ -166,7 +178,7 @@ class SnapRetailerFilter(filters.FilterSet):
     city = IdInFilter(
         field_name='store__city',
         lookup_expr='in',
-        label='city'
+        label='snap_city'
     )
     country = IdInFilter(
         field_name='snapstore__city__country',
