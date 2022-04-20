@@ -153,7 +153,7 @@ class BrandOverviewPriceMonitorSnapReportView(BaseReportView):
 
     def custom_queryset(self, queryset):
         results = []
-        unique_brands = queryset.values('sku__brand_id', 'sku__brand__name').distinct()
+        unique_brands = queryset.values('brand_id', 'brand_name').distinct()
         stats = queryset.aggregate(
             Min('min'),
             Max('max'),
@@ -162,7 +162,7 @@ class BrandOverviewPriceMonitorSnapReportView(BaseReportView):
 
         for brand in unique_brands:
             results.append({
-                'brand_name': brand.get('sku__brand__name'),
+                'brand_name': brand.get('brand_name'),
                 'mode_value': queryset.annotate(
                     Count('mode')
                 ).order_by('-mode__count').values('mode')[0].get('mode'),

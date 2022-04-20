@@ -353,7 +353,7 @@ class MonthModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             '-frequency',
         ).values('mode')[:1]
 
-        return PriceMonitorSnap.objects.values(
+        return SnapPriceMonitor.objects.values(
             'sku_id'
         ).distinct().annotate(
             month=TruncMonth('date'),
