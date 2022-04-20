@@ -18,4 +18,4 @@ class OverviewReportView(generics.RetrieveAPIView):
 
 class BaseReportView(generics.ListAPIView):
     pagination_class = ReportPagination
-    permission_classes = [IsAdminPortalUser | IsResearcherPortalUser]
+    # permission_classes = [IsAdminPortalUser | IsResearcherPortalUser]

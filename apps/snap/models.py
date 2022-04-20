@@ -43,12 +43,12 @@ class SnapCategory(BaseModel):
     """
     Category Model
     """
-    id = models.CharField(
-        max_length=50,
-        unique=True,
-        primary_key=True,
-        editable=False
-    )
+    # id = models.CharField(
+    #     max_length=50,
+    #     unique=True,
+    #     primary_key=True,
+    #     editable=False
+    # )
 
     name = models.CharField(max_length=224)
 
@@ -66,22 +66,22 @@ class SnapCategory(BaseModel):
                 'name': _('Category name already exists.')
             })
 
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            self.id = generate_custom_id(initial='CA', model=SnapCategory)
-        super(SnapCategory, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self._state.adding:
+    #         self.id = generate_custom_id(initial='CA', model=SnapCategory)
+    #     super(SnapCategory, self).save(*args, **kwargs)
 
 
 class SnapBrand(BaseModel):
     """
     Category Model
     """
-    id = models.CharField(
-        max_length=50,
-        unique=True,
-        primary_key=True,
-        editable=False
-    )
+    # id = models.CharField(
+    #     max_length=50,
+    #     unique=True,
+    #     primary_key=True,
+    #     editable=False
+    # )
 
     name = models.CharField(max_length=224)
 
@@ -95,22 +95,22 @@ class SnapBrand(BaseModel):
                 'name': _('Brand name already exists.')
             })
 
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            self.id = generate_custom_id(initial='BR', model=SnapBrand)
-        super(SnapBrand, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self._state.adding:
+    #         self.id = generate_custom_id(initial='BR', model=SnapBrand)
+    #     super(SnapBrand, self).save(*args, **kwargs)
 
 
 class SnapSKU(BaseModel):
     """
     SKU Model
     """
-    id = models.CharField(
-        max_length=50,
-        unique=True,
-        primary_key=True,
-        editable=False
-    )
+    # id = models.CharField(
+    #     max_length=50,
+    #     unique=True,
+    #     primary_key=True,
+    #     editable=False
+    # )
 
     name = models.CharField(max_length=224)
     brand = models.ForeignKey(SnapBrand, on_delete=models.CASCADE)
@@ -119,15 +119,14 @@ class SnapSKU(BaseModel):
         null=True,
         on_delete=models.CASCADE
     )
-    country = models.ManyToManyField(Country, blank=True)
 
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            self.id = generate_custom_id(initial='SKU', model=SnapSKU)
-        super(SnapSKU, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self._state.adding:
+    #         self.id = generate_custom_id(initial='SKU', model=SnapSKU)
+    #     super(SnapSKU, self).save(*args, **kwargs)
 
     def clean(self):
         # check for unique name for unarchived list
@@ -309,5 +308,32 @@ class DistributionSnap(BaseModel):
 
     def __str__(self):
         return '{}-Distribution-Snap'.format(
+            self.date.strftime('%Y-%m-%d')
+        )
+
+
+# new models
+class SnapPriceMonitor(BaseModel):
+    date = models.DateField(db_index=True)
+    city_id = models.BigIntegerField(db_index=True)
+    city_name = models.CharField(max_length=255, db_index=True)
+    country_id = models.BigIntegerField(db_index=True)
+    country_name = models.CharField(max_length=255, db_index=True)
+    channel_id = models.BigIntegerField(db_index=True)
+    channel_name = models.CharField(max_length=255, db_index=True)
+    category_id = models.BigIntegerField(db_index=True)
+    category_name = models.CharField(max_length=255, db_index=True)
+    brand_id = models.BigIntegerField(db_index=True)
+    brand_name = models.CharField(max_length=255, db_index=True)
+    sku_id = models.BigIntegerField(db_index=True)
+    sku_name = models.CharField(max_length=255, db_index=True)
+    count = models.IntegerField()
+    mode = models.FloatField()
+    mean = models.FloatField()
+    max = models.FloatField()
+    min = models.FloatField()
+
+    def __str__(self):
+        return '{}-Price-Monitor'.format(
             self.date.strftime('%Y-%m-%d')
         )

@@ -1,9 +1,7 @@
 from rest_framework import serializers
 
 from apps.core.serializers import (
-    CSVFileInputSerializer,
-    IdNameSerializer,
-    IdNameCharSerializer
+    CSVFileInputSerializer
 )
 from apps.report.serializers.price_monitor_serializers import (
     AnswerPerCountryReportSerializer,

@@ -50,4 +50,8 @@ urlpatterns = [
         'snap-city/',
         include('apps.snap.urls.city_urls')
     ),
+    path(
+        'filters/',
+        include('apps.snap.urls.filters_urls')
+    ),
 ]

@@ -126,3 +126,20 @@ class SnapBrandAdmin(SnapModelAdmin):
 @admin.register(models.SnapSKU)
 class SnapSKUAdmin(SnapModelAdmin):
     pass
+
+
+# -------------new models----------
+
+@admin.register(models.SnapPriceMonitor)
+class SnapPriceMonitorAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'sku_name',
+        'date',
+    )
+    list_filter = BaseModelAdmin.list_filter + (
+        'category_name',
+        'brand_name',
+        'channel_name',
+        'country_name',
+        'city_name',
+    )

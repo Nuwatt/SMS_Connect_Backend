@@ -58,6 +58,48 @@ class PriceMonitorSnapFilter(filters.FilterSet):
     )
 
 
+class SnapPriceMonitorFilter(filters.FilterSet):
+    country = IdInFilter(
+        field_name='country_id',
+        label='country',
+        lookup_expr='in'
+    )
+    city = IdInFilter(
+        field_name='city_id',
+        label='city',
+        lookup_expr='in'
+    )
+    brand = IdInFilter(
+        field_name='brand_id',
+        label='brand',
+        lookup_expr='in'
+    )
+    date = filters.DateFromToRangeFilter(
+        field_name='date',
+        label='date',
+    )
+    exact_date = filters.DateFilter(
+        field_name='date',
+        label='date'
+    )
+    channel = IdInFilter(
+        field_name='channel_id',
+        label='channel',
+        lookup_expr='in'
+
+    )
+    category = IdInFilter(
+        field_name='category_id',
+        label='category',
+        lookup_expr='in'
+    )
+    sku = IdInFilter(
+        field_name='sku_id',
+        label='sku',
+        lookup_expr='in'
+    )
+
+
 class OutOfStockSnapFilter(PriceMonitorSnapFilter):
     channel = IdInFilter(
         field_name='store__channel',

@@ -6,6 +6,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
 from apps.report.views.base_views import BaseReportView
+from apps.snap import filtersets
 from apps.snap.filtersets import PriceMonitorSnapFilter
 from apps.snap.mixins import PriceMonitorSnapMixin
 from apps.snap.serializers import price_monitor_serializers
@@ -90,7 +91,7 @@ class OverviewPriceMonitorSnapReportView(BaseReportView):
     Use this end-point to list overview report of price monitor snap
     """
     serializer_class = price_monitor_serializers.OverviewPriceMonitorSnapReport
-    filterset_class = PriceMonitorSnapFilter
+    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
         return price_monitor_usecases.OverviewPriceMonitorSnapReportUseCase().execute()

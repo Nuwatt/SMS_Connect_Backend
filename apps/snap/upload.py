@@ -11,7 +11,7 @@ from apps.snap.models import (
     PriceMonitorSnap,
     SnapRetailer,
     SnapStore,
-    OutOfStockSnap
+    OutOfStockSnap, SnapCountry, SnapCity, SnapPriceMonitor
 )
 
 
@@ -19,7 +19,7 @@ def import_snap_pm(path):
     os.chdir(path)
     files = os.listdir()
     for file_name in files:
-        file = open(os.path.join(path, file_name),'r')
+        file = open(os.path.join(path, file_name), 'r')
         csv_reader = csv.DictReader(file)
         item_list = list(csv_reader)
 
@@ -97,7 +97,7 @@ def import_snap_oos(path):
     os.chdir(path)
     files = os.listdir()
     for file_name in files:
-        file = open(os.path.join(path, file_name),'r')
+        file = open(os.path.join(path, file_name), 'r')
         csv_reader = csv.DictReader(file)
         item_list = list(csv_reader)
 
@@ -192,3 +192,89 @@ def import_snap_oos(path):
                 }
             )
             print(snap.pk)
+
+
+# --------new upload script --------------
+
+def import_snap_price_monitor(path):
+    file = open(path, 'r')
+    csv_reader = csv.DictReader(file)
+    item_list = list(csv_reader)
+
+    country_data = {}
+    city_data = {}
+    channel_data = {}
+    category_data = {}
+    brand_data = {}
+    sku_data = {}
+
+    for item in item_list:
+        if item.get('Country') not in country_data:
+            country, _country_created = SnapCountry.objects.get_or_create(
+                name=item.get('Country').strip(),
+                is_archived=False
+            )
+            country_data[item.get('Country')] = country
+
+        if item.get('City') not in city_data:
+            city, _city_created = SnapCity.objects.get_or_create(
+                name=item.get('City').strip(),
+                country=country_data[item.get('Country')],
+                is_archived=False
+            )
+            city_data[item.get('City')] = city
+
+        if item.get('Channel') not in channel_data:
+            channel, _channel_created = SnapChannel.objects.get_or_create(
+                name=item.get('Channel').strip(),
+                is_archived=False
+            )
+            channel_data[item.get('Channel')] = channel
+
+        if item.get('Category') not in category_data:
+            category, _category_created = SnapCategory.objects.get_or_create(
+                name=item.get('Category').strip(),
+                is_archived=False
+            )
+            category_data[item.get('Category')] = category
+
+        if item.get('Brand') not in brand_data:
+            brand, _brand_created = SnapBrand.objects.get_or_create(
+                name=item.get('Brand').strip(),
+                is_archived=False
+            )
+            brand_data[item.get('Brand')] = brand
+
+        if item.get('SKU') not in sku_data:
+            sku, _sku_created = SnapSKU.objects.get_or_create(
+                name=item.get('SKU').strip(),
+                brand=brand_data[item.get('Brand')],
+                category=category_data[item.get('Category')],
+                is_archived=False
+            )
+            sku_data[item.get('SKU')] = sku
+            # sku.country.add(country_data[item.get('Country')])
+
+        snap, _snap_created = SnapPriceMonitor.objects.update_or_create(
+            city_name=city_data[item.get('City')].name,
+            city_id=city_data[item.get('City')].id,
+            country_name=country_data[item.get('Country')].name,
+            country_id=country_data[item.get('Country')].id,
+            channel_name=channel_data[item.get('Channel')].name,
+            channel_id=channel_data[item.get('Channel')].id,
+            sku_name=sku_data[item.get('SKU')].name,
+            sku_id=sku_data[item.get('SKU')].id,
+            category_id=category_data[item.get('Category')].id,
+            category_name=category_data[item.get('Category')].name,
+            brand_id=brand_data[item.get('Brand')].id,
+            brand_name=brand_data[item.get('Brand')].name,
+            date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
+            defaults={
+                'count': item.get('Count'),
+                'mode': item.get('Mode'),
+                'mean': item.get('Mean'),
+                'max': item.get('Max'),
+                'min': item.get('Min')
+            }
+        )
+        print(snap.pk)
