@@ -42,7 +42,7 @@ schema_view = get_schema_view(
 # API URLS
 urlpatterns += [
     path(
-        'api/docs',
+        'api/docs/',
         schema_view.with_ui('swagger', cache_timeout=0),
         name='api-docs'
     ),
