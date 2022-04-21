@@ -19,12 +19,14 @@ class AddSnapCitySerializer(SnapCitySerializer):
 
 class ListSnapCitySerializer(SnapCitySerializer):
     country_id = serializers.IntegerField()
+    country_name = serializers.CharField(source='country__name')
 
     class Meta(SnapCitySerializer.Meta):
         fields = (
             'id',
             'name',
-            'country_id'
+            'country_id',
+            'country__name'
         )
 
 

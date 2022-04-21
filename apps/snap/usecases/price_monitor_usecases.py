@@ -153,11 +153,8 @@ class ExportPriceMonitorSnapUseCase(usecases.BaseUseCase):
 
 
 class ListPriceMonitorSnapUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
     def _factory(self):
-        return PriceMonitorSnap.objects.values(
+        return SnapPriceMonitor.objects.values(
             'city__name',
             'channel__name',
             'city__country__name',

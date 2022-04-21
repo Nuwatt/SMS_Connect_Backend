@@ -39,4 +39,5 @@ class ListSnapCityUseCase(usecases.BaseUseCase):
             'id',
             'name',
             'country_id',
+            'country__name',
         ).unarchived()
