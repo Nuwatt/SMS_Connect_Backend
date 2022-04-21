@@ -44,10 +44,10 @@ class ListPriceMonitorSnapView(generics.ListAPIView):
     serializer_class = price_monitor_serializers.ListPriceMonitorSnapSerializer
     permission_classes = (IsPortalUser,)
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = PriceMonitorSnapFilter
+    filterset_class = filtersets.SnapPriceMonitorFilter
     search_fields = [
-        'city__country__name', 'city__name', 'channel__name',
-        'sku__category__name', 'sku__brand__name', 'sku__name',
+        'country_name', 'city_name', 'channel_name',
+        'category_name', 'brand_name', 'sku_name',
         'count', 'min', 'min', 'max', 'mean', 'mode'
     ]
 

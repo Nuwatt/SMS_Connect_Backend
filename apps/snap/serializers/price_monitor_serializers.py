@@ -21,12 +21,12 @@ class PriceMonitorSnapSerializer(serializers.ModelSerializer):
 
 
 class ListPriceMonitorSnapSerializer(PriceMonitorSnapSerializer):
-    country = serializers.CharField(source='city__country__name')
-    city = serializers.CharField(source='city__name')
-    category = serializers.CharField(source='sku__category__name')
-    brand = serializers.CharField(source='sku__brand__name')
-    channel = serializers.CharField(source='channel__name')
-    sku = serializers.CharField(source='sku__name')
+    country = serializers.CharField(source='country_name')
+    city = serializers.CharField(source='city_name')
+    category = serializers.CharField(source='category_name')
+    brand = serializers.CharField(source='brand_name')
+    channel = serializers.CharField(source='channel_name')
+    sku = serializers.CharField(source='sku_name')
 
     class Meta(PriceMonitorSnapSerializer.Meta):
         fields = (
