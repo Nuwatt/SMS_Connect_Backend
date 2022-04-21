@@ -23,7 +23,6 @@ class AddSnapSKUSerializer(SnapSKUSerializer):
             'name',
             'brand',
             'category',
-            'country'
         )
 
     def validate_name(self, data):
@@ -35,7 +34,6 @@ class AddSnapSKUSerializer(SnapSKUSerializer):
 class ListSnapSKUSerializer(SnapSKUSerializer):
     category = IdNameCharSerializer()
     brand = IdNameCharSerializer()
-    country = IdNameSerializer(many=True)
 
     class Meta(SnapSKUSerializer.Meta):
         fields = (
@@ -43,7 +41,6 @@ class ListSnapSKUSerializer(SnapSKUSerializer):
             'name',
             'category',
             'brand',
-            'country'
         )
 
 
@@ -53,5 +50,4 @@ class UpdateSnapSKUSerializer(SnapSKUSerializer):
             'name',
             'brand',
             'category',
-            'country'
         )

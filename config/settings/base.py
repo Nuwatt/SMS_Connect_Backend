@@ -247,7 +247,7 @@ REST_FRAMEWORK = {
         'apps.core.authentication.CustomJWTAuthentication',
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
     ),
     'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.CustomCursorPagination',
     'PAGE_SIZE': 10000,
