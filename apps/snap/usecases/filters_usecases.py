@@ -22,7 +22,7 @@ class ListCityFiltersUseCase(usecases.BaseUseCase):
     def _factory(self):
         return SnapPriceMonitor.objects.values(
             'city_id',
-            'country_name'
+            'city_name'
         ).distinct()
 
 
