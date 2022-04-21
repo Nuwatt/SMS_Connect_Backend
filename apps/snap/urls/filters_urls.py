@@ -29,7 +29,7 @@ urlpatterns = [
         name='list-country-filters'
     ),
     path(
-        'country-list',
+        'channel-list',
         filters_views.ListChannelFiltersView.as_view(),
         name='list-channel-filters'
     )
