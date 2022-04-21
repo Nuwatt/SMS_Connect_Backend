@@ -9,7 +9,7 @@ class AddSnapCityView(generics.CreateAPIView):
     """
     Use this end-point to add new snap snap_city
     """
-    serializer_class = city_serializers.AddSnapSnapCitySerializer
+    serializer_class = city_serializers.AddSnapCitySerializer
 
     def perform_create(self, serializer):
         return city_usecases.AddSnapCityUseCase(
@@ -21,14 +21,11 @@ class ListSnapCityView(generics.ListAPIView):
     """
     Use this end-point to list all snap cities
     """
-    serializer_class = city_serializers.ListSnapSnapCitySerializer
+    serializer_class = city_serializers.ListSnapCitySerializer
     filterset_class = SnapCityFilter
 
     def get_queryset(self):
         return city_usecases.ListSnapCityUseCase().execute()
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
 
 
 class UpdateSnapCityView(generics.UpdateAPIView, SnapCityMixin):

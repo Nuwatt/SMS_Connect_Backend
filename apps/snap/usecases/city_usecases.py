@@ -35,4 +35,8 @@ class DeleteSnapCityUseCase(usecases.DeleteUseCase):
 
 class ListSnapCityUseCase(usecases.BaseUseCase):
     def _factory(self):
-        return SnapCity.objects.unarchived()
+        return SnapCity.objects.values(
+            'id',
+            'name',
+            'country_id',
+        ).unarchived()

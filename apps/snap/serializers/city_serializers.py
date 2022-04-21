@@ -9,7 +9,7 @@ class SnapCitySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class AddSnapSnapCitySerializer(SnapCitySerializer):
+class AddSnapCitySerializer(SnapCitySerializer):
     class Meta(SnapCitySerializer.Meta):
         fields = (
             'name',
@@ -17,13 +17,16 @@ class AddSnapSnapCitySerializer(SnapCitySerializer):
         )
 
 
-class ListSnapSnapCitySerializer(SnapCitySerializer):
+class ListSnapCitySerializer(SnapCitySerializer):
+    country_id = serializers.IntegerField()
+
     class Meta(SnapCitySerializer.Meta):
         fields = (
             'id',
-            'name'
+            'name',
+            'country_id'
         )
 
 
-class UpdateSnapCitySerializer(AddSnapSnapCitySerializer):
+class UpdateSnapCitySerializer(AddSnapCitySerializer):
     pass

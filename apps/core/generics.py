@@ -51,17 +51,19 @@ class CreateWithMessageAPIView(CreateAPIView):
 class ListAPIView(LoggingErrorsMixin, generics.ListAPIView):
     logging_methods = ['GET']
 
-    no_content_error_message = _('No Content At The Moment.')
-
     def filter_queryset(self, queryset):
         for backend in list(self.filter_backends):
             queryset = backend().filter_queryset(self.request, queryset, self)
-        if len(queryset) > 0:
-            return self.custom_queryset(queryset)
-        raise NoContent(self.no_content_error_message)
+        return self.custom_queryset(queryset)
 
     def custom_queryset(self, queryset):
         return queryset
+
+    def get(self, request, *args, **kwargs):
+        pagination = request.GET.get('pagination')
+        if pagination == 'False':
+            self.pagination_class = None
+        return self.list(request, *args, **kwargs)
 
 
 class UpdateAPIView(LoggingErrorsMixin, generics.UpdateAPIView):
