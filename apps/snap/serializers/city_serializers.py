@@ -26,7 +26,7 @@ class ListSnapCitySerializer(SnapCitySerializer):
             'id',
             'name',
             'country_id',
-            'country__name'
+            'country_name'
         )
 
 
