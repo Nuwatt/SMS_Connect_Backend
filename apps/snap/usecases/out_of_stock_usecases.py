@@ -286,7 +286,7 @@ class NotAvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
 class LessByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
     def _factory(self):
         return SnapOutOfStock.objects.values(
-            'city'
+            'city_id'
         ).distinct().annotate(
             value=Avg('less_available_in_month'),
         ).values(
@@ -314,7 +314,7 @@ class NotAvailableByWeekOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         return SnapOutOfStock.objects.filter(
             not_available_by_store__gt=0
         ).values(
-            'sku'
+            'sku_id'
         ).distinct().annotate(
             week=F('date'),
         ).values(
