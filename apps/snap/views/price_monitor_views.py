@@ -7,7 +7,6 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from apps.core import generics
 from apps.report.views.base_views import BaseReportView
 from apps.snap import filtersets
-from apps.snap.filtersets import PriceMonitorSnapFilter
 from apps.snap.mixins import PriceMonitorSnapMixin
 from apps.snap.serializers import price_monitor_serializers
 from apps.snap.usecases import price_monitor_usecases

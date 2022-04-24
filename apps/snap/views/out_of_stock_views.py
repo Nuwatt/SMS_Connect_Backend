@@ -5,7 +5,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
 from apps.report.views.base_views import BaseReportView
-from apps.snap.filtersets import OutOfStockSnapFilter
+from apps.snap.filtersets import SnapOutOfStockFilter
 from apps.snap.mixins import PriceMonitorSnapMixin
 from apps.snap.serializers import out_of_stock_serializers
 from apps.snap.usecases import out_of_stock_usecases
@@ -33,11 +33,11 @@ class ListOutOfStockSnapView(generics.ListAPIView):
     serializer_class = out_of_stock_serializers.ListOutOfStockSnapSerializer
     permission_classes = (IsPortalUser,)
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
     search_fields = [
-        'city__country__name', 'city__name', 'store__channel__name',
-        'store__retailer__name', 'store__name',
-        'sku__category__name', 'sku__brand__name', 'sku__name'
+        'country_name', 'city_name', 'channel_name',
+        'retailer_name', 'store_name',
+        'category_name', 'brand_name', 'sku__name'
     ]
 
     def get_queryset(self):
@@ -80,7 +80,7 @@ class OverviewPriceMonitorSnapReportView(BaseReportView):
     Use this end-point to list overview report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.OverviewOutOfStockSnapReport
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.OverviewOutOfStockSnapReportUseCase().execute()
@@ -91,7 +91,7 @@ class AvailableOutOfStockSnapReportView(BaseReportView):
     Use this end-point to list available report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.OutOfStockSnapReportSerializer
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.AvailableOutOfStockSnapReportUseCase().execute()
@@ -102,7 +102,7 @@ class NotAvailableOutOfStockSnapReportView(BaseReportView):
     Use this end-point to list not available report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.OutOfStockSnapReportSerializer
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.NotAvailableOutOfStockSnapReportUseCase().execute()
@@ -113,7 +113,7 @@ class LessOutOfStockSnapReportView(BaseReportView):
     Use this end-point to list list report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.OutOfStockSnapReportSerializer
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.LessOutOfStockSnapReportUseCase().execute()
@@ -125,7 +125,7 @@ class AvailableByCityOutOfStockSnapReportView(BaseReportView):
     Use this end-point to list available by city report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.ByCityOutOfStockSnapReportSerializer
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.AvailableByCityOutOfStockSnapReportUseCase().execute()
@@ -136,7 +136,7 @@ class NotAvailableByCityOutOfStockSnapReportView(BaseReportView):
     Use this end-point to list not available by city report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.ByCityOutOfStockSnapReportSerializer
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.NotAvailableByCityOutOfStockSnapReportUseCase().execute()
@@ -147,7 +147,7 @@ class LessByCityOutOfStockSnapReportView(BaseReportView):
     Use this end-point to list less by city report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.ByCityOutOfStockSnapReportSerializer
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.LessByCityOutOfStockSnapReportUseCase().execute()
@@ -158,7 +158,7 @@ class VisitByCityOutOfStockSnapReportView(BaseReportView):
     Use this end-point to list visit by city report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.VisitByCityOutOfStockSnapReportSerializer
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.VisitByCityOutOfStockSnapReportUseCase().execute()
@@ -169,7 +169,7 @@ class NotAvailableByWeekOutOfStockSnapReportView(BaseReportView):
     Use this end-point to list not available by week report of out of stock snap
     """
     serializer_class = out_of_stock_serializers.NotAvailableByWeekOutOfStockSnapReportSerializer
-    filterset_class = OutOfStockSnapFilter
+    filterset_class = SnapOutOfStockFilter
 
     def get_queryset(self):
         return out_of_stock_usecases.NotAvailableByWeekOutOfStockSnapReportUseCase().execute()

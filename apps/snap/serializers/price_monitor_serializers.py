@@ -7,7 +7,7 @@ from apps.report.serializers.price_monitor_serializers import (
     AnswerPerCountryReportSerializer,
     AnswerPerCityReportSerializer
 )
-from apps.snap.models import PriceMonitorSnap
+from apps.snap.models import SnapPriceMonitor
 
 
 class ImportPriceMonitorSnapSerializer(CSVFileInputSerializer):
@@ -16,7 +16,7 @@ class ImportPriceMonitorSnapSerializer(CSVFileInputSerializer):
 
 class PriceMonitorSnapSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PriceMonitorSnap
+        model = SnapPriceMonitor
         fields = '__all__'
 
 

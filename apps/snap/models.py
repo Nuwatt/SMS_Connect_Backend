@@ -196,57 +196,6 @@ class SnapStore(BaseModel):
         return self.name
 
 
-class PriceMonitorSnap(BaseModel):
-    date = models.DateField()
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
-    snap_city = models.ForeignKey(
-        SnapCity,
-        null=True,
-        on_delete=models.CASCADE
-    )
-    channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
-    sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
-    count = models.IntegerField()
-    mode = models.FloatField()
-    mean = models.FloatField()
-    max = models.FloatField()
-    min = models.FloatField()
-
-    def __str__(self):
-        return '{}-Price-Monitor'.format(
-            self.date.strftime('%Y-%m-%d')
-        )
-
-
-class OutOfStockSnap(BaseModel):
-    date = models.DateField()
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
-    snap_city = models.ForeignKey(
-        SnapCity,
-        null=True,
-        on_delete=models.CASCADE
-    )
-    store = models.ForeignKey(SnapStore, null=True, on_delete=models.CASCADE)
-    sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
-    count = models.IntegerField()
-    not_available_in_month = models.FloatField()
-    less_available_in_month = models.FloatField()
-    available_in_month = models.FloatField()
-    # store
-    not_available_by_store = models.FloatField()
-    less_available_by_store = models.FloatField()
-    available_by_store = models.FloatField()
-    # snap_city
-    not_available_by_city = models.FloatField()
-    less_available_by_city = models.FloatField()
-    available_by_city = models.FloatField()
-
-    def __str__(self):
-        return '{}-Out-of-Monitor'.format(
-            self.date.strftime('%Y-%m-%d')
-        )
-
-
 class ConsumerSnap(BaseModel):
     date = models.DateField()
     city = models.ForeignKey(City, on_delete=models.CASCADE)
@@ -292,26 +241,6 @@ class ConsumerSnap(BaseModel):
         )
 
 
-class DistributionSnap(BaseModel):
-    date = models.DateField()
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
-    snap_city = models.ForeignKey(
-        SnapCity,
-        null=True,
-        on_delete=models.CASCADE
-    )
-    channel = models.ForeignKey(SnapChannel, null=True, on_delete=models.CASCADE)
-    sku = models.ForeignKey(SnapSKU, null=True, on_delete=models.CASCADE)
-    total_distribution = models.FloatField(blank=True, null=True)
-    shelf_share = models.FloatField(blank=True, null=True)
-    number_of_outlet = models.FloatField(blank=True, null=True)
-
-    def __str__(self):
-        return '{}-Distribution-Snap'.format(
-            self.date.strftime('%Y-%m-%d')
-        )
-
-
 # new models
 class SnapPriceMonitor(BaseModel):
     date = models.DateField(db_index=True)
@@ -335,5 +264,66 @@ class SnapPriceMonitor(BaseModel):
 
     def __str__(self):
         return '{}-Price-Monitor'.format(
+            self.date.strftime('%Y-%m-%d')
+        )
+
+
+class SnapOutOfStock(BaseModel):
+    date = models.DateField()
+    city_id = models.BigIntegerField(db_index=True)
+    city_name = models.CharField(max_length=255, db_index=True)
+    country_id = models.BigIntegerField(db_index=True)
+    country_name = models.CharField(max_length=255, db_index=True)
+    channel_id = models.BigIntegerField(db_index=True)
+    channel_name = models.CharField(max_length=255, db_index=True)
+    retailer_id = models.BigIntegerField(db_index=True)
+    retailer_name = models.CharField(max_length=255, db_index=True)
+    store_id = models.BigIntegerField(db_index=True)
+    store_name = models.CharField(max_length=255, db_index=True)
+    category_id = models.BigIntegerField(db_index=True)
+    category_name = models.CharField(max_length=255, db_index=True)
+    brand_id = models.BigIntegerField(db_index=True)
+    brand_name = models.CharField(max_length=255, db_index=True)
+    sku_id = models.BigIntegerField(db_index=True)
+    sku_name = models.CharField(max_length=255, db_index=True)
+    count = models.IntegerField()
+    not_available_in_month = models.FloatField()
+    less_available_in_month = models.FloatField()
+    available_in_month = models.FloatField()
+    # store
+    not_available_by_store = models.FloatField()
+    less_available_by_store = models.FloatField()
+    available_by_store = models.FloatField()
+    # snap_city
+    not_available_by_city = models.FloatField()
+    less_available_by_city = models.FloatField()
+    available_by_city = models.FloatField()
+
+    def __str__(self):
+        return '{}-Out-of-Monitor'.format(
+            self.date.strftime('%Y-%m-%d')
+        )
+
+
+class SnapDistribution(BaseModel):
+    date = models.DateField()
+    ity_id = models.BigIntegerField(db_index=True)
+    city_name = models.CharField(max_length=255, db_index=True)
+    country_id = models.BigIntegerField(db_index=True)
+    country_name = models.CharField(max_length=255, db_index=True)
+    channel_id = models.BigIntegerField(db_index=True)
+    channel_name = models.CharField(max_length=255, db_index=True)
+    category_id = models.BigIntegerField(db_index=True)
+    category_name = models.CharField(max_length=255, db_index=True)
+    brand_id = models.BigIntegerField(db_index=True)
+    brand_name = models.CharField(max_length=255, db_index=True)
+    sku_id = models.BigIntegerField(db_index=True)
+    sku_name = models.CharField(max_length=255, db_index=True)
+    total_distribution = models.FloatField(blank=True, null=True)
+    shelf_share = models.FloatField(blank=True, null=True)
+    number_of_outlet = models.FloatField(blank=True, null=True)
+
+    def __str__(self):
+        return '{}-Distribution-Snap'.format(
             self.date.strftime('%Y-%m-%d')
         )

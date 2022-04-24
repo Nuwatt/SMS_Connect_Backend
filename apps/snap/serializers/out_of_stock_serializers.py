@@ -1,15 +1,9 @@
 from rest_framework import serializers
 
 from apps.core.serializers import (
-    CSVFileInputSerializer,
-    IdNameSerializer,
-    IdNameCharSerializer
+    CSVFileInputSerializer
 )
-from apps.report.serializers.price_monitor_serializers import (
-    AnswerPerCountryReportSerializer,
-    AnswerPerCityReportSerializer
-)
-from apps.snap.models import PriceMonitorSnap, OutOfStockSnap
+from apps.snap.models import SnapOutOfStock
 
 
 class ImportOutOfStockSnapSerializer(CSVFileInputSerializer):
@@ -18,19 +12,19 @@ class ImportOutOfStockSnapSerializer(CSVFileInputSerializer):
 
 class OutOfStockSnapSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OutOfStockSnap
+        model = SnapOutOfStock
         fields = '__all__'
 
 
 class ListOutOfStockSnapSerializer(OutOfStockSnapSerializer):
-    country = serializers.CharField(source='city__country__name')
-    city = serializers.CharField(source='city__name')
-    category = serializers.CharField(source='sku__category__name')
-    brand = serializers.CharField(source='sku__brand__name')
-    channel = serializers.CharField(source='store__channel__name')
-    store = serializers.CharField(source='store__name')
-    retailer = serializers.CharField(source='store__retailer__name')
-    sku = serializers.CharField(source='sku__name')
+    country = serializers.CharField(source='country_name')
+    city = serializers.CharField(source='city_name')
+    category = serializers.CharField(source='category_name')
+    brand = serializers.CharField(source='brand_name')
+    channel = serializers.CharField(source='channel_name')
+    store = serializers.CharField(source='store_name')
+    retailer = serializers.CharField(source='retailer_name')
+    sku = serializers.CharField(source='sku_name')
 
     class Meta(OutOfStockSnapSerializer.Meta):
         fields = (

@@ -9,7 +9,7 @@ from apps.report.serializers.distribution_check_serializers import (
     VisitPerChannelReportSerializer,
     SKUPerCityReportSerializer
 )
-from apps.snap.models import DistributionSnap
+from apps.snap.models import SnapDistribution
 
 
 class ImportDistributionSnapSerializer(CSVFileInputSerializer):
@@ -18,17 +18,17 @@ class ImportDistributionSnapSerializer(CSVFileInputSerializer):
 
 class DistributionSnapSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DistributionSnap
+        model = SnapDistribution
         fields = '__all__'
 
 
 class ListDistributionSnapSerializer(DistributionSnapSerializer):
-    country = serializers.CharField(source='city__country__name')
-    city = serializers.CharField(source='city__name')
-    category = serializers.CharField(source='sku__category__name')
-    brand = serializers.CharField(source='sku__brand__name')
-    channel = serializers.CharField(source='channel__name')
-    sku = serializers.CharField(source='sku__name')
+    country = serializers.CharField(source='country_name')
+    city = serializers.CharField(source='city_name')
+    category = serializers.CharField(source='category_name')
+    brand = serializers.CharField(source='brand_name')
+    channel = serializers.CharField(source='channel_name')
+    sku = serializers.CharField(source='sku_name')
 
     class Meta(DistributionSnapSerializer.Meta):
         fields = (

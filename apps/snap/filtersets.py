@@ -16,48 +16,6 @@ class SnapCountryFilter(NameSearchFilter):
     pass
 
 
-class PriceMonitorSnapFilter(filters.FilterSet):
-    country = IdInFilter(
-        field_name='city__country',
-        label='country',
-        lookup_expr='in'
-    )
-    city = IdInFilter(
-        field_name='snap_city',
-        label='snap_city',
-        lookup_expr='in'
-    )
-    brand = IdInFilter(
-        field_name='sku__brand',
-        label='brand',
-        lookup_expr='in'
-    )
-    date = filters.DateFromToRangeFilter(
-        field_name='date',
-        label='date',
-    )
-    exact_date = filters.DateFilter(
-        field_name='date',
-        label='date'
-    )
-    channel = IdInFilter(
-        field_name='channel',
-        label='channel',
-        lookup_expr='in'
-
-    )
-    category = IdInFilter(
-        field_name='sku__category',
-        label='category',
-        lookup_expr='in'
-    )
-    sku = IdInFilter(
-        field_name='sku',
-        label='sku',
-        lookup_expr='in'
-    )
-
-
 class SnapPriceMonitorFilter(filters.FilterSet):
     country = IdInFilter(
         field_name='country_id',
@@ -100,30 +58,63 @@ class SnapPriceMonitorFilter(filters.FilterSet):
     )
 
 
-class OutOfStockSnapFilter(PriceMonitorSnapFilter):
-    channel = IdInFilter(
-        field_name='store__channel',
-        label='channel',
-        lookup_expr='in'
-    )
+class SnapOutOfStockFilter(SnapPriceMonitorFilter):
     retailer = IdInFilter(
-        field_name='store__retailer',
+        field_name='retailer_id',
         label='retailer',
         lookup_expr='in'
     )
     store = IdInFilter(
-        field_name='store',
+        field_name='store_id',
         label='store',
         lookup_expr='in'
     )
 
 
-class ConsumerSnapFilter(PriceMonitorSnapFilter):
+class SnapDistributionFilter(SnapPriceMonitorFilter):
     pass
 
 
-class DistributionSnapFilter(PriceMonitorSnapFilter):
-    pass
+class ConsumerSnapFilter(filters.FilterSet):
+    country = IdInFilter(
+        field_name='city__country',
+        label='country',
+        lookup_expr='in'
+    )
+    city = IdInFilter(
+        field_name='snap_city',
+        label='snap_city',
+        lookup_expr='in'
+    )
+    brand = IdInFilter(
+        field_name='sku__brand',
+        label='brand',
+        lookup_expr='in'
+    )
+    date = filters.DateFromToRangeFilter(
+        field_name='date',
+        label='date',
+    )
+    exact_date = filters.DateFilter(
+        field_name='date',
+        label='date'
+    )
+    channel = IdInFilter(
+        field_name='channel',
+        label='channel',
+        lookup_expr='in'
+
+    )
+    category = IdInFilter(
+        field_name='sku__category',
+        label='category',
+        lookup_expr='in'
+    )
+    sku = IdInFilter(
+        field_name='sku',
+        label='sku',
+        lookup_expr='in'
+    )
 
 
 class SnapSKUFilter(filters.FilterSet):

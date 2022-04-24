@@ -12,7 +12,14 @@ from apps.core import usecases
 from apps.localize.models import Country, City
 from apps.question.models import QuestionType
 from apps.snap.exceptions import ConsumerSnapNotFound
-from apps.snap.models import PriceMonitorSnap, ConsumerSnap, SnapChannel, SnapCategory, SnapBrand, SnapSKU
+from apps.snap.models import (
+    ConsumerSnap,
+    SnapChannel,
+    SnapCategory,
+    SnapBrand,
+    SnapSKU,
+    SnapPriceMonitor
+)
 
 
 class GetConsumerSnapUseCase(usecases.BaseUseCase):
@@ -184,7 +191,7 @@ class OverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        snap_mode = PriceMonitorSnap.objects.filter(
+        snap_mode = SnapPriceMonitor.objects.filter(
             sku=OuterRef('sku'),
         ).values(
             'mode',
@@ -196,7 +203,7 @@ class OverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             '-frequency',
         ).values('mode')[:1]
 
-        return PriceMonitorSnap.objects.values(
+        return SnapPriceMonitor.objects.values(
             'sku'
         ).distinct().annotate(
             sku_name=F('sku__name'),
@@ -218,7 +225,7 @@ class MonthMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        return SnapPriceMonitor.objects.annotate(
             month=TruncMonth('date'),
             value=F('max'),
             sku_name=F('sku__name')
@@ -234,7 +241,7 @@ class MonthMinPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        return SnapPriceMonitor.objects.annotate(
             month=TruncMonth('date'),
             value=F('min'),
             sku_name=F('sku__name')
@@ -250,7 +257,7 @@ class MonthMeanPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        return SnapPriceMonitor.objects.annotate(
             month=TruncMonth('date'),
             value=F('mean'),
             sku_name=F('sku__name')
@@ -266,7 +273,7 @@ class MonthModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        return SnapPriceMonitor.objects.annotate(
             month=TruncMonth('date'),
             value=F('mode'),
             sku_name=F('sku__name')
@@ -282,7 +289,7 @@ class BrandOverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        snap_mode = PriceMonitorSnap.objects.filter(
+        snap_mode = SnapPriceMonitor.objects.filter(
             sku__brand=OuterRef('sku__brand'),
         ).values(
             'mode',
@@ -294,7 +301,7 @@ class BrandOverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             '-frequency',
         ).values('mode')[:1]
 
-        return PriceMonitorSnap.objects.values(
+        return SnapPriceMonitor.objects.values(
             'sku__brand'
         ).distinct().annotate(
             brand_name=F('sku__brand__name'),
@@ -312,7 +319,7 @@ class CountryMinPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        return SnapPriceMonitor.objects.annotate(
             country=F('city__country')
         ).values(
             'country',
@@ -332,7 +339,7 @@ class CountryMaxPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        return SnapPriceMonitor.objects.annotate(
             country=F('city__country')
         ).values(
             'country',
@@ -352,7 +359,7 @@ class CountryMeanPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.annotate(
+        return SnapPriceMonitor.objects.annotate(
             country=F('city__country')
         ).values(
             'country',
@@ -372,7 +379,7 @@ class CountryModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        snap_mode = PriceMonitorSnap.objects.filter(
+        snap_mode = SnapPriceMonitor.objects.filter(
             sku=OuterRef('sku'),
         ).values(
             'mode',
@@ -384,7 +391,7 @@ class CountryModePriceMonitorSnapReportUseCase(usecases.BaseUseCase):
             '-frequency',
         ).values('mode')[:1]
 
-        return PriceMonitorSnap.objects.values(
+        return SnapPriceMonitor.objects.values(
             'sku'
         ).distinct().annotate(
             country_name=F('city__country__name'),
@@ -402,7 +409,7 @@ class VisitPerCityPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.values(
+        return SnapPriceMonitor.objects.values(
             'city'
         ).distinct().annotate(
             city_name=F('city__name'),
@@ -418,7 +425,7 @@ class VisitPerCountryPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.values(
+        return SnapPriceMonitor.objects.values(
             'city__country'
         ).distinct().annotate(
             country_name=F('city__country__name'),
@@ -434,7 +441,7 @@ class SKUPerChannelPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         return self._factory()
 
     def _factory(self):
-        return PriceMonitorSnap.objects.values(
+        return SnapPriceMonitor.objects.values(
             'channel'
         ).distinct().annotate(
             sku_name=F('sku__name'),

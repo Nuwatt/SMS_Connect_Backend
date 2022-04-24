@@ -5,7 +5,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
 from apps.report.views.base_views import BaseReportView
-from apps.snap.filtersets import DistributionSnapFilter
+from apps.snap.filtersets import SnapDistributionFilter
 from apps.snap.mixins import DistributionSnapMixin
 from apps.snap.serializers import distribution_serializers
 from apps.snap.usecases import distribution_usecases
@@ -33,11 +33,11 @@ class ListDistributionSnapView(generics.ListAPIView):
     serializer_class = distribution_serializers.ListDistributionSnapSerializer
     permission_classes = (IsPortalUser,)
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = DistributionSnapFilter
+    filterset_class = SnapDistributionFilter
     search_fields = [
-        'city__country__name', 'city__name', 'store__channel__name',
-        'store__retailer__name', 'store__name',
-        'sku__category__name', 'sku__brand__name', 'sku__name'
+        'country_name', 'city_name', 'channel_name',
+        'retailer_name', 'store_name',
+        'category_name', 'brand_name', 'sku_name'
     ]
 
     def get_queryset(self):
@@ -124,7 +124,7 @@ class TotalDistributionSnapReportView(BaseReportView):
     Use this end-point to list total distribution of distribution snap
     """
     serializer_class = distribution_serializers.TotalDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
+    filterset_class = SnapDistributionFilter
 
     def get_queryset(self):
         return distribution_usecases.TotalDistributionSnapReportUseCase().execute()
@@ -135,7 +135,7 @@ class ShelfShareDistributionSnapReportView(BaseReportView):
     Use this end-point to list shelf share distribution of distribution snap
     """
     serializer_class = distribution_serializers.ShelfShareDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
+    filterset_class = SnapDistributionFilter
 
     def get_queryset(self):
         return distribution_usecases.ShelfShareDistributionSnapReportUseCase().execute()
@@ -146,7 +146,7 @@ class NumberOfOutletDistributionSnapReportView(BaseReportView):
     Use this end-point to list number of outlet distribution of distribution snap
     """
     serializer_class = distribution_serializers.NumberOfOutletDistributionSnapReportSerializer
-    filterset_class = DistributionSnapFilter
+    filterset_class = SnapDistributionFilter
 
     def get_queryset(self):
         return distribution_usecases.NumberOfOutletDistributionSnapReportUseCase().execute()

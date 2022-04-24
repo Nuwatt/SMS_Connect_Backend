@@ -12,7 +12,6 @@ from apps.core import usecases
 from apps.localize.models import Country, City
 from apps.snap.exceptions import PriceMonitorSnapNotFound
 from apps.snap.models import (
-    PriceMonitorSnap,
     SnapChannel,
     SnapCategory,
     SnapBrand,
@@ -20,18 +19,15 @@ from apps.snap.models import (
     SnapPriceMonitor
 )
 
+
 class GetPriceMonitorSnapUseCase(usecases.BaseUseCase):
     def __init__(self, price_monitor_snap_id: str):
         self._price_monitor_snap_id = price_monitor_snap_id
 
-    def execute(self):
-        self._factory()
-        return self._price_monitor_snap
-
     def _factory(self):
         try:
-            self._price_monitor_snap = PriceMonitorSnap.objects.get(pk=self._price_monitor_snap_id)
-        except PriceMonitorSnap.DoesNotExist:
+            return SnapPriceMonitor.objects.get(pk=self._price_monitor_snap_id)
+        except SnapPriceMonitor.DoesNotExist:
             raise PriceMonitorSnapNotFound
 
 
@@ -97,7 +93,7 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
                 sku_data[item.get('SKU')] = sku
                 sku.country.add(country_data[item.get('Country')])
 
-            snap, _snap_created = PriceMonitorSnap.objects.update_or_create(
+            snap, _snap_created = SnapPriceMonitor.objects.update_or_create(
                 city=city_data[item.get('City')],
                 channel=channel_data[item.get('Channel')],
                 sku=sku_data[item.get('SKU')],
@@ -141,9 +137,9 @@ class ExportPriceMonitorSnapUseCase(usecases.BaseUseCase):
         writer.writerow(self.columns)
 
         # 2. write questions
-        snaps = PriceMonitorSnap.objects.unarchived().values(
-            'date', 'city__country__name', 'city__name', 'channel__name', 'sku__category__name',
-            'sku__brand__name', 'sku__name', 'count', 'mode', 'mean', 'max', 'min'
+        snaps = SnapPriceMonitor.objects.unarchived().values(
+            'date', 'country_name', 'city_name', 'channel_name', 'category_name',
+            'brand_name', 'sku_name', 'count', 'mode', 'mean', 'max', 'min'
         )
         for snap in snaps:
             writer.writerow([
@@ -174,12 +170,12 @@ class ListPriceMonitorSnapUseCase(usecases.BaseUseCase):
 
 
 class DeletePriceMonitorSnapUseCase(usecases.DeleteUseCase):
-    def __init__(self, price_monitor_snap: PriceMonitorSnap):
+    def __init__(self, price_monitor_snap: SnapPriceMonitor):
         super().__init__(price_monitor_snap)
 
 
 class UpdatePriceMonitorSnapUseCase(usecases.UpdateUseCase):
-    def __init__(self, serializer, price_monitor_snap: PriceMonitorSnap):
+    def __init__(self, serializer, price_monitor_snap: SnapPriceMonitor):
         super().__init__(serializer, price_monitor_snap)
 
 
@@ -586,7 +582,7 @@ class SKUPerChannelPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
 
 class BulkDeletePriceMonitorSnapUseCase(usecases.CreateUseCase):
     def _factory(self):
-        PriceMonitorSnap.objects.filter(
+        SnapPriceMonitor.objects.filter(
             is_archived=False,
             id__in=self._data.get('snap_ids')
         ).archive()

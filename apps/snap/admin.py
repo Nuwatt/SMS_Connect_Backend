@@ -28,59 +28,6 @@ class SnapCityAdmin(SnapModelAdmin):
     )
 
 
-@admin.register(models.PriceMonitorSnap)
-class PriceMonitorSnapAdmin(BaseModelAdmin):
-    list_display = BaseModelAdmin.list_display + (
-        'sku',
-        'date',
-    )
-    list_filter = BaseModelAdmin.list_filter + (
-        'sku__category',
-        'sku__brand',
-        'channel',
-        'city__country',
-        'snap_city',
-    )
-    raw_id_fields = [
-        'snap_city',
-        'channel',
-        'sku',
-    ]
-
-
-@admin.register(models.OutOfStockSnap)
-class OutOfStockSnapAdmin(BaseModelAdmin):
-    list_display = BaseModelAdmin.list_display + (
-        'sku',
-    )
-    list_filter = BaseModelAdmin.list_filter + (
-        'sku__category',
-        'sku__brand',
-        'city__country',
-    )
-    raw_id_fields = [
-        'snap_city',
-        'sku',
-        'store',
-    ]
-
-
-@admin.register(models.DistributionSnap)
-class DistributionSnapAdmin(BaseModelAdmin):
-    list_display = BaseModelAdmin.list_display + (
-        'sku',
-    )
-    list_filter = BaseModelAdmin.list_filter + (
-        'sku__category',
-        'sku__brand',
-        'city__country',
-    )
-    raw_id_fields = [
-        'snap_city',
-        'sku',
-    ]
-
-
 @admin.register(models.ConsumerSnap)
 class ConsumerSnapAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
@@ -132,6 +79,36 @@ class SnapSKUAdmin(SnapModelAdmin):
 
 @admin.register(models.SnapPriceMonitor)
 class SnapPriceMonitorAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'sku_name',
+        'date',
+    )
+    list_filter = BaseModelAdmin.list_filter + (
+        'category_name',
+        'brand_name',
+        'channel_name',
+        'country_name',
+        'city_name',
+    )
+
+
+@admin.register(models.SnapOutOfStock)
+class SnapOutOfStockAdmin(BaseModelAdmin):
+    list_display = BaseModelAdmin.list_display + (
+        'sku_name',
+        'date',
+    )
+    list_filter = BaseModelAdmin.list_filter + (
+        'category_name',
+        'brand_name',
+        'channel_name',
+        'country_name',
+        'city_name',
+    )
+
+
+@admin.register(models.SnapDistribution)
+class SnapDistributionAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
         'sku_name',
         'date',
