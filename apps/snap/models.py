@@ -307,7 +307,7 @@ class SnapOutOfStock(BaseModel):
 
 class SnapDistribution(BaseModel):
     date = models.DateField()
-    ity_id = models.BigIntegerField(db_index=True)
+    city_id = models.BigIntegerField(db_index=True)
     city_name = models.CharField(max_length=255, db_index=True)
     country_id = models.BigIntegerField(db_index=True)
     country_name = models.CharField(max_length=255, db_index=True)
