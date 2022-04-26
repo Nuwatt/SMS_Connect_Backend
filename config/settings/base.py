@@ -312,3 +312,5 @@ USE_S3 = False
 
 # Reporting data max limit
 REPORTING_MAX_LIMIT = 10
+
+SNAP_REPORTING_MAX_LIMIT = 100

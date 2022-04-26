@@ -104,5 +104,9 @@ urlpatterns = [
     path(
         'report/',
         include(report_urls)
+    ),
+    path(
+        'report/',
+        include('apps.snap.urls.new_price_monitor_urls')
     )
 ]

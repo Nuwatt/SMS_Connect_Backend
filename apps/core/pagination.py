@@ -12,3 +12,10 @@ class ReportPagination(LimitOffsetPagination):
 
     def get_paginated_response(self, data):
         return Response(data)
+
+
+class SnapReportPagination(LimitOffsetPagination):
+    default_limit = settings.SNAP_REPORTING_MAX_LIMIT
+
+    def get_paginated_response(self, data):
+        return Response(data)
