@@ -110,6 +110,7 @@ class ListCountryFiltersView(BaseFiltersView):
     serializer_class = filters_serializers.ListCountryFiltersSerializer
 
     def get_queryset(self):
+        super(ListCountryFiltersView, self).get_queryset()
         return filters_usecases.ListCountryFiltersUseCase(
             snap_model=self.snap_model
         ).execute()
