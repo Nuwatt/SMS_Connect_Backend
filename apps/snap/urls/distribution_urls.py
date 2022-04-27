@@ -1,13 +1,28 @@
 from django.urls import path, include
 
-from apps.snap.views import distribution_views
+from apps.snap.views import new_distribution_views, distribution_views
 
 report_urls = [
-    # path(
-    #     'visit-by-country',
-    #     distribution_views.VisitByCountryDistributionSnapReportView.as_view(),
-    #     name='visit-by-country-distribution-snap-report'
-    # ),
+    path(
+        'city-report',
+        new_distribution_views.DistributionSnapCityReportView.as_view(),
+        name='distribution-snap-city-report'
+    ),
+    path(
+        'sku-report',
+        new_distribution_views.DistributionSnapSKUReportView.as_view(),
+        name='distribution-snap-sku-report'
+    ),
+    path(
+        'brand-report',
+        new_distribution_views.DistributionSnapBrandReportView.as_view(),
+        name='distribution-snap-brand-report'
+    ),
+    path(
+        'channel-report',
+        new_distribution_views.DistributionSnapChannelReportView.as_view(),
+        name='distribution-snap-channel-report'
+    ),
     # path(
     #     'visit-by-city',
     #     distribution_views.VisitByCityDistributionSnapReportView.as_view(),
