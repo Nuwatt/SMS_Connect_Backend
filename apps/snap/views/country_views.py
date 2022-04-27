@@ -27,9 +27,6 @@ class ListSnapCountryView(generics.ListAPIView):
     def get_queryset(self):
         return country_usecases.ListCountryUseCase().execute()
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
 
 class UpdateSnapCountryView(generics.UpdateAPIView, SnapCountryMixin):
     """

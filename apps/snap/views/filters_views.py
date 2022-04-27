@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 
 from apps.core import generics
 from apps.snap import filtersets
+from apps.snap.models import SnapPriceMonitor, SnapDistribution, SnapOutOfStock
 from apps.snap.serializers import filters_serializers
 from apps.snap.usecases import filters_usecases
 
@@ -11,6 +12,7 @@ from apps.snap.usecases import filters_usecases
 class BaseFiltersView(generics.ListAPIView):
     pagination_class = None
     permission_classes = (AllowAny,)
+    snap_model = None
 
     def set_filterset_class(self):
         # model = {
@@ -22,10 +24,31 @@ class BaseFiltersView(generics.ListAPIView):
         self.questionnaire_type = self.request.GET.get('questionnaire_type', None)
         if self.questionnaire_type == '7':
             self.filterset_class = filtersets.SnapPriceMonitorFilter
+        elif self.questionnaire_type == '4':
+            self.filterset_class = filtersets.SnapDistributionFilter
+        elif self.questionnaire_type == '3':
+            self.filterset_class = filtersets.SnapOutOfStockFilter
         else:
             raise ValidationError({
                 'questionnaire_type': _('This filter params is required.')
             })
+
+    def get_snap_model(self):
+        self.questionnaire_type = self.request.GET.get('questionnaire_type', None)
+        if self.snap_model == '7':
+            self.snap_model = SnapPriceMonitor
+        elif self.questionnaire_type == '4':
+            self.snap_model = SnapDistribution
+        elif self.questionnaire_type == '3':
+            self.snap_model = SnapOutOfStock
+        else:
+            raise ValidationError({
+                'questionnaire_type': _('This filter params is required.')
+            })
+
+    def get_queryset(self):
+        self.set_filterset_class()
+        self.get_snap_model()
 
 
 class ListSKUFiltersView(BaseFiltersView):
@@ -35,9 +58,10 @@ class ListSKUFiltersView(BaseFiltersView):
     serializer_class = filters_serializers.ListSKUFiltersSerializer
 
     def get_queryset(self):
-        self.set_filterset_class()
-        if self.questionnaire_type == '7':
-            return filters_usecases.ListSKUFiltersUseCase().execute()
+        super(ListSKUFiltersView, self).get_queryset()
+        return filters_usecases.ListSKUFiltersUseCase(
+            snap_model=self.snap_model
+        ).execute()
 
 
 class ListBrandFiltersView(BaseFiltersView):
@@ -47,9 +71,10 @@ class ListBrandFiltersView(BaseFiltersView):
     serializer_class = filters_serializers.ListBrandFiltersSerializer
 
     def get_queryset(self):
-        self.set_filterset_class()
-        if self.questionnaire_type == '7':
-            return filters_usecases.ListBrandFiltersUseCase().execute()
+        super(ListBrandFiltersView, self).get_queryset()
+        return filters_usecases.ListBrandFiltersUseCase(
+            snap_model=self.snap_model
+        ).execute()
 
 
 class ListCategoryFiltersView(BaseFiltersView):
@@ -59,9 +84,10 @@ class ListCategoryFiltersView(BaseFiltersView):
     serializer_class = filters_serializers.ListCategoryFiltersSerializer
 
     def get_queryset(self):
-        self.set_filterset_class()
-        if self.questionnaire_type == '7':
-            return filters_usecases.ListCategoryFiltersUseCase().execute()
+        super(ListCategoryFiltersView, self).get_queryset()
+        return filters_usecases.ListCategoryFiltersUseCase(
+            snap_model=self.snap_model
+        ).execute()
 
 
 class ListCityFiltersView(BaseFiltersView):
@@ -71,9 +97,10 @@ class ListCityFiltersView(BaseFiltersView):
     serializer_class = filters_serializers.ListCityFiltersSerializer
 
     def get_queryset(self):
-        self.set_filterset_class()
-        if self.questionnaire_type == '7':
-            return filters_usecases.ListCityFiltersUseCase().execute()
+        super(ListCityFiltersView, self).get_queryset()
+        return filters_usecases.ListCityFiltersUseCase(
+            snap_model=self.snap_model
+        ).execute()
 
 
 class ListCountryFiltersView(BaseFiltersView):
@@ -83,9 +110,9 @@ class ListCountryFiltersView(BaseFiltersView):
     serializer_class = filters_serializers.ListCountryFiltersSerializer
 
     def get_queryset(self):
-        self.set_filterset_class()
-        if self.questionnaire_type == '7':
-            return filters_usecases.ListCountryFiltersUseCase().execute()
+        return filters_usecases.ListCountryFiltersUseCase(
+            snap_model=self.snap_model
+        ).execute()
 
 
 class ListChannelFiltersView(BaseFiltersView):
@@ -95,6 +122,8 @@ class ListChannelFiltersView(BaseFiltersView):
     serializer_class = filters_serializers.ListChannelFiltersSerializer
 
     def get_queryset(self):
-        self.set_filterset_class()
-        if self.questionnaire_type == '7':
-            return filters_usecases.ListChannelFiltersUseCase().execute()
+        super(ListChannelFiltersView, self).get_queryset()
+        return filters_usecases.ListChannelFiltersUseCase(
+            snap_model=self.snap_model
+        ).execute()
+
