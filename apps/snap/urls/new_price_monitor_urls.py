@@ -19,11 +19,11 @@ urlpatterns = [
         new_price_monitor_views.CityMeanPriceMonitorSnapReportView.as_view(),
         name='city-mean-price-monitor-snap-report'
     ),
-    # path(
-    #     'city-mode',
-    #     new_price_monitor_views.CityModePriceMonitorSnapReportView.as_view(),
-    #     name='city-mode-price-monitor-snap-report'
-    # ),
+    path(
+        'city-mode',
+        new_price_monitor_views.CityModePriceMonitorSnapReportView.as_view(),
+        name='city-mode-price-monitor-snap-report'
+    ),
 
     # channel
     path(
@@ -41,13 +41,13 @@ urlpatterns = [
         new_price_monitor_views.ChannelMeanPriceMonitorSnapReportView.as_view(),
         name='channel-mean-price-monitor-snap-report'
     ),
-    # path(
-    #     'city-mode',
-    #     new_price_monitor_views.CityModePriceMonitorSnapReportView.as_view(),
-    #     name='city-mode-price-monitor-snap-report'
-    # ),
+    path(
+        'channel-mode',
+        new_price_monitor_views.ChannelModePriceMonitorSnapReportView.as_view(),
+        name='channel-mode-price-monitor-snap-report'
+    ),
 
-    # channel
+    # brand
     path(
         'brand-max',
         new_price_monitor_views.BrandMaxPriceMonitorSnapReportView.as_view(),
@@ -63,9 +63,9 @@ urlpatterns = [
         new_price_monitor_views.BrandMeanPriceMonitorSnapReportView.as_view(),
         name='brand-mean-price-monitor-snap-report'
     ),
-    # path(
-    #     'city-mode',
-    #     new_price_monitor_views.CityModePriceMonitorSnapReportView.as_view(),
-    #     name='city-mode-price-monitor-snap-report'
-    # ),
+    path(
+        'brand-mode',
+        new_price_monitor_views.BrandModePriceMonitorSnapReportView.as_view(),
+        name='brand-mode-price-monitor-snap-report'
+    ),
 ]

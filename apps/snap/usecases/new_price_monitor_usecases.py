@@ -1,4 +1,4 @@
-from django.db.models import Max, Count, Min, Avg
+from django.db.models import Max, Count, Min, Avg, OuterRef, Subquery
 from django.db.models.functions import TruncMonth
 
 from apps.core import usecases
@@ -75,6 +75,37 @@ class CityMeanPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
         return self._final_data(query)
 
 
+class CityModePriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
+    def _factory(self):
+        snap_mode = SnapPriceMonitor.objects.filter(
+            sku_id=OuterRef('sku_id'),
+        ).values(
+            'mode',
+        ).order_by(
+            'created',
+        ).annotate(
+            frequency=Count('id')
+        ).order_by(
+            '-frequency',
+        ).values('mode')[:1]
+
+        query = SnapPriceMonitor.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
+            value=Subquery(snap_mode),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'month',
+            'value',
+            'city_name'
+        ).unarchived()
+
+        return self._final_data(query)
+
+
 # channel
 class ChannelMaxPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
     def _factory(self):
@@ -133,6 +164,37 @@ class ChannelMeanPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
         return self._final_data(query)
 
 
+class ChannelModePriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
+    def _factory(self):
+        snap_mode = SnapPriceMonitor.objects.filter(
+            sku_id=OuterRef('sku_id'),
+        ).values(
+            'mode',
+        ).order_by(
+            'created',
+        ).annotate(
+            frequency=Count('id')
+        ).order_by(
+            '-frequency',
+        ).values('mode')[:1]
+
+        query = SnapPriceMonitor.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
+            value=Subquery(snap_mode),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'month',
+            'value',
+            'channel_name'
+        ).unarchived()
+
+        return self._final_data(query)
+
+
 # brand
 class BrandMaxPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
     def _factory(self):
@@ -180,6 +242,37 @@ class BrandMeanPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
             'month'
         ).annotate(
             value=Avg('max'),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'month',
+            'value',
+            'brand_name'
+        ).unarchived()
+
+        return self._final_data(query)
+
+
+class BrandModePriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
+    def _factory(self):
+        snap_mode = SnapPriceMonitor.objects.filter(
+            sku_id=OuterRef('sku_id'),
+        ).values(
+            'mode',
+        ).order_by(
+            'created',
+        ).annotate(
+            frequency=Count('id')
+        ).order_by(
+            '-frequency',
+        ).values('mode')[:1]
+
+        query = SnapPriceMonitor.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
+            value=Subquery(snap_mode),
         ).values(
             'sku_name',
             'sku_id',

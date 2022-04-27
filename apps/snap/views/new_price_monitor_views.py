@@ -56,6 +56,20 @@ class CityMeanPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
+class CityModePriceMonitorSnapReportView(SnapBaseReportView):
+    """
+    Use this end-point to get mode report by city
+    """
+    serializer_class = new_price_monitor_serializers.CityPriceMonitorSnapReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_price_monitor_usecases.CityModePriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
 # Channel
 class ChannelMaxPriceMonitorSnapReportView(SnapBaseReportView):
     """
@@ -99,6 +113,20 @@ class ChannelMeanPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
+class ChannelModePriceMonitorSnapReportView(SnapBaseReportView):
+    """
+    Use this end-point to get mode report by channel
+    """
+    serializer_class = new_price_monitor_serializers.ChannelPriceMonitorSnapReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_price_monitor_usecases.ChannelModePriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
 # Brand
 class BrandMaxPriceMonitorSnapReportView(SnapBaseReportView):
     """
@@ -138,5 +166,19 @@ class BrandMeanPriceMonitorSnapReportView(SnapBaseReportView):
         sku_provided = True if self.request.GET.get('sku', None) else False
 
         return new_price_monitor_usecases.BrandMeanPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
+class BrandModePriceMonitorSnapReportView(SnapBaseReportView):
+    """
+    Use this end-point to get mode report by brand
+    """
+    serializer_class = new_price_monitor_serializers.BrandPriceMonitorSnapReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_price_monitor_usecases.BrandModePriceMonitorSnapReportUseCase(
             sku_provided=sku_provided
         ).execute()
