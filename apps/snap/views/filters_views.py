@@ -29,13 +29,14 @@ class BaseFiltersView(generics.ListAPIView):
         elif self.questionnaire_type == '3':
             self.filterset_class = filtersets.SnapOutOfStockFilter
         else:
+            print('query')
             raise ValidationError({
                 'questionnaire_type': _('This filter params is required.')
             })
 
     def get_snap_model(self):
         self.questionnaire_type = self.request.GET.get('questionnaire_type', None)
-        if self.snap_model == '7':
+        if self.questionnaire_type == '7':
             self.snap_model = SnapPriceMonitor
         elif self.questionnaire_type == '4':
             self.snap_model = SnapDistribution
