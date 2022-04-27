@@ -118,9 +118,6 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
 
 
 class ListDistributionSnapUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
     def _factory(self):
         return SnapDistribution.objects.values(
             'city_name',
@@ -149,9 +146,6 @@ class UpdateDistributionSnapUseCase(usecases.UpdateUseCase):
 
 
 class VisitByCountryDistributionSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
     def _factory(self):
         return SnapDistribution.objects.values(
             'country_id'
@@ -233,7 +227,6 @@ class NumberOfOutletDistributionSnapReportUseCase(usecases.BaseUseCase):
         return SnapDistribution.objects.values(
             'sku_id'
         ).distinct().annotate(
-            sku_name=F('sku__name'),
             value=Avg('number_of_outlet')
         ).values(
             'value',
