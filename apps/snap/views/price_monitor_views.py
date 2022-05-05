@@ -1,4 +1,3 @@
-from django.db.models import Count, Min, Max, Avg
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
@@ -90,7 +89,6 @@ class OverviewPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list overview report of price monitor snap
     """
     serializer_class = price_monitor_serializers.OverviewPriceMonitorSnapReport
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
         sku_provided = True if self.request.GET.get('sku', None) else False
@@ -104,7 +102,6 @@ class MonthMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list month max report of price monitor snap
     """
     serializer_class = price_monitor_serializers.MonthPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
         sku_provided = True if self.request.GET.get('sku', None) else False
@@ -118,7 +115,6 @@ class MonthMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list month min report of price monitor snap
     """
     serializer_class = price_monitor_serializers.MonthPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
         sku_provided = True if self.request.GET.get('sku', None) else False
@@ -132,7 +128,6 @@ class MonthModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list month mode report of price monitor snap
     """
     serializer_class = price_monitor_serializers.MonthPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
         sku_provided = True if self.request.GET.get('sku', None) else False
@@ -146,7 +141,6 @@ class MonthMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list month mean report of price monitor snap
     """
     serializer_class = price_monitor_serializers.MonthPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
         sku_provided = True if self.request.GET.get('sku', None) else False
@@ -160,32 +154,34 @@ class BrandOverviewPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list brand overview report of price monitor snap
     """
     serializer_class = price_monitor_serializers.BrandoverviewPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.BrandOverviewPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.BrandOverviewPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
-    def custom_queryset(self, queryset):
-        results = []
-        unique_brands = queryset.values('brand_id', 'brand_name').distinct()
-        stats = queryset.aggregate(
-            Min('min'),
-            Max('max'),
-            Avg('mean')
-        )
-
-        for brand in unique_brands:
-            results.append({
-                'brand_name': brand.get('brand_name'),
-                'mode_value': queryset.annotate(
-                    Count('mode')
-                ).order_by('-mode__count').values('mode')[0].get('mode'),
-                'min_value': stats.get('min__min'),
-                'max_value': stats.get('max__max'),
-                'mean_value': stats.get('mean__avg'),
-            })
-
-        return results
+    # def custom_queryset(self, queryset):
+    #     results = []
+    #     unique_brands = queryset.values('brand_id', 'brand_name').distinct()
+    #     stats = queryset.aggregate(
+    #         Min('min'),
+    #         Max('max'),
+    #         Avg('mean')
+    #     )
+    #
+    #     for brand in unique_brands:
+    #         results.append({
+    #             'brand_name': brand.get('brand_name'),
+    #             'mode_value': queryset.annotate(
+    #                 Count('mode')
+    #             ).order_by('-mode__count').values('mode')[0].get('mode'),
+    #             'min_value': stats.get('min__min'),
+    #             'max_value': stats.get('max__max'),
+    #             'mean_value': stats.get('mean__avg'),
+    #         })
+    #
+    #     return results
 
 
 class CountryMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -193,10 +189,12 @@ class CountryMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list country min report of price monitor snap
     """
     serializer_class = price_monitor_serializers.CountryPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.CountryMinPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.CountryMinPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class CountryMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -204,10 +202,12 @@ class CountryMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list country max report of price monitor snap
     """
     serializer_class = price_monitor_serializers.CountryPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.CountryMaxPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.CountryMaxPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class CountryMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -215,10 +215,12 @@ class CountryMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list country mean report of price monitor snap
     """
     serializer_class = price_monitor_serializers.CountryPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.CountryMeanPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.CountryMeanPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class CountryModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -226,10 +228,12 @@ class CountryModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list country mode report of price monitor snap
     """
     serializer_class = price_monitor_serializers.CountryPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.CountryModePriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.CountryModePriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class VisitPerCityPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -237,10 +241,12 @@ class VisitPerCityPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list visit per city report of price monitor snap
     """
     serializer_class = price_monitor_serializers.VisitPerCityPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.VisitPerCityPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.VisitPerCityPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class VisitPerCountryPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -248,10 +254,12 @@ class VisitPerCountryPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list visit per country report of price monitor snap
     """
     serializer_class = price_monitor_serializers.VisitPerCountryPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.VisitPerCountryPriceMonitorSnapReportUseCase().execute()
+        country_provided = True if self.request.GET.get('country', None) else False
+        return price_monitor_usecases.VisitPerCountryPriceMonitorSnapReportUseCase(
+            country_provided=country_provided
+        ).execute()
 
 
 class SKUPerChannelPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -259,10 +267,12 @@ class SKUPerChannelPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     Use this end-point to list sku per channel report of price monitor snap
     """
     serializer_class = price_monitor_serializers.SKUPerChannelPriceMonitorSnapReportSerializer
-    filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.SKUPerChannelPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.SKUPerChannelPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class BulkDeletePriceMonitorSnapView(generics.CreateWithMessageAPIView):
