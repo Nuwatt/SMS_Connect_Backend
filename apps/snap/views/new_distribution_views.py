@@ -1,19 +1,9 @@
-from rest_framework.permissions import AllowAny
-
-from apps.core import generics
-from apps.snap import filtersets
 from apps.snap.serializers import new_distribution_serializers
 from apps.snap.usecases import new_distribution_usecases
+from apps.snap.views.base_views import SnapDistributionBaseReportView
 
 
-class DistributionSnapReportView(generics.ListAPIView):
-    permission_classes = (AllowAny,)
-    filterset_class = filtersets.SnapDistributionFilter
-    pagination_class = None
-    # permission_classes = [IsAdminPortalUser | IsResearcherPortalUser]
-
-
-class DistributionSnapCityReportView(DistributionSnapReportView):
+class DistributionSnapCityReportView(SnapDistributionBaseReportView):
     """
     Use this end-point to get max report by city
     """
@@ -27,7 +17,7 @@ class DistributionSnapCityReportView(DistributionSnapReportView):
         ).execute()
 
 
-class DistributionSnapBrandReportView(DistributionSnapReportView):
+class DistributionSnapBrandReportView(SnapDistributionBaseReportView):
     """
     Use this end-point to get max report by Brand
     """
@@ -41,7 +31,7 @@ class DistributionSnapBrandReportView(DistributionSnapReportView):
         ).execute()
 
 
-class DistributionSnapChannelReportView(DistributionSnapReportView):
+class DistributionSnapChannelReportView(SnapDistributionBaseReportView):
     """
     Use this end-point to get max report by Channel
     """
@@ -55,7 +45,7 @@ class DistributionSnapChannelReportView(DistributionSnapReportView):
         ).execute()
 
 
-class DistributionSnapSKUReportView(DistributionSnapReportView):
+class DistributionSnapSKUReportView(SnapDistributionBaseReportView):
     """
     Use this end-point to get max report by SKU
     """

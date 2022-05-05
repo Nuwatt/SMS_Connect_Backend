@@ -1,20 +1,11 @@
-from rest_framework.permissions import AllowAny
-
-from apps.core import generics
-from apps.snap import filtersets
 from apps.snap.serializers import new_price_monitor_serializers
 from apps.snap.usecases import new_price_monitor_usecases
 
-
-class SnapBaseReportView(generics.ListAPIView):
-    permission_classes = (AllowAny,)
-    filterset_class = filtersets.SnapPriceMonitorFilter
-    pagination_class = None
-    # permission_classes = [IsAdminPortalUser | IsResearcherPortalUser]
-
-
 # city
-class CityMaxPriceMonitorSnapReportView(SnapBaseReportView):
+from apps.snap.views.base_views import SnapPriceMonitorBaseReportView
+
+
+class CityMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get max report by city
     """
@@ -28,7 +19,7 @@ class CityMaxPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class CityMinPriceMonitorSnapReportView(SnapBaseReportView):
+class CityMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get min report by city
     """
@@ -42,7 +33,7 @@ class CityMinPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class CityMeanPriceMonitorSnapReportView(SnapBaseReportView):
+class CityMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get mean report by city
     """
@@ -56,7 +47,7 @@ class CityMeanPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class CityModePriceMonitorSnapReportView(SnapBaseReportView):
+class CityModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get mode report by city
     """
@@ -71,7 +62,7 @@ class CityModePriceMonitorSnapReportView(SnapBaseReportView):
 
 
 # Channel
-class ChannelMaxPriceMonitorSnapReportView(SnapBaseReportView):
+class ChannelMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get max report by Channel
     """
@@ -85,7 +76,7 @@ class ChannelMaxPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class ChannelMinPriceMonitorSnapReportView(SnapBaseReportView):
+class ChannelMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get min report by Channel
     """
@@ -99,7 +90,7 @@ class ChannelMinPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class ChannelMeanPriceMonitorSnapReportView(SnapBaseReportView):
+class ChannelMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get mean report by Channel
     """
@@ -113,7 +104,7 @@ class ChannelMeanPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class ChannelModePriceMonitorSnapReportView(SnapBaseReportView):
+class ChannelModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get mode report by channel
     """
@@ -128,7 +119,7 @@ class ChannelModePriceMonitorSnapReportView(SnapBaseReportView):
 
 
 # Brand
-class BrandMaxPriceMonitorSnapReportView(SnapBaseReportView):
+class BrandMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get max report by Brand
     """
@@ -142,7 +133,7 @@ class BrandMaxPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class BrandMinPriceMonitorSnapReportView(SnapBaseReportView):
+class BrandMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get min report by Brand
     """
@@ -156,7 +147,7 @@ class BrandMinPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class BrandMeanPriceMonitorSnapReportView(SnapBaseReportView):
+class BrandMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get mean report by Brand
     """
@@ -170,7 +161,7 @@ class BrandMeanPriceMonitorSnapReportView(SnapBaseReportView):
         ).execute()
 
 
-class BrandModePriceMonitorSnapReportView(SnapBaseReportView):
+class BrandModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to get mode report by brand
     """

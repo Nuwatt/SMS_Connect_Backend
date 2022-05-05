@@ -5,11 +5,11 @@ from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
-from apps.report.views.base_views import BaseReportView
 from apps.snap import filtersets
 from apps.snap.mixins import PriceMonitorSnapMixin
 from apps.snap.serializers import price_monitor_serializers
 from apps.snap.usecases import price_monitor_usecases
+from apps.snap.views.base_views import SnapPriceMonitorBaseReportView
 from apps.user.permissions import IsPortalUser
 
 
@@ -85,7 +85,7 @@ class DeletePriceMonitorSnapView(generics.DestroyAPIView, PriceMonitorSnapMixin)
         ).execute()
 
 
-class OverviewPriceMonitorSnapReportView(BaseReportView):
+class OverviewPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list overview report of price monitor snap
     """
@@ -96,7 +96,7 @@ class OverviewPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.OverviewPriceMonitorSnapReportUseCase().execute()
 
 
-class MonthMaxPriceMonitorSnapReportView(BaseReportView):
+class MonthMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list month max report of price monitor snap
     """
@@ -107,7 +107,7 @@ class MonthMaxPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.MonthMaxPriceMonitorSnapReportUseCase().execute()
 
 
-class MonthMinPriceMonitorSnapReportView(BaseReportView):
+class MonthMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list month min report of price monitor snap
     """
@@ -118,7 +118,7 @@ class MonthMinPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.MonthMinPriceMonitorSnapReportUseCase().execute()
 
 
-class MonthModePriceMonitorSnapReportView(BaseReportView):
+class MonthModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list month mode report of price monitor snap
     """
@@ -129,7 +129,7 @@ class MonthModePriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.MonthModePriceMonitorSnapReportUseCase().execute()
 
 
-class MonthMeanPriceMonitorSnapReportView(BaseReportView):
+class MonthMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list month mean report of price monitor snap
     """
@@ -140,7 +140,7 @@ class MonthMeanPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.MonthMeanPriceMonitorSnapReportUseCase().execute()
 
 
-class BrandOverviewPriceMonitorSnapReportView(BaseReportView):
+class BrandOverviewPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list brand overview report of price monitor snap
     """
@@ -173,7 +173,7 @@ class BrandOverviewPriceMonitorSnapReportView(BaseReportView):
         return results
 
 
-class CountryMinPriceMonitorSnapReportView(BaseReportView):
+class CountryMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list country min report of price monitor snap
     """
@@ -184,7 +184,7 @@ class CountryMinPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.CountryMinPriceMonitorSnapReportUseCase().execute()
 
 
-class CountryMaxPriceMonitorSnapReportView(BaseReportView):
+class CountryMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list country max report of price monitor snap
     """
@@ -195,7 +195,7 @@ class CountryMaxPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.CountryMaxPriceMonitorSnapReportUseCase().execute()
 
 
-class CountryMeanPriceMonitorSnapReportView(BaseReportView):
+class CountryMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list country mean report of price monitor snap
     """
@@ -206,7 +206,7 @@ class CountryMeanPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.CountryMeanPriceMonitorSnapReportUseCase().execute()
 
 
-class CountryModePriceMonitorSnapReportView(BaseReportView):
+class CountryModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list country mode report of price monitor snap
     """
@@ -217,7 +217,7 @@ class CountryModePriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.CountryModePriceMonitorSnapReportUseCase().execute()
 
 
-class VisitPerCityPriceMonitorSnapReportView(BaseReportView):
+class VisitPerCityPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list visit per city report of price monitor snap
     """
@@ -228,7 +228,7 @@ class VisitPerCityPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.VisitPerCityPriceMonitorSnapReportUseCase().execute()
 
 
-class VisitPerCountryPriceMonitorSnapReportView(BaseReportView):
+class VisitPerCountryPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list visit per country report of price monitor snap
     """
@@ -239,7 +239,7 @@ class VisitPerCountryPriceMonitorSnapReportView(BaseReportView):
         return price_monitor_usecases.VisitPerCountryPriceMonitorSnapReportUseCase().execute()
 
 
-class SKUPerChannelPriceMonitorSnapReportView(BaseReportView):
+class SKUPerChannelPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     """
     Use this end-point to list sku per channel report of price monitor snap
     """
