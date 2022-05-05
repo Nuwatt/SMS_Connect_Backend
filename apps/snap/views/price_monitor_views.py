@@ -93,7 +93,10 @@ class OverviewPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.OverviewPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.OverviewPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class MonthMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -104,7 +107,10 @@ class MonthMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.MonthMaxPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.MonthMaxPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class MonthMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -115,7 +121,10 @@ class MonthMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.MonthMinPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.MonthMinPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class MonthModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -126,7 +135,10 @@ class MonthModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.MonthModePriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.MonthModePriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class MonthMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
@@ -137,7 +149,10 @@ class MonthMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     filterset_class = filtersets.SnapPriceMonitorFilter
 
     def get_queryset(self):
-        return price_monitor_usecases.MonthMeanPriceMonitorSnapReportUseCase().execute()
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return price_monitor_usecases.MonthMeanPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
 
 
 class BrandOverviewPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
