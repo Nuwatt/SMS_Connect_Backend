@@ -20,7 +20,7 @@ from apps.snap.models import (
     SnapStore,
     SnapCategory,
     SnapBrand,
-    SnapSKU
+    SnapSKU, SnapCity
 )
 
 
@@ -187,14 +187,26 @@ class DeleteOutOfStockSnapUseCase(usecases.DeleteUseCase):
         super().__init__(out_of_stock_snap)
 
 
-class UpdatePriceMonitorSnapUseCase(usecases.UpdateUseCase):
+class UpdateOutOfStockSnapUseCase(usecases.UpdateUseCase):
     def __init__(self, serializer, out_of_stock_snap: SnapOutOfStock):
         super().__init__(serializer, out_of_stock_snap)
 
 
-class OverviewOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+class OutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def __init__(self, sku_provided):
+        self._sku_provided = sku_provided
+
+    def _final_data(self, query):
+        if not self._sku_provided:
+            snap_skus = SnapSKU.objects.filter(is_archived=False).values('id')[:5]
+            snap_ids = [item.get('id') for item in snap_skus]
+            return query.filter(sku_id__in=snap_ids)
+        return query
+
+
+class OverviewOutOfStockSnapReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
-        return SnapOutOfStock.objects.values(
+        query = SnapOutOfStock.objects.values(
             'sku_id'
         ).distinct().annotate(
             available=Avg('available_in_month'),
@@ -202,15 +214,17 @@ class OverviewOutOfStockSnapReportUseCase(usecases.BaseUseCase):
             less=Avg('less_available_in_month'),
         ).values(
             'sku_name',
+            'sku_id',
             'available',
             'not_available',
             'less'
         ).unarchived()
+        return self._final_data(query)
 
 
-class AvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+class AvailableOutOfStockSnapReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
-        return SnapOutOfStock.objects.annotate(
+        query = SnapOutOfStock.objects.annotate(
             month=TruncMonth('date')
         ).values(
             'month'
@@ -219,13 +233,15 @@ class AvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         ).values(
             'month',
             'sku_name',
+            'sku_id',
             'value'
         ).unarchived()
+        return self._final_data(query)
 
 
-class NotAvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+class NotAvailableOutOfStockSnapReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
-        return SnapOutOfStock.objects.annotate(
+        query = SnapOutOfStock.objects.annotate(
             month=TruncMonth('date')
         ).values(
             'month'
@@ -234,13 +250,15 @@ class NotAvailableOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         ).values(
             'month',
             'sku_name',
+            'sku_id',
             'value'
         ).unarchived()
+        return self._final_data(query)
 
 
-class LessOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+class LessOutOfStockSnapReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
-        return SnapOutOfStock.objects.annotate(
+        query = SnapOutOfStock.objects.annotate(
             month=TruncMonth('date')
         ).values(
             'month'
@@ -249,69 +267,95 @@ class LessOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         ).values(
             'month',
             'sku_name',
+            'sku_id',
             'value'
         ).unarchived()
+        return self._final_data(query)
 
 
 # city
-class AvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
-    def execute(self):
-        return self._factory()
-
+class AvailableByCityOutOfStockSnapReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
-        return SnapOutOfStock.objects.values(
-            'city_id'
+        query = SnapOutOfStock.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
         ).distinct().annotate(
             value=Avg('available_in_month'),
         ).values(
             'city_name',
+            'month',
             'sku_name',
+            'sku_id',
             'value'
         ).unarchived()
+        return self._final_data(query)
 
 
-class NotAvailableByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+class NotAvailableByCityOutOfStockSnapReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
-        return SnapOutOfStock.objects.values(
-            'city_id'
+        query = SnapOutOfStock.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
         ).distinct().annotate(
             value=Avg('not_available_in_month'),
         ).values(
             'city_name',
+            'month',
             'sku_name',
+            'sku_id',
             'value'
         ).unarchived()
+        return self._final_data(query)
 
 
-class LessByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+class LessByCityOutOfStockSnapReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
-        return SnapOutOfStock.objects.values(
-            'city_id'
+        query = SnapOutOfStock.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
         ).distinct().annotate(
             value=Avg('less_available_in_month'),
         ).values(
             'city_name',
+            'month',
             'sku_name',
+            'sku_id',
             'value'
         ).unarchived()
+        return self._final_data(query)
 
 
 class VisitByCityOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+    def __init__(self, city_provided):
+        self._city_provided = city_provided
+
+    def _final_data(self, query):
+        if not self._city_provided:
+            snap_cities = SnapCity.objects.filter(is_archived=False).values('id')[:5]
+            snap_ids = [item.get('id') for item in snap_cities]
+            return query.filter(sku_id__in=snap_ids)
+        return query
+
     def _factory(self):
-        return SnapOutOfStock.objects.values(
+        query = SnapOutOfStock.objects.values(
             'city_id'
         ).distinct().annotate(
             value=Sum('count'),
         ).values(
             'city_name',
+            'city_id',
             'value'
         ).unarchived()
+        return self._final_data(query)
 
 
-class NotAvailableByWeekOutOfStockSnapReportUseCase(usecases.BaseUseCase):
+class NotAvailableByWeekOutOfStockSnapReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
         current_week = now().isocalendar()[1]
-        return SnapOutOfStock.objects.filter(
+        query = SnapOutOfStock.objects.filter(
             not_available_by_store__gt=0
         ).values(
             'sku_id'
@@ -320,9 +364,11 @@ class NotAvailableByWeekOutOfStockSnapReportUseCase(usecases.BaseUseCase):
         ).values(
             'week',
             'sku_name',
+            'sku_id',
             'store_name',
             'retailer_name'
         ).unarchived()
+        return self._final_data(query)
 
 
 class BulkDeleteOutOfStockSnapUseCase(usecases.CreateUseCase):
