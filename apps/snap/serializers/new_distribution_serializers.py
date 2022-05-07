@@ -20,6 +20,10 @@ class DistributionSnapCityReportSerializer(DistributionSnapReportSerializer):
     city = serializers.CharField(source='city_name')
 
 
+class DistributionSnapCountryReportSerializer(DistributionSnapReportSerializer):
+    country = serializers.CharField(source='country_name')
+
+
 class DistributionSnapBrandReportSerializer(DistributionSnapReportSerializer):
     brand = serializers.CharField(source='brand_name')
 

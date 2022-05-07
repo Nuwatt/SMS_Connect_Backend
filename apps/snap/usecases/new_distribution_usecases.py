@@ -39,6 +39,28 @@ class DistributionSnapCityReportUseCase(DistributionSnapReportUseCase):
         return self._final_data(query)
 
 
+# country
+class DistributionSnapCountryReportUseCase(DistributionSnapReportUseCase):
+    def _factory(self):
+        query = SnapDistribution.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
+            total_distribution_value=Avg('total_distribution'),
+            shelf_share_value=Avg('shelf_share'),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'month',
+            'total_distribution_value',
+            'shelf_share_value',
+            'country_name'
+        ).unarchived()
+
+        return self._final_data(query)
+
+
 # brand
 class DistributionSnapBrandReportUseCase(DistributionSnapReportUseCase):
     def _factory(self):

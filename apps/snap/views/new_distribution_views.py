@@ -17,6 +17,20 @@ class DistributionSnapCityReportView(SnapDistributionBaseReportView):
         ).execute()
 
 
+class DistributionSnapCountryReportView(SnapDistributionBaseReportView):
+    """
+    Use this end-point to get max report by country
+    """
+    serializer_class = new_distribution_serializers.DistributionSnapCountryReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_distribution_usecases.DistributionSnapCountryReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
 class DistributionSnapBrandReportView(SnapDistributionBaseReportView):
     """
     Use this end-point to get max report by Brand

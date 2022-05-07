@@ -9,6 +9,11 @@ report_urls = [
         name='distribution-snap-city-report'
     ),
     path(
+        'country-report',
+        new_distribution_views.DistributionSnapCountryReportView.as_view(),
+        name='distribution-snap-country-report'
+    ),
+    path(
         'sku-report',
         new_distribution_views.DistributionSnapSKUReportView.as_view(),
         name='distribution-snap-sku-report'
