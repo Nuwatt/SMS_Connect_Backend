@@ -242,8 +242,10 @@ class OutOfStockSnapStoreReportView(SnapOutOfStockBaseReportView):
 
     def get_queryset(self):
         store_provided = True if self.request.GET.get('store', None) else False
+        sku_provided = True if self.request.GET.get('sku', None) else False
         return out_of_stock_usecases.OutOfStockSnapStoreReportUseCase(
-            store_provided=store_provided
+            store_provided=store_provided,
+            sku_provided=sku_provided
         ).execute()
 
 

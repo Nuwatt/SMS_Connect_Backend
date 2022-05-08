@@ -445,14 +445,17 @@ class OutOfStockSnapCityReportUseCase(OutOfStockSnapReportUseCase):
 
 
 class OutOfStockSnapStoreReportUseCase(usecases.BaseUseCase):
-    def __init__(self, store_provided):
+    def __init__(self, store_provided, sku_provided):
+        self._sku_provided = sku_provided
         self._store_provided = store_provided
 
     def _final_data(self, query):
-        if not self._store_provided:
+        if not self._store_provided and self._sku_provided:
             snap_stores = SnapStore.objects.filter(is_archived=False).values('id')[:5]
+            snap_skus = SnapSKU.objects.filter(is_archived=False).values('id')[:5]
             snap_ids = [item.get('id') for item in snap_stores]
-            return query.filter(store_id__in=snap_ids)
+            sku_ids = [item.get('id') for item in snap_skus]
+            return query.filter(store_id__in=snap_ids, sku_id__in=sku_ids)
         return query
 
     def _factory(self):
