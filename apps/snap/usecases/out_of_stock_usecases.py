@@ -473,9 +473,9 @@ class OutOfStockSnapMonthReportUseCase(OutOfStockSnapReportUseCase):
         ).values(
             'month'
         ).distinct().annotate(
-            not_available_by_month_value=Avg('not_available_by_month'),
-            less_available_by_month_value=Avg('less_available_by_month'),
-            available_by_month_value=Avg('available_by_month'),
+            not_available_by_month_value=Avg('not_available_in_month'),
+            less_available_by_month_value=Avg('less_available_in_month'),
+            available_by_month_value=Avg('available_in_month'),
         ).values(
             'month',
             'sku_name',
