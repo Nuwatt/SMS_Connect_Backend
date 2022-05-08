@@ -243,13 +243,15 @@ class BulkDeleteDistributionSnapUseCase(usecases.CreateUseCase):
 
 
 class ExportDistributionSnapUseCase(usecases.BaseUseCase):
+    def __init__(self, filter_backends, request, view_self):
+        self._view_self = view_self
+        self._request = request
+        self._filter_backends = filter_backends
+
     columns = [
         'Date', 'Country', 'City', 'Channel', 'Category', 'Brand', 'SKU',
         'Total Distribution', 'Shelf Share', 'Number Of Outlet'
     ]
-
-    def execute(self):
-        return self._factory()
 
     def _factory(self):
         response = HttpResponse(content_type='text/csv')
@@ -261,12 +263,16 @@ class ExportDistributionSnapUseCase(usecases.BaseUseCase):
         writer.writerow(self.columns)
 
         # 2. write questions
-        snaps = SnapDistribution.objects.unarchived().values(
+        queryset = SnapDistribution.objects.unarchived().values(
             'date', 'country_name', 'city_name',
             'channel_name', 'category_name',
             'brand_name', 'sku_name',
             'total_distribution', 'shelf_share', 'number_of_outlet'
         )
+        snaps = None
+        for backend in list(self._filter_backends):
+            snaps = backend().filter_queryset(self._request, queryset, self._view_self)
+
         for snap in snaps:
             writer.writerow([
                 *snap.values()

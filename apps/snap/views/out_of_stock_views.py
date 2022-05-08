@@ -4,6 +4,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
+from apps.snap import filtersets
 from apps.snap.filtersets import SnapOutOfStockFilter
 from apps.snap.mixins import PriceMonitorSnapMixin
 from apps.snap.serializers import out_of_stock_serializers
@@ -210,6 +211,11 @@ class ExportOutOfStockSnapView(generics.GenericAPIView):
     """
     Use this end-point to export out of stock to csv file
     """
+    filterset_class = filtersets.SnapOutOfStockFilter
 
     def get(self, *args, **kwargs):
-        return out_of_stock_usecases.ExportOutOfStockSnapUseCase().execute()
+        return out_of_stock_usecases.ExportOutOfStockSnapUseCase(
+            filter_backends=self.filter_backends,
+            request=self.request,
+            view_self=self
+        ).execute()

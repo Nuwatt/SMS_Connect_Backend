@@ -75,7 +75,7 @@ class SnapDistributionFilter(SnapPriceMonitorFilter):
     pass
 
 
-class ConsumerSnapFilter(filters.FilterSet):
+class SnapConsumerFilter(filters.FilterSet):
     country = IdInFilter(
         field_name='city__country',
         label='country',

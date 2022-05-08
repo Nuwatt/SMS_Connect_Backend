@@ -32,7 +32,6 @@ class ExportPriceMonitorSnapView(generics.GenericAPIView):
     Use this end-point to export price monitor to csv file
     """
     filterset_class = filtersets.SnapPriceMonitorFilter
-    permission_classes = (AllowAny,)
 
     def get(self, *args, **kwargs):
         return price_monitor_usecases.ExportPriceMonitorSnapUseCase(

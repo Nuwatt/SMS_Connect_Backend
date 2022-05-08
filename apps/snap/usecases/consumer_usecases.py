@@ -531,6 +531,11 @@ class BulkDeleteConsumerSnapUseCase(usecases.CreateUseCase):
 
 
 class ExportConsumerSnapUseCase(usecases.BaseUseCase):
+    def __init__(self, filter_backends, request, view_self):
+        self._view_self = view_self
+        self._request = request
+        self._filter_backends = filter_backends
+
     columns = [
         'Date', 'Country', 'City', 'Channel', 'Category',
         'Brand', 'SKU', 'Count', 'Question Statement', 'Question Type', 'Total Yes',
@@ -542,9 +547,6 @@ class ExportConsumerSnapUseCase(usecases.BaseUseCase):
         'Average Numeric'
     ]
 
-    def execute(self):
-        return self._factory()
-
     def _factory(self):
         response = HttpResponse(content_type='text/csv')
         filename = 'consumer_snap.csv'
@@ -555,7 +557,7 @@ class ExportConsumerSnapUseCase(usecases.BaseUseCase):
         writer.writerow(self.columns)
 
         # 2. write questions
-        snaps = ConsumerSnap.objects.unarchived().values(
+        queryset = ConsumerSnap.objects.unarchived().values(
             'date', 'city__country__name', 'city__name', 'channel__name', 'sku__category__name',
             'sku__brand__name', 'sku__name', 'count', 'question_statement', 'question_type__name', 'total_yes',
             'total_no', 'rating_one_on_three', 'rating_two_on_three', 'rating_three_on_three',
@@ -564,6 +566,10 @@ class ExportConsumerSnapUseCase(usecases.BaseUseCase):
             'rating_four_on_ten', 'rating_five_on_ten', 'rating_six_on_ten', 'rating_seven_on_ten',
             'rating_eight_on_ten', 'rating_nine_on_ten', 'rating_ten_on_ten', 'average_numeric'
         )
+        snaps = None
+        for backend in list(self._filter_backends):
+            snaps = backend().filter_queryset(self._request, queryset, self._view_self)
+
         for snap in snaps:
             writer.writerow([
                 *snap.values()

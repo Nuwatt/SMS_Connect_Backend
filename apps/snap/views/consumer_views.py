@@ -5,7 +5,8 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
 from apps.report.views.base_views import BaseReportView
-from apps.snap.filtersets import ConsumerSnapFilter
+from apps.snap import filtersets
+from apps.snap.filtersets import SnapConsumerFilter
 from apps.snap.mixins import ConsumerSnapMixin
 from apps.snap.serializers import consumer_serializers
 from apps.snap.usecases import consumer_usecases
@@ -33,7 +34,7 @@ class ListConsumerSnapView(generics.ListAPIView):
     serializer_class = consumer_serializers.ListConsumerSnapSerializer
     permission_classes = (IsPortalUser,)
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = ConsumerSnapFilter
+    filterset_class = SnapConsumerFilter
     search_fields = [
         'city__country__name', 'city__name', 'channel__name',
         'sku__category__name', 'sku__brand__name', 'sku__name'
@@ -78,7 +79,7 @@ class YesNoQuestionConsumerSnapReportView(BaseReportView):
     """
     Use this end-point to list yes no question report of Consumer Snap
     """
-    filterset_class = ConsumerSnapFilter
+    filterset_class = SnapConsumerFilter
     serializer_class = consumer_serializers.YesNoQuestionConsumerSnapReportSerializer
 
     def get_queryset(self):
@@ -89,7 +90,7 @@ class RatingOneToThreeConsumerSnapReportView(BaseReportView):
     """
     Use this end-point to list rating one to three report of Consumer Snap
     """
-    filterset_class = ConsumerSnapFilter
+    filterset_class = SnapConsumerFilter
     serializer_class = consumer_serializers.RatingOneToThreeConsumerSnapReportSerializer
 
     def get_queryset(self):
@@ -100,7 +101,7 @@ class RatingOneToFiveConsumerSnapReportView(BaseReportView):
     """
     Use this end-point to list rating one to five report of Consumer Snap
     """
-    filterset_class = ConsumerSnapFilter
+    filterset_class = SnapConsumerFilter
     serializer_class = consumer_serializers.RatingOneToFiveConsumerSnapReportSerializer
 
     def get_queryset(self):
@@ -111,7 +112,7 @@ class RatingOneToTenConsumerSnapReportView(BaseReportView):
     """
     Use this end-point to list rating one to ten report of Consumer Snap
     """
-    filterset_class = ConsumerSnapFilter
+    filterset_class = SnapConsumerFilter
     serializer_class = consumer_serializers.RatingOneToTenConsumerSnapReportSerializer
 
     def get_queryset(self):
@@ -122,7 +123,7 @@ class NumericAverageConsumerSnapReportView(BaseReportView):
     """
     Use this end-point to list numeric average report of Consumer Snap
     """
-    filterset_class = ConsumerSnapFilter
+    filterset_class = SnapConsumerFilter
     serializer_class = consumer_serializers.NumericAverageConsumerSnapReportSerializer
 
     def get_queryset(self):
@@ -145,6 +146,11 @@ class ExportConsumerSnapView(generics.GenericAPIView):
     """
     Use this end-point to export consumer snap to csv file
     """
+    filterset_class = filtersets.SnapConsumerFilter
 
     def get(self, *args, **kwargs):
-        return consumer_usecases.ExportConsumerSnapUseCase().execute()
+        return consumer_usecases.ExportConsumerSnapUseCase(
+            filter_backends=self.filter_backends,
+            request=self.request,
+            view_self=self
+        ).execute()

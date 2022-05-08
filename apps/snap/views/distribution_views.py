@@ -5,6 +5,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 
 from apps.core import generics
 from apps.report.views.base_views import BaseReportView
+from apps.snap import filtersets
 from apps.snap.filtersets import SnapDistributionFilter
 from apps.snap.mixins import DistributionSnapMixin
 from apps.snap.serializers import distribution_serializers
@@ -168,6 +169,11 @@ class ExportDistributionSnapView(generics.GenericAPIView):
     """
     Use this end-point to export distribution snap to csv file
     """
+    filterset_class = filtersets.SnapDistributionFilter
 
     def get(self, *args, **kwargs):
-        return distribution_usecases.ExportDistributionSnapUseCase().execute()
+        return distribution_usecases.ExportDistributionSnapUseCase(
+            filter_backends=self.filter_backends,
+            request=self.request,
+            view_self=self
+        ).execute()

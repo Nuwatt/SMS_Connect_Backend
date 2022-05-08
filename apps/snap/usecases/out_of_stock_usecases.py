@@ -380,6 +380,11 @@ class BulkDeleteOutOfStockSnapUseCase(usecases.CreateUseCase):
 
 
 class ExportOutOfStockSnapUseCase(usecases.BaseUseCase):
+    def __init__(self, filter_backends, request, view_self):
+        self._view_self = view_self
+        self._request = request
+        self._filter_backends = filter_backends
+
     columns = [
         'Date', 'Country', 'City', 'Channel', 'Retailer', 'Store',
         'Category', 'Brand', 'SKU', 'Count', 'Not Available In Month',
@@ -387,9 +392,6 @@ class ExportOutOfStockSnapUseCase(usecases.BaseUseCase):
         'Less Available By Store', 'Available By Store', 'Not Available By City',
         'Less Available By City', 'Available By City'
     ]
-
-    def execute(self):
-        return self._factory()
 
     def _factory(self):
         response = HttpResponse(content_type='text/csv')
@@ -401,7 +403,7 @@ class ExportOutOfStockSnapUseCase(usecases.BaseUseCase):
         writer.writerow(self.columns)
 
         # 2. write questions
-        snaps = SnapOutOfStock.objects.unarchived().values(
+        queryset = SnapOutOfStock.objects.unarchived().values(
             'date', 'country_name', 'city_name', 'channel_name',
             'retailer_name', 'store_name', 'category_name',
             'brand_name', 'sku_name', 'count', 'not_available_in_month',
@@ -410,6 +412,9 @@ class ExportOutOfStockSnapUseCase(usecases.BaseUseCase):
             'available_by_store', 'not_available_by_city',
             'less_available_by_city', 'available_by_city',
         )
+        snaps = None
+        for backend in list(self._filter_backends):
+            snaps = backend().filter_queryset(self._request, queryset, self._view_self)
         for snap in snaps:
             writer.writerow([
                 *snap.values()
