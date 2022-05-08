@@ -134,12 +134,12 @@ class OutOfStockSnapStoreStoreReportSerializer(serializers.Serializer):
         max_digits=3,
         decimal_places=0
     )
-    less_available_by_city = serializers.DecimalField(
+    less_available_by_store = serializers.DecimalField(
         source='less_available_by_store_value',
         max_digits=3,
         decimal_places=0
     )
-    available_by_city = serializers.DecimalField(
+    available_by_store = serializers.DecimalField(
         source='available_by_store_value',
         max_digits=3,
         decimal_places=0
@@ -154,12 +154,12 @@ class OutOfStockSnapStoreMonthReportSerializer(serializers.Serializer):
         max_digits=3,
         decimal_places=0
     )
-    less_available_by_city = serializers.DecimalField(
+    less_available_by_month = serializers.DecimalField(
         source='less_available_by_month_value',
         max_digits=3,
         decimal_places=0
     )
-    available_by_city = serializers.DecimalField(
+    available_by_month = serializers.DecimalField(
         source='available_by_month_value',
         max_digits=3,
         decimal_places=0
