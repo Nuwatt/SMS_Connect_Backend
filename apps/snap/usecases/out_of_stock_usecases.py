@@ -450,7 +450,7 @@ class OutOfStockSnapStoreReportUseCase(usecases.BaseUseCase):
         self._store_provided = store_provided
 
     def _final_data(self, query):
-        if not self._store_provided and self._sku_provided:
+        if not self._store_provided and not self._sku_provided:
             snap_stores = SnapStore.objects.filter(is_archived=False).values('id')[:5]
             snap_skus = SnapSKU.objects.filter(is_archived=False).values('id')[:5]
             snap_ids = [item.get('id') for item in snap_stores]
