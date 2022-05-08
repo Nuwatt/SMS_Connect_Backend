@@ -352,7 +352,7 @@ class BrandOverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
         self._brand_provided = brand_provided
 
     def _final_data(self, query):
-        if not self._sbrand_provided:
+        if not self._brand_provided:
             snap_brands = SnapBrand.objects.filter(is_archived=False).values('id')[:10]
             snap_ids = [item.get('id') for item in snap_brands]
             return query.filter(brand_id__in=snap_ids)
