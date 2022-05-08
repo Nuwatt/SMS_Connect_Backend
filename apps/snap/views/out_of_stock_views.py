@@ -38,7 +38,7 @@ class ListOutOfStockSnapView(generics.ListAPIView):
     search_fields = [
         'country_name', 'city_name', 'channel_name',
         'retailer_name', 'store_name',
-        'category_name', 'brand_name', 'sku__name'
+        'category_name', 'brand_name', 'sku_name'
     ]
 
     def get_queryset(self):
@@ -223,12 +223,38 @@ class ExportOutOfStockSnapView(generics.GenericAPIView):
 
 class OutOfStockSnapCityReportView(SnapOutOfStockBaseReportView):
     """
-    Use this end-point to get max report by SKU
+    Use this end-point to get city report
     """
     serializer_class = out_of_stock_serializers.OutOfStockSnapCityReportSerializer
 
     def get_queryset(self):
         sku_provided = True if self.request.GET.get('sku', None) else False
         return out_of_stock_usecases.OutOfStockSnapCityReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
+class OutOfStockSnapStoreReportView(SnapOutOfStockBaseReportView):
+    """
+    Use this end-point to get store report
+    """
+    serializer_class = out_of_stock_serializers.OutOfStockSnapStoreStoreReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return out_of_stock_usecases.OutOfStockSnapStoreReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
+class OutOfStockSnapMonthReportView(SnapOutOfStockBaseReportView):
+    """
+    Use this end-point to get month report
+    """
+    serializer_class = out_of_stock_serializers.OutOfStockSnapStoreMonthReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return out_of_stock_usecases.OutOfStockSnapMonthReportUseCase(
             sku_provided=sku_provided
         ).execute()

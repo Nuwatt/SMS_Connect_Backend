@@ -50,6 +50,18 @@ report_urls = [
         out_of_stock_views.OutOfStockSnapCityReportView.as_view(),
         name='stock-snap-city-report'
     ),
+    # store-report
+    path(
+        'store-report',
+        out_of_stock_views.OutOfStockSnapStoreReportView.as_view(),
+        name='stock-snap-store-report'
+    ),
+    # month-report
+    path(
+        'month-report',
+        out_of_stock_views.OutOfStockSnapMonthReportView.as_view(),
+        name='stock-snap-month-report'
+    ),
     path(
         'not-available-by-week',
         out_of_stock_views.NotAvailableByWeekOutOfStockSnapReportView.as_view(),

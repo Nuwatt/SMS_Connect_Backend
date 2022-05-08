@@ -442,3 +442,46 @@ class OutOfStockSnapCityReportUseCase(OutOfStockSnapReportUseCase):
             'available_by_city_value'
         ).unarchived()
         return self._final_data(query)
+
+
+class OutOfStockSnapStoreReportUseCase(OutOfStockSnapReportUseCase):
+    def _factory(self):
+        query = SnapOutOfStock.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).distinct().annotate(
+            not_available_by_store_value=Avg('not_available_by_store'),
+            less_available_by_store_value=Avg('less_available_by_store'),
+            available_by_store_value=Avg('available_by_store'),
+        ).values(
+            'store_name',
+            'month',
+            'sku_name',
+            'sku_id',
+            'not_available_by_store_value',
+            'less_available_by_store_value',
+            'available_by_store_value'
+        ).unarchived()
+        return self._final_data(query)
+
+
+class OutOfStockSnapMonthReportUseCase(OutOfStockSnapReportUseCase):
+    def _factory(self):
+        query = SnapOutOfStock.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).distinct().annotate(
+            not_available_by_month_value=Avg('not_available_by_month'),
+            less_available_by_month_value=Avg('less_available_by_month'),
+            available_by_month_value=Avg('available_by_month'),
+        ).values(
+            'month',
+            'sku_name',
+            'sku_id',
+            'not_available_by_month_value',
+            'less_available_by_month_value',
+            'available_by_month_value'
+        ).unarchived()
+        return self._final_data(query)
