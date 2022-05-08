@@ -162,9 +162,9 @@ class BrandOverviewPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
     serializer_class = price_monitor_serializers.BrandoverviewPriceMonitorSnapReportSerializer
 
     def get_queryset(self):
-        sku_provided = True if self.request.GET.get('sku', None) else False
+        brand_provided = True if self.request.GET.get('brand', None) else False
         return price_monitor_usecases.BrandOverviewPriceMonitorSnapReportUseCase(
-            sku_provided=sku_provided
+            brand_provided=brand_provided
         ).execute()
 
     # def custom_queryset(self, queryset):

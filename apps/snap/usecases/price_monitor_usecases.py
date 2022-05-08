@@ -347,7 +347,17 @@ class MonthModePriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
         return self._final_data(query)
 
 
-class BrandOverviewPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
+class BrandOverviewPriceMonitorSnapReportUseCase(usecases.BaseUseCase):
+    def __init__(self, brand_provided):
+        self._brand_provided = brand_provided
+
+    def _final_data(self, query):
+        if not self._sbrand_provided:
+            snap_brands = SnapBrand.objects.filter(is_archived=False).values('id')[:10]
+            snap_ids = [item.get('id') for item in snap_brands]
+            return query.filter(brand_id__in=snap_ids)
+        return query
+
     def _factory(self):
         snap_mode = SnapPriceMonitor.objects.filter(
             brand_id=OuterRef('brand_id'),
@@ -370,7 +380,7 @@ class BrandOverviewPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
             mode_value=Subquery(snap_mode)
         ).values(
             'brand_name',
-            'sku_id',
+            'brand_id',
             'min_value',
             'max_value',
             'mean_value',
