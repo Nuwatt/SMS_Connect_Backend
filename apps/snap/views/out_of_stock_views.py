@@ -241,9 +241,9 @@ class OutOfStockSnapStoreReportView(SnapOutOfStockBaseReportView):
     serializer_class = out_of_stock_serializers.OutOfStockSnapStoreStoreReportSerializer
 
     def get_queryset(self):
-        sku_provided = True if self.request.GET.get('sku', None) else False
+        store_provided = True if self.request.GET.get('store', None) else False
         return out_of_stock_usecases.OutOfStockSnapStoreReportUseCase(
-            sku_provided=sku_provided
+            store_provided=store_provided
         ).execute()
 
 

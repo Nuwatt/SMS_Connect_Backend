@@ -444,7 +444,17 @@ class OutOfStockSnapCityReportUseCase(OutOfStockSnapReportUseCase):
         return self._final_data(query)
 
 
-class OutOfStockSnapStoreReportUseCase(OutOfStockSnapReportUseCase):
+class OutOfStockSnapStoreReportUseCase(usecases.BaseUseCase):
+    def __init__(self, store_provided):
+        self._store_provided = store_provided
+
+    def _final_data(self, query):
+        if not self._store_provided:
+            snap_stores = SnapStore.objects.filter(is_archived=False).values('id')[:5]
+            snap_ids = [item.get('id') for item in snap_stores]
+            return query.filter(store_id__in=snap_ids)
+        return query
+
     def _factory(self):
         query = SnapOutOfStock.objects.annotate(
             month=TruncMonth('date')
