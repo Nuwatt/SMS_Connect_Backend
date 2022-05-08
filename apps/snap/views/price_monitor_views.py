@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.parsers import MultiPartParser, JSONParser
+from rest_framework.permissions import AllowAny
 
 from apps.core import generics
 from apps.snap import filtersets
@@ -30,9 +31,15 @@ class ExportPriceMonitorSnapView(generics.GenericAPIView):
     """
     Use this end-point to export price monitor to csv file
     """
+    filterset_class = filtersets.SnapPriceMonitorFilter
+    permission_classes = (AllowAny,)
 
     def get(self, *args, **kwargs):
-        return price_monitor_usecases.ExportPriceMonitorSnapUseCase().execute()
+        return price_monitor_usecases.ExportPriceMonitorSnapUseCase(
+            filter_backends=self.filter_backends,
+            request=self.request,
+            view_self=self
+        ).execute()
 
 
 class ListPriceMonitorSnapView(generics.ListAPIView):

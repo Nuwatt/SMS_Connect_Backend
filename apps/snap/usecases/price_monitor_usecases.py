@@ -131,13 +131,15 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
 
 
 class ExportPriceMonitorSnapUseCase(usecases.BaseUseCase):
+    def __init__(self, filter_backends, request, view_self):
+        self._view_self = view_self
+        self._request = request
+        self._filter_backends = filter_backends
+
     columns = [
         'Date', 'Country', 'City', 'Channel', 'Category', 'Brand',
         'SKU', 'Count', 'Mode', 'Mean', 'Max', 'Min'
     ]
-
-    def execute(self):
-        return self._factory()
 
     def _factory(self):
         response = HttpResponse(content_type='text/csv')
@@ -149,10 +151,14 @@ class ExportPriceMonitorSnapUseCase(usecases.BaseUseCase):
         writer.writerow(self.columns)
 
         # 2. write questions
-        snaps = SnapPriceMonitor.objects.unarchived().values(
+        queryset = SnapPriceMonitor.objects.unarchived().values(
             'date', 'country_name', 'city_name', 'channel_name', 'category_name',
             'brand_name', 'sku_name', 'count', 'mode', 'mean', 'max', 'min'
         )
+        snaps = None
+        for backend in list(self._filter_backends):
+            snaps = backend().filter_queryset(self._request, queryset, self._view_self)
+
         for snap in snaps:
             writer.writerow([
                 *snap.values()
