@@ -420,3 +420,25 @@ class ExportOutOfStockSnapUseCase(usecases.BaseUseCase):
                 *snap.values()
             ])
         return response
+
+
+class OutOfStockSnapCityReportUseCase(OutOfStockSnapReportUseCase):
+    def _factory(self):
+        query = SnapOutOfStock.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).distinct().annotate(
+            not_available_by_city_value=Avg('not_available_by_city'),
+            less_available_by_city_value=Avg('less_available_by_city'),
+            available_by_city_value=Avg('available_by_city'),
+        ).values(
+            'city_name',
+            'month',
+            'sku_name',
+            'sku_id',
+            'not_available_by_city_value',
+            'less_available_by_city_value',
+            'available_by_city_value'
+        ).unarchived()
+        return self._final_data(query)

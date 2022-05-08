@@ -101,3 +101,24 @@ class NotAvailableByWeekOutOfStockSnapReportSerializer(serializers.Serializer):
 
 class BulkDeleteOutOfStockSnapSerializer(serializers.Serializer):
     snap_ids = serializers.ListSerializer(child=serializers.IntegerField())
+
+
+class OutOfStockSnapCityReportSerializer(serializers.Serializer):
+    city = serializers.DateField(source='city_name')
+    month = serializers.DateField(format='%b\'%-y')
+    sku = serializers.CharField(source='sku_name')
+    not_available_by_city = serializers.DecimalField(
+        source='not_available_by_city_value',
+        max_digits=3,
+        decimal_places=0
+    )
+    less_available_by_city = serializers.DecimalField(
+        source='less_available_by_city_value',
+        max_digits=3,
+        decimal_places=0
+    )
+    available_by_city = serializers.DecimalField(
+        source='available_by_city_value',
+        max_digits=3,
+        decimal_places=0
+    )

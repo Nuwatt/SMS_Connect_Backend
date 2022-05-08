@@ -219,3 +219,16 @@ class ExportOutOfStockSnapView(generics.GenericAPIView):
             request=self.request,
             view_self=self
         ).execute()
+
+
+class OutOfStockSnapCityReportView(SnapOutOfStockBaseReportView):
+    """
+    Use this end-point to get max report by SKU
+    """
+    serializer_class = out_of_stock_serializers.OutOfStockSnapCityReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return out_of_stock_usecases.OutOfStockSnapCityReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
