@@ -52,7 +52,7 @@ report_urls = [
     ),
     # city-chanel-report
     path(
-        'city-report',
+        'city-channel-report',
         out_of_stock_views.OutOfStockSnapCityChannelReportView.as_view(),
         name='stock-snap-city-channel-report'
     ),
