@@ -454,7 +454,7 @@ class OutOfStockSnapCityChannelReportUseCase(OutOfStockSnapReportUseCase):
             available_by_city_value=Avg('available_by_city'),
         ).values(
             'city_name',
-            'channel_id',
+            'channel_name',
             'sku_name',
             'sku_id',
             'not_available_by_city_value',
