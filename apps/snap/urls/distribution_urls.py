@@ -28,6 +28,11 @@ report_urls = [
         new_distribution_views.DistributionSnapChannelReportView.as_view(),
         name='distribution-snap-channel-report'
     ),
+    path(
+        'channel-city-report',
+        new_distribution_views.DistributionSnapChannelCityReportView.as_view(),
+        name='distribution-snap-channel-city-report'
+    ),
     # path(
     #     'visit-by-city',
     #     distribution_views.VisitByCityDistributionSnapReportView.as_view(),

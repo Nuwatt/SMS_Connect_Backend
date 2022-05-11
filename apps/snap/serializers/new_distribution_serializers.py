@@ -34,3 +34,19 @@ class DistributionSnapChannelReportSerializer(DistributionSnapReportSerializer):
 
 class DistributionSnapSKUReportSerializer(DistributionSnapReportSerializer):
     pass
+
+
+class DistributionSnapChannelCityReportSerializer(serializers.Serializer):
+    sku = serializers.CharField(source='sku_name')
+    channel = serializers.CharField(source='channel_name')
+    city = serializers.CharField(source='city_name')
+    total_distribution = serializers.DecimalField(
+        source='total_distribution_value',
+        max_digits=10,
+        decimal_places=1
+    )
+    shelf_share = serializers.DecimalField(
+        source='shelf_share_value',
+        max_digits=10,
+        decimal_places=1
+    )

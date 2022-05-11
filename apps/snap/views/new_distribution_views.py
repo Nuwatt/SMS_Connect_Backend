@@ -71,3 +71,17 @@ class DistributionSnapSKUReportView(SnapDistributionBaseReportView):
         return new_distribution_usecases.DistributionSnapSKUReportUseCase(
             sku_provided=sku_provided
         ).execute()
+
+
+class DistributionSnapChannelCityReportView(SnapDistributionBaseReportView):
+    """
+    Use this end-point to get max report by Channel city
+    """
+    serializer_class = new_distribution_serializers.DistributionSnapChannelCityReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_distribution_usecases.DistributionSnapChannelCityReportUseCase(
+            sku_provided=sku_provided
+        ).execute()

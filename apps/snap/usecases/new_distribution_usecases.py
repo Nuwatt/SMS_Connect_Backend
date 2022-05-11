@@ -125,3 +125,21 @@ class DistributionSnapSKUReportUseCase(DistributionSnapReportUseCase):
 
         return self._final_data(query)
 
+
+class DistributionSnapChannelCityReportUseCase(DistributionSnapReportUseCase):
+    def _factory(self):
+        query = SnapDistribution.objects.values(
+            'sku_id'
+        ).distinct().annotate(
+            total_distribution_value=Avg('total_distribution'),
+            shelf_share_value=Avg('shelf_share'),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'city_name',
+            'total_distribution_value',
+            'shelf_share_value',
+            'channel_name'
+        ).unarchived()
+
+        return self._final_data(query)
