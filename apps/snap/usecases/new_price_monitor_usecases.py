@@ -282,3 +282,86 @@ class BrandModePriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
         ).unarchived()
 
         return self._final_data(query)
+
+
+# channel city
+class ChannelCityMaxPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
+    def _factory(self):
+        query = SnapPriceMonitor.objects.values(
+            'sku_id'
+        ).distinct().annotate(
+            value=Max('max'),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'value',
+            'channel_name',
+            'city_name'
+        ).unarchived()
+
+        return self._final_data(query)
+
+
+class ChannelCityMinPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
+    def _factory(self):
+        query = SnapPriceMonitor.objects.values(
+            'sku_id'
+        ).distinct().annotate(
+            value=Min('max'),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'value',
+            'channel_name',
+            'city_name'
+        ).unarchived()
+
+        return self._final_data(query)
+
+
+class ChannelCityMeanPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
+    def _factory(self):
+        query = SnapPriceMonitor.objects.values(
+            'sku_id'
+        ).distinct().annotate(
+            value=Avg('max'),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'value',
+            'channel_name',
+            'city_name'
+        ).unarchived()
+
+        return self._final_data(query)
+
+
+class ChannelCityModePriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
+    def _factory(self):
+        snap_mode = SnapPriceMonitor.objects.filter(
+            sku_id=OuterRef('sku_id'),
+            city_id=OuterRef('city_id'),
+            channel_id=OuterRef('channel_id')
+        ).values(
+            'mode',
+        ).order_by(
+            'created',
+        ).annotate(
+            frequency=Count('id')
+        ).order_by(
+            '-frequency',
+        ).values('mode')[:1]
+
+        query = SnapPriceMonitor.objects.values(
+            'sku_id'
+        ).distinct().annotate(
+            value=Subquery(snap_mode),
+        ).values(
+            'sku_name',
+            'sku_id',
+            'value',
+            'channel_name',
+            'city_name'
+        ).unarchived()
+
+        return self._final_data(query)

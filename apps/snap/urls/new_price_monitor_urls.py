@@ -68,4 +68,26 @@ urlpatterns = [
         new_price_monitor_views.BrandModePriceMonitorSnapReportView.as_view(),
         name='brand-mode-price-monitor-snap-report'
     ),
+
+    # channel city
+    path(
+        'channel-city-max',
+        new_price_monitor_views.ChannelCityMaxPriceMonitorSnapReportView.as_view(),
+        name='channel-city-max-price-monitor-snap-report'
+    ),
+    path(
+        'channel-city-min',
+        new_price_monitor_views.ChannelCityMinPriceMonitorSnapReportView.as_view(),
+        name='channel-city-min-price-monitor-snap-report'
+    ),
+    path(
+        'channel-city-mean',
+        new_price_monitor_views.ChannelCityMeanPriceMonitorSnapReportView.as_view(),
+        name='channel-city-mean-price-monitor-snap-report'
+    ),
+    path(
+        'channel-city-mode',
+        new_price_monitor_views.ChannelCityModePriceMonitorSnapReportView.as_view(),
+        name='channel-city-mode-price-monitor-snap-report'
+    ),
 ]

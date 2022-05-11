@@ -173,3 +173,60 @@ class BrandModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
         return new_price_monitor_usecases.BrandModePriceMonitorSnapReportUseCase(
             sku_provided=sku_provided
         ).execute()
+
+
+# channel - city
+class ChannelCityMaxPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
+    """
+    Use this end-point to get max report by channel city
+    """
+    serializer_class = new_price_monitor_serializers.ChannelCityPriceMonitorSnapReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_price_monitor_usecases.ChannelCityMaxPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
+class ChannelCityMinPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
+    """
+    Use this end-point to get min report by channel city
+    """
+    serializer_class = new_price_monitor_serializers.ChannelCityPriceMonitorSnapReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_price_monitor_usecases.ChannelCityMinPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
+class ChannelCityMeanPriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
+    """
+    Use this end-point to get mean report by channel city
+    """
+    serializer_class = new_price_monitor_serializers.ChannelCityPriceMonitorSnapReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_price_monitor_usecases.ChannelCityMeanPriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
+class ChannelCityModePriceMonitorSnapReportView(SnapPriceMonitorBaseReportView):
+    """
+    Use this end-point to get mode report by channel city
+    """
+    serializer_class = new_price_monitor_serializers.ChannelCityPriceMonitorSnapReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+
+        return new_price_monitor_usecases.ChannelCityModePriceMonitorSnapReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
