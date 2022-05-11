@@ -11,7 +11,7 @@ class DistributionSnapReportUseCase(usecases.BaseUseCase):
 
     def _final_data(self, query):
         if not self._sku_provided:
-            snap_skus = SnapSKU.objects.filter(is_archived=False).values('id')[:10]
+            snap_skus = SnapSKU.objects.filter(is_archived=False).values('id')[:5]
             snap_ids = [item.get('id') for item in snap_skus]
             return query.filter(sku_id__in=snap_ids)
         return query
