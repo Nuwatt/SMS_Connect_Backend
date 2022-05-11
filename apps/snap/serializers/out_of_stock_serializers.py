@@ -125,6 +125,27 @@ class OutOfStockSnapCityReportSerializer(serializers.Serializer):
     )
 
 
+class OutOfStockSnapCityChannelReportSerializer(serializers.Serializer):
+    city = serializers.CharField(source='city_name')
+    channel = serializers.CharField(source='channel_name')
+    sku = serializers.CharField(source='sku_name')
+    not_available_by_city = serializers.DecimalField(
+        source='not_available_by_city_value',
+        max_digits=3,
+        decimal_places=0
+    )
+    less_available_by_city = serializers.DecimalField(
+        source='less_available_by_city_value',
+        max_digits=3,
+        decimal_places=0
+    )
+    available_by_city = serializers.DecimalField(
+        source='available_by_city_value',
+        max_digits=3,
+        decimal_places=0
+    )
+
+
 class OutOfStockSnapStoreStoreReportSerializer(serializers.Serializer):
     store = serializers.CharField(source='store_name')
     month = serializers.DateField(format='%b\'%-y')

@@ -444,6 +444,26 @@ class OutOfStockSnapCityReportUseCase(OutOfStockSnapReportUseCase):
         return self._final_data(query)
 
 
+class OutOfStockSnapCityChannelReportUseCase(OutOfStockSnapReportUseCase):
+    def _factory(self):
+        query = SnapOutOfStock.objects.values(
+            'sku_id'
+        ).distinct().annotate(
+            not_available_by_city_value=Avg('not_available_by_city'),
+            less_available_by_city_value=Avg('less_available_by_city'),
+            available_by_city_value=Avg('available_by_city'),
+        ).values(
+            'city_name',
+            'channel_id',
+            'sku_name',
+            'sku_id',
+            'not_available_by_city_value',
+            'less_available_by_city_value',
+            'available_by_city_value'
+        ).unarchived()
+        return self._final_data(query)
+
+
 class OutOfStockSnapStoreReportUseCase(usecases.BaseUseCase):
     def __init__(self, store_provided, sku_provided):
         self._sku_provided = sku_provided

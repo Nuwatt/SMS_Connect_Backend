@@ -234,6 +234,19 @@ class OutOfStockSnapCityReportView(SnapOutOfStockBaseReportView):
         ).execute()
 
 
+class OutOfStockSnapCityChannelReportView(SnapOutOfStockBaseReportView):
+    """
+    Use this end-point to get city channel report
+    """
+    serializer_class = out_of_stock_serializers.OutOfStockSnapCityChannelReportSerializer
+
+    def get_queryset(self):
+        sku_provided = True if self.request.GET.get('sku', None) else False
+        return out_of_stock_usecases.OutOfStockSnapCityChannelReportUseCase(
+            sku_provided=sku_provided
+        ).execute()
+
+
 class OutOfStockSnapStoreReportView(SnapOutOfStockBaseReportView):
     """
     Use this end-point to get store report

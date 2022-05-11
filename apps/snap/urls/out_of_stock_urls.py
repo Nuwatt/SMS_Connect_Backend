@@ -50,6 +50,12 @@ report_urls = [
         out_of_stock_views.OutOfStockSnapCityReportView.as_view(),
         name='stock-snap-city-report'
     ),
+    # city-chanel-report
+    path(
+        'city-report',
+        out_of_stock_views.OutOfStockSnapCityChannelReportView.as_view(),
+        name='stock-snap-city-channel-report'
+    ),
     # store-report
     path(
         'store-report',
