@@ -50,7 +50,7 @@ class ListSnapStoreSerializer(SnapStoreSerializer):
     retailer = IdNameSerializer()
     city = IdNameSerializer()
     channel = IdNameSerializer()
-    country = IdNameSerializer(source='city.country')
+    country = IdNameSerializer(source='city.country', allow_null=True)
 
     class Meta(SnapStoreSerializer.Meta):
         fields = (
