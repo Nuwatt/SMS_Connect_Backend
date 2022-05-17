@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django_filters import rest_framework as filters
 
 from apps.core.filtersets import IdInFilter, NameSearchFilter
@@ -56,6 +58,18 @@ class SnapPriceMonitorFilter(filters.FilterSet):
         label='sku',
         lookup_expr='in'
     )
+    month = filters.CharFilter(
+        method='filter_month',
+        label='month'
+    )
+
+    def filter_month(self, queryset, name, value):
+        dates = value.split(',')
+        dates = [datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
+        return queryset.filter(
+            date__month__in=[date.month for date in dates],
+            date__year__in=[date.year for date in dates]
+        )
 
 
 class SnapOutOfStockFilter(SnapPriceMonitorFilter):
@@ -115,6 +129,18 @@ class SnapConsumerFilter(filters.FilterSet):
         label='sku',
         lookup_expr='in'
     )
+    month = filters.CharFilter(
+        method='filter_month',
+        label='month'
+    )
+
+    def filter_month(self, queryset, name, value):
+        dates = value.split(',')
+        dates = [datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
+        return queryset.filter(
+            date__month__in=[date.month for date in dates],
+            date__year__in=[date.year for date in dates]
+        )
 
 
 class SnapSKUFilter(filters.FilterSet):
