@@ -60,9 +60,7 @@ class ListSnapSKUUseCase(usecases.BaseUseCase):
         return self._sku_list
 
     def _factory(self):
-        self._sku_list = SnapSKU.objects.unarchived().prefetch_related(
-            'country'
-        ).select_related(
+        self._sku_list = SnapSKU.objects.unarchived().select_related(
             'brand',
             'category',
         ).order_by('-created')
