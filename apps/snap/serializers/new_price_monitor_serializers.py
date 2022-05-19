@@ -24,6 +24,7 @@ class BrandPriceMonitorSnapReportSerializer(serializers.Serializer):
 
 class ChannelCityPriceMonitorSnapReportSerializer(serializers.Serializer):
     city = serializers.CharField(source='city_name')
+    month = serializers.DateField(format='%b\'%-y')
     channel = serializers.CharField(source='channel_name')
     sku = serializers.CharField(source='sku_name')
     value = serializers.DecimalField(max_digits=10, decimal_places=1)

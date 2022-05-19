@@ -287,13 +287,16 @@ class BrandModePriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
 # channel city
 class ChannelCityMaxPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
     def _factory(self):
-        query = SnapPriceMonitor.objects.values(
-            'sku_id'
-        ).distinct().annotate(
+        query = SnapPriceMonitor.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
             value=Max('max'),
         ).values(
             'sku_name',
             'sku_id',
+            'month',
             'value',
             'channel_name',
             'city_name'
@@ -304,14 +307,17 @@ class ChannelCityMaxPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase)
 
 class ChannelCityMinPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
     def _factory(self):
-        query = SnapPriceMonitor.objects.values(
-            'sku_id'
-        ).distinct().annotate(
+        query = SnapPriceMonitor.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
             value=Min('max'),
         ).values(
             'sku_name',
             'sku_id',
             'value',
+            'month',
             'channel_name',
             'city_name'
         ).unarchived()
@@ -321,13 +327,16 @@ class ChannelCityMinPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase)
 
 class ChannelCityMeanPriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase):
     def _factory(self):
-        query = SnapPriceMonitor.objects.values(
-            'sku_id'
-        ).distinct().annotate(
+        query = SnapPriceMonitor.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
             value=Avg('max'),
         ).values(
             'sku_name',
             'sku_id',
+            'month',
             'value',
             'channel_name',
             'city_name'
@@ -352,13 +361,16 @@ class ChannelCityModePriceMonitorSnapReportUseCase(PriceMonitorSnapReportUseCase
             '-frequency',
         ).values('mode')[:1]
 
-        query = SnapPriceMonitor.objects.values(
-            'sku_id'
-        ).distinct().annotate(
+        query = SnapPriceMonitor.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
             value=Subquery(snap_mode),
         ).values(
             'sku_name',
             'sku_id',
+            'month',
             'value',
             'channel_name',
             'city_name'

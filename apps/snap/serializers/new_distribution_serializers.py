@@ -37,6 +37,7 @@ class DistributionSnapSKUReportSerializer(DistributionSnapReportSerializer):
 
 
 class DistributionSnapChannelCityReportSerializer(serializers.Serializer):
+    month = serializers.DateField(format='%b\'%-y')
     sku = serializers.CharField(source='sku_name')
     channel = serializers.CharField(source='channel_name')
     city = serializers.CharField(source='city_name')

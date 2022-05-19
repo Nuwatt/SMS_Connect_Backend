@@ -446,13 +446,16 @@ class OutOfStockSnapCityReportUseCase(OutOfStockSnapReportUseCase):
 
 class OutOfStockSnapCityChannelReportUseCase(OutOfStockSnapReportUseCase):
     def _factory(self):
-        query = SnapOutOfStock.objects.values(
-            'sku_id'
-        ).distinct().annotate(
+        query = SnapOutOfStock.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
             not_available_by_city_value=Avg('not_available_by_city'),
             less_available_by_city_value=Avg('less_available_by_city'),
             available_by_city_value=Avg('available_by_city'),
         ).values(
+            'month',
             'city_name',
             'channel_name',
             'sku_name',

@@ -128,12 +128,15 @@ class DistributionSnapSKUReportUseCase(DistributionSnapReportUseCase):
 
 class DistributionSnapChannelCityReportUseCase(DistributionSnapReportUseCase):
     def _factory(self):
-        query = SnapDistribution.objects.values(
-            'sku_id'
-        ).distinct().annotate(
+        query = SnapDistribution.objects.annotate(
+            month=TruncMonth('date')
+        ).values(
+            'month'
+        ).annotate(
             total_distribution_value=Avg('total_distribution'),
             shelf_share_value=Avg('shelf_share'),
         ).values(
+            'month',
             'sku_name',
             'sku_id',
             'city_name',

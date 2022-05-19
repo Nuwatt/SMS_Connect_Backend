@@ -126,6 +126,7 @@ class OutOfStockSnapCityReportSerializer(serializers.Serializer):
 
 
 class OutOfStockSnapCityChannelReportSerializer(serializers.Serializer):
+    month = serializers.DateField(format='%b\'%-y')
     city = serializers.CharField(source='city_name')
     channel = serializers.CharField(source='channel_name')
     sku = serializers.CharField(source='sku_name')
