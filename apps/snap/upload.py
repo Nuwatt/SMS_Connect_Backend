@@ -328,6 +328,8 @@ def import_snap_out_of_stock(path):
             store, _store_created = SnapStore.objects.get_or_create(
                 name=item.get('Store').strip(),
                 retailer=retailer_data[item.get('Retailer')],
+                channel=channel_data[item.get('Channel')],
+                city=city_data[item.get('City')],
                 is_archived=False
             )
             store_data[item.get('Store')] = store

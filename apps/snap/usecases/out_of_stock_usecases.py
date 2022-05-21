@@ -94,6 +94,7 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
                     name=item.get('Store').strip(),
                     channel=channel_data[item.get('Channel')],
                     retailer=retailer_data[item.get('Retailer')],
+                    city=city_data[item.get('City')],
                     is_archived=False
                 )
                 store_data[item.get('Store')] = store
@@ -119,7 +120,6 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
                     category=category_data[item.get('Category')],
                     is_archived=False
                 )
-                sku.country.add(country_data[item.get('Country')])
                 sku_data[item.get('SKU')] = sku
 
             snap, _snap_created = SnapOutOfStock.objects.update_or_create(
