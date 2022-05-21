@@ -175,11 +175,6 @@ class SnapStore(BaseModel):
     )
 
     city = models.ForeignKey(
-        City,
-        null=True,
-        on_delete=models.CASCADE
-    )
-    snap_city = models.ForeignKey(
         SnapCity,
         null=True,
         on_delete=models.CASCADE

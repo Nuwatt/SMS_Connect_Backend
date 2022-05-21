@@ -39,7 +39,7 @@ class ConsumerSnapAdmin(BaseModelAdmin):
         'city__country',
     )
     raw_id_fields = [
-        'snap_city',
+        'city',
         'sku',
         'channel'
     ]

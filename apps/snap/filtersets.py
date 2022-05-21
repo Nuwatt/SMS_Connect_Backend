@@ -228,7 +228,6 @@ class SnapStoreFilter(filters.FilterSet):
         model = SnapStore
         fields = [
             'retailer',
-            'snap_city',
             'country'
         ]
 
