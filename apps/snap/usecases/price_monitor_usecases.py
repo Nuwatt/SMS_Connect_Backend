@@ -106,9 +106,18 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
                 sku.country.add(country_data[item.get('Country')])
 
             snap, _snap_created = SnapPriceMonitor.objects.update_or_create(
-                city=city_data[item.get('City')],
-                channel=channel_data[item.get('Channel')],
-                sku=sku_data[item.get('SKU')],
+                country_id=country_data[item.get('Country')].id,
+                country_name=country_data[item.get('Country')].name,
+                city_id=city_data[item.get('City')].id,
+                city_name=city_data[item.get('City')].name,
+                channel_id=channel_data[item.get('Channel')].id,
+                channel_name=channel_data[item.get('Channel')].name,
+                category_id=category_data[item.get('Category')].id,
+                category_name=category_data[item.get('Category')].name,
+                brand_id=brand_data[item.get('Brand')].id,
+                brand_name=brand_data[item.get('Brand')].name,
+                sku_id=sku_data[item.get('SKU')].id,
+                sku_name=sku_data[item.get('SKU')].name,
                 date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
                 defaults={
                     'count': item.get('Count'),
