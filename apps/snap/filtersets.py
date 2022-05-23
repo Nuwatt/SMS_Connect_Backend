@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from apps.core.filtersets import IdInFilter, NameSearchFilter
@@ -66,10 +67,20 @@ class SnapPriceMonitorFilter(filters.FilterSet):
     def filter_month(self, queryset, name, value):
         dates = value.split(',')
         dates = [datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
-        return queryset.filter(
-            date__month__in=[date.month for date in dates],
-            date__year__in=[date.year for date in dates]
-        )
+        params = {}
+        for date in dates:
+            if date.year in params:
+                params[date.year] = params[date.year] + [date.month]
+            else:
+                params[date.year] = [date.month]
+
+        q = Q()
+        for key in params.keys():
+            q |= Q(**{'date__year': key, 'date__month__in': params.get(key)})
+
+        if q:
+            return queryset.filter(q)
+        return queryset
 
 
 class SnapOutOfStockFilter(SnapPriceMonitorFilter):
@@ -137,10 +148,20 @@ class SnapConsumerFilter(filters.FilterSet):
     def filter_month(self, queryset, name, value):
         dates = value.split(',')
         dates = [datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
-        return queryset.filter(
-            date__month__in=[date.month for date in dates],
-            date__year__in=[date.year for date in dates]
-        )
+        params = {}
+        for date in dates:
+            if date.year in params:
+                params[date.year] = params[date.year] + [date.month]
+            else:
+                params[date.year] = [date.month]
+
+        q = Q()
+        for key in params.keys():
+            q |= Q(**{'date__year': key, 'date__month__in': params.get(key)})
+
+        if q:
+            return queryset.filter(q)
+        return queryset
 
 
 class SnapSKUFilter(filters.FilterSet):
