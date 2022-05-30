@@ -5,27 +5,27 @@ from apps.snap.views import consumer_views
 report_urls = [
     path(
         'yes-no-question',
-        consumer_views.YesNoQuestionConsumerSnapReportView.as_view(),
+        consumer_views.YesNoQuestionSnapConsumerReportView.as_view(),
         name='Yes-no-question-consumer-snap-report'
     ),
     path(
         'rating-one-to-three',
-        consumer_views.RatingOneToThreeConsumerSnapReportView.as_view(),
+        consumer_views.RatingOneToThreeSnapConsumerReportView.as_view(),
         name='rating-one-to-three-consumer-snap-report'
     ),
     path(
         'rating-one-to-five',
-        consumer_views.RatingOneToFiveConsumerSnapReportView.as_view(),
+        consumer_views.RatingOneToFiveSnapConsumerReportView.as_view(),
         name='rating-one-to-five-consumer-snap-report'
     ),
     path(
         'rating-one-to-ten',
-        consumer_views.RatingOneToTenConsumerSnapReportView.as_view(),
+        consumer_views.RatingOneToTenSnapConsumerReportView.as_view(),
         name='rating-one-to-ten-consumer-snap-report'
     ),
     path(
         'numeric-average',
-        consumer_views.NumericAverageConsumerSnapReportView.as_view(),
+        consumer_views.NumericAverageSnapConsumerReportView.as_view(),
         name='numeric-average-consumer-snap-report'
     ),
 ]
@@ -33,27 +33,27 @@ report_urls = [
 urlpatterns = [
     path(
         'import',
-        consumer_views.ImportConsumerSnapView.as_view(),
+        consumer_views.ImportSnapConsumerView.as_view(),
         name='import-consumer-snap'
     ),
     path(
         'export',
-        consumer_views.ExportConsumerSnapView.as_view(),
+        consumer_views.ExportSnapConsumerView.as_view(),
         name='export-consumer-snap'
     ),
     path(
         'list',
-        consumer_views.ListConsumerSnapView.as_view(),
+        consumer_views.ListSnapConsumerView.as_view(),
         name='list-consumer-snap'
     ),
     path(
         '<str:consumer_snap_id>/update',
-        consumer_views.UpdateConsumerSnapView.as_view(),
+        consumer_views.UpdateSnapConsumerView.as_view(),
         name='update-consumer-snap'
     ),
     path(
         '<str:consumer_snap_id>/delete',
-        consumer_views.DeleteConsumerSnapView.as_view(),
+        consumer_views.DeleteSnapConsumerView.as_view(),
         name='delete-consumer-snap'
     ),
     path(

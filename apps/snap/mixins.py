@@ -6,7 +6,7 @@ from apps.snap.usecases.country_usecases import GetSnapCountryUseCase
 from apps.snap.usecases.price_monitor_usecases import GetPriceMonitorSnapUseCase
 from apps.snap.usecases.out_of_stock_usecases import GetOutOfStockSnapUseCase
 from apps.snap.usecases.distribution_usecases import GetDistributionSnapUseCase
-from apps.snap.usecases.consumer_usecases import GetConsumerSnapUseCase
+from apps.snap.usecases.consumer_usecases import GetSnapConsumerUseCase
 from apps.snap.usecases.retailer_usecases import GetSnapRetailerUseCase
 from apps.snap.usecases.sku_usecases import GetSnapSKUUseCase
 from apps.snap.usecases.store_usecases import GetSnapStoreUseCase
@@ -26,9 +26,9 @@ class OutOfStockSnapMixin:
         ).execute()
 
 
-class ConsumerSnapMixin:
+class SnapConsumerMixin:
     def get_consumer_snap(self, *args, **kwargs):
-        return GetConsumerSnapUseCase(
+        return GetSnapConsumerUseCase(
             consumer_snap_id=self.kwargs.get('consumer_snap_id')
         ).execute()
 

@@ -9,20 +9,20 @@ from apps.report.serializers.consumer_questionnaire_serializers import (
     YesNoQuestionReportSerializer,
     NumericQuestionReportSerializer
 )
-from apps.snap.models import ConsumerSnap
+from apps.snap.models import SnapConsumer
 
 
-class ImportConsumerSnapSerializer(CSVFileInputSerializer):
+class ImportSnapConsumerSerializer(CSVFileInputSerializer):
     pass
 
 
-class ConsumerSnapSerializer(serializers.ModelSerializer):
+class SnapConsumerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ConsumerSnap
+        model = SnapConsumer
         fields = '__all__'
 
 
-class ListConsumerSnapSerializer(ConsumerSnapSerializer):
+class ListSnapConsumerSerializer(SnapConsumerSerializer):
     country = serializers.CharField(source='city__country__name')
     city = serializers.CharField(source='city__name')
     category = serializers.CharField(source='sku__category__name')
@@ -31,7 +31,7 @@ class ListConsumerSnapSerializer(ConsumerSnapSerializer):
     sku = serializers.CharField(source='sku__name')
     question_type = serializers.CharField(source='question_type__name')
 
-    class Meta(ConsumerSnapSerializer.Meta):
+    class Meta(SnapConsumerSerializer.Meta):
         fields = (
             'id', 'date', 'country', 'city', 'channel', 'category', 'brand',
             'sku', 'count', 'question_statement', 'question_type', 'total_yes',
@@ -43,8 +43,8 @@ class ListConsumerSnapSerializer(ConsumerSnapSerializer):
         )
 
 
-class UpdateConsumerSnapSerializer(ConsumerSnapSerializer):
-    class Meta(ConsumerSnapSerializer.Meta):
+class UpdateSnapConsumerSerializer(SnapConsumerSerializer):
+    class Meta(SnapConsumerSerializer.Meta):
         fields = (
             'count', 'question_statement', 'question_type', 'total_yes',
             'total_no', 'rating_one_on_three', 'rating_two_on_three', 'rating_three_on_three',
@@ -55,18 +55,18 @@ class UpdateConsumerSnapSerializer(ConsumerSnapSerializer):
         )
 
 
-class YesNoQuestionConsumerSnapReportSerializer(YesNoQuestionReportSerializer):
+class YesNoQuestionSnapConsumerReportSerializer(YesNoQuestionReportSerializer):
     pass
 
 
-class RatingOneToThreeConsumerSnapReportSerializer(serializers.Serializer):
+class RatingOneToThreeSnapConsumerReportSerializer(serializers.Serializer):
     question_statement = serializers.CharField()
     rating_one = serializers.FloatField(source='rating_one_on_three')
     rating_two = serializers.FloatField(source='rating_two_on_three')
     rating_three = serializers.FloatField(source='rating_three_on_three')
 
 
-class RatingOneToFiveConsumerSnapReportSerializer(serializers.Serializer):
+class RatingOneToFiveSnapConsumerReportSerializer(serializers.Serializer):
     question_statement = serializers.CharField()
     rating_one = serializers.FloatField(source='rating_one_on_five')
     rating_two = serializers.FloatField(source='rating_two_on_five')
@@ -75,7 +75,7 @@ class RatingOneToFiveConsumerSnapReportSerializer(serializers.Serializer):
     rating_five = serializers.FloatField(source='rating_five_on_five')
 
 
-class RatingOneToTenConsumerSnapReportSerializer(serializers.Serializer):
+class RatingOneToTenSnapConsumerReportSerializer(serializers.Serializer):
     question_statement = serializers.CharField()
     rating_one = serializers.FloatField(source='rating_one_on_ten')
     rating_two = serializers.FloatField(source='rating_two_on_ten')
@@ -89,9 +89,9 @@ class RatingOneToTenConsumerSnapReportSerializer(serializers.Serializer):
     rating_ten = serializers.FloatField(source='rating_ten_on_ten')
 
 
-class NumericAverageConsumerSnapReportSerializer(NumericQuestionReportSerializer):
+class NumericAverageSnapConsumerReportSerializer(NumericQuestionReportSerializer):
     pass
 
 
-class BulkDeleteConsumerSnapSerializer(serializers.Serializer):
+class BulkDeleteSnapConsumerSerializer(serializers.Serializer):
     snap_ids = serializers.ListSerializer(child=serializers.IntegerField())

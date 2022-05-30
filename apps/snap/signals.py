@@ -19,7 +19,7 @@ def update_for_snap_city(sender, instance, **kwargs):
     )
 
     # consumer
-    models.ConsumerSnap.objects.filter(city_id=instance.id).update(
+    models.SnapConsumer.objects.filter(city_id=instance.id).update(
         is_archived=instance.is_archived,
         city_name=instance.name
     )
@@ -46,7 +46,7 @@ def update_for_snap_country(sender, instance, **kwargs):
     )
 
     # consumer
-    models.ConsumerSnap.objects.filter(country_id=instance.id).update(
+    models.SnapConsumer.objects.filter(country_id=instance.id).update(
         is_archived=instance.is_archived,
         country_name=instance.name
     )
@@ -73,7 +73,7 @@ def update_for_snap_category(sender, instance, **kwargs):
     )
 
     # consumer
-    models.ConsumerSnap.objects.filter(category_id=instance.id).update(
+    models.SnapConsumer.objects.filter(category_id=instance.id).update(
         is_archived=instance.is_archived,
         category_name=instance.name
     )
@@ -100,7 +100,7 @@ def update_for_snap_brand(sender, instance, **kwargs):
     )
 
     # consumer
-    models.ConsumerSnap.objects.filter(brand_id=instance.id).update(
+    models.SnapConsumer.objects.filter(brand_id=instance.id).update(
         is_archived=instance.is_archived,
         brand_name=instance.name
     )
@@ -127,7 +127,7 @@ def update_for_snap_sku(sender, instance, **kwargs):
     )
 
     # consumer
-    models.ConsumerSnap.objects.filter(sku_id=instance.id).update(
+    models.SnapConsumer.objects.filter(sku_id=instance.id).update(
         is_archived=instance.is_archived,
         sku_name=instance.name
     )
@@ -154,7 +154,7 @@ def update_for_snap_channel(sender, instance, **kwargs):
     )
 
     # consumer
-    models.ConsumerSnap.objects.filter(channel_id=instance.id).update(
+    models.SnapConsumer.objects.filter(channel_id=instance.id).update(
         is_archived=instance.is_archived,
         channel_name=instance.name
     )

@@ -7,31 +7,31 @@ from apps.core import generics
 from apps.report.views.base_views import BaseReportView
 from apps.snap import filtersets
 from apps.snap.filtersets import SnapConsumerFilter
-from apps.snap.mixins import ConsumerSnapMixin
+from apps.snap.mixins import SnapConsumerMixin
 from apps.snap.serializers import consumer_serializers
 from apps.snap.usecases import consumer_usecases
 from apps.user.permissions import IsPortalUser
 
 
-class ImportConsumerSnapView(generics.CreateWithMessageAPIView):
+class ImportSnapConsumerView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to import snap data for consumer
     """
-    serializer_class = consumer_serializers.ImportConsumerSnapSerializer
+    serializer_class = consumer_serializers.ImportSnapConsumerSerializer
     message = _('Consumer snap imported successfully.')
     parser_classes = (MultiPartParser, JSONParser)
 
     def perform_create(self, serializer):
-        return consumer_usecases.ImportConsumerSnapUseCase(
+        return consumer_usecases.ImportSnapConsumerUseCase(
             serializer=serializer
         ).execute()
 
 
-class ListConsumerSnapView(generics.ListAPIView):
+class ListSnapConsumerView(generics.ListAPIView):
     """
     Use this end-point to list all consumer snap data
     """
-    serializer_class = consumer_serializers.ListConsumerSnapSerializer
+    serializer_class = consumer_serializers.ListSnapConsumerSerializer
     permission_classes = (IsPortalUser,)
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = SnapConsumerFilter
@@ -41,26 +41,26 @@ class ListConsumerSnapView(generics.ListAPIView):
     ]
 
     def get_queryset(self):
-        return consumer_usecases.ListConsumerSnapUseCase().execute()
+        return consumer_usecases.ListSnapConsumerUseCase().execute()
 
 
-class UpdateConsumerSnapView(generics.UpdateAPIView, ConsumerSnapMixin):
+class UpdateSnapConsumerView(generics.UpdateAPIView, SnapConsumerMixin):
     """
     Use this end-point to update specific consumer snap data
     """
-    serializer_class = consumer_serializers.UpdateConsumerSnapSerializer
+    serializer_class = consumer_serializers.UpdateSnapConsumerSerializer
 
     def get_object(self):
         return self.get_consumer_snap()
 
     def perform_update(self, serializer):
-        return consumer_usecases.UpdatePriceMonitorSnapUseCase(
+        return consumer_usecases.UpdateSnapConsumerUseCase(
             serializer=serializer,
             consumer_snap=self.get_object()
         ).execute()
 
 
-class DeleteConsumerSnapView(generics.DestroyAPIView, ConsumerSnapMixin):
+class DeleteSnapConsumerView(generics.DestroyAPIView, SnapConsumerMixin):
     """
     Use this end-point to delete specific consumer snap data
     """
@@ -70,79 +70,79 @@ class DeleteConsumerSnapView(generics.DestroyAPIView, ConsumerSnapMixin):
         return self.get_consumer_snap()
 
     def perform_destroy(self, instance):
-        return consumer_usecases.DeleteConsumerSnapUseCase(
+        return consumer_usecases.DeleteSnapConsumerUseCase(
             consumer_snap=self.get_object()
         ).execute()
 
 
-class YesNoQuestionConsumerSnapReportView(BaseReportView):
+class YesNoQuestionSnapConsumerReportView(BaseReportView):
     """
     Use this end-point to list yes no question report of Consumer Snap
     """
     filterset_class = SnapConsumerFilter
-    serializer_class = consumer_serializers.YesNoQuestionConsumerSnapReportSerializer
+    serializer_class = consumer_serializers.YesNoQuestionSnapConsumerReportSerializer
 
     def get_queryset(self):
-        return consumer_usecases.YesNoQuestionConsumerSnapUseCase().execute()
+        return consumer_usecases.YesNoQuestionSnapConsumerUseCase().execute()
 
 
-class RatingOneToThreeConsumerSnapReportView(BaseReportView):
+class RatingOneToThreeSnapConsumerReportView(BaseReportView):
     """
     Use this end-point to list rating one to three report of Consumer Snap
     """
     filterset_class = SnapConsumerFilter
-    serializer_class = consumer_serializers.RatingOneToThreeConsumerSnapReportSerializer
+    serializer_class = consumer_serializers.RatingOneToThreeSnapConsumerReportSerializer
 
     def get_queryset(self):
-        return consumer_usecases.RatingOneToThreeConsumerSnapUseCase().execute()
+        return consumer_usecases.RatingOneToThreeSnapConsumerUseCase().execute()
 
 
-class RatingOneToFiveConsumerSnapReportView(BaseReportView):
+class RatingOneToFiveSnapConsumerReportView(BaseReportView):
     """
     Use this end-point to list rating one to five report of Consumer Snap
     """
     filterset_class = SnapConsumerFilter
-    serializer_class = consumer_serializers.RatingOneToFiveConsumerSnapReportSerializer
+    serializer_class = consumer_serializers.RatingOneToFiveSnapConsumerReportSerializer
 
     def get_queryset(self):
-        return consumer_usecases.RatingOneToFiveConsumerSnapUseCase().execute()
+        return consumer_usecases.RatingOneToFiveSnapConsumerUseCase().execute()
 
 
-class RatingOneToTenConsumerSnapReportView(BaseReportView):
+class RatingOneToTenSnapConsumerReportView(BaseReportView):
     """
     Use this end-point to list rating one to ten report of Consumer Snap
     """
     filterset_class = SnapConsumerFilter
-    serializer_class = consumer_serializers.RatingOneToTenConsumerSnapReportSerializer
+    serializer_class = consumer_serializers.RatingOneToTenSnapConsumerReportSerializer
 
     def get_queryset(self):
-        return consumer_usecases.RatingOneToTenConsumerSnapUseCase().execute()
+        return consumer_usecases.RatingOneToTenSnapConsumerUseCase().execute()
 
 
-class NumericAverageConsumerSnapReportView(BaseReportView):
+class NumericAverageSnapConsumerReportView(BaseReportView):
     """
     Use this end-point to list numeric average report of Consumer Snap
     """
     filterset_class = SnapConsumerFilter
-    serializer_class = consumer_serializers.NumericAverageConsumerSnapReportSerializer
+    serializer_class = consumer_serializers.NumericAverageSnapConsumerReportSerializer
 
     def get_queryset(self):
-        return consumer_usecases.NumericAverageConsumerSnapUseCase().execute()
+        return consumer_usecases.NumericAverageSnapConsumerUseCase().execute()
 
 
 class BulkDeleteOutOfStockSnapView(generics.CreateWithMessageAPIView):
     """
     Use this end-point to delete consumer snap in bulk
     """
-    serializer_class = consumer_serializers.BulkDeleteConsumerSnapSerializer
+    serializer_class = consumer_serializers.BulkDeleteSnapConsumerSerializer
 
     def perform_create(self, serializer):
-        return consumer_usecases.BulkDeleteConsumerSnapUseCase(
+        return consumer_usecases.BulkDeleteSnapConsumerUseCase(
             serializer=serializer
         ).execute()
 
 
-class ExportConsumerSnapView(generics.GenericAPIView):
+class ExportSnapConsumerView(generics.GenericAPIView):
     """
     Use this end-point to export consumer snap to csv file
     """

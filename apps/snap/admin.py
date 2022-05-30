@@ -28,21 +28,16 @@ class SnapCityAdmin(SnapModelAdmin):
     )
 
 
-@admin.register(models.ConsumerSnap)
-class ConsumerSnapAdmin(BaseModelAdmin):
+@admin.register(models.SnapConsumer)
+class SnapConsumerAdmin(BaseModelAdmin):
     list_display = BaseModelAdmin.list_display + (
-        'sku',
+        'sku_name',
     )
     list_filter = BaseModelAdmin.list_filter + (
-        'sku__category',
-        'sku__brand',
-        'city__country',
+        'category_name',
+        'brand_name',
+        'country_name',
     )
-    raw_id_fields = [
-        'city',
-        'sku',
-        'channel'
-    ]
 
 
 @admin.register(models.SnapChannel)

@@ -100,68 +100,8 @@ class SnapDistributionFilter(SnapPriceMonitorFilter):
     pass
 
 
-class SnapConsumerFilter(filters.FilterSet):
-    country = IdInFilter(
-        field_name='city__country',
-        label='country',
-        lookup_expr='in'
-    )
-    city = IdInFilter(
-        field_name='snap_city',
-        label='snap_city',
-        lookup_expr='in'
-    )
-    brand = IdInFilter(
-        field_name='sku__brand',
-        label='brand',
-        lookup_expr='in'
-    )
-    date = filters.DateFromToRangeFilter(
-        field_name='date',
-        label='date',
-    )
-    exact_date = filters.DateFilter(
-        field_name='date',
-        label='date'
-    )
-    channel = IdInFilter(
-        field_name='channel',
-        label='channel',
-        lookup_expr='in'
-
-    )
-    category = IdInFilter(
-        field_name='sku__category',
-        label='category',
-        lookup_expr='in'
-    )
-    sku = IdInFilter(
-        field_name='sku',
-        label='sku',
-        lookup_expr='in'
-    )
-    month = filters.CharFilter(
-        method='filter_month',
-        label='month'
-    )
-
-    def filter_month(self, queryset, name, value):
-        dates = value.split(',')
-        dates = [datetime.strptime(date, '%Y-%m-%d').date() for date in dates]
-        params = {}
-        for date in dates:
-            if date.year in params:
-                params[date.year] = params[date.year] + [date.month]
-            else:
-                params[date.year] = [date.month]
-
-        q = Q()
-        for key in params.keys():
-            q |= Q(**{'date__year': key, 'date__month__in': params.get(key)})
-
-        if q:
-            return queryset.filter(q)
-        return queryset
+class SnapConsumerFilter(SnapPriceMonitorFilter):
+    pass
 
 
 class SnapSKUFilter(filters.FilterSet):
