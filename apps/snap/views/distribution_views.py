@@ -37,7 +37,6 @@ class ListDistributionSnapView(generics.ListAPIView):
     filterset_class = SnapDistributionFilter
     search_fields = [
         'country_name', 'city_name', 'channel_name',
-        'retailer_name', 'store_name',
         'category_name', 'brand_name', 'sku_name'
     ]
 
