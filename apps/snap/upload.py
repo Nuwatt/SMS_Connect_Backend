@@ -491,5 +491,5 @@ def fix_snap_pm():
         snap.city_name = city.name
         snap.city_id = city.id
         snap.save()
-        print(f'{snap.id}-done')
+        print(f'{city.name}-{country.name}-done')
 
