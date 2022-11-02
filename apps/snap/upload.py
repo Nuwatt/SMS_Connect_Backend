@@ -1,6 +1,8 @@
 import csv
 from datetime import datetime
 
+from django.db.models import Count
+
 from apps.snap.models import (
     SnapChannel,
     SnapCategory,
@@ -555,3 +557,24 @@ def fix_snap_consumer():
         snap.city_id = city.id
         snap.save()
         print(f'{snap.id}-{city.name}-{country.name}-done')
+
+
+def check_duplicate():
+    a = SnapDistribution.objects.values(
+        'city_id',
+        'city_name',
+        'country_id',
+        'country_name',
+        'channel_id',
+        'channel_name',
+        'category_id',
+        'category_name',
+        'brand_id',
+        'brand_name',
+        'sku_id',
+        'sku_name',
+        'date'
+    ).annotate(Count('id')).order_by().filter(id__count__gt=1)
+    for item in a:
+        item.pop('id__count')
+        print(SnapDistribution.objects.filter(**item).last())
