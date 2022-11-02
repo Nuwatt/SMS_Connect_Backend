@@ -493,3 +493,23 @@ def fix_snap_pm():
         snap.save()
         print(f'{city.name}-{country.name}-done')
 
+
+def fix_snap_distribution():
+    # 1. snap distribution
+    snap_distribution = SnapDistribution.objects.all()
+    for snap in snap_distribution:
+        country, _country_created = SnapCountry.objects.get_or_create(
+            name=snap.country_name,
+            is_archived=False
+        )
+        city, _city_created = SnapCity.objects.get_or_create(
+            country=country,
+            name=snap.city_name,
+            is_archived=False
+        )
+        snap.country_name = country.name
+        snap.country_id = country.id
+        snap.city_name = city.name
+        snap.city_id = city.id
+        snap.save()
+        print(f'{snap.id}-{city.name}-{country.name}-done')
