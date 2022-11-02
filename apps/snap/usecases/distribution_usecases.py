@@ -15,7 +15,7 @@ from apps.snap.models import (
     SnapChannel,
     SnapCategory,
     SnapBrand,
-    SnapSKU
+    SnapSKU, SnapCountry, SnapCity
 )
 
 
@@ -49,14 +49,14 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
 
         for item in self._item_list:
             if item.get('Country') not in country_data:
-                country, _created = Country.objects.get_or_create(
+                country, _created = SnapCountry.objects.get_or_create(
                     name=item.get('Country').strip(),
                     is_archived=False
                 )
                 country_data[item.get('Country')] = country
 
             if item.get('City') not in country_data:
-                city, _created = City.objects.get_or_create(
+                city, _created = SnapCity.objects.get_or_create(
                     name=item.get('City').strip(),
                     country=country_data[item.get('Country')],
                     is_archived=False

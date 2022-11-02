@@ -20,7 +20,7 @@ from apps.snap.models import (
     SnapStore,
     SnapCategory,
     SnapBrand,
-    SnapSKU, SnapCity
+    SnapSKU, SnapCity, SnapCountry
 )
 
 
@@ -61,14 +61,14 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
 
         for item in self._item_list:
             if item.get('Country') not in country_data:
-                country, _country_created = Country.objects.get_or_create(
+                country, _country_created = SnapCountry.objects.get_or_create(
                     name=item.get('Country').strip(),
                     is_archived=False
                 )
                 country_data[item.get('Country')] = country
 
             if item.get('City') not in city_data:
-                city, _city_created = City.objects.get_or_create(
+                city, _city_created = SnapCity.objects.get_or_create(
                     name=item.get('City').strip(),
                     country=country_data[item.get('Country')],
                     is_archived=False

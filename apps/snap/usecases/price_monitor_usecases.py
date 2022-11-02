@@ -16,7 +16,7 @@ from apps.snap.models import (
     SnapCategory,
     SnapBrand,
     SnapSKU,
-    SnapPriceMonitor, SnapCountry
+    SnapPriceMonitor, SnapCountry, SnapCity
 )
 
 
@@ -60,14 +60,14 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
 
         for item in self._item_list:
             if item.get('Country') not in country_data:
-                country, _country_created = Country.objects.get_or_create(
+                country, _country_created = SnapCountry.objects.get_or_create(
                     name=item.get('Country').strip(),
                     is_archived=False
                 )
                 country_data[item.get('Country')] = country
 
             if item.get('City') not in city_data:
-                city, _city_created = City.objects.get_or_create(
+                city, _city_created = SnapCity.objects.get_or_create(
                     name=item.get('City').strip(),
                     country=country_data[item.get('Country')],
                     is_archived=False
@@ -103,7 +103,6 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
                     is_archived=False
                 )
                 sku_data[item.get('SKU')] = sku
-                sku.country.add(country_data[item.get('Country')])
 
             snap, _snap_created = SnapPriceMonitor.objects.update_or_create(
                 country_id=country_data[item.get('Country')].id,
