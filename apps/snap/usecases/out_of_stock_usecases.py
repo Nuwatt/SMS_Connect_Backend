@@ -11,7 +11,6 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
-from apps.localize.models import Country, City
 from apps.snap.exceptions import OutOfStockSnapNotFound
 from apps.snap.models import (
     SnapOutOfStock,
@@ -138,6 +137,7 @@ class ImportOutOfStockSnapUseCase(usecases.ImportCSVUseCase):
                 store_id=store_data[item.get('Store')].id,
                 store_name=store_data[item.get('Store')].name,
                 date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
+                is_archived=False,
                 defaults={
                     'count': item.get('Count'),
                     'not_available_in_month': item.get('Not Available In Month'),

@@ -2,13 +2,12 @@ import csv
 from datetime import datetime
 
 from django.db import IntegrityError
-from django.db.models import F, Sum, Avg
+from django.db.models import Sum, Avg
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
-from apps.localize.models import Country, City
 from apps.snap.exceptions import DistributionSnapNotFound
 from apps.snap.models import (
     SnapDistribution,
@@ -107,6 +106,7 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
                 sku_id=sku_data[item.get('SKU')].id,
                 sku_name=sku_data[item.get('SKU')].name,
                 date=datetime.strptime(item.get('Date'), "%Y-%m-%d").date(),
+                is_archived=False,
                 defaults={
                     'total_distribution': item.get('Total Distribution'),
                     'shelf_share': item.get('Shelf Share'),
