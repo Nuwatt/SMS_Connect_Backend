@@ -603,3 +603,26 @@ def fix_snap_brand_dubs():
         SnapConsumer.objects.filter(brand_name=first_brand.name).update(brand_id=first_brand.id)
 
 
+def fix_snap_chanel_dubs():
+    dub_chanels = SnapChannel.objects.unarchived().values(
+        'name'
+    ).annotate(Count('id')).order_by().filter(id__count__gt=1)
+    for dub_chanel in dub_chanels:
+        first_channel = SnapChannel.objects.filter(
+            name=dub_chanel.get('name'),
+            is_archived=False
+        ).first()
+        channels = SnapChannel.objects.filter(
+            name=dub_chanel.get('name'),
+            is_archived=False
+        ).exclude(id=first_channel.id)
+        for chanel in channels:
+            SnapStore.objects.filter(channel=chanel).update(channel=first_channel)
+            chanel.delete()
+
+        SnapPriceMonitor.objects.filter(channel_name=first_channel.name).update(channel_id=first_channel.id)
+        SnapOutOfStock.objects.filter(channel_name=first_channel.name).update(channel_id=first_channel.id)
+        SnapDistribution.objects.filter(channel_name=first_channel.name).update(channel_id=first_channel.id)
+        SnapConsumer.objects.filter(channel_name=first_channel.name).update(channel_id=first_channel.id)
+
+
