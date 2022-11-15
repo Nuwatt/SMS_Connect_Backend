@@ -578,3 +578,28 @@ def check_duplicate():
     for item in a:
         item.pop('id__count')
         print(SnapDistribution.objects.filter(**item).last())
+
+
+def fix_snap_brand_dubs():
+    dub_brands = SnapBrand.objects.unarchived().values(
+        'name'
+    ).annotate(Count('id')).order_by().filter(id__count__gt=1)
+    for dub_brand in dub_brands:
+        first_brand = SnapBrand.objects.filter(
+            name=dub_brand.get('name'),
+            is_archived=False
+        ).first()
+        brands = SnapBrand.objects.filter(
+            name=dub_brand.get('name'),
+            is_archived=False
+        ).exclude(id=first_brand.id)
+        for brand in brands:
+            SnapSKU.objects.filter(brand=brand).update(brand=first_brand)
+            brand.delete()
+
+        SnapPriceMonitor.objects.filter(brand_name=first_brand.name).update(brand_id=first_brand.id)
+        SnapOutOfStock.objects.filter(brand_name=first_brand.name).update(brand_id=first_brand.id)
+        SnapDistribution.objects.filter(brand_name=first_brand.name).update(brand_id=first_brand.id)
+        SnapConsumer.objects.filter(brand_name=first_brand.name).update(brand_id=first_brand.id)
+
+
