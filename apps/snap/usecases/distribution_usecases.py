@@ -1,13 +1,11 @@
 import csv
 from datetime import datetime
 
-from django.db import IntegrityError
 from django.db.models import Sum, Avg
 from django.http import HttpResponse
-from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
 
 from apps.core import usecases
+from apps.snap import exceptions
 from apps.snap.exceptions import DistributionSnapNotFound
 from apps.snap.models import (
     SnapDistribution,
@@ -118,11 +116,18 @@ class ImportDistributionSnapUseCase(usecases.ImportCSVUseCase):
         self.is_valid()
         try:
             self._factory()
-        except IntegrityError as e:
-            print(e)
-            raise ValidationError({
-                'non_field_errors': _('CSV Contains invalid ids.')
-            })
+        except SnapCity.MultipleObjectsReturned:
+            raise exceptions.SnapCityDuplicate
+        except SnapCountry.MultipleObjectsReturned:
+            raise exceptions.SnapCountryDuplicate
+        except SnapChannel.MultipleObjectsReturned:
+            raise exceptions.SnapChannelDuplicate
+        except SnapBrand.MultipleObjectsReturned:
+            raise exceptions.SnapBrandDuplicate
+        except SnapSKU.MultipleObjectsReturned:
+            raise exceptions.SnapSKUDuplicate
+        except SnapCategory.MultipleObjectsReturned:
+            raise exceptions.SnapCategoryDuplicate
 
 
 class ListDistributionSnapUseCase(usecases.BaseUseCase):

@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError
 
 
 class PriceMonitorSnapNotFound(NotFound):
@@ -25,3 +25,27 @@ class SnapCityNotFound(NotFound):
 
 class SnapCountryNotFound(NotFound):
     default_detail = _('Country not found.')
+
+
+class SnapCountryDuplicate(ValidationError):
+    default_detail = _('Duplicate Snap Country exists. Please Check')
+
+
+class SnapCityDuplicate(ValidationError):
+    default_detail = _('Duplicate Snap City exists. Please Check')
+
+
+class SnapChannelDuplicate(ValidationError):
+    default_detail = _('Duplicate Snap Channel exists. Please Check')
+
+
+class SnapCategoryDuplicate(ValidationError):
+    default_detail = _('Duplicate Snap Category exists. Please Check')
+
+
+class SnapBrandDuplicate(ValidationError):
+    default_detail = _('Duplicate Snap Brand exists. Please Check')
+
+
+class SnapSKUDuplicate(ValidationError):
+    default_detail = _('Duplicate Snap SKU exists. Please Check')
