@@ -107,6 +107,11 @@ urlpatterns = [
         name='bulk-delete-out-of-stock-snap'
     ),
     path(
+        'month-list',
+        out_of_stock_views.ListOutOfStockSnapMonthView.as_view(),
+        name='list-out-of-stock-snap-month'
+    ),
+    path(
         'report/',
         include(report_urls)
     )

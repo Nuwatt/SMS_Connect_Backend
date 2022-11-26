@@ -273,3 +273,16 @@ class OutOfStockSnapMonthReportView(SnapOutOfStockBaseReportView):
         return out_of_stock_usecases.OutOfStockSnapMonthReportUseCase(
             sku_provided=sku_provided
         ).execute()
+
+
+class ListOutOfStockSnapMonthView(generics.ListAPIView):
+    """
+    Use this end-point to list all months of out of stock snap data
+    """
+    serializer_class = out_of_stock_serializers.ListOutOfStockSnapMonthSerializer
+    pagination_class = None
+    permission_classes = (IsPortalUser,)
+    filterset_class = filtersets.SnapOutOfStockFilter
+
+    def get_queryset(self):
+        return out_of_stock_usecases.ListOutOfStockSnapMonthUseCase().execute()

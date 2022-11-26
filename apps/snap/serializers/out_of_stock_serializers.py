@@ -103,7 +103,6 @@ class BulkDeleteOutOfStockSnapSerializer(serializers.Serializer):
     snap_ids = serializers.ListSerializer(child=serializers.IntegerField())
 
 
-
 class OutOfStockSnapCityReportSerializer(serializers.Serializer):
     city = serializers.CharField(source='city_name')
     month = serializers.DateField(format='%b\'%-y')
@@ -186,3 +185,8 @@ class OutOfStockSnapStoreMonthReportSerializer(serializers.Serializer):
         max_digits=3,
         decimal_places=0
     )
+
+
+class ListOutOfStockSnapMonthSerializer(serializers.Serializer):
+    name = serializers.DateField(format='%b\'%-y', source='month')
+    id = serializers.DateField(format='%Y-%m-%d', source='month')

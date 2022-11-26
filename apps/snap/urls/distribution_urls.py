@@ -97,6 +97,11 @@ urlpatterns = [
         name='bulk-delete-distribution-snap'
     ),
     path(
+        'month-list',
+        distribution_views.ListDistributionSnapMonthView.as_view(),
+        name='list-distribution-snap-month'
+    ),
+    path(
         'report/',
         include(report_urls)
     )

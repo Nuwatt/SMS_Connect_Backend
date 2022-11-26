@@ -176,3 +176,16 @@ class ExportDistributionSnapView(generics.GenericAPIView):
             request=self.request,
             view_self=self
         ).execute()
+
+
+class ListDistributionSnapMonthView(generics.ListAPIView):
+    """
+    Use this end-point to list all months of distribution snap data
+    """
+    serializer_class = distribution_serializers.ListDistributionSnapMonthSerializer
+    pagination_class = None
+    permission_classes = (IsPortalUser,)
+    filterset_class = filtersets.SnapDistributionFilter
+
+    def get_queryset(self):
+        return distribution_usecases.ListDistributionSnapMonthUseCase().execute()

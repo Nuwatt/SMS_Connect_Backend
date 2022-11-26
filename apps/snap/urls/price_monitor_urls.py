@@ -102,6 +102,11 @@ urlpatterns = [
         name='bulk-delete-price-monitor-snap'
     ),
     path(
+        'month-list',
+        price_monitor_views.ListPriceMonitorSnapMonthView.as_view(),
+        name='list-price-monitor-snap-month'
+    ),
+    path(
         'report/',
         include(report_urls)
     ),

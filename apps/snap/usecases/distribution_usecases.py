@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 
 from django.db.models import Sum, Avg
+from django.db.models.functions import TruncMonth
 from django.http import HttpResponse
 
 from apps.core import usecases
@@ -291,3 +292,12 @@ class ExportDistributionSnapUseCase(usecases.BaseUseCase):
                 *snap.values()
             ])
         return response
+
+
+class ListDistributionSnapMonthUseCase(usecases.BaseUseCase):
+    def _factory(self):
+        return SnapDistribution.objects.filter(
+            is_archived=False,
+        ).annotate(
+            month=TruncMonth('date')
+        ).values('month').distinct()

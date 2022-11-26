@@ -541,3 +541,12 @@ class OutOfStockSnapMonthReportUseCase(OutOfStockSnapReportUseCase):
             'available_by_month_value'
         ).unarchived()
         return self._final_data(query)
+
+
+class ListOutOfStockSnapMonthUseCase(usecases.BaseUseCase):
+    def _factory(self):
+        return SnapOutOfStock.objects.filter(
+            is_archived=False,
+        ).annotate(
+            month=TruncMonth('date')
+        ).values('month').distinct()

@@ -291,3 +291,16 @@ class BulkDeletePriceMonitorSnapView(generics.CreateWithMessageAPIView):
         return price_monitor_usecases.BulkDeletePriceMonitorSnapUseCase(
             serializer=serializer
         ).execute()
+
+
+class ListPriceMonitorSnapMonthView(generics.ListAPIView):
+    """
+    Use this end-point to list all months of price monitor snap data
+    """
+    serializer_class = price_monitor_serializers.ListPriceMonitorSnapMonthSerializer
+    pagination_class = None
+    permission_classes = (IsPortalUser,)
+    filterset_class = filtersets.SnapPriceMonitorFilter
+
+    def get_queryset(self):
+        return price_monitor_usecases.ListPriceMonitorSnapMonthUseCase().execute()

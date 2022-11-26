@@ -145,7 +145,6 @@ class ImportPriceMonitorSnapUseCase(usecases.ImportCSVUseCase):
             raise exceptions.SnapCategoryDuplicate
 
 
-
 class ExportPriceMonitorSnapUseCase(usecases.BaseUseCase):
     def __init__(self, filter_backends, request, view_self):
         self._view_self = view_self
@@ -539,3 +538,12 @@ class BulkDeletePriceMonitorSnapUseCase(usecases.CreateUseCase):
             is_archived=False,
             id__in=self._data.get('snap_ids')
         ).archive()
+
+
+class ListPriceMonitorSnapMonthUseCase(usecases.BaseUseCase):
+    def _factory(self):
+        return SnapPriceMonitor.objects.filter(
+            is_archived=False,
+        ).annotate(
+            month=TruncMonth('date')
+        ).values('month').distinct()

@@ -95,3 +95,8 @@ class NumericAverageSnapConsumerReportSerializer(NumericQuestionReportSerializer
 
 class BulkDeleteSnapConsumerSerializer(serializers.Serializer):
     snap_ids = serializers.ListSerializer(child=serializers.IntegerField())
+
+
+class ListSnapConsumerMonthSerializer(serializers.Serializer):
+    name = serializers.DateField(format='%b\'%-y', source='month')
+    id = serializers.DateField(format='%Y-%m-%d', source='month')
