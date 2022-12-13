@@ -1,3 +1,6 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework.exceptions import ValidationError
+
 from apps.core import usecases
 from apps.snap.exceptions import SnapCountryNotFound
 from apps.snap.models import SnapCountry
@@ -16,7 +19,12 @@ class GetSnapCountryUseCase(usecases.BaseUseCase):
 
 class AddCountryUseCase(usecases.CreateUseCase):
     def _factory(self):
-        SnapCountry.objects.create(**self._data)
+        country = SnapCountry(**self._data)
+        try:
+            country.full_clean()
+            country.save()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
 
 class UpdateCountryUseCase(usecases.UpdateUseCase):

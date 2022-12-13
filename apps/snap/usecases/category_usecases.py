@@ -25,7 +25,7 @@ class AddSnapCategoryUseCase(usecases.CreateUseCase):
     def _factory(self):
         category = SnapCategory(**self._data)
         try:
-            category.clean()
+            category.full_clean()
             category.save()
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)

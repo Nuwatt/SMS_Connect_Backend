@@ -26,7 +26,7 @@ class AddSnapChannelUseCase(usecases.CreateUseCase):
     def _factory(self):
         channel = SnapChannel(**self._data)
         try:
-            channel.clean()
+            channel.full_clean()
             channel.save()
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)

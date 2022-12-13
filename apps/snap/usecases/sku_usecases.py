@@ -32,7 +32,7 @@ class AddSnapSKUUseCase(usecases.CreateUseCase):
                 name=name
             )
             try:
-                sku.clean()
+                sku.full_clean()
             except DjangoValidationError as e:
                 raise ValidationError(e.message_dict)
             sku.save()

@@ -27,7 +27,7 @@ class AddSnapBrandUseCase(usecases.CreateUseCase):
             **self._data
         )
         try:
-            brand.clean()
+            brand.full_clean()
             brand.save()
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)

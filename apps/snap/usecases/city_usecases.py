@@ -1,3 +1,6 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework.exceptions import ValidationError
+
 from apps.core import usecases
 from apps.snap.exceptions import SnapCityNotFound
 from apps.snap.models import SnapCity
@@ -20,7 +23,12 @@ class GetSnapCityUseCase(usecases.BaseUseCase):
 
 class AddSnapCityUseCase(usecases.CreateUseCase):
     def _factory(self):
-        SnapCity.objects.create(**self._data)
+        city = SnapCity(**self._data)
+        try:
+            city.full_clean()
+            city.save()
+        except DjangoValidationError as e:
+            raise ValidationError(e.message_dict)
 
 
 class UpdateSnapCityUseCase(usecases.UpdateUseCase):

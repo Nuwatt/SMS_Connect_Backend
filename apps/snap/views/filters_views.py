@@ -29,7 +29,6 @@ class BaseFiltersView(generics.ListAPIView):
         elif self.questionnaire_type == '3':
             self.filterset_class = filtersets.SnapOutOfStockFilter
         else:
-            print('query')
             raise ValidationError({
                 'questionnaire_type': _('This filter params is required.')
             })

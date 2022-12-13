@@ -31,9 +31,13 @@ class SnapCity(BaseModel):
 
     def clean(self):
         # check for unique name for unarchived list
-        if SnapCity.objects.filter(name__iexact=self.name, is_archived=False, country=self.country).exists():
+        if SnapCity.objects.filter(
+                name__iexact=self.name,
+                is_archived=False,
+                country=self.country
+        ).exists():
             raise DjangoValidationError({
-                'name': _('Country name already exists.')
+                'name': _('City name already exists.')
             })
 
 
@@ -65,10 +69,6 @@ class SnapCategory(BaseModel):
                 'name': _('Category name already exists.')
             })
 
-    # def save(self, *args, **kwargs):
-    #     if self._state.adding:
-    #         self.id = generate_custom_id(initial='CA', model=SnapCategory)
-    #     super(SnapCategory, self).save(*args, **kwargs)
 
 
 class SnapBrand(BaseModel):
