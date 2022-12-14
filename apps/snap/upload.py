@@ -647,4 +647,62 @@ def fix_snap_chanel_dubs():
         SnapDistribution.objects.filter(channel_name=first_channel.name).update(channel_id=first_channel.id)
         SnapConsumer.objects.filter(channel_name=first_channel.name).update(channel_id=first_channel.id)
 
+def fix_snap_retailer_dubs():
+    dub_retailer = SnapRetailer.objects.unarchived().values(
+        'name'
+    ).annotate(Count('id')).order_by().filter(id__count__gt=1)
+    for dub_retailer in dub_retailer:
+        first_retailer = SnapRetailer.objects.filter(
+            name=dub_retailer.get('name'),
+            is_archived=False
+        ).first()
+        retailers = SnapRetailer.objects.filter(
+            name=dub_retailer.get('name'),
+            is_archived=False
+        ).exclude(id=first_retailer.id)
+        for retailer in retailers:
+            SnapStore.objects.filter(retailer=retailer).update(retailer=first_retailer)
+            retailer.delete()
 
+        SnapOutOfStock.objects.filter(retailer_name=first_retailer.name).update(retailer_id=first_retailer.id)
+
+
+def fix_snap_sku_dubs():
+    dub_skus = SnapSKU.objects.unarchived().values(
+        'name'
+    ).annotate(Count('id')).order_by().filter(id__count__gt=1)
+    for dub_sku in dub_skus:
+        first_sku = SnapSKU.objects.filter(
+            name=dub_sku.get('name'),
+            is_archived=False
+        ).first()
+        skus = SnapSKU.objects.filter(
+            name=dub_sku.get('name'),
+            is_archived=False
+        ).exclude(id=first_sku.id)
+        for sku in skus:
+            sku.delete()
+
+        SnapPriceMonitor.objects.filter(sku_name=first_sku.name).update(sku_id=first_sku.id)
+        SnapOutOfStock.objects.filter(sku_name=first_sku.name).update(sku_id=first_sku.id)
+        SnapDistribution.objects.filter(sku_name=first_sku.name).update(sku_id=first_sku.id)
+        SnapConsumer.objects.filter(sku_name=first_sku.name).update(sku_id=first_sku.id)
+
+
+def fix_snap_store_dubs():
+    dub_store = SnapStore.objects.unarchived().values(
+        'name'
+    ).annotate(Count('id')).order_by().filter(id__count__gt=1)
+    for dub_store in dub_store:
+        first_store = SnapStore.objects.filter(
+            name=dub_store.get('name'),
+            is_archived=False
+        ).first()
+        stores = SnapStore.objects.filter(
+            name=dub_store.get('name'),
+            is_archived=False
+        ).exclude(id=first_store.id)
+        for store in stores:
+            store.delete()
+
+        SnapOutOfStock.objects.filter(store_name=first_store.name).update(store_id=first_store.id)
