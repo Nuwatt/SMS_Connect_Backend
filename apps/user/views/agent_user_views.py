@@ -13,6 +13,8 @@ from apps.user.mixins import AgentUserMixin
 from apps.user.permissions import IsAgentUser, IsAdminPortalUser
 from apps.user.serializers import agent_user_serializers
 from apps.user.usecases import agent_user_usecases
+from apps.user.views.azure_upload import AzureImageUploadView
+from apps.user.permissions import IsAgentUser
 
 
 class ListAgentUserView(generics.ListAPIView):
@@ -33,6 +35,7 @@ class RegisterAgentUserView(generics.CreateWithMessageAPIView):
     """
     serializer_class = agent_user_serializers.RegisterAgentUserSerializer
     permission_classes = (IsAdminPortalUser,)
+    # permission_classes = [AllowAny]
     message = _('Registered successfully.')
 
     def perform_create(self, serializer):
@@ -180,3 +183,10 @@ class BasicListAgentUserView(generics.ListAPIView):
 
     def get_queryset(self):
         return agent_user_usecases.BasicListAgentUserUseCase().execute()
+    
+class UploadImagesView(AzureImageUploadView):
+    """
+    POST /v1/user/agent-user/upload-images
+    """
+    # Require agent users?  Change as needed:
+    permission_classes = (IsAgentUser,)

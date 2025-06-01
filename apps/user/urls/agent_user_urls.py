@@ -23,6 +23,7 @@ agent_user_urls = [
         agent_user_views.UploadPortalUserAvatarView.as_view(),
         name='upload-agent-user-avatar'
     ),
+  
 ]
 
 urlpatterns = [
@@ -65,4 +66,9 @@ urlpatterns = [
         '<str:agent_user_id>/',
         include(agent_user_urls)
     ),
+      path(
+        'upload-images',
+        agent_user_views.UploadImagesView.as_view(),
+        name='upload-images'
+),
 ]

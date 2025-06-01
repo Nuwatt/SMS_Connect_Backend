@@ -10,4 +10,4 @@ django-extensions==3.0.9  # https://github.com/django-extensions/django-extensio
 
 # Database
 # --------------------------------------------------------------
-mysqlclient==2.0.3
+# mysqlclient==2.0.3

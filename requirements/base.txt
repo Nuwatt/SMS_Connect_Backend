@@ -5,7 +5,8 @@
 Django==3.1.7
 django-environ==0.4.5
 argon2-cffi==20.1.0  # password
-Pillow==8.2.0
+Pillow>=9.5.0
+
 
 # Rest Framework
 # --------------------------------------------------------------
@@ -17,3 +18,5 @@ djangorestframework-simplejwt==4.6.0  # JWT
 django-templated-mail==1.1.1          # email template
 drf-api-tracking==1.8.0                   # api tracking
 django-sql-utils==0.6.1
+
+

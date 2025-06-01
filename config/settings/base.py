@@ -41,7 +41,17 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'sms_connect',
+        'USER': 'root',  # <<< change 'admin' to 'root'
+        'PASSWORD': '',  # <<< mets ici ton vrai mot de passe
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # URLS
@@ -311,3 +321,8 @@ USE_S3 = False
 
 # Reporting data max limit
 REPORTING_MAX_LIMIT = 10
+
+
+AZURE_STORAGE_CONNECTION_STRING = env("AZURE_STORAGE_CONNECTION_STRING")
+AZURE_CONTAINER               = env("AZURE_CONTAINER", default="smsmerchandise-media")
+AZURE_CONTAINER_IS_PUBLIC     = env.bool("AZURE_CONTAINER_IS_PUBLIC", default=False)
